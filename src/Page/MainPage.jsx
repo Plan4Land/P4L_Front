@@ -1,10 +1,12 @@
-import { HeaderCom } from "../Component/GlobalComponent";
+import { Header, Nav, Footer } from "../Component/GlobalComponent";
 
 export const Main = () => {
   return (
     <>
-      <HeaderCom></HeaderCom>
+      <Header />
+      <Nav />
       <div>main 페이지입니다.</div>
+      <Footer />
     </>
   );
 };
