@@ -11,7 +11,7 @@ import {
   ModalOverlay,
   ModalContainer,
 } from "../../Style/PlanningStyled";
-import { KakaoMap } from "../../Component/KakaoMapComponent";
+import { KakaoMap, KakaoEx } from "../../Component/KakaoMapComponent";
 import { useState } from "react";
 
 export const Planning = () => {
@@ -38,7 +38,10 @@ export const Planning = () => {
           </KakaoMapContainer>
         </ContentContainer>
       </MainContainer>
-      <MemoContainer>여기는 메모</MemoContainer>
+      <MemoContainer>
+        여기는 메모
+        <KakaoEx></KakaoEx>
+      </MemoContainer>
       {isUserModalOpen && (
         <ModalOverlay>
           <ModalContainer>
