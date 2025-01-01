@@ -50,6 +50,7 @@ export const KakaoMap = () => {
 export const KakaoEx = () => {
   // Rest API
   // https://developers.kakao.com/docs/latest/ko/local/dev-guide#address-coord
+  // https://react-kakao-maps-sdk.jaeseokim.dev/docs/sample/library/keywordBasic
   // 참고 사이트 : https://m.blog.naver.com/kiddwannabe/221812712712
   // https://bluepebble25.tistory.com/73#--%--%EA%B-%AC%ED%--%--%--%EC%--%B-%EA%B-%B--%---%--react-kakao-maps-sdk%--%ED%-C%A-%ED%--%A-%EC%A-%--%--%EC%-D%B-%EC%-A%A-
 
