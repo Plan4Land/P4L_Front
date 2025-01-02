@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Planning } from "./Page/Planning/Planning";
 import { Main } from "./Page/MainPage";
-import { MakePlanning } from "./Page/Planning/makePlanning";
+import { MakePlanning } from "./Page/Planning/MakePlanning";
 
 function App() {
   return (
