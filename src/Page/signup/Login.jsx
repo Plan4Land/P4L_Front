@@ -2,7 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Header, Footer } from "../../Component/GlobalComponent";
-import { Container, SignupContainer, InputBox, Button, FindEmailModal, ResultEmailModal, FindPwModal, ResultPwModal } from "../../Component/SignupComponent";
+import { Center, SignupContainer, InputBox, Button, FindEmailModal, ResultEmailModal, FindPwModal, ResultPwModal } from "../../Component/SignupComponent";
+
+// icon
+import { GoMail, GoLock, GoEye, GoEyeClosed } from "react-icons/go";
 
 export const Login = () => {
   const [inputEmail, setInputEmail] = useState("");
@@ -33,72 +36,80 @@ export const Login = () => {
   }
 
   return (
-    <Container>
+    <>
       <Header />
-      <SignupContainer>
-        <h1 className="title">로그인</h1>
-        
-        <InputBox>
-          <div>아이콘</div>
-          <input
-            type="email" 
-            placeholder="이메일 입력"
-            value={inputEmail}
-            onChange={(e) => handleInputChange(e, setInputEmail)}
-          />
-        </InputBox>
-
-        <InputBox>
-          <div>아이콘</div>
-          <input
-            type={isPwShow ? "text" : "password"} 
-            placeholder="비밀번호 입력"
-            value={inputPw}
-            onChange={(e) => handleInputChange(e, setInputPw)}
-          />
-          <div>{isPwShow ? "아이콘1" : "아이콘2"}</div>
-        </InputBox>
-
-        <div>
-          <div>
-            <p onClick={()=>openEmailModal(true)}>아이디 찾기</p>
-            <p>|</p>
-            <p onClick={()=>openPwModal(true)}>비밀번호 찾기</p>
-          </div>
-          <div>
-            <p onClick={()=>navigate("/signup")}>회원가입</p>
-          </div>
-        </div>
-
-        <Button onClick={()=>onClickLogin}>
-          로그인
-        </Button>
-
-        <button>카카오 로그인</button>
-
-        {/* 아이디 찾기 모달 */}
-        <FindEmailModal>
-
-        </FindEmailModal>
-
-        {/* 아이디 찾기 결과 모달 */}
-        <ResultEmailModal>
+      <Center>
+        <SignupContainer>
+          <h1 className="title">로그인</h1>
           
-        </ResultEmailModal>
-        
-        {/* 비밀번호 찾기 모달 */}
-        <FindPwModal>
+          <InputBox>
+            <div className="iconBox-left"><GoMail /></div>
+            <div className="inputBox">
+              <input
+                type="email" 
+                placeholder="이메일 입력"
+                value={inputEmail}
+                onChange={(e) => handleInputChange(e, setInputEmail)}
+              />
+            </div>
+          </InputBox>
 
-        </FindPwModal>
+          <InputBox>
+            <div className="iconBox-left"><GoLock /></div>
+            <div className="inputBox">
+              <input
+                type={isPwShow ? "text" : "password"} 
+                placeholder="비밀번호 입력"
+                value={inputPw}
+                onChange={(e) => handleInputChange(e, setInputPw)}
+              />
+              <div className="iconBox-right">
+                {isPwShow ? <GoEye /> : <GoEyeClosed />}
+              </div>
+            </div>
+          </InputBox>
 
-        {/* 비밀번호 찾기 결과 모달 */}
-        <ResultPwModal>
+          <div className="linkBox">
+            <div className="linkBox-left">
+              <p onClick={()=>openEmailModal(true)}>아이디 찾기</p>
+              <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+              <p onClick={()=>openPwModal(true)}>비밀번호 찾기</p>
+            </div>
+            <div className="linkBox-right">
+              <p onClick={()=>navigate("/signup")}>회원가입</p>
+            </div>
+          </div>
 
-        </ResultPwModal>
+          <Button onClick={()=>onClickLogin}>
+            로그인
+          </Button>
 
-      </SignupContainer>
+          <button className="kakaoBtn">카카오 로그인</button>
+
+          {/* 아이디 찾기 모달 */}
+          <FindEmailModal>
+
+          </FindEmailModal>
+
+          {/* 아이디 찾기 결과 모달 */}
+          <ResultEmailModal>
+            
+          </ResultEmailModal>
+          
+          {/* 비밀번호 찾기 모달 */}
+          <FindPwModal>
+
+          </FindPwModal>
+
+          {/* 비밀번호 찾기 결과 모달 */}
+          <ResultPwModal>
+
+          </ResultPwModal>
+
+        </SignupContainer>
+      </Center>
       <Footer />
-    </Container>
+    </>
   );
 };
 export default Login;
