@@ -13,7 +13,7 @@ import {
 } from "../../Style/PlanningStyled";
 import { KakaoMap, KakaoEx } from "../../Component/KakaoMapComponent";
 import { useState } from "react";
-import { Header } from "../../Component/GlobalComponent";
+import { Header, Footer } from "../../Component/GlobalComponent";
 
 export const Planning = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
@@ -56,6 +56,7 @@ export const Planning = () => {
           </ModalContainer>
         </ModalOverlay>
       )}
+      <Footer />
     </>
   );
 };
