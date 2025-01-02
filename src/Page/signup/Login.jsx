@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { SignupContainer, InputBox, Button } from "../../Component/SignupComponent";
+import { SignupContainer, InputBox, Button, FindEmailModal, ResultEmailModal, FindPwModal, ResultPwModal } from "../../Component/SignupComponent";
 
 const Login = () => {
   const [inputEmail, setInputEmail] = useState("");
@@ -9,12 +9,26 @@ const Login = () => {
 
   const [isPwShow, setIsPwShow] = useState(false);
 
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [emailResultModalOpen, setEmailResultModalOpen] = useState(false);
+  const [pwModalOpen, setPwModalOpen] = useState(false);
+  const [pwResultModalOpen, setPwResultModalOpen] = useState(false);
+
+  const navigate = useNavigate();
+
   const handleInputChange = (e, setState) => {
     setState(e.target.value);
   }
 
   const onClickLogin = async () => {
+    // 로그인 기능 구현해야함
+  }
 
+  const openEmailModal = (state) => {
+    setEmailModalOpen(state);
+  }
+  const openPwModal = (state) => {
+    setPwModalOpen(state);
   }
 
   return (
@@ -44,12 +58,12 @@ const Login = () => {
 
       <div>
         <div>
-          <p>아이디 찾기</p>
+          <p onClick={()=>openEmailModal(true)}>아이디 찾기</p>
           <p>|</p>
-          <p>비밀번호 찾기</p>
+          <p onClick={()=>openPwModal(true)}>비밀번호 찾기</p>
         </div>
         <div>
-          <p>회원가입</p>
+          <p onClick={()=>navigate("/signup")}>회원가입</p>
         </div>
       </div>
 
@@ -58,6 +72,27 @@ const Login = () => {
       </Button>
 
       <button>카카오 로그인</button>
+
+      {/* 아이디 찾기 모달 */}
+      <FindEmailModal>
+
+      </FindEmailModal>
+
+      {/* 아이디 찾기 결과 모달 */}
+      <ResultEmailModal>
+        
+      </ResultEmailModal>
+      
+      {/* 비밀번호 찾기 모달 */}
+      <FindPwModal>
+
+      </FindPwModal>
+
+      {/* 비밀번호 찾기 결과 모달 */}
+      <ResultPwModal>
+
+      </ResultPwModal>
+
     </SignupContainer>
   );
 };

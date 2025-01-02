@@ -16,3 +16,11 @@ export const InputBox = styled.div`
 export const Button = styled.button`
   
 `
+
+export const EmailModal = styled.div`
+  
+`
+
+export const PwModal = styled.div`
+  
+`
