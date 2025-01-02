@@ -1,5 +1,10 @@
 import styled, { css } from "styled-components";
 
+export const Container = styled.div`
+  
+
+`
+
 // 회원가입, 로그인 스타일
 export const SignupContainer = styled.div`
   display: flex;
