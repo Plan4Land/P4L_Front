@@ -1,23 +1,35 @@
 import styled from "styled-components";
 
 export const MainContainer = styled.div`
-  width: 100%;
   min-height: 700px; /////이거는 고민
+  padding: 0 15vw;
   display: flex;
   flex-direction: column;
 `;
 
 export const Info = styled.div`
-  width: 100%;
-  height: 150px; // 이것도 고정으로 할지 고민
+  height: 300px; // 이것도 고정으로 할지 고민
   display: flex;
-  flex-direction: column;
+  box-sizing: border-box;
   position: relative;
   background-color: azure;
-
+  div {
+    margin: auto 0 auto 2%;
+  }
   h1,
   h3 {
     margin: 3px;
+  }
+
+  img {
+    display: flex;
+    right: 0;
+    width: 250px;
+    height: 250px;
+    margin: auto 0;
+    background-color: #eafcd5;
+    border-radius: 50%;
+    text-align: center;
   }
 `;
 
@@ -52,7 +64,7 @@ export const UserName = styled.div`
 
 export const ContentContainer = styled.div`
   width: 100%;
-  height: 450px; // 이것도 고정으로 할지 고민
+  height: 600px; // 이것도 고정으로 할지 고민
   display: flex;
   justify-content: center;
   padding: 2%;
@@ -61,18 +73,19 @@ export const ContentContainer = styled.div`
 `;
 
 export const MainPlanning = styled.div`
-  width: 50%;
-  min-width: 700px; // 이거도 고민
+  width: 60%;
+  min-width: 400px; // 이거도 고민
   min-height: 100px; // 이거 고민
-  max-height: 400px; // 이것도 고민
+  max-height: 600px; // 이것도 고민
   display: flex;
   background-color: blanchedalmond;
 `;
 
 export const KakaoMapContainer = styled.div`
-  width: 400px;
+  min-width: 400px;
+  width: 40%;
   height: 400px;
-  margin-left: 20px;
+  margin-left: 1%;
   background-color: antiquewhite;
 `;
 
