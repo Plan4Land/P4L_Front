@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { Header, Nav, Footer } from "../../Component/GlobalComponent";
 import { SignupContainer, InputBox, Button, FindEmailModal, ResultEmailModal, FindPwModal, ResultPwModal } from "../../Component/SignupComponent";
 
-const Login = () => {
+export const Login = () => {
   const [inputEmail, setInputEmail] = useState("");
   const [inputPw, setInputPw] = useState("");
 
@@ -32,6 +33,9 @@ const Login = () => {
   }
 
   return (
+    <>
+    <Header />
+    <Nav />
     <SignupContainer>
       <h1 className="title">로그인</h1>
       
@@ -94,6 +98,8 @@ const Login = () => {
       </ResultPwModal>
 
     </SignupContainer>
+    <Footer />
+    </>
   );
 };
 export default Login;
