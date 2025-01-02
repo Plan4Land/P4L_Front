@@ -13,16 +13,21 @@ import {
 } from "../../Style/PlanningStyled";
 import { KakaoMap, KakaoEx } from "../../Component/KakaoMapComponent";
 import { useState } from "react";
+import { Header } from "../../Component/GlobalComponent";
 
 export const Planning = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   return (
     <>
+      <Header />
       <MainContainer>
         <Info>
-          <h1>플래닝 제목</h1>
-          <h3>지역 / 테마</h3>
-          <h3>2024.01.10 ~ 2024.02.10</h3>
+          <img src="" alt="여기가 이미지" />
+          <div>
+            <h1>플래닝 제목</h1>
+            <h3>지역 / 테마</h3>
+            <h3>2024.01.10 ~ 2024.02.10</h3>
+          </div>
         </Info>
         <Users>
           <UserProfile />

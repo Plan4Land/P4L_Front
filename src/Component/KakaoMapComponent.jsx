@@ -29,8 +29,8 @@ export const KakaoMap = () => {
           lng: 126.9723,
         }}
         style={{
-          width: "400px",
-          height: "400px",
+          width: "100%",
+          height: "100%",
         }}
         level={5} // 지도의 확대 레벨
         onClick={(_, mouseEvent) => {
