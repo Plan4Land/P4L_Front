@@ -3,6 +3,7 @@ import { Planning } from "./Page/Planning/Planning";
 import { Main } from "./Page/MainPage";
 import { MakePlanning } from "./Page/Planning/MakePlanning";
 import { Login } from "./Page/signup/Login";
+import { Signup } from "./Page/signup/Signup";
 import MyPageMain from "./Page/Mypage/MyPageMain";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
           <Route path="/planning" element={<Planning />} />
           <Route path="/makePlanning" element={<MakePlanning />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/mypage" element={<MyPageMain />} />
         </Routes>
       </Router>

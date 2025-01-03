@@ -415,3 +415,35 @@ export const ResultPwModal = (props) => {
     </ModalStyle>
   );
 };
+
+// 프로필 사진 모달
+export const ProfilePicModal = (props) => {
+  const { open, close } = props;
+
+
+  const handleBackgroundClick = (e) => {
+    e.stopPropagation();  // 내부 클릭 시 닫히지 않게 설정
+    close();
+  };
+
+  return (
+    <ModalStyle>
+      <div
+        className={open ? "openModal modal" : "modal"}
+        onClick={handleBackgroundClick}
+      >
+        {open && (
+          <div
+            className="modal-container"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h1 className="title">
+              프로필 선택
+            </h1>
+            
+          </div>
+        )}
+      </div>
+    </ModalStyle>
+  );
+};

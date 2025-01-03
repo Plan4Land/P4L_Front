@@ -62,6 +62,31 @@ export const SignupContainer = styled.div`
       background-color: rgb(240, 240, 0);
     }
   }
+
+  .picture-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin: 20px 0;
+
+    .current-pic {
+      border-radius: 50%;
+      border: 1px solid #ccc;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    img {
+      width: 100px;
+      height: 100px;
+    }
+
+    .picture-button {
+      height: 30%;
+      cursor: pointer;
+    }
+  }
 `
 
 export const InputBox = styled.div`
@@ -129,4 +154,3 @@ export const Button = styled.button`
       background-color: rgb(0, 160, 0);
     }
 `
-
