@@ -26,7 +26,7 @@ export const QuickSearch = styled(GridItem)`
     background-color: beige;
     padding: 10px;
     border-radius: 8px;
-    width: 100%;
+
     button {
       border-radius: 4px;
       padding: 8px 16px;

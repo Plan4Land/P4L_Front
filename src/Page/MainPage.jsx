@@ -17,7 +17,7 @@ import Calendar from "react-calendar"; // 축제 캘린더
 import "react-calendar/dist/Calendar.css"; // 축제 캘린더
 
 export const Main = () => {
-  const [selectedMenu, setSelectedMenu] = useState("지역검색"); // 미니검색창
+  const [selectedMenu, setSelectedMenu] = useState("지역"); // 미니검색창
   const [value, onChange] = useState(new Date()); // 축제 캘린더
 
   return (
