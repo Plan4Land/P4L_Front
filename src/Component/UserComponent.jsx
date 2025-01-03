@@ -1,13 +1,21 @@
+import { useNavigate } from "react-router-dom";
+import { UserMenuContainer } from "../Style/UserComponentStyled";
+
 export const UserMenu = ({ setSelectedMenu, selectedMenu }) => {
-  const links = [
-    "마이페이지",
-    "내 플래닝",
-    "좋아요 관광지",
-    "좋아요 플래닝",
-    "내 정보 수정",
-  ];
+  const navigate = useNavigate();
+  const links = ["내 플래닝", "좋아요 관광지", "좋아요 플래닝", "내 정보 수정"];
+
   return (
-    <>
+    <UserMenuContainer>
+      <p
+        onClick={() => {
+          setSelectedMenu("");
+          navigate("/mypage");
+        }}
+        className={!selectedMenu ? "selected" : ""}
+      >
+        마이페이지
+      </p>
       {links.map((label) => (
         <p
           key={label}
@@ -17,6 +25,6 @@ export const UserMenu = ({ setSelectedMenu, selectedMenu }) => {
           {label}
         </p>
       ))}
-    </>
+    </UserMenuContainer>
   );
 };

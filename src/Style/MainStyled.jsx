@@ -23,15 +23,19 @@ export const QuickSearch = styled(GridItem)`
   .QuickSelect {
     display: flex;
     justify-content: space-around;
-    background-color: beige;
+
     padding: 10px;
     border-radius: 8px;
 
     button {
-      border-radius: 4px;
-      padding: 8px 16px;
       cursor: pointer;
+      background-color: transparent;
+      border: none;
+      width: 100%;
+      margin: 0 20px;
       transition: all 0.3s ease;
+      font-size: 16px;
+      color: #17520b;
       &:hover {
         opacity: 0.7;
       }
@@ -113,7 +117,6 @@ export const PlanBox = styled.div`
 //         {/* 축제 미니 캘린더!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const Festive = styled(GridItem)`
   grid-column: span 1;
-
   display: flex;
   align-items: center;
   justify-content: center;
