@@ -7,6 +7,7 @@ export const MakePlanning = () => {
   const handleInputChange = (e) => {
     setSearchKeyword(e.target.value);
   };
+  console.log(process.env.REACT_APP_KAKAOMAP_KEY);
   return (
     <>
       <Header />
