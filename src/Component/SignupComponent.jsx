@@ -17,6 +17,19 @@ export const SignupContainer = styled.div`
 
   .title {
     text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .input-container {
+    position: relative;
+    padding-top: 20px;
+  }
+
+  .textMessage {
+    position: absolute;
+    top: 0;
+    color: red;
+    font-size: 12px;
   }
 
   .linkBox {
@@ -73,6 +86,7 @@ export const InputBox = styled.div`
       background-color: transparent;
       outline: none;
       border: none;
+      font-size: 1em;
     }
   }
 
@@ -91,6 +105,7 @@ export const InputBox = styled.div`
     justify-content: center;
     align-items: center;
     margin-left: 10px;
+    cursor: pointer;
     svg {
       width: 20px;
       height: 20px;
@@ -99,6 +114,7 @@ export const InputBox = styled.div`
 `
 
 export const Button = styled.button`
+  width: 100%;
   height: 4em;
   margin: 10px 0;
   font-size: 14px;
@@ -111,18 +127,3 @@ export const Button = styled.button`
     }
 `
 
-export const FindEmailModal = styled.div`
-  
-`
-
-export const ResultEmailModal = styled.div`
-  
-`
-
-export const FindPwModal = styled.div`
-  
-`
-
-export const ResultPwModal = styled.div`
-  
-`
