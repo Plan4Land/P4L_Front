@@ -17,6 +17,11 @@ import { Header, Footer } from "../../Component/GlobalComponent";
 
 export const Planning = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const handleInputChange = (e) => {
+    setSearchKeyword(e.target.value);
+  };
+
   return (
     <>
       <Header />
@@ -52,6 +57,19 @@ export const Planning = () => {
           <ModalContainer>
             <h2>모달창입니댜</h2>
             <p>임시로 만들어논거에요</p>
+            <input
+              type="text"
+              placeholder="검색어를 입력하세요"
+              value={searchKeyword}
+              onChange={handleInputChange}
+              style={{
+                width: "300px",
+                height: "40px",
+                fontSize: "16px",
+                marginBottom: "20px",
+                padding: "5px",
+              }}
+            />
             <button onClick={() => setIsUserModalOpen(false)}>확인</button>
           </ModalContainer>
         </ModalOverlay>
