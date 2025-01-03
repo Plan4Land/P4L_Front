@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Planning } from "./Page/Planning/Planning";
 import { Main } from "./Page/MainPage";
 import { MakePlanning } from "./Page/Planning/MakePlanning";
-import { Login } from "./Page/signup/Login"
+import { Login } from "./Page/signup/Login";
+import MyPageMain from "./Page/Mypage/MyPageMain";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/planning" element={<Planning />} />
           <Route path="/makePlanning" element={<MakePlanning />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/mypage" element={<MyPageMain />} />
         </Routes>
       </Router>
     </>
