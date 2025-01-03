@@ -8,6 +8,8 @@ import { useKakaoLoader, useMap } from "react-kakao-maps-sdk";
 import { useState, useEffect } from "react";
 import MarkerPlace from "../Img/markerPlace.png";
 
+const { kakao } = window;
+
 export const KakaoMap = () => {
   useKakaoLoader();
   const [result, setResult] = useState("");
@@ -229,6 +231,68 @@ export const KakaoEx = () => {
           position={value.latlng}
           content={value.content}
         />
+      ))}
+    </Map>
+  );
+};
+
+export const SearchKakaoMap = ({ searchKeyword }) => {
+  const [info, setInfo] = useState(); // 현재 선택된 마커의 정보
+  const [markers, setMarkers] = useState([]); // 지도에 표시할 마커 목록
+  const [map, setMap] = useState(); // 카카오 지도 객체
+
+  useEffect(() => {
+    if (!map) return; // 지도 객체가 초기화 안됐으면 검색 로직 실행 X
+    const ps = new kakao.maps.services.Places();
+
+    ps.keywordSearch(
+      searchKeyword,
+      (data, status, _pagination) => {
+        if (status === kakao.maps.services.Status.OK) {
+          const bounds = new kakao.maps.LatLngBounds();
+          let markers = [];
+
+          for (let i = 0; i < data.length; i++) {
+            markers.push({
+              position: {
+                lat: data[i].y,
+                lng: data[i].x,
+              },
+              content: data[i].place_name,
+            });
+            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+          }
+          setMarkers(markers);
+          map.setBounds(bounds);
+        }
+      },
+      [map]
+    );
+  }, [searchKeyword]);
+
+  return (
+    <Map // 로드뷰를 표시할 Container
+      center={{
+        lat: 37.566826,
+        lng: 126.9786567,
+      }}
+      style={{
+        width: "100%",
+        height: "350px",
+      }}
+      level={3}
+      onCreate={setMap}
+    >
+      {markers.map((marker) => (
+        <MapMarker
+          key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+          position={marker.position}
+          onClick={() => setInfo(marker)}
+        >
+          {info && info.content === marker.content && (
+            <div style={{ color: "#000" }}>{marker.content}</div>
+          )}
+        </MapMarker>
       ))}
     </Map>
   );
