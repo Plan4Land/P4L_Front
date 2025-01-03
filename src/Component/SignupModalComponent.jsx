@@ -14,6 +14,9 @@ export const InputBox = styled.div`
   border: 1px solid #ddd;
   padding: 1em;
   margin-bottom: 10px;
+  &:focus-within {
+    border: 1px solid #bbb;
+  }
 
   .inputBox {
     display: flex;
@@ -146,6 +149,7 @@ export const FindUserIdModal = (props) => {
 
   const handleCloseModal = () => {
     close();
+    setInputName("");
     setInputEmail("");
   }
 
