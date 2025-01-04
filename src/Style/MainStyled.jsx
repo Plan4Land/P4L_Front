@@ -120,4 +120,11 @@ export const Festive = styled(GridItem)`
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  .react-calendar__tile.highlight {
+    background-color: #ffcc00;
+    color: white;
+  }
 `;
+
+
