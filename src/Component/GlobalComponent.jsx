@@ -35,9 +35,9 @@ export const Header = () => {
       </Link>
       <NavSt>
         <Link
-          to="/post?category=교통" // 이후 페이지 생성시 해당 부분 수정
+          to="/ktxinquiry" // 이후 페이지 생성시 해당 부분 수정
           className={`tag ${
-            isActive("/post", "category=교통") ? "active" : ""
+            isActive("/ktxinquiry") ? "active" : ""
           }`}
         >
           교통
