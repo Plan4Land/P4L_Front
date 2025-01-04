@@ -5,6 +5,7 @@ import { MakePlanning } from "./Page/Planning/MakePlanning";
 import { Login } from "./Page/signup/Login";
 import { Signup } from "./Page/signup/Signup";
 import MyPageMain from "./Page/Mypage/MyPageMain";
+import KtxInquiry from "./Page/Traffic/KtxInquiry";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/mypage" element={<MyPageMain />} />
+          <Route path="/ktxInquiry" element={<KtxInquiry />} />
         </Routes>
       </Router>
     </>
