@@ -127,3 +127,71 @@ export const ModalContainer = styled.div`
     margin-bottom: 6px;
   }
 `;
+
+export const MakePlanningContainer = styled.div`
+  height: 75vh;
+  padding: 0 30vw;
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    margin-top: 6vh;
+  }
+
+  .location-select {
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    width: 300px;
+    background-color: #f9f9f9;
+  }
+  /* 
+  .location-select:focus {
+    border-color: #f9ffe9;
+    box-shadow: 0 0 5px #bce877;
+  } */
+
+  .location-select option {
+    padding: 10px;
+  }
+`;
+
+export const DatePickerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  min-width: 420px;
+  width: 70%;
+  align-items: center;
+  border: 1px solid #aaa;
+  border-radius: 20px;
+
+  span {
+    margin: 0 5px;
+  }
+
+  .input-date-picker {
+    // 시작일, 종료일 input
+    height: 35px;
+    text-align: center;
+    color: #777;
+    font-size: 100%;
+    border: none;
+    border-radius: 20px;
+    background-color: transparent;
+    cursor: pointer;
+    caret-color: transparent; // 키보드 커서 없애기
+  }
+
+  .input-date-picker:hover::placeholder {
+    /* background-color: #ddd; */
+    color: black;
+    /* font-weight: bold; */
+  }
+
+  .input-date-picker:focus {
+    outline: none; // 포커스 시 검은색 테두리 제거
+  }
+`;

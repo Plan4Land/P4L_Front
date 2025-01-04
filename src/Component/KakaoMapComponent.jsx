@@ -242,58 +242,113 @@ export const SearchKakaoMap = ({ searchKeyword }) => {
   const [map, setMap] = useState(); // 카카오 지도 객체
 
   useEffect(() => {
-    if (!map) return; // 지도 객체가 초기화 안됐으면 검색 로직 실행 X
+    if (!map) return;
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch(
-      searchKeyword,
-      (data, status, _pagination) => {
-        if (status === kakao.maps.services.Status.OK) {
-          const bounds = new kakao.maps.LatLngBounds();
-          let markers = [];
-
-          for (let i = 0; i < data.length; i++) {
-            markers.push({
-              position: {
-                lat: data[i].y,
-                lng: data[i].x,
-              },
-              content: data[i].place_name,
-            });
-            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-          }
-          setMarkers(markers);
-          map.setBounds(bounds);
+    ps.keywordSearch(searchKeyword, (data, status, _pagination) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const bounds = new kakao.maps.LatLngBounds();
+        let markers = [];
+        for (let i = 0; i < data.length; i++) {
+          markers.push({
+            position: {
+              lat: data[i].y,
+              lng: data[i].x,
+            },
+            content: data[i].place_name, // 장소명
+            address: data[i].address_name,
+            category: data[i].category_name, // 카테고리 ex) 여행 > 관광,명소 > 테마파크
+          });
+          bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
         }
-      },
-      [map]
-    );
+        setMarkers(markers);
+        map.setBounds(bounds);
+      }
+      if (status === kakao.maps.services.Status.OK) {
+        const bounds = new kakao.maps.LatLngBounds();
+        let markers = [];
+
+        for (let i = 0; i < data.length; i++) {
+          console.log(data);
+          markers.push({
+            position: {
+              lat: data[i].y,
+              lng: data[i].x,
+            },
+            content: data[i].place_name, // 장소명
+            address: data[i].address_name,
+            category: data[i].category_name, // 카테고리 ex) 여행 > 관광,명소 > 테마파크
+          });
+          bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+        }
+        setMarkers(markers);
+        map.setBounds(bounds);
+      }
+    });
   }, [searchKeyword]);
 
+  const handleListItemClick = (marker) => {
+    // 마커 클릭 시 지도 이동 및 정보 업데이트
+    const position = new kakao.maps.LatLng(
+      marker.position.lat,
+      marker.position.lng
+    );
+    map.setCenter(position);
+    setInfo(marker);
+    console.log(info);
+  };
   return (
-    <Map // 로드뷰를 표시할 Container
-      center={{
-        lat: 37.566826,
-        lng: 126.9786567,
-      }}
-      style={{
-        width: "100%",
-        height: "350px",
-      }}
-      level={3}
-      onCreate={setMap}
-    >
-      {markers.map((marker) => (
-        <MapMarker
-          key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-          position={marker.position}
-          onClick={() => setInfo(marker)}
-        >
-          {info && info.content === marker.content && (
-            <div style={{ color: "#000" }}>{marker.content}</div>
-          )}
-        </MapMarker>
-      ))}
-    </Map>
+    <div>
+      <Map // 로드뷰를 표시할 Container
+        center={{
+          lat: 37.566826,
+          lng: 126.9786567,
+        }}
+        style={{
+          width: "0%",
+          height: "0%",
+        }}
+        level={3}
+        onCreate={setMap}
+      >
+        {markers.map((marker) => (
+          <MapMarker
+            key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+            position={marker.position}
+            onClick={() => setInfo(marker)}
+          ></MapMarker>
+        ))}
+      </Map>
+      <div
+        style={{
+          width: "30%",
+          height: "350px",
+          overflowY: "auto",
+          border: "1px solid #ddd",
+          padding: "10px",
+        }}
+      >
+        <h3>검색 결과</h3>
+        <ul style={{ listStyleType: "none", padding: 0 }}>
+          {markers.map((marker, index) => (
+            <li
+              key={index}
+              onClick={() => handleListItemClick(marker)}
+              style={{
+                padding: "10px",
+                borderBottom: "1px solid #eee",
+                cursor: "pointer",
+              }}
+            >
+              <strong>{marker.content}</strong>
+              <br />
+              <span style={{ fontSize: "12px", color: "#666" }}>
+                {marker.address}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 };

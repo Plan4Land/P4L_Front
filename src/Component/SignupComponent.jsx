@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 export const Center = styled.div`
   display: flex;
   justify-content: center;
-`
+`;
 
 // 회원가입, 로그인 스타일
 export const SignupContainer = styled.div`
@@ -72,14 +72,19 @@ export const SignupContainer = styled.div`
 
     .current-pic {
       border-radius: 50%;
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
       overflow: hidden;
       cursor: pointer;
+      width: 100px;
+      height: 100px;
+      &:hover {
+        border: 1px solid #bbb;
+      }
     }
 
     img {
-      width: 100px;
-      height: 100px;
+      width: 100%;
+      height: 100%;
     }
 
     .picture-button {
@@ -87,7 +92,7 @@ export const SignupContainer = styled.div`
       cursor: pointer;
     }
   }
-`
+`;
 
 export const InputBox = styled.div`
   display: flex;
@@ -103,7 +108,7 @@ export const InputBox = styled.div`
   .inputBox {
     display: flex;
     width: 100%;
-    
+
     &:focus {
       outline: none;
       border: none;
@@ -139,7 +144,7 @@ export const InputBox = styled.div`
       height: 20px;
     }
   }
-`
+`;
 
 export const Button = styled.button`
   width: 100%;
@@ -148,9 +153,9 @@ export const Button = styled.button`
   font-size: 14px;
   font-weight: 600;
   background-color: rgb(0, 180, 0);
-    border: none;
-    cursor: pointer;
-    &:hover {
-      background-color: rgb(0, 160, 0);
-    }
-`
+  border: none;
+  cursor: pointer;
+  &:hover {
+    background-color: rgb(0, 160, 0);
+  }
+`;

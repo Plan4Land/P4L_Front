@@ -21,7 +21,7 @@ export const InputBox = styled.div`
   .inputBox {
     display: flex;
     width: 100%;
-    
+
     &:focus {
       outline: none;
       border: none;
@@ -57,7 +57,7 @@ export const InputBox = styled.div`
       height: 20px;
     }
   }
-`
+`;
 
 export const Button = styled.button`
   width: 100%;
@@ -66,12 +66,12 @@ export const Button = styled.button`
   font-size: 14px;
   font-weight: 600;
   background-color: rgb(0, 180, 0);
-    border: none;
-    cursor: pointer;
-    &:hover {
-      background-color: rgb(0, 160, 0);
-    }
-`
+  border: none;
+  cursor: pointer;
+  &:hover {
+    background-color: rgb(0, 160, 0);
+  }
+`;
 
 const ModalStyle = styled.div`
   .modal {
@@ -109,8 +109,8 @@ const ModalStyle = styled.div`
   .closeBtn {
     display: flex;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 10px;
+    right: 10px;
     padding: 5px;
     cursor: pointer;
     svg {
@@ -122,7 +122,31 @@ const ModalStyle = styled.div`
   .margin-top50 {
     margin-top: 50px;
   }
-`
+
+  .picture-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .picture-box {
+    width: 100%;
+    height: 100%;
+    img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #ddd;
+      overflow: hidden;
+      cursor: pointer;
+      &:hover {
+        border: 3px solid #bbb;
+      }
+    }
+  }
+`;
 
 // 아이디 찾기 모달
 export const FindUserIdModal = (props) => {
@@ -143,7 +167,7 @@ export const FindUserIdModal = (props) => {
   };
 
   const handleBackgroundClick = (e) => {
-    e.stopPropagation();  // 내부 클릭 시 닫히지 않게 설정
+    e.stopPropagation(); // 내부 클릭 시 닫히지 않게 설정
     handleCloseModal();
   };
 
@@ -151,7 +175,7 @@ export const FindUserIdModal = (props) => {
     close();
     setInputName("");
     setInputEmail("");
-  }
+  };
 
   return (
     <ModalStyle>
@@ -160,20 +184,17 @@ export const FindUserIdModal = (props) => {
         onClick={handleBackgroundClick}
       >
         {open && (
-          <div
-            className="modal-container"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h1 className="title">
-              아이디 찾기
-            </h1>
+          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+            <h1 className="title">아이디 찾기</h1>
             <div className="input-container">
               <div className="textMessage">{textMessage}</div>
               <InputBox>
-                <div className="iconBox-left"><GoPencil /></div>
+                <div className="iconBox-left">
+                  <GoPencil />
+                </div>
                 <div className="inputBox">
                   <input
-                    type="text" 
+                    type="text"
                     placeholder="이름 입력"
                     value={inputName}
                     onChange={(e) => handleInputChange(e, setInputName)}
@@ -181,10 +202,12 @@ export const FindUserIdModal = (props) => {
                 </div>
               </InputBox>
               <InputBox>
-                <div className="iconBox-left"><GoMail /></div>
+                <div className="iconBox-left">
+                  <GoMail />
+                </div>
                 <div className="inputBox">
                   <input
-                    type="email" 
+                    type="email"
                     placeholder="이메일 입력"
                     value={inputEmail}
                     onChange={(e) => handleInputChange(e, setInputEmail)}
@@ -193,9 +216,7 @@ export const FindUserIdModal = (props) => {
               </InputBox>
             </div>
             <div className="margin-top50" />
-            <Button onClick={onClickFindUserId}>
-              아이디 찾기
-            </Button>
+            <Button onClick={onClickFindUserId}>아이디 찾기</Button>
 
             <div className="closeBtn" onClick={handleCloseModal}>
               <IoClose />
@@ -212,14 +233,14 @@ export const ResultUserIdModal = (props) => {
   const { open, close, userId, openFindPw } = props;
 
   const handleBackgroundClick = (e) => {
-    e.stopPropagation();  // 내부 클릭 시 닫히지 않게 설정
+    e.stopPropagation(); // 내부 클릭 시 닫히지 않게 설정
     close();
   };
 
   const onClickFindPw = () => {
     close();
     openFindPw();
-  }
+  };
 
   // 아이디 형태 변환
   const changeUserId = (userId) => {
@@ -227,7 +248,7 @@ export const ResultUserIdModal = (props) => {
       return userId + "***";
     }
     return userId.slice(0, 5) + "***";
-  }
+  };
 
   return (
     <ModalStyle>
@@ -236,31 +257,20 @@ export const ResultUserIdModal = (props) => {
         onClick={handleBackgroundClick}
       >
         {open && (
-          <div
-            className="modal-container"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h1 className="title">
-              아이디 찾기
-            </h1>
+          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+            <h1 className="title">아이디 찾기</h1>
             <div className="input-container">
               <div className="textMessage">
                 해당하는 아이디는 다음과 같습니다.
               </div>
               <InputBox className="readonly">
                 <div className="inputBox">
-                  <input
-                    type="text" 
-                    value={changeUserId(userId)}
-                    readOnly
-                  />
+                  <input type="text" value={changeUserId(userId)} readOnly />
                 </div>
               </InputBox>
             </div>
             <div className="margin-top50" />
-            <Button onClick={onClickFindPw}>
-              비밀번호 찾기
-            </Button>
+            <Button onClick={onClickFindPw}>비밀번호 찾기</Button>
 
             <div className="closeBtn" onClick={close}>
               <IoClose />
@@ -275,12 +285,12 @@ export const ResultUserIdModal = (props) => {
 // 비밀번호 찾기 모달
 export const FindPwModal = (props) => {
   const { open, close, openResult, openFindUserId } = props;
-  const [ inputUserId, setInputUserId ] = useState("");
-  const [ inputEmail, setInputEmail ] = useState("");
-  const [ textMessage, setTextMessage ] = useState("");
+  const [inputUserId, setInputUserId] = useState("");
+  const [inputEmail, setInputEmail] = useState("");
+  const [textMessage, setTextMessage] = useState("");
 
   const handleBackgroundClick = (e) => {
-    e.stopPropagation();  // 내부 클릭 시 닫히지 않게 설정
+    e.stopPropagation(); // 내부 클릭 시 닫히지 않게 설정
     handleCloseModal();
   };
 
@@ -292,18 +302,18 @@ export const FindPwModal = (props) => {
     // 비밀번호 찾기 기능 구현
     openResult();
     handleCloseModal();
-  }
+  };
 
   const onClickFindUserId = () => {
     openFindUserId();
     handleCloseModal();
-  }
+  };
 
   const handleCloseModal = () => {
     close();
     setInputUserId("");
     setInputEmail("");
-  }
+  };
 
   return (
     <ModalStyle>
@@ -312,20 +322,17 @@ export const FindPwModal = (props) => {
         onClick={handleBackgroundClick}
       >
         {open && (
-          <div
-            className="modal-container"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h1 className="title">
-              비밀번호 찾기
-            </h1>
+          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+            <h1 className="title">비밀번호 찾기</h1>
             <div className="input-container">
               <div className="textMessage">{textMessage}</div>
               <InputBox>
-                <div className="iconBox-left"><VscAccount /></div>
+                <div className="iconBox-left">
+                  <VscAccount />
+                </div>
                 <div className="inputBox">
                   <input
-                    type="text" 
+                    type="text"
                     placeholder="아이디 입력"
                     value={inputUserId}
                     onChange={(e) => handleInputChange(e, setInputUserId)}
@@ -333,10 +340,12 @@ export const FindPwModal = (props) => {
                 </div>
               </InputBox>
               <InputBox>
-                <div className="iconBox-left"><GoMail /></div>
+                <div className="iconBox-left">
+                  <GoMail />
+                </div>
                 <div className="inputBox">
                   <input
-                    type="email" 
+                    type="email"
                     placeholder="이메일 입력"
                     value={inputEmail}
                     onChange={(e) => handleInputChange(e, setInputEmail)}
@@ -345,14 +354,20 @@ export const FindPwModal = (props) => {
               </InputBox>
             </div>
             <div className="margin-top50" />
-            <Button onClick={onClickFindPw}>
-              비밀번호 찾기
-            </Button>
-            <div style={{position: "relative", paddingTop: "10px"}}>
-              <p style={{fontSize: "12px", color: "red", margin: 0, position: "absolute", top: 0}}>아이디를 잊어버리셨나요?</p>
-              <Button onClick={onClickFindUserId}>
-                아이디 찾기
-              </Button>
+            <Button onClick={onClickFindPw}>비밀번호 찾기</Button>
+            <div style={{ position: "relative", paddingTop: "10px" }}>
+              <p
+                style={{
+                  fontSize: "12px",
+                  color: "red",
+                  margin: 0,
+                  position: "absolute",
+                  top: 0,
+                }}
+              >
+                아이디를 잊어버리셨나요?
+              </p>
+              <Button onClick={onClickFindUserId}>아이디 찾기</Button>
             </div>
             <div className="closeBtn" onClick={handleCloseModal}>
               <IoClose />
@@ -369,7 +384,7 @@ export const ResultPwModal = (props) => {
   const { open, close, email } = props;
 
   const handleBackgroundClick = (e) => {
-    e.stopPropagation();  // 내부 클릭 시 닫히지 않게 설정
+    e.stopPropagation(); // 내부 클릭 시 닫히지 않게 설정
     close();
   };
 
@@ -380,31 +395,20 @@ export const ResultPwModal = (props) => {
         onClick={handleBackgroundClick}
       >
         {open && (
-          <div
-            className="modal-container"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h1 className="title">
-              비밀번호 찾기
-            </h1>
+          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+            <h1 className="title">비밀번호 찾기</h1>
             <div className="input-container">
               <div className="textMessage">
                 아래의 이메일로 임시 비밀번호가 발급되었습니다.
               </div>
               <InputBox className="readonly">
                 <div className="inputBox">
-                  <input
-                    type="email" 
-                    value={email}
-                    readOnly
-                  />
+                  <input type="email" value={email} readOnly />
                 </div>
               </InputBox>
             </div>
             <div className="margin-top50" />
-            <Button onClick={close}>
-              로그인
-            </Button>
+            <Button onClick={close}>로그인</Button>
 
             <div className="closeBtn" onClick={close}>
               <IoClose />
@@ -418,13 +422,27 @@ export const ResultPwModal = (props) => {
 
 // 프로필 사진 모달
 export const ProfilePicModal = (props) => {
-  const { open, close } = props;
-
+  const { open, close, onSelect } = props;
 
   const handleBackgroundClick = (e) => {
-    e.stopPropagation();  // 내부 클릭 시 닫히지 않게 설정
+    e.stopPropagation(); // 내부 클릭 시 닫히지 않게 설정
     close();
   };
+
+  const selectPic = (picName) => {
+    // 사진 적용 구현하기.
+    onSelect(picName);
+    close();
+  };
+
+  const pictures = [
+    { name: "cat.png", alt: "고양이" },
+    { name: "dog.png", alt: "강아지" },
+    { name: "elephant.png", alt: "코끼리" },
+    { name: "monkey.png", alt: "원숭이" },
+    { name: "panda.png", alt: "판다" },
+    { name: "rabbit.png", alt: "토끼" },
+  ];
 
   return (
     <ModalStyle>
@@ -433,14 +451,22 @@ export const ProfilePicModal = (props) => {
         onClick={handleBackgroundClick}
       >
         {open && (
-          <div
-            className="modal-container"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h1 className="title">
-              프로필 선택
-            </h1>
-            
+          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+            <h1 className="title">프로필 선택</h1>
+            <div className="picture-container">
+              {pictures.map((picture, index) => (
+                <div className="picture-box" key={index}>
+                  <img
+                    src={`profile-pic/${picture.name}`}
+                    alt={picture.alt}
+                    onClick={() => selectPic(picture.name)}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="closeBtn" onClick={close}>
+              <IoClose />
+            </div>
           </div>
         )}
       </div>
