@@ -26,6 +26,7 @@ export const Main = () => {
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1, // 월은 0부터 시작하므로 1을 더함
   });
+  
 
   // 연도와 월이 변경될 때마다 공휴일 데이터를 요청
   useEffect(() => {
@@ -121,26 +122,44 @@ export const Main = () => {
         {/* 축제 미니 캘린더 */}
         <Festive className="GridItem">
           <Calendar
-            onChange={handleMonthChange} // 날짜 클릭 시 선택된 날짜 업데이트 (월/연도 변경 시 공휴일 목록 갱신)
+             calendarType = "hebrew"
+            onChange={handleMonthChange} 
             value={value} // 선택된 날짜
             onActiveStartDateChange={({ activeStartDate }) => {
               const newMonth = activeStartDate.getMonth() + 1; // 월
               const newYear = activeStartDate.getFullYear(); // 연도
-              setCurrentYearMonth({ year: newYear, month: newMonth });
+              setCurrentYearMonth({ year: newYear, month: newMonth });    
             }}
-            tileContent={({ date }) =>
+            tileClassName={({ date, view }) => {
+              const today = new Date();
+              if (date.toDateString() === today.toDateString()) {
+                return 'react-calendar__tile--now'; 
+              }
+              if (view === 'month') {
+                const activeMonth = currentYearMonth.month - 1; // 현재 월 (0부터 시작)
+                if (date.getMonth() !== activeMonth) {
+                  return 'react-calendar__tile--inactive'; // 흐릿한 날짜
+                }
+                if (date.getDay() === 0) return 'react-calendar-sunday';
+                if (date.getDay() === 6) return 'react-calendar-saturday';
+              }
+            }}
+            
+              tileContent={({ date }) =>
               holidayDates.some(
                 (holidayDate) => holidayDate.toDateString() === date.toDateString()
               ) ? (
                 <div className="red-dot"></div> // 날짜 아래 빨간 점 표시
               ) : null
             }
-          />
+            formatDay={(locale, date) => date.getDate()}
+            tileDisabled={({ date, view }) => view === 'month'} // 'month' 뷰일 때 날짜만 선택 불가능
+            />
 
           <HolidayList>
             <ul>
               {holidays.length === 0 ? (
-                <li>이번 달에는 공휴일이 없습니다.</li>
+                <li>일정이 존재하지 않습니다..</li>
               ) : (
                 holidays.map((holiday) => (
                   <li key={holiday.seq}>
