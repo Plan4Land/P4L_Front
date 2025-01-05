@@ -14,6 +14,7 @@ import {
 import { KakaoMap, KakaoEx } from "../../Component/KakaoMapComponent";
 import { useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
+import Thumbnail from "../../Img/planning_thumbnail2.jpg";
 
 export const Planning = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
@@ -27,7 +28,7 @@ export const Planning = () => {
       <Header />
       <MainContainer>
         <Info>
-          <img src="" alt="여기가 이미지" />
+          <img src={Thumbnail} alt="" />
           <div>
             <h1>플래닝 제목</h1>
             <h3>지역 / 테마</h3>

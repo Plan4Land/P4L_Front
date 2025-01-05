@@ -130,14 +130,13 @@ export const ModalContainer = styled.div`
     width: 70px;
     height: 30px;
     margin-top: 20px;
-    background-color: #bce877;
-    border: 1px solid #70d165;
+    background-color: #e1ffb0;
+    border: 1px solid #bce877;
     border-radius: 5px;
     cursor: pointer;
 
     &:hover {
-      background-color: #579450;
-      color: #fff;
+      background-color: #bce877;
     }
   }
 `;
@@ -184,13 +183,13 @@ export const MakePlanningContainer = styled.div`
     margin: 5px 16px;
     border-radius: 10px;
     background-color: #fbfdf9;
-    border: 1px solid #70d165;
+    border: 1px solid #bce877;
     cursor: pointer;
     transition: background-color 0.08s ease;
   }
 
   .theme-button.selected {
-    background-color: #bce877;
+    background-color: #e1ffb0;
   }
 
   .theme-button:disabled {
@@ -204,6 +203,21 @@ export const MakePlanningContainer = styled.div`
     font-size: 16px;
     border: none;
     border-bottom: 1px solid #ccc;
+  }
+
+  .makePlanning-submit {
+    margin: 50px auto;
+    width: 150px;
+    font-size: 17px;
+    padding: 4px;
+    background-color: #e1ffb0;
+    border: 1px solid #bce877;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #bce877;
+    }
   }
 `;
 
@@ -245,16 +259,16 @@ export const DatePickerContainer = styled.div`
 
   .react-datepicker-popper[data-placement^="bottom"]
     .react-datepicker__triangle {
-    fill: #7bce72;
-    color: #7bce72;
+    fill: #e1ffb0;
+    color: #e1ffb0;
   }
 
   .react-datepicker__header {
-    background-color: #7bce72;
+    background-color: #e1ffb0;
   }
 
   .react-datepicker__navigation-icon::before {
-    border-color: #3d7937;
+    border-color: #90af5e;
     border-style: solid;
     border-width: 3px 3px 0 0;
     content: "";
@@ -315,6 +329,7 @@ export const DatePickerContainer = styled.div`
     border-radius: 0.3rem;
     background-color: #d5f0a9;
     /* color: #fff; */
+    color: black;
   }
   .react-datepicker__day:not([aria-disabled="true"]):hover,
   .react-datepicker__month-text:not([aria-disabled="true"]):hover,

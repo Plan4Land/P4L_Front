@@ -145,6 +145,9 @@ export const MakePlanning = () => {
             />
           </>
         )}
+        {selectedArea && selectedThemes.length > 0 && endDate && title && (
+          <button className="makePlanning-submit">생성하기</button>
+        )}
       </MakePlanningContainer>
       {/* <div style={{ padding: "20px", textAlign: "center" }}>
         <input
