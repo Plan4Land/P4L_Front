@@ -142,7 +142,7 @@ export const ModalContainer = styled.div`
 `;
 
 export const MakePlanningContainer = styled.div`
-  height: 75vh;
+  min-height: 75vh;
   padding: 0 30vw;
   margin-bottom: 10vh;
   display: flex;

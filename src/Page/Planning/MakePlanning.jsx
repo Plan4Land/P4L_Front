@@ -10,6 +10,7 @@ import { areas, themes } from "../../Util/Common";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
+import { ToggleSwitch } from "../../Component/ToggleSwitch";
 import { SearchKakaoMap } from "../../Component/KakaoMapComponent";
 
 export const MakePlanning = () => {
@@ -22,6 +23,7 @@ export const MakePlanning = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [title, setTitle] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
   const handleAreaChange = (e) => {
@@ -35,8 +37,6 @@ export const MakePlanning = () => {
         return prev.filter((t) => t !== theme);
       } else {
         // 새로운 테마를 선택하고, 최대 3개까지 선택
-        console.log(selectedThemes);
-
         return [...prev, theme].slice(0, 3);
       }
     });
@@ -47,6 +47,10 @@ export const MakePlanning = () => {
     if (endDate && date > endDate) {
       setEndDate(null); // 종료일을 초기화
     }
+  };
+
+  const handleSubmit = async () => {
+    console.log("제출이요");
   };
 
   return (
@@ -146,27 +150,20 @@ export const MakePlanning = () => {
           </>
         )}
         {selectedArea && selectedThemes.length > 0 && endDate && title && (
-          <button className="makePlanning-submit">생성하기</button>
+          <>
+            <h2 className="question-title">공개 여부</h2>
+            <ToggleSwitch setIsOn={setIsPublic} isOn={isPublic} />
+          </>
+        )}
+        {selectedArea && selectedThemes.length > 0 && endDate && title && (
+          <button
+            className="makePlanning-submit"
+            onClick={() => handleSubmit()}
+          >
+            생성하기
+          </button>
         )}
       </MakePlanningContainer>
-      {/* <div style={{ padding: "20px", textAlign: "center" }}>
-        <input
-          type="text"
-          placeholder="검색어를 입력하세요"
-          value={searchKeyword}
-          onChange={handleInputChange}
-          style={{
-            width: "300px",
-            height: "40px",
-            fontSize: "16px",
-            marginBottom: "20px",
-            padding: "5px",
-          }}
-        />
-      </div>
-      <div style={{ height: "1000px" }}>
-        <SearchKakaoMap searchKeyword={searchKeyword} />{" "}
-      </div> */}
       {openModal && (
         <ModalOverlay>
           <ModalContainer>
