@@ -136,6 +136,14 @@ export const Festive = styled(GridItem)`
     background-color: red;
     border-radius: 50%;
   }
+  .red-dot {
+  width: 6px;
+  height: 6px;
+  background-color: red;
+  border-radius: 50%;
+  margin: 0 auto; /* 가운데 정렬 */
+}
+
 `;
 
 export const HolidayList = styled.div`
