@@ -6,6 +6,7 @@ import {
   RecommPlan,
   Festive,
   PlanBox,
+  HolidayList,
 } from "../Style/MainStyled"; // 스타일
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react"; // 추천 관광지 스와이퍼
@@ -29,24 +30,22 @@ export const Main = () => {
     })
     .catch(error => {
       console.error("공휴일 데이터를 불러오는 데 실패했습니다.", error);
-      if (error.response) {
-        // 서버가 응답을 반환했지만 4xx 또는 5xx 상태 코드가 포함된 경우
-        console.error("응답 오류 상태 코드:", error.response.status);
-        console.error("응답 데이터:", error.response.data);
-      } else if (error.request) {
-        // 요청이 이루어졌지만 응답이 없는 경우
-        console.error("요청 오류:", error.request);
-      } else {
-        // 다른 오류
-        console.error("에러 메시지:", error.message);
-      }
     });
   },[]);
   
   // React Calendar에 표시할 공휴일 날짜들을 처리
-  const holidayDates = holidays.map(holiday => {
-    const date = holiday.locdate.toString();  // 날짜를 string 형식으로 변환
-    return new Date(date.slice(0, 4), date.slice(4, 6) - 1, date.slice(6, 8));  // Date 객체로 변환
+  const holidayDates = holidays.map((holiday) => {
+    const date = holiday.locdate.toString();
+    return new Date(
+      parseInt(date.slice(0, 4)), // 연도
+      parseInt(date.slice(4, 6)) - 1, // 월
+      parseInt(date.slice(6, 8)) // 일
+    );
+  });
+
+  const currentMonthHolidays = holidays.filter((holiday) => {
+    const holidayMonth = parseInt(holiday.locdate.toString().slice(4, 6));
+    return holidayMonth === value.getMonth() + 1;
   });
 
   return (
@@ -105,15 +104,38 @@ export const Main = () => {
 
         {/* 축제 미니 캘린더 */}
         <Festive className="GridItem">
-          <Calendar 
-            onChange={onChange} 
-            value={value} 
-            tileClassName={({ date }) => {
-              return holidayDates.some(holidayDate => holidayDate.toDateString() === date.toDateString()) 
-                ? 'highlight'  // 공휴일인 날짜에 클래스 추가
-                : null;
-            }} 
-          />
+        <Calendar
+    onChange={onChange}
+    value={value}
+    onActiveStartDateChange={({ activeStartDate }) => {
+      const newMonth = activeStartDate.getMonth() + 1; // 변경된 월
+      const newYear = activeStartDate.getFullYear(); // 변경된 연도
+      onChange(new Date(newYear, newMonth - 1, 1)); // 선택된 날짜를 새로 업데이트
+    }}
+    tileContent={({ date }) =>
+      holidayDates.some(
+        (holidayDate) =>
+          holidayDate.toDateString() === date.toDateString()
+      ) ? (
+        <div className="red-dot"></div> // 날짜 아래 빨간 점 추가
+      ) : null
+    }
+  />
+            <HolidayList>
+          <ul>
+            {currentMonthHolidays.length > 0 ? (
+              currentMonthHolidays.map((holiday) => (
+                <li key={holiday.seq}>
+                  {parseInt(holiday.locdate.toString().slice(4, 6))}월{" "}
+                  {parseInt(holiday.locdate.toString().slice(6, 8))}일 -{" "}
+                  {holiday.dateName}
+                </li>
+              ))
+            ) : (
+              <li>이번 달에는 공휴일이 없습니다.</li>
+            )}
+          </ul>
+        </HolidayList>
         </Festive>
       </MainBox>
       <Footer />

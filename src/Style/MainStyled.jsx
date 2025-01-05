@@ -118,13 +118,52 @@ export const PlanBox = styled.div`
 export const Festive = styled(GridItem)`
   grid-column: span 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  
-  .react-calendar__tile.highlight {
-    background-color: #ffcc00;
-    color: white;
+  justify-content: flex-start;
+
+  .react-calendar__tile {
+    position: relative;
+  }
+
+  .react-calendar__tile .red-dot {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: red;
+    border-radius: 50%;
   }
 `;
 
+export const HolidayList = styled.div`
+  margin-top: 20px;
+  width: 100%;
+  max-width: 400px;
+  height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+
+  h3 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    padding: 5px 0;
+    font-size: 14px;
+  }
+`;
 
