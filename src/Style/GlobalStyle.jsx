@@ -48,6 +48,7 @@ export const HeaderSt = styled.div`
     border-radius: 50%;
     background-color: ${colors.colorD};
     position: relative;
+    cursor: pointer;
   }
   .dropdown {
     position: absolute;
