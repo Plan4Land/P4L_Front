@@ -20,17 +20,18 @@ const ToggleContainer = styled.div`
     transition: 0.2s;
 
     &.toggle--checked {
-      background-color: #81e492;
+      background-color: #98ffaa;
     }
   }
 
   > .toggle-circle {
     position: absolute;
-    top: 1px;
+    top: 0px;
     left: -1px;
     width: 28px;
     height: 28px;
     border-radius: 50%;
+    border: 1px solid #ccc;
     background-color: #ffffff;
     transition: all ease-out 0.2s;
 

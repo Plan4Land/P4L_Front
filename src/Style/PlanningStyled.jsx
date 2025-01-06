@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "./GlobalStyle";
 
 export const MainContainer = styled.div`
   min-height: 700px; /////이거는 고민
@@ -126,19 +127,6 @@ export const ModalContainer = styled.div`
   p {
     margin-bottom: 6px;
   }
-  button {
-    width: 70px;
-    height: 30px;
-    margin-top: 20px;
-    background-color: #e1ffb0;
-    border: 1px solid #bce877;
-    border-radius: 5px;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #bce877;
-    }
-  }
 `;
 
 export const MakePlanningContainer = styled.div`
@@ -166,15 +154,11 @@ export const MakePlanningContainer = styled.div`
     transition: border-color 0.3s ease;
     width: 300px;
     background-color: #f9f9f9;
+    cursor: pointer;
   }
   .location-select:first-of-type {
     margin-bottom: 10px;
   }
-  /* 
-  .location-select:focus {
-    border-color: #f9ffe9;
-    box-shadow: 0 0 5px #bce877;
-  } */
 
   .location-select option {
     padding: 10px;
@@ -185,14 +169,14 @@ export const MakePlanningContainer = styled.div`
     width: 100px;
     margin: 5px 16px;
     border-radius: 10px;
-    background-color: #fbfdf9;
-    border: 1px solid #bce877;
+    background-color: #fffffa;
+    border: 1px solid ${colors.colorB};
     cursor: pointer;
     transition: background-color 0.08s ease;
   }
 
   .theme-button.selected {
-    background-color: #e1ffb0;
+    background-color: ${colors.colorD};
   }
 
   .theme-button:disabled {

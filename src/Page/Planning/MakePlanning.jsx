@@ -69,7 +69,14 @@ export const MakePlanning = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("제출이요");
+    console.log("selectedArea : ", selectedArea);
+    console.log("selectedSubArea : ", selectedSubArea);
+    console.log("selectedThemes : ", selectedThemes.join(","));
+    console.log("startDate : ", startDate);
+    console.log("endDate : ", endDate);
+    console.log("title : ", title);
+    console.log("selectedThumbnail : ", selectedImage);
+    console.log("isPublic : ", isPublic);
   };
 
   return (
@@ -203,8 +210,8 @@ export const MakePlanning = () => {
         {isStepComplete && (
           <Button
             onClick={() => handleSubmit()}
-            margin={"40px auto 0"}
-            width={"150px"}
+            $margin={"40px auto 0"}
+            $width={"150px"}
           >
             생성하기
           </Button>
@@ -214,7 +221,9 @@ export const MakePlanning = () => {
         <ModalOverlay>
           <ModalContainer>
             <h3>시작일을 먼저 선택해주세요.</h3>
-            <button onClick={() => setOpenModal(false)}>확인</button>
+            <Button onClick={() => setOpenModal(false)} height={"40px"}>
+              확인
+            </Button>
           </ModalContainer>
         </ModalOverlay>
       )}
