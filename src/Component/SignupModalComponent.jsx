@@ -437,7 +437,6 @@ export const ProfilePicModal = (props) => {
 
   const pictures = [
     { name: "basic1.png", alt: "기본1" },
-    { name: "basic2.png", alt: "기본2" },
     { name: "basic3.png", alt: "기본3" },
     { name: "basic4.png", alt: "기본4" },
     { name: "basic5.png", alt: "기본5" },
