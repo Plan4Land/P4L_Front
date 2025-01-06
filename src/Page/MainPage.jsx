@@ -9,6 +9,7 @@ import {
   HolidayList,
 } from "../Style/MainStyled"; // 스타일
 import React, { useState, useEffect } from "react";
+import { areas } from "../Util/Common";
 import { Swiper, SwiperSlide } from "swiper/react"; // 추천 관광지 스와이퍼
 import "swiper/css"; // 추천 관광지 스와이퍼
 import "swiper/css/navigation"; // 추천 관광지 스와이퍼
@@ -20,13 +21,17 @@ import axios from "axios";
 
 export const Main = () => {
   const [selectedMenu, setSelectedMenu] = useState("지역"); // 미니검색창
+  const [selectedArea, setSelectedArea] = useState("");
   const [value, onChange] = useState(new Date()); // 축제 캘린더
   const [holidays, setHolidays] = useState([]); // 공휴일 목록
   const [currentYearMonth, setCurrentYearMonth] = useState({
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1, // 월은 0부터 시작하므로 1을 더함
   });
-  
+
+  const handleAreaClick = (areaName) => {
+    setSelectedArea(areaName);
+  };
 
   // 연도와 월이 변경될 때마다 공휴일 데이터를 요청
   useEffect(() => {
@@ -78,8 +83,23 @@ export const Main = () => {
           <div className="SearchBox">
             {selectedMenu === "지역" && (
               <div className="RegionSearch">
-                <input type="text" placeholder="지역" />
-                <button>검색</button>
+                <div className="area-list">
+                  {areas.map((area) => (
+                    <button
+                      key={area.code}
+                      onClick={() => handleAreaClick(area.name)}
+                      className={selectedArea === area.name ? "selected" : ""}
+                    >
+                      {area.name}
+                    </button>
+                  ))}
+                </div>
+                <div className="selected-area">
+                  {selectedArea && <p>선택된 지역: {selectedArea}</p>}
+                </div>
+                <button onClick={() => console.log("검색 지역:", selectedArea)}>
+                  검색
+                </button>
               </div>
             )}
             {selectedMenu === "테마" && (
@@ -122,39 +142,39 @@ export const Main = () => {
         {/* 축제 미니 캘린더 */}
         <Festive className="GridItem">
           <Calendar
-             calendarType = "hebrew"
-            onChange={handleMonthChange} 
+            calendarType="hebrew"
+            onChange={handleMonthChange}
             value={value} // 선택된 날짜
             onActiveStartDateChange={({ activeStartDate }) => {
               const newMonth = activeStartDate.getMonth() + 1; // 월
               const newYear = activeStartDate.getFullYear(); // 연도
-              setCurrentYearMonth({ year: newYear, month: newMonth });    
+              setCurrentYearMonth({ year: newYear, month: newMonth });
             }}
             tileClassName={({ date, view }) => {
               const today = new Date();
               if (date.toDateString() === today.toDateString()) {
-                return 'react-calendar__tile--now'; 
+                return "react-calendar__tile--now";
               }
-              if (view === 'month') {
+              if (view === "month") {
                 const activeMonth = currentYearMonth.month - 1; // 현재 월 (0부터 시작)
                 if (date.getMonth() !== activeMonth) {
-                  return 'react-calendar__tile--inactive'; // 흐릿한 날짜
+                  return "react-calendar__tile--inactive"; // 흐릿한 날짜
                 }
-                if (date.getDay() === 0) return 'react-calendar-sunday';
-                if (date.getDay() === 6) return 'react-calendar-saturday';
+                if (date.getDay() === 0) return "react-calendar-sunday";
+                if (date.getDay() === 6) return "react-calendar-saturday";
               }
             }}
-            
-              tileContent={({ date }) =>
+            tileContent={({ date }) =>
               holidayDates.some(
-                (holidayDate) => holidayDate.toDateString() === date.toDateString()
+                (holidayDate) =>
+                  holidayDate.toDateString() === date.toDateString()
               ) ? (
                 <div className="red-dot"></div> // 날짜 아래 빨간 점 표시
               ) : null
             }
             formatDay={(locale, date) => date.getDate()}
-            tileDisabled={({ date, view }) => view === 'month'} // 'month' 뷰일 때 날짜만 선택 불가능
-            />
+            tileDisabled={({ date, view }) => view === "month"} // 'month' 뷰일 때 날짜만 선택 불가능
+          />
 
           <HolidayList>
             <ul>
