@@ -31,8 +31,49 @@ export const UserInfo = styled.div`
     border-radius: 50%;
   }
   .UserExplain {
-    border: 1px solid black;
-    width: 500px;
-    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .UserDetail {
+    margin-bottom: 10px;
+  }
+  .UserDetail:last-child {
+    cursor: pointer;
+  }
+
+  .label {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
+  .value {
+    color: #333;
+  }
+`;
+
+export const FollowList = styled.div`
+  width: 500px;
+  height: 300px;
+  overflow-y: scroll;
+  .tabs {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 100px;
+    button {
+      background-color: white;
+      border: none;
+      color: ${colors.colorA};
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      &:hover {
+        background-color: ${colors.colorC};
+      }
+      &.active {
+        background-color: ${colors.colorC};
+      }
+    }
   }
 `;

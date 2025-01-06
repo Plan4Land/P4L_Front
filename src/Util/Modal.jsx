@@ -19,11 +19,10 @@ const ModalContent = styled.div`
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  width: 300px;
   text-align: center;
 `;
 
-const Modal = ({ isOpen, onClose, onConfirm, children }) => {
+export const Modal = ({ isOpen, onClose, onConfirm, children }) => {
   if (!isOpen) return null;
 
   return (
@@ -31,10 +30,21 @@ const Modal = ({ isOpen, onClose, onConfirm, children }) => {
       <ModalContent>
         {children} {/* 자식 요소로 전달된 내용 */}
         <Button onClick={onConfirm}>확인</Button>
-        <CancelButton onClick={onClose}>취소</CancelButton>{" "}
+        <CancelButton onClick={onClose}>취소</CancelButton>
       </ModalContent>
     </ModalBackdrop>
   );
 };
 
-export default Modal;
+export const CheckModal = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <ModalBackdrop>
+      <ModalContent>
+        {children} {/* 자식 요소로 전달된 내용 */}
+        <Button onClick={onClose}>확인</Button>
+      </ModalContent>
+    </ModalBackdrop>
+  );
+};

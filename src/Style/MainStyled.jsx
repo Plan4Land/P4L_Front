@@ -12,7 +12,7 @@ export const MainBox = styled.div`
 
 export const GridItem = styled.div`
   display: flex;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   height: 100%;
 `;
 //         {/* 미니 검색창!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
@@ -20,11 +20,8 @@ export const QuickSearch = styled(GridItem)`
   grid-column: span 2;
   display: flex;
   flex-direction: column;
-
   .QuickSelect {
     display: flex;
-    justify-content: space-around;
-
     padding: 10px;
     border-radius: 8px;
 
@@ -33,32 +30,40 @@ export const QuickSearch = styled(GridItem)`
       background-color: transparent;
       border: none;
       width: 100%;
-      margin: 0 20px;
+      height: 30px;
+      margin: 0 20px 20px;
       transition: all 0.3s ease;
       font-size: 16px;
       color: #17520b;
       &:hover {
         opacity: 0.7;
       }
-      &:active {
-        opacity: 0.7;
+      &.active {
+        background-color: ${colors.colorC};
       }
     }
   }
 
   .SearchBox {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    width: 100%;
     height: 100%;
-
     .RegionSearch {
       display: flex;
       flex-direction: column;
-      align-items: center;
-
       button {
+        background-color: white;
+        color: ${colors.colorA};
         height: 40px;
+        width: 30%;
         margin: 5px;
+        transition: all 0.3s ease;
+        &:hover {
+          background-color: ${colors.colorB};
+          color: white;
+          transform: translateY(-3px);
+        }
       }
     }
 
@@ -66,6 +71,7 @@ export const QuickSearch = styled(GridItem)`
       display: flex;
       text-align: center;
       height: 100%;
+      width: 100%;
       .Theme {
         margin: 10px;
         border: 1px solid black;
@@ -78,6 +84,7 @@ export const QuickSearch = styled(GridItem)`
 //         {/* 상위 관광지 n개 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const RecommItem = styled(GridItem)`
   grid-column: span 2;
+  border: 1px solid black;
 `;
 //         {/* 상위 플래닝 3개!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const RecommPlan = styled(GridItem)`

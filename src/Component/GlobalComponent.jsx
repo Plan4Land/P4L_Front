@@ -3,8 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "../Img/Plan4landLogo.png";
 import { useState } from "react";
 import { Button, CancelButton } from "./ButtonComponent";
-import Modal from "../Util/Modal";
-
+import { Modal } from "../Util/Modal";
 export const Header = () => {
   const location = useLocation();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -70,7 +69,11 @@ export const Header = () => {
       <div className="recomm">추천합니다.</div>
       <div
         className="profile-link"
-        onClick={() => (window.location.href = "/mypage")}
+        onClick={() => {
+          if (!showLogoutModal) {
+            window.location.href = "/mypage";
+          }
+        }}
       >
         <div className="dropdown" onClick={(e) => e.stopPropagation()}>
           <Link to="/mypage" className="dropdown-item">
@@ -80,7 +83,8 @@ export const Header = () => {
             className="dropdown-item"
             onClick={(e) => {
               e.preventDefault();
-              setShowLogoutModal(true); // 로그아웃 모달 열기
+              e.stopPropagation();
+              setShowLogoutModal(true);
             }}
           >
             로그아웃

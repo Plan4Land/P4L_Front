@@ -77,8 +77,19 @@ export const Main = () => {
         {/* 미니 검색창 */}
         <QuickSearch>
           <div className="QuickSelect">
-            <button onClick={() => setSelectedMenu("지역")}>지역</button>|
-            <button onClick={() => setSelectedMenu("테마")}>테마</button>
+            <button
+              onClick={() => setSelectedMenu("지역")}
+              className={selectedMenu === "지역" ? "active" : ""}
+            >
+              지역
+            </button>
+            |
+            <button
+              onClick={() => setSelectedMenu("테마")}
+              className={selectedMenu === "테마" ? "active" : ""}
+            >
+              테마
+            </button>
           </div>
           <div className="SearchBox">
             {selectedMenu === "지역" && (
