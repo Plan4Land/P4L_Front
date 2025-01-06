@@ -9,7 +9,7 @@ export const colors = {
 
 export const HeaderSt = styled.div`
   height: 100px;
-  background-color: ${colors.colorC};
+  background-color: ${colors.colorD};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -30,7 +30,7 @@ export const HeaderSt = styled.div`
       display: flex;
       align-items: center;
       background-color: white;
-      border: 1px solid ${colors.colorB};
+      border: 1px solid ${colors.colorA};
       border-radius: 50px;
       overflow: hidden;
       height: 50px;
@@ -46,7 +46,7 @@ export const HeaderSt = styled.div`
     height: 80px;
     width: 80px;
     border-radius: 50%;
-    background-color: ${colors.colorD};
+    background-color: ${colors.colorC};
     position: relative;
     cursor: pointer;
   }
@@ -125,7 +125,6 @@ export const HeaderSt = styled.div`
 
 export const NavSt = styled.div`
   height: 50px;
-  background-color: ${colors.colorD};
   display: flex;
   justify-content: space-between;
   align-items: center;

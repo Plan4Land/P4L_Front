@@ -6,6 +6,7 @@ import { Login } from "./Page/signup/Login";
 import { Signup } from "./Page/signup/Signup";
 import MyPageMain from "./Page/Mypage/MyPageMain";
 import KtxInquiry from "./Page/Traffic/KtxInquiry";
+import { TourList } from "./Page/Item/TourList";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/mypage" element={<MyPageMain />} />
           <Route path="/ktxInquiry" element={<KtxInquiry />} />
+          <Route path="/tourlist" element={<TourList />} />
         </Routes>
       </Router>
     </>
