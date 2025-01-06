@@ -8,6 +8,8 @@ import {
   PlanBox,
   HolidayList,
 } from "../Style/MainStyled"; // 스타일
+import { Button } from "../Component/ButtonComponent";
+import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { areas } from "../Util/Common";
 import { Swiper, SwiperSlide } from "swiper/react"; // 추천 관광지 스와이퍼
@@ -43,16 +45,14 @@ export const Main = () => {
         params: { solYear: year, solMonth: month },
       })
       .then((response) => {
-        // 응답이 배열 형태로 변환되지 않으면 강제로 배열로 설정
         const holidaysData = Array.isArray(response.data) ? response.data : [];
-        setHolidays(holidaysData); // 이전 데이터는 덮어쓰고 새 데이터를 사용
+        setHolidays(holidaysData);
       })
       .catch((error) => {
         console.error("공휴일 데이터를 불러오는 데 실패했습니다.", error);
       });
-  }, [currentYearMonth]); // currentYearMonth 상태가 변경될 때마다 호출
+  }, [currentYearMonth]);
 
-  // React Calendar에 표시할 공휴일 날짜들을 처리
   const holidayDates = holidays.map((holiday) => {
     const date = holiday.locdate.toString();
     return new Date(
@@ -65,9 +65,9 @@ export const Main = () => {
   // 월/연도가 변경될 때 currentYearMonth 업데이트
   const handleMonthChange = (newDate) => {
     const newYear = newDate.getFullYear();
-    const newMonth = newDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
+    const newMonth = newDate.getMonth() + 1;
     setCurrentYearMonth({ year: newYear, month: newMonth });
-    onChange(newDate); // 달력의 날짜 상태도 갱신
+    onChange(newDate);
   };
 
   return (
@@ -85,21 +85,18 @@ export const Main = () => {
               <div className="RegionSearch">
                 <div className="area-list">
                   {areas.map((area) => (
-                    <button
-                      key={area.code}
-                      onClick={() => handleAreaClick(area.name)}
-                      className={selectedArea === area.name ? "selected" : ""}
-                    >
-                      {area.name}
-                    </button>
+                    // 링크 이거 변경
+                    <Link key={area.code} to={`/tourlist/${area.code}`}>
+                      <Button
+                        key={area.code}
+                        onClick={() => handleAreaClick(area.name)}
+                        className={selectedArea === area.name ? "selected" : ""}
+                      >
+                        {area.name}
+                      </Button>
+                    </Link>
                   ))}
                 </div>
-                <div className="selected-area">
-                  {selectedArea && <p>선택된 지역: {selectedArea}</p>}
-                </div>
-                <button onClick={() => console.log("검색 지역:", selectedArea)}>
-                  검색
-                </button>
               </div>
             )}
             {selectedMenu === "테마" && (

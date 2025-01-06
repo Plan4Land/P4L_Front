@@ -57,17 +57,8 @@ export const QuickSearch = styled(GridItem)`
       align-items: center;
 
       button {
-        background-color: ${colors.colorB};
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 8px 16px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-
-        &:hover {
-          opacity: 0.7;
-        }
+        height: 40px;
+        margin: 5px;
       }
     }
 

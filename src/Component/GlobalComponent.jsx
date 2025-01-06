@@ -2,6 +2,8 @@ import { HeaderSt, NavSt, FooterSt } from "../Style/GlobalStyle";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../Img/Plan4landLogo.png";
 import { useState } from "react";
+import { Button, CancelButton } from "./ButtonComponent";
+
 export const Header = () => {
   const location = useLocation();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -85,14 +87,16 @@ export const Header = () => {
         <div className="modal">
           <div className="modal-content">
             <p>로그아웃 하시겠습니까?</p>
-            <button
+            <Button
               onClick={() => {
                 setShowLogoutModal(false);
               }}
             >
               확인
-            </button>
-            <button onClick={() => setShowLogoutModal(false)}>취소</button>
+            </Button>
+            <CancelButton onClick={() => setShowLogoutModal(false)}>
+              취소
+            </CancelButton>
           </div>
         </div>
       )}

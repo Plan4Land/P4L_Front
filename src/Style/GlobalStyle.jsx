@@ -120,21 +120,6 @@ export const HeaderSt = styled.div`
     border-radius: 8px;
     text-align: center;
   }
-
-  .modal-content button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    background-color: ${colors.colorB};
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .modal-content button:hover {
-    opacity: 0.7;
-  }
 `;
 
 export const NavSt = styled.div`
