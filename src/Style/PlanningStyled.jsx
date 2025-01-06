@@ -4,6 +4,7 @@ import { colors } from "./GlobalStyle";
 export const MainContainer = styled.div`
   min-height: 700px; /////이거는 고민
   padding: 0 15vw;
+  margin-bottom: 10vh;
   display: flex;
   flex-direction: column;
 `;
@@ -13,7 +14,7 @@ export const Info = styled.div`
   display: flex;
   box-sizing: border-box;
   position: relative;
-  background-color: azure;
+  /* background-color: azure; */
   div {
     margin: auto 0 auto 2%;
   }
@@ -22,7 +23,7 @@ export const Info = styled.div`
     margin: 3px;
   }
 
-  img {
+  /* img {
     display: flex;
     right: 0;
     width: 250px;
@@ -31,7 +32,7 @@ export const Info = styled.div`
     background-color: #eafcd5;
     border-radius: 50%;
     text-align: center;
-  }
+  } */
 `;
 
 export const Users = styled.div`
@@ -40,7 +41,7 @@ export const Users = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  background-color: bisque;
+  /* background-color: bisque; */
 `;
 
 export const UserProfile = styled.div`
@@ -70,7 +71,7 @@ export const ContentContainer = styled.div`
   justify-content: center;
   padding: 2%;
   box-sizing: border-box;
-  background-color: skyblue;
+  /* background-color: skyblue; */
 `;
 
 export const MainPlanning = styled.div`
@@ -78,8 +79,17 @@ export const MainPlanning = styled.div`
   min-width: 400px; // 이거도 고민
   min-height: 100px; // 이거 고민
   max-height: 600px; // 이것도 고민
-  display: flex;
+  /* display: flex;
+  flex-direction: column; */
+  overflow-y: auto;
   background-color: blanchedalmond;
+
+  .planning-day {
+    width: 92%;
+    height: 40px;
+    margin: 2px auto 0;
+    background-color: #e2f3a2;
+  }
 `;
 
 export const KakaoMapContainer = styled.div`
@@ -88,13 +98,6 @@ export const KakaoMapContainer = styled.div`
   height: 400px;
   margin-left: 1%;
   background-color: antiquewhite;
-`;
-
-export const MemoContainer = styled.div`
-  width: 100%;
-  height: 500px;
-  overflow-y: auto;
-  background-color: palegoldenrod;
 `;
 
 export const ModalOverlay = styled.div`

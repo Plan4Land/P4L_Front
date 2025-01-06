@@ -32,7 +32,7 @@ export const MakePlanning = () => {
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const isStepComplete =
-    selectedSubArea && selectedThemes.length > 0 && endDate && title;
+    selectedSubArea && selectedThemes.length > 0 && endDate && title.trim();
 
   const handleAreaChange = (e) => {
     setSelectedArea(e.target.value);
@@ -186,7 +186,8 @@ export const MakePlanning = () => {
               type="text"
               placeholder="플래닝 제목을 입력하세요"
               className="title-input"
-              onChange={(e) => setTitle(e.target.value)}
+              value={title}
+              onChange={(e) => setTitle(e.target.value.replace(/^\s+/, ""))}
             />
           </>
         )}
