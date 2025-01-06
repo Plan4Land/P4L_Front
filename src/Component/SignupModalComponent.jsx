@@ -436,12 +436,12 @@ export const ProfilePicModal = (props) => {
   };
 
   const pictures = [
-    { name: "cat.png", alt: "고양이" },
-    { name: "dog.png", alt: "강아지" },
-    { name: "elephant.png", alt: "코끼리" },
-    { name: "monkey.png", alt: "원숭이" },
-    { name: "panda.png", alt: "판다" },
-    { name: "rabbit.png", alt: "토끼" },
+    { name: "basic1.png", alt: "기본1" },
+    { name: "basic3.png", alt: "기본3" },
+    { name: "basic4.png", alt: "기본4" },
+    { name: "basic5.png", alt: "기본5" },
+    { name: "basic6.png", alt: "기본6" },
+    { name: "basic7.png", alt: "기본7" },
   ];
 
   return (

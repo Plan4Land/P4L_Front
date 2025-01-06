@@ -9,8 +9,8 @@ export const ProfileImgContainer = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  width: 100%;
-  height: 100%;
+  width: ${(props) => props.width || "100%"}; // 기본값 100px
+  height: ${(props) => props.height || "100%"}; // 기본값 100px
 
   .upload-label {
     position: absolute;
@@ -29,6 +29,23 @@ export const ProfileImgContainer = styled.div`
     z-index: 10;
   }
 `;
+
+export const ProfileImg = ({ file, width, height }) => {
+  return (
+    <ProfileImgContainer width={width} height={height}>
+      <img
+        src={file}
+        alt="프로필 이미지"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          borderRadius: "50%",
+        }}
+      />
+    </ProfileImgContainer>
+  );
+};
 
 export const EditImg = ({
   basic,

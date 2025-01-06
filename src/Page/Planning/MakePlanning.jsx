@@ -3,8 +3,6 @@ import { Header, Footer } from "../../Component/GlobalComponent";
 import {
   MakePlanningContainer,
   DatePickerContainer,
-  ModalOverlay,
-  ModalContainer,
 } from "../../Style/PlanningStyled";
 import { areas, themes } from "../../Util/Common";
 import DatePicker from "react-datepicker";
@@ -12,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { ToggleSwitch } from "../../Component/ToggleSwitch";
 import { EditImg } from "../../Component/ProfileImg";
+import { CheckModal } from "../../Util/Modal";
 import ThumbnailBasic from "../../Img/planning_thumbnail.jpg";
 import { SearchKakaoMap } from "../../Component/KakaoMapComponent";
 import { Button } from "../../Component/ButtonComponent";
@@ -32,7 +31,7 @@ export const MakePlanning = () => {
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const isStepComplete =
-    selectedSubArea && selectedThemes.length > 0 && endDate && title;
+    selectedSubArea && selectedThemes.length > 0 && endDate && title.trim();
 
   const handleAreaChange = (e) => {
     setSelectedArea(e.target.value);
@@ -186,7 +185,8 @@ export const MakePlanning = () => {
               type="text"
               placeholder="플래닝 제목을 입력하세요"
               className="title-input"
-              onChange={(e) => setTitle(e.target.value)}
+              value={title}
+              onChange={(e) => setTitle(e.target.value.replace(/^\s+/, ""))}
             />
           </>
         )}
@@ -218,14 +218,13 @@ export const MakePlanning = () => {
         )}
       </MakePlanningContainer>
       {openModal && (
-        <ModalOverlay>
-          <ModalContainer>
-            <h3>시작일을 먼저 선택해주세요.</h3>
-            <Button onClick={() => setOpenModal(false)} height={"40px"}>
-              확인
-            </Button>
-          </ModalContainer>
-        </ModalOverlay>
+        <CheckModal
+          isOpen={openModal}
+          onClose={() => setOpenModal(false)}
+          buttonProps={{ $margin: "5% 0 0" }}
+        >
+          <h3>시작일을 먼저 선택해주세요.</h3>
+        </CheckModal>
       )}
       <Footer />
     </>
