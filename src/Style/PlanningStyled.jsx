@@ -90,10 +90,26 @@ export const MainPlanning = styled.div`
   .planning-day {
     display: flex;
     position: relative;
+    align-items: center;
     width: 92%;
     height: 40px;
     margin: 2px auto 0;
+    cursor: pointer;
     background-color: #e2f3a2;
+
+    .arrow {
+      display: flex;
+      position: absolute;
+      right: 7px;
+    }
+  }
+
+  .day-toggle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin: 0 auto;
   }
 `;
 
@@ -103,38 +119,6 @@ export const KakaoMapContainer = styled.div`
   height: 400px;
   margin-left: 1%;
   background-color: antiquewhite;
-`;
-
-export const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000; /* 다른 요소보다 위에 배치 */
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  /* 배경 페이드인 효과만 적용 */
-  animation: fadeBackground 0.3s ease;
-`;
-
-export const ModalContainer = styled.div`
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 500px;
-  text-align: center;
-
-  h3 {
-    margin-bottom: 20px;
-  }
-  p {
-    margin-bottom: 6px;
-  }
 `;
 
 export const MakePlanningContainer = styled.div`
