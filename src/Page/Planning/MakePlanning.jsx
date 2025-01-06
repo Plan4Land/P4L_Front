@@ -13,7 +13,7 @@ import { ko } from "date-fns/locale";
 import { ToggleSwitch } from "../../Component/ToggleSwitch";
 import { ProfileImgContainer } from "../../Component/ProfileImg";
 import ThumbnailBasic from "../../Img/planning_thumbnail.jpg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SearchKakaoMap } from "../../Component/KakaoMapComponent";
 
 export const MakePlanning = () => {
