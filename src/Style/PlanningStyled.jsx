@@ -167,6 +167,9 @@ export const MakePlanningContainer = styled.div`
     width: 300px;
     background-color: #f9f9f9;
   }
+  .location-select:first-of-type {
+    margin-bottom: 10px;
+  }
   /* 
   .location-select:focus {
     border-color: #f9ffe9;

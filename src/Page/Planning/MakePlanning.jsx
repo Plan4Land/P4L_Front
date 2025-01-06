@@ -22,6 +22,7 @@ export const MakePlanning = () => {
   //   setSearchKeyword(e.target.value);
   // };
   const [selectedArea, setSelectedArea] = useState("");
+  const [selectedSubArea, setSelectedSubArea] = useState("");
   const [selectedThemes, setSelectedThemes] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -31,11 +32,14 @@ export const MakePlanning = () => {
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const isStepComplete =
-    selectedArea && selectedThemes.length > 0 && endDate && title;
+    selectedSubArea && selectedThemes.length > 0 && endDate && title;
 
   const handleAreaChange = (e) => {
     setSelectedArea(e.target.value);
+    setSelectedSubArea("");
   };
+
+  const selectedAreaData = areas.find((area) => area.name === selectedArea);
 
   const handleThemeClick = (theme) => {
     setSelectedThemes((prev) => {
@@ -85,7 +89,22 @@ export const MakePlanning = () => {
             </option>
           ))}
         </select>
-        {selectedArea && (
+        {selectedAreaData && (
+          <select
+            value={selectedSubArea}
+            onChange={(e) => setSelectedSubArea(e.target.value)}
+            className="location-select"
+          >
+            <option value="">세부 지역을 선택하세요</option>
+            {selectedArea &&
+              selectedAreaData.subAreas.map((subArea) => (
+                <option key={subArea.code} value={subArea.name}>
+                  {subArea.name}
+                </option>
+              ))}
+          </select>
+        )}
+        {selectedSubArea && (
           <>
             <h2 className="question-title">
               여행 테마 선택<span>(최대 3개)</span>
@@ -109,7 +128,7 @@ export const MakePlanning = () => {
             </div>
           </>
         )}
-        {selectedArea && selectedThemes.length > 0 && (
+        {selectedSubArea && selectedThemes.length > 0 && (
           <>
             <h2 className="question-title">언제 가시나요?</h2>
             <DatePickerContainer>
@@ -153,7 +172,7 @@ export const MakePlanning = () => {
             </DatePickerContainer>
           </>
         )}
-        {selectedArea && selectedThemes.length > 0 && endDate && (
+        {selectedSubArea && selectedThemes.length > 0 && endDate && (
           <>
             <h2 className="question-title">플래닝 제목 입력</h2>
             <input
@@ -182,7 +201,13 @@ export const MakePlanning = () => {
           </>
         )}
         {isStepComplete && (
-          <Button onClick={() => handleSubmit()}>생성하기</Button>
+          <Button
+            onClick={() => handleSubmit()}
+            margin={"40px auto 0"}
+            width={"150px"}
+          >
+            생성하기
+          </Button>
         )}
       </MakePlanningContainer>
       {openModal && (

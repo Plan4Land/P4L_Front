@@ -3,6 +3,9 @@ import styled from "styled-components";
 import React from "react";
 
 const StyledButton = styled.button`
+  ${(props) => props.margin && `margin: ${props.margin};`}
+  ${(props) => props.width && `width: ${props.width};`}
+  ${(props) => props.height && `height: ${props.height};`}
   padding: ${(props) => props.padding || "10px 20px"};
   font-size: ${(props) => props.fontSize || "16px"};
   border: ${(props) => props.border || `1px solid ${colors.colorA}`};
@@ -11,12 +14,12 @@ const StyledButton = styled.button`
   color: ${(props) => props.color || "white"};
 
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   &:hover {
-    opacity: 0.7;
+    opacity: 0.8;
   }
 
   &:disabled {
