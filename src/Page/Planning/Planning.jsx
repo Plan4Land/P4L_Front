@@ -14,7 +14,7 @@ import {
 import { KakaoMap, KakaoEx } from "../../Component/KakaoMapComponent";
 import { useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
-import Thumbnail from "../../Img/planning_thumbnail2.jpg";
+import Thumbnail from "../../Img/planning_thumbnail.jpg";
 
 export const Planning = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);

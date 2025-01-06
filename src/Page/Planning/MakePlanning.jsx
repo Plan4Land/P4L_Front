@@ -11,6 +11,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { ToggleSwitch } from "../../Component/ToggleSwitch";
+import { ProfileImgContainer } from "../../Component/ProfileImg";
+import ThumbnailBasic from "../../Img/planning_thumbnail.jpg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SearchKakaoMap } from "../../Component/KakaoMapComponent";
 
 export const MakePlanning = () => {
@@ -23,6 +26,8 @@ export const MakePlanning = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [title, setTitle] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
@@ -46,6 +51,14 @@ export const MakePlanning = () => {
     setStartDate(date);
     if (endDate && date > endDate) {
       setEndDate(null); // 종료일을 초기화
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -149,8 +162,32 @@ export const MakePlanning = () => {
             />
           </>
         )}
+
         {selectedArea && selectedThemes.length > 0 && endDate && title && (
           <>
+            <h2 className="question-title">플래닝 사진</h2>
+            <div className="profile-container">
+              <ProfileImgContainer>
+                {imagePreview ? (
+                  <img
+                    src={imagePreview}
+                    alt="미리보기"
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                ) : (
+                  <img
+                    src={ThumbnailBasic}
+                    alt="썸네일 기본"
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                )}
+              </ProfileImgContainer>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            </div>
             <h2 className="question-title">공개 여부</h2>
             <ToggleSwitch setIsOn={setIsPublic} isOn={isPublic} />
           </>
