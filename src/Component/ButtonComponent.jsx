@@ -48,9 +48,9 @@ export const Button = ({
 export const CancelButton = ({ onClick, children }) => (
   <Button
     onClick={onClick}
-    bgColor="#f44336"
-    color="white"
-    border="1px solid #d32f2f"
+    bgColor="#c4c4c4"
+    color="black"
+    border="1px solid #6d6d6d"
   >
     {children}
   </Button>

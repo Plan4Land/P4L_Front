@@ -205,25 +205,9 @@ export const MakePlanningContainer = styled.div`
     border-bottom: 1px solid #ccc;
   }
 
-  .makePlanning-submit {
-    margin: 50px auto;
-    width: 150px;
-    font-size: 17px;
-    padding: 4px;
-    background-color: #e1ffb0;
-    border: 1px solid #bce877;
-    border-radius: 5px;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #bce877;
-    }
-  }
-
   .profile-container {
     width: 200px;
     height: 200px;
-    background-color: #e1ffb0;
   }
 `;
 

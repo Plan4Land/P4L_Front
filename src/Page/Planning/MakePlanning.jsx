@@ -11,10 +11,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { ToggleSwitch } from "../../Component/ToggleSwitch";
-import { ProfileImgContainer } from "../../Component/ProfileImg";
+import { EditImg } from "../../Component/ProfileImg";
 import ThumbnailBasic from "../../Img/planning_thumbnail.jpg";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SearchKakaoMap } from "../../Component/KakaoMapComponent";
+import { Button } from "../../Component/ButtonComponent";
 
 export const MakePlanning = () => {
   // const [searchKeyword, setSearchKeyword] = useState("");
@@ -30,6 +30,8 @@ export const MakePlanning = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const isStepComplete =
+    selectedArea && selectedThemes.length > 0 && endDate && title;
 
   const handleAreaChange = (e) => {
     setSelectedArea(e.target.value);
@@ -163,42 +165,24 @@ export const MakePlanning = () => {
           </>
         )}
 
-        {selectedArea && selectedThemes.length > 0 && endDate && title && (
+        {isStepComplete && (
           <>
             <h2 className="question-title">플래닝 사진</h2>
             <div className="profile-container">
-              <ProfileImgContainer>
-                {imagePreview ? (
-                  <img
-                    src={imagePreview}
-                    alt="미리보기"
-                    style={{ width: "100%", height: "100%" }}
-                  />
-                ) : (
-                  <img
-                    src={ThumbnailBasic}
-                    alt="썸네일 기본"
-                    style={{ width: "100%", height: "100%" }}
-                  />
-                )}
-              </ProfileImgContainer>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
+              <EditImg
+                basic={ThumbnailBasic}
+                setSelectedImage={setSelectedImage}
+                imagePreview={imagePreview}
+                setImagePreview={setImagePreview}
+                handleImageChange={handleImageChange}
               />
             </div>
             <h2 className="question-title">공개 여부</h2>
             <ToggleSwitch setIsOn={setIsPublic} isOn={isPublic} />
           </>
         )}
-        {selectedArea && selectedThemes.length > 0 && endDate && title && (
-          <button
-            className="makePlanning-submit"
-            onClick={() => handleSubmit()}
-          >
-            생성하기
-          </button>
+        {isStepComplete && (
+          <Button onClick={() => handleSubmit()}>생성하기</Button>
         )}
       </MakePlanningContainer>
       {openModal && (
