@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "../Img/Plan4landLogo.png";
 import { useState } from "react";
 import { Button, CancelButton } from "./ButtonComponent";
+import Modal from "../Util/Modal";
 
 export const Header = () => {
   const location = useLocation();
@@ -67,8 +68,11 @@ export const Header = () => {
         </div>
       </Link>
       <div className="recomm">추천합니다.</div>
-      <Link to="/mypage" className="profile-link">
-        <div className="dropdown">
+      <div
+        className="profile-link"
+        onClick={() => (window.location.href = "/mypage")}
+      >
+        <div className="dropdown" onClick={(e) => e.stopPropagation()}>
           <Link to="/mypage" className="dropdown-item">
             마이페이지
           </Link>
@@ -76,30 +80,22 @@ export const Header = () => {
             className="dropdown-item"
             onClick={(e) => {
               e.preventDefault();
-              setShowLogoutModal(true);
+              setShowLogoutModal(true); // 로그아웃 모달 열기
             }}
           >
             로그아웃
           </button>
         </div>
-      </Link>
-      {showLogoutModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <p>로그아웃 하시겠습니까?</p>
-            <Button
-              onClick={() => {
-                setShowLogoutModal(false);
-              }}
-            >
-              확인
-            </Button>
-            <CancelButton onClick={() => setShowLogoutModal(false)}>
-              취소
-            </CancelButton>
-          </div>
-        </div>
-      )}
+        <Modal
+          isOpen={showLogoutModal}
+          onClose={() => setShowLogoutModal(false)}
+          onConfirm={() => {
+            setShowLogoutModal(false);
+          }}
+        >
+          <p>로그아웃 하시겠습니까?</p>
+        </Modal>
+      </div>
     </HeaderSt>
   );
 };
