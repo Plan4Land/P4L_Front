@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MyPageMainContainer, UserInfo } from "../../Style/MyPageMainStyled";
 import UserInfoEdit from "./UserInfoEdit";
+import MyPlanningList from "./MyPlanningList";
 
 export const MyPageMain = () => {
   const location = useLocation();
@@ -45,7 +46,7 @@ export const MyPageMain = () => {
               <div className="UserExplain">내 정보 설명설명</div>
             </UserInfo>
           )}
-          {selectedMenu === "내 플래닝"}
+          {selectedMenu === "내 플래닝" && <MyPlanningList />}
           {selectedMenu === "좋아요 관광지"}
           {selectedMenu === "좋아요 플래닝"}
           {selectedMenu === "내 정보 수정" && <UserInfoEdit />}

@@ -1,8 +1,15 @@
 import styled from "styled-components";
 
+export const colors = {
+  colorA: "#19660a",
+  colorB: "#579450",
+  colorC: "#d3eea9",
+  colorD: "#ffffcf",
+};
+
 export const HeaderSt = styled.div`
   height: 100px;
-  background-color: #f9ffe9;
+  background-color: ${colors.colorC};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -23,7 +30,7 @@ export const HeaderSt = styled.div`
       display: flex;
       align-items: center;
       background-color: white;
-      border: 1px solid #17520b;
+      border: 1px solid ${colors.colorB};
       border-radius: 50px;
       overflow: hidden;
       height: 50px;
@@ -39,7 +46,7 @@ export const HeaderSt = styled.div`
     height: 80px;
     width: 80px;
     border-radius: 50%;
-    background-color: #17520b;
+    background-color: ${colors.colorD};
     position: relative;
   }
   .dropdown {
@@ -47,7 +54,7 @@ export const HeaderSt = styled.div`
     top: 100%;
     right: 0;
     background-color: white;
-    border: 1px solid #ccc;
+    border: 1px solid ${colors.colorC};
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 10;
@@ -87,12 +94,11 @@ export const HeaderSt = styled.div`
     width: 100%;
     display: block;
     color: #333;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: all 0.3s ease;
   }
 
   .dropdown button:hover {
     background-color: #f0f0f0;
-    color: #4caf50;
   }
 
   .modal {
@@ -120,25 +126,26 @@ export const HeaderSt = styled.div`
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
-    background-color: #007bff;
+    background-color: ${colors.colorB};
     color: white;
     cursor: pointer;
+    transition: all 0.3s ease;
   }
 
   .modal-content button:hover {
-    background-color: #0056b3;
+    opacity: 0.7;
   }
 `;
 
 export const NavSt = styled.div`
   height: 50px;
-  background-color: #e1ffb0;
+  background-color: ${colors.colorD};
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-grow: 0.6;
   .tag {
-    color: #17520b;
+    color: ${colors.colorA};
     font-weight: bold;
     text-decoration: none;
     flex: 0.8;
@@ -152,10 +159,10 @@ export const NavSt = styled.div`
   }
   .tag.active {
     text-decoration: underline;
-    color: #3c8dbc;
+    opacity: 0.7;
   }
   p {
-    color: #17520b;
+    color: ${colors.colorA};
     margin: -10px;
   }
 `;

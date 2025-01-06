@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "./GlobalStyle";
 
 export const MainBox = styled.div`
   display: grid;
@@ -52,32 +53,20 @@ export const QuickSearch = styled(GridItem)`
 
     .RegionSearch {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
 
-      input {
-        flex: 1;
-        padding: 8px;
-        margin-right: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-
       button {
-        background-color: #4caf50;
+        background-color: ${colors.colorB};
         color: white;
         border: none;
         border-radius: 4px;
         padding: 8px 16px;
         cursor: pointer;
-        transition: background-color 0.3s;
+        transition: all 0.3s ease;
 
         &:hover {
-          background-color: #45a049;
-        }
-
-        &:active {
-          background-color: #3e8e41;
+          opacity: 0.7;
         }
       }
     }
@@ -136,7 +125,7 @@ export const Festive = styled(GridItem)`
 
   .react-calendar__tile--now {
     position: relative;
-    background: #fff6c0 !important;
+    background: ${colors.colorD} !important;
     border-radius: 20% !important;
     padding: 0;
   }
@@ -164,8 +153,8 @@ export const Festive = styled(GridItem)`
     background-color: transparent;
   }
   .react-calendar__tile--inactive {
-    color: #d3d3d3; /* 흐릿한 색상 */
-    pointer-events: none; /* 클릭 불가능 */
+    color: #d3d3d3;
+    pointer-events: none;
   }
 `;
 
