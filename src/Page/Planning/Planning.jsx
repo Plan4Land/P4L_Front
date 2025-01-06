@@ -20,8 +20,18 @@ export const Planning = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [travelDays, setTravelDays] = useState("");
+  const [arrowDirections, setArrowDirections] = useState(
+    Array(travelDays).fill("▼")
+  );
   const handleInputChange = (e) => {
     setSearchKeyword(e.target.value);
+  };
+  const toggleArrow = (index) => {
+    setArrowDirections((prevDirections) => {
+      const newDirections = [...prevDirections];
+      newDirections[index] = newDirections[index] === "▲" ? "▼" : "▲"; // 화살표 방향을 토글
+      return newDirections;
+    });
   };
 
   const plannerInfo = {
@@ -123,6 +133,7 @@ export const Planning = () => {
             {[...Array(travelDays)].map((_, index) => (
               <div key={index} className="planning-day">
                 <span>{index + 1}일차</span>
+                <span className="arrow">▲▼</span>
               </div>
             ))}
           </MainPlanning>

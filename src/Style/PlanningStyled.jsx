@@ -55,6 +55,9 @@ export const UserProfile = styled.div`
   &:first-of-type {
     margin-left: 0; /* 첫 번째 프로필은 이동하지 않도록 설정 */
   }
+  &:hover {
+    scale: 1.1;
+  }
 `;
 
 export const UserName = styled.div`
@@ -85,6 +88,8 @@ export const MainPlanning = styled.div`
   background-color: blanchedalmond;
 
   .planning-day {
+    display: flex;
+    position: relative;
     width: 92%;
     height: 40px;
     margin: 2px auto 0;
