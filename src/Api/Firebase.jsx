@@ -2,15 +2,15 @@
 import { initializeApp } from "firebase/app";
 import firebase from "firebase/compat";
 
-const key = process.env.REACT_APP_FIREBASE_KEY;
+
 
 const firebaseConfig = {
-  apiKey: key,
-  authDomain: "plan4land-e7018.firebaseapp.com",
-  projectId: "plan4land-e7018",
-  storageBucket: "plan4land-e7018.firebasestorage.app",
-  messagingSenderId: "906105005817",
-  appId: "1:906105005817:web:dafb25826f66368a5ae428"
+  apiKey: process.env.REACT_APP_FIREBASE_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PID,
+  storageBucket: process.env.REACT_APP_FIREBASE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER,
+  appId: process.env.REACT_APP_FIREBASE_APP
 };
 
 // Initialize Firebase

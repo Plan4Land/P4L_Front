@@ -219,6 +219,12 @@ export const MakePlanningContainer = styled.div`
       background-color: #bce877;
     }
   }
+
+  .profile-container {
+    width: 200px;
+    height: 200px;
+    background-color: #e1ffb0;
+  }
 `;
 
 export const DatePickerContainer = styled.div`

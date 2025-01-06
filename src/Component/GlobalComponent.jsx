@@ -36,9 +36,7 @@ export const Header = () => {
       <NavSt>
         <Link
           to="/ktxinquiry" // 이후 페이지 생성시 해당 부분 수정
-          className={`tag ${
-            isActive("/ktxinquiry") ? "active" : ""
-          }`}
+          className={`tag ${isActive("/ktxinquiry") ? "active" : ""}`}
         >
           교통
         </Link>
