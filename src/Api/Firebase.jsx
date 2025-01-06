@@ -2,7 +2,8 @@
 import { initializeApp } from "firebase/app";
 import firebase from "firebase/compat";
 
-
+// 플래너 폴더 : /PlannerPic
+// 유저 폴더 : /UserProfilePic
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_KEY,
