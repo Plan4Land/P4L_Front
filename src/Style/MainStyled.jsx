@@ -124,34 +124,34 @@ export const Festive = styled(GridItem)`
   overflow: hidden;
   .react-calendar {
     width: 100%;
-    height: 400px; 
+    height: 400px;
   }
 
   .react-calendar__tile {
-  position: relative;
-  height: 50px;  
-  aspect-ratio: 1;  
-  padding: 0;
-}
+    position: relative;
+    height: 50px;
+    aspect-ratio: 1;
+    padding: 0;
+  }
 
-.react-calendar__tile--now {
-  position: relative;
-  background: #fff6c0 !important;
-  border-radius: 50% !important;
-  padding: 0;
-}
+  .react-calendar__tile--now {
+    position: relative;
+    background: #fff6c0 !important;
+    border-radius: 20% !important;
+    padding: 0;
+  }
   .red-dot {
     width: 6px;
     height: 6px;
     background-color: red;
     border-radius: 50%;
     position: absolute;
-  bottom: 5px; 
-  left: 45%; 
+    bottom: 5px;
+    left: 45%;
   }
   .react-calendar__month-view__days__day {
     color: black;
-}
+  }
   .react-calendar-sunday {
     color: red; /* 일요일 빨간색 */
   }
@@ -160,17 +160,17 @@ export const Festive = styled(GridItem)`
     color: blue; /* 토요일 파란색 */
   }
 
-.react-calendar__tile {
-  background-color: transparent;
-}
-.react-calendar__tile--inactive {
-  color: #d3d3d3; /* 흐릿한 색상 */
-  pointer-events: none; /* 클릭 불가능 */
-}
+  .react-calendar__tile {
+    background-color: transparent;
+  }
+  .react-calendar__tile--inactive {
+    color: #d3d3d3; /* 흐릿한 색상 */
+    pointer-events: none; /* 클릭 불가능 */
+  }
 `;
 
 export const HolidayList = styled.div`
- margin: 10px;
+  margin: 10px;
   width: 100%;
   height: 150px;
   overflow-y: auto;
@@ -187,4 +187,3 @@ export const HolidayList = styled.div`
     font-size: 14px;
   }
 `;
-
