@@ -34,10 +34,8 @@ export const Header = () => {
         </Link>
         <p>|</p>
         <Link
-          to="/post?category=플래닝"
-          className={`tag ${
-            isActive("/post", "category=플래닝") ? "active" : ""
-          }`}
+          to="/planninglist"
+          className={`tag ${isActive("planninglist") ? "active" : ""}`}
         >
           플래닝
         </Link>

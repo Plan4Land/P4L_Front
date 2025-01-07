@@ -5,20 +5,18 @@ import { useParams, useLocation } from "react-router-dom";
 import { Button } from "../../Component/ButtonComponent";
 import { SelectTourItem } from "../../Style/TourListStyled";
 
-export const TourList = () => {
+export const PlanningList = () => {
   const { areaCode, subAreaCode } = useParams();
   const location = useLocation();
   const [selectedAreaCode, setSelectedAreaCode] = useState("");
   const [selectedSubAreaCode, setSelectedSubAreaCode] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     setSelectedAreaCode(areaCode || "");
     setSelectedSubAreaCode(queryParams.get("subarea") || "");
     setSelectedTheme(queryParams.get("theme") || "");
-    setSelectedCategory(queryParams.get("category") || "");
   }, [areaCode, location.search]);
 
   // 모든 선택 초기화
@@ -26,8 +24,7 @@ export const TourList = () => {
     setSelectedAreaCode(""); // 지역 초기화
     setSelectedSubAreaCode(""); // 세부지역 초기화
     setSelectedTheme(""); // 테마 초기화
-    setSelectedCategory(""); // 카테고리 초기화
-    window.history.replaceState({}, "", "/tourlist"); // URL 초기화
+    window.history.replaceState({}, "", "/planninglist"); // URL 초기화
   };
 
   // 지역 선택
@@ -38,9 +35,7 @@ export const TourList = () => {
       window.history.replaceState(
         {},
         "",
-        `/tourlist${selectedTheme ? `?theme=${selectedTheme}` : ""}${
-          selectedCategory ? `&category=${selectedCategory}` : ""
-        }`
+        `/planninglist${selectedTheme ? `?theme=${selectedTheme}` : ""}`
       );
     } else {
       setSelectedAreaCode(areaCode);
@@ -48,9 +43,9 @@ export const TourList = () => {
       window.history.pushState(
         {},
         "",
-        `/tourlist/${areaCode}${
+        `/planninglist/${areaCode}${
           selectedTheme ? `?theme=${selectedTheme}` : ""
-        }${selectedCategory ? `&category=${selectedCategory}` : ""}`
+        }`
       );
     }
   };
@@ -59,7 +54,6 @@ export const TourList = () => {
   const handleSubAreaChange = (subAreaCode) => {
     const queryParams = new URLSearchParams();
     if (selectedTheme) queryParams.append("theme", selectedTheme);
-    if (selectedCategory) queryParams.append("category", selectedCategory);
 
     if (selectedSubAreaCode === subAreaCode) {
       // 세부지역 취소
@@ -68,7 +62,7 @@ export const TourList = () => {
       window.history.replaceState(
         {},
         "",
-        `/tourlist${queryString ? `?${queryString}` : ""}` // 지역이 없으면 / 제거
+        `/planninglist${queryString ? `?${queryString}` : ""}`
       );
     } else {
       setSelectedSubAreaCode(subAreaCode);
@@ -77,7 +71,7 @@ export const TourList = () => {
       window.history.pushState(
         {},
         "",
-        `/tourlist${selectedAreaCode ? `/${selectedAreaCode}` : ""}${
+        `/planninglist${selectedAreaCode ? `/${selectedAreaCode}` : ""}${
           queryString ? `?${queryString}` : ""
         }`
       );
@@ -88,7 +82,6 @@ export const TourList = () => {
   const handleThemeChange = (theme) => {
     const queryParams = new URLSearchParams();
     if (selectedSubAreaCode) queryParams.append("subarea", selectedSubAreaCode);
-    if (selectedCategory) queryParams.append("category", selectedCategory);
 
     if (selectedTheme === theme) {
       // 테마 취소
@@ -97,7 +90,7 @@ export const TourList = () => {
       window.history.replaceState(
         {},
         "",
-        `/tourlist${selectedAreaCode ? `/${selectedAreaCode}` : ""}${
+        `/planninglist${selectedAreaCode ? `/${selectedAreaCode}` : ""}${
           queryString ? `?${queryString}` : ""
         }`
       );
@@ -108,38 +101,7 @@ export const TourList = () => {
       window.history.pushState(
         {},
         "",
-        `/tourlist${selectedAreaCode ? `/${selectedAreaCode}` : ""}${
-          queryString ? `?${queryString}` : ""
-        }`
-      );
-    }
-  };
-
-  // 카테고리 선택
-  const handleCategoryChange = (category) => {
-    const queryParams = new URLSearchParams();
-    if (selectedSubAreaCode) queryParams.append("subarea", selectedSubAreaCode);
-    if (selectedTheme) queryParams.append("theme", selectedTheme);
-
-    if (selectedCategory === category) {
-      // 카테고리 취소
-      setSelectedCategory("");
-      const queryString = queryParams.toString();
-      window.history.replaceState(
-        {},
-        "",
-        `/tourlist${selectedAreaCode ? `/${selectedAreaCode}` : ""}${
-          queryString ? `?${queryString}` : ""
-        }`
-      );
-    } else {
-      setSelectedCategory(category);
-      queryParams.append("category", category);
-      const queryString = queryParams.toString();
-      window.history.pushState(
-        {},
-        "",
-        `/tourlist${selectedAreaCode ? `/${selectedAreaCode}` : ""}${
+        `/planninglist${selectedAreaCode ? `/${selectedAreaCode}` : ""}${
           queryString ? `?${queryString}` : ""
         }`
       );
@@ -196,20 +158,6 @@ export const TourList = () => {
               }`}
             >
               {theme}
-            </Button>
-          ))}
-        </div>
-        <div className="category">
-          <h3>카테고리 선택</h3>
-          {["관광지", "숙소", "음식점"].map((category) => (
-            <Button
-              key={category}
-              onClick={() => handleCategoryChange(category)}
-              className={`category-button ${
-                selectedCategory === category ? "selected" : ""
-              }`}
-            >
-              {category}
             </Button>
           ))}
         </div>
