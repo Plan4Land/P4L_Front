@@ -9,7 +9,7 @@ import { Signup } from "./Page/signup/Signup";
 import MyPageMain from "./Page/Mypage/MyPageMain";
 import KtxInquiry from "./Page/Traffic/KtxInquiry";
 import { TourList } from "./Page/Item/TourList";
-import { PlanningList } from "./Page/Item/PlanningList";\
+import { PlanningList } from "./Page/Item/PlanningList";
 import { AuthProvider } from "./Context/AuthContext";
 
 function App() {
