@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditStyle";
 import { ProfilePicModal } from "../../Component/SignupModalComponent";
+import { useAuth } from "../../Context/AuthContext";
 
 const UserInfoEdit = () => {
+  const { user } = useAuth();
   const [userId, setUserId] = useState("test1");
   const [userPw, setUserPw] = useState("");
   const [userPwCheck, setUserPwCheck] = useState("");
@@ -10,15 +12,12 @@ const UserInfoEdit = () => {
   const [name, setName] = useState("홍길동");
   const [nickName, setNickName] = useState("길동이");
   const [email, setEmail] = useState("hong@example.com");
-
   const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
   const [isPicsModalOpen, setIsPicsModalOpen] = useState("");
 
   const handleSave = () => {
     alert(`저장되었습니다: \n이름: ${name}\n이메일: ${email}`);
   };
-
-
 
   const handlePwCheck = (e) => {
     setUserPwCheck(e.target.value);
@@ -45,7 +44,7 @@ const UserInfoEdit = () => {
             <input
               id="userId"
               type="text"
-              value={userId}
+              value={user.data.id}
               readOnly
             />
           </div>
@@ -81,7 +80,7 @@ const UserInfoEdit = () => {
             <input
               id="name"
               type="text"
-              value={name}
+              value={user.data.name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
@@ -93,7 +92,7 @@ const UserInfoEdit = () => {
             <input
               id="nickName"
               type="text"
-              value={nickName}
+              value={user.data.nickname}
               onChange={(e) => setNickName(e.target.value)}
             />
           </div>
@@ -105,7 +104,7 @@ const UserInfoEdit = () => {
             <input
               id="email"
               type="email"
-              value={email}
+              value={user.data.email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
