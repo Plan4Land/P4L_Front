@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { areas, themes } from "../../Util/Common";
 import { useParams, useLocation } from "react-router-dom";
 import { Button } from "../../Component/ButtonComponent";
-import { SelectTourItem } from "../../Style/TourListStyled";
+import { SelectTourItem } from "../../Style/ItemListStyled";
 
 export const PlanningList = () => {
   const { areaCode, subAreaCode } = useParams();

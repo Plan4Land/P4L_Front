@@ -67,15 +67,15 @@ export const QuickSearch = styled(GridItem)`
       }
     }
 
-    .SelectTheme {
+    .SelectCategory {
       display: flex;
       text-align: center;
-      height: 100%;
+      align-items: center;
+      justify-content: center;
       width: 100%;
-      .Theme {
+      .Category {
         margin: 10px;
-        border: 1px solid black;
-        width: 100%;
+        text-align: center;
       }
     }
   }
