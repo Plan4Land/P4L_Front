@@ -1,12 +1,49 @@
 import { HeaderSt, NavSt, FooterSt } from "../Style/GlobalStyle";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../Img/Plan4landLogo.png";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Modal } from "../Util/Modal";
-export const Header = () => {
-  const location = useLocation();
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
+import { FaSearch } from "react-icons/fa";
 
+export const Header = () => {
+  const [showOptions, setShowOptions] = useState(false);
+  const optionsRef = useRef(null);
+  const [selectedOption, setSelectedOption] = useState("관광지");
+  const [searchQuery, setSearchQuery] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const toggleOptions = (event) => {
+    event.stopPropagation(); // 클릭 이벤트 전파 방지
+    setShowOptions((prev) => !prev); // 상태 반전
+  };
+  const handleSearch = () => {
+    if (searchQuery.length < 2) {
+      alert("검색어는 2자리 이상 입력해 주세요.");
+    } else {
+      const params = new URLSearchParams();
+
+      if (searchQuery) {
+        params.set("search", searchQuery);
+      }
+      const destination =
+        selectedOption === "관광지" ? "/tourlist" : "/planninglist";
+      navigate(`${destination}?${params.toString()}`);
+      setSearchQuery("");
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      // Enter 키가 눌렸을 때
+      handleSearch(); // 검색 함수 호출
+    }
+  };
+  const selectOption = (option) => {
+    setSelectedOption(option); // 선택된 옵션 표시
+    setShowOptions(false); // 옵션 창 닫기
+  };
   const isActive = (path, query = "") => {
     const pathnameMatches = location.pathname.startsWith(path);
     const queryMatches = query ? location.search.includes(query) : true;
@@ -35,16 +72,41 @@ export const Header = () => {
         <p>|</p>
         <Link
           to="/planninglist"
-          className={`tag ${isActive("planninglist") ? "active" : ""}`}
+          className={`tag ${isActive("/planninglist") ? "active" : ""}`}
         >
           플래닝
         </Link>
       </NavSt>
-      <Link to="/search" className="search-link">
-        <div className="search-container">
-          <span className="placeholder">검색하세요.</span>
+      <div className="search-container">
+        <button className="search-toggle" onClick={toggleOptions}>
+          {showOptions ? "▲" : "▼"} {/* showOptions 상태에 따라 기호 변경 */}
+        </button>
+        <div className="search-wrapper">
+          <span className="selected-option">{selectedOption}</span>
+          <span className="divider">|</span>
+          <input
+            type="text"
+            className="search"
+            placeholder="제목 검색!"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} // 검색어 업데이트
+            onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
+          />
+          <button className="search-button" onClick={handleSearch}>
+            <FaSearch /> {/* 검색 아이콘 */}
+          </button>
         </div>
-      </Link>
+        <div
+          ref={optionsRef}
+          className={`search-options ${showOptions ? "active" : ""}`}
+          style={{ pointerEvents: showOptions ? "auto" : "none" }}
+        >
+          <div className="options-list">
+            <p onClick={() => selectOption("관광지")}>관광지</p>
+            <p onClick={() => selectOption("플래닝")}>플래닝</p>
+          </div>
+        </div>
+      </div>
       <div className="recomm">추천합니다.</div>
       <div
         className="profile-link"
