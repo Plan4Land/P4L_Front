@@ -23,6 +23,7 @@ import axios from "axios";
 
 export const Main = () => {
   const [selectedMenu, setSelectedMenu] = useState("지역"); // 미니검색창
+  const categories = ["관광지", "숙소", "음식점"];
   const [selectedArea, setSelectedArea] = useState("");
   const [value, onChange] = useState(new Date()); // 축제 캘린더
   const [holidays, setHolidays] = useState([]); // 공휴일 목록
@@ -85,10 +86,10 @@ export const Main = () => {
             </button>
             |
             <button
-              onClick={() => setSelectedMenu("테마")}
-              className={selectedMenu === "테마" ? "active" : ""}
+              onClick={() => setSelectedMenu("카테고리")}
+              className={selectedMenu === "카테고리" ? "active" : ""}
             >
-              테마
+              카테고리
             </button>
           </div>
           <div className="SearchBox">
@@ -96,7 +97,7 @@ export const Main = () => {
               <div className="RegionSearch">
                 <div className="area-list">
                   {areas.map((area) => (
-                    <Link key={area.code} to={`/tourlist/${area.code}`}>
+                    <Link key={area.code} to={`/tourlist?area=${area.code}`}>
                       <Button
                         key={area.code}
                         onClick={() => handleAreaClick(area.name)}
@@ -109,11 +110,13 @@ export const Main = () => {
                 </div>
               </div>
             )}
-            {selectedMenu === "테마" && (
-              <div className="SelectTheme">
-                <div className="Theme">테마1</div>
-                <div className="Theme">테마2</div>
-                <div className="Theme">테마3</div>
+            {selectedMenu === "카테고리" && (
+              <div className="SelectCategory">
+                {categories.map((category) => (
+                  <Link key={category} to={`/tourlist?category=${category}`}>
+                    <Button className="Category">{category}</Button>
+                  </Link>
+                ))}
               </div>
             )}
           </div>
