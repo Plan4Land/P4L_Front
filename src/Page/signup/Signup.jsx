@@ -51,10 +51,6 @@ export const Signup = () => {
 
   const onClickSignup = () => {};
 
-  const openPicsModal = (state) => {
-    setIsPicsModalOpen(state);
-  };
-
   const handlePicSelect = (picName) => {
     setCurrentPic(`profile-pic/${picName}`);
   };
@@ -172,12 +168,12 @@ export const Signup = () => {
           </div>
 
           <div className="picture-box">
-            <div className="current-pic" onClick={() => openPicsModal(true)}>
+            <div className="current-pic" onClick={() => setIsPicsModalOpen(true)}>
               <img src={currentPic} alt="프로필 이미지" />
             </div>
             <button
               className="picture-button"
-              onClick={() => openPicsModal(true)}
+              onClick={() => setIsPicsModalOpen(true)}
             >
               변경
             </button>
@@ -189,8 +185,9 @@ export const Signup = () => {
           {/* 프로필 사진 모달 */}
           <ProfilePicModal
             open={isPicsModalOpen}
-            close={() => openPicsModal(false)}
+            close={() => setIsPicsModalOpen(false)}
             onSelect={handlePicSelect}
+            type="new"
           />
         </SignupContainer>
       </Center>
