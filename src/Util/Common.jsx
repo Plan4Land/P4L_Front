@@ -1,3 +1,47 @@
+import axios from "axios";
+
+const Common = {
+  PLAN_DOMAIN: "http://localhost:8111",
+
+  getAccessToken: () => {
+    return localStorage.getItem("accessToken");
+  },
+  setAccessToken: (token) => {
+    localStorage.setItem("accessToken", token);
+  },
+  getRefreshToken: () => {
+    return localStorage.getItem("refreshToken");
+  },
+  setRefreshToken: (token) => {
+    localStorage.setItem("refreshToken", token);
+  },
+
+  // 401 에러 처리 함수
+  handleUnauthorized: async () => {
+    const accessToken = Common.getAccessToken();
+    const refreshToken = Common.getRefreshToken();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    try {
+      const rsp = await axios.post(
+        `${Common.PLAN_DOMAIN}/auth/refresh`,
+        refreshToken,
+        config
+      );
+      console.log(rsp.data);
+      Common.setAccessToken(rsp.data);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  },
+};
+export default Common;
+
 export const themes = [
   "가족",
   "친구",
