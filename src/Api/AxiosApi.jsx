@@ -17,15 +17,21 @@ const AxiosApi = {
   },
   // 회원가입
   signup: async (id, password, name, nickname, email, profileImg) => {
-    const member = {
-      id: id,
-      password: password,
-      name: name,
-      email: email,
-      nickname: nickname,
-      profileImg: profileImg,
-    };
-    return await AxiosInstance.post(`/auth/signup`, member)
+    try {
+      const member = {
+        id: id,
+        password: password,
+        name: name,
+        email: email,
+        nickname: nickname,
+        profileImg: profileImg,
+      };
+      const response = await AxiosInstance.post(`/auth/signup`, member);
+      return response;
+    } catch (error) {
+      console.error("Signup Error: ", error);
+      throw error;
+    }
   },
   // 전체 멤버 조회
   memberList: async () => {
@@ -52,3 +58,4 @@ const AxiosApi = {
     return await AxiosInstance.delete(`/member/${userId}`);
   },
 }
+export default AxiosApi;
