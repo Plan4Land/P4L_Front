@@ -31,8 +31,8 @@ export const Main = () => {
     month: new Date().getMonth() + 1, // 월은 0부터 시작하므로 1을 더함
   });
 
-  const handleAreaClick = (areaName) => {
-    setSelectedArea(areaName);
+  const handleAreaClick = (areaCode) => {
+    setSelectedArea(areaCode);
   };
 
   // 연도와 월이 변경될 때마다 공휴일 데이터를 요청
@@ -96,7 +96,6 @@ export const Main = () => {
               <div className="RegionSearch">
                 <div className="area-list">
                   {areas.map((area) => (
-                    // 링크 이거 변경
                     <Link key={area.code} to={`/tourlist/${area.code}`}>
                       <Button
                         key={area.code}

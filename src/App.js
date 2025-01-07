@@ -21,6 +21,7 @@ function App() {
           <Route path="/mypage" element={<MyPageMain />} />
           <Route path="/ktxInquiry" element={<KtxInquiry />} />
           <Route path="/tourlist" element={<TourList />} />
+          <Route path="/tourlist/:areaCode" element={<TourList />} />
         </Routes>
       </Router>
     </>
