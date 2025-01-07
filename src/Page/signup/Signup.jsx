@@ -10,12 +10,12 @@ import {
   Pic,
 } from "../../Component/SignupComponent";
 import { ProfilePicModal } from "../../Component/SignupModalComponent";
+import AxiosApi from "../../Api/AxiosApi";
 
 // icon
 import { VscAccount } from "react-icons/vsc";
 import { GoMail, GoPencil, GoLock, GoEye, GoEyeClosed } from "react-icons/go";
-import AxiosApi from "../../Api/AxiosApi";
-import AxiosInstance from "../../Api/AxiosInstance";
+
 
 export const Signup = () => {
   // input

@@ -8,25 +8,28 @@ import MyPageMain from "./Page/Mypage/MyPageMain";
 import KtxInquiry from "./Page/Traffic/KtxInquiry";
 import { TourList } from "./Page/Item/TourList";
 import { PlanningList } from "./Page/Item/PlanningList";
+import { AuthProvider } from "./Context/AuthContext";
 
 function App() {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/planning" element={<Planning />} />
-          <Route path="/makePlanning" element={<MakePlanning />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/mypage" element={<MyPageMain />} />
-          <Route path="/ktxInquiry" element={<KtxInquiry />} />
-          <Route path="/tourlist" element={<TourList />} />
-          <Route path="/tourlist/:areaCode" element={<TourList />} />
-          <Route path="/planninglist" element={<PlanningList />} />
-          <Route path="/planninglist/:areaCode" element={<PlanningList />} />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/planning" element={<Planning />} />
+            <Route path="/makePlanning" element={<MakePlanning />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/mypage" element={<MyPageMain />} />
+            <Route path="/ktxInquiry" element={<KtxInquiry />} />
+            <Route path="/tourlist" element={<TourList />} />
+            <Route path="/tourlist/:areaCode" element={<TourList />} />
+            <Route path="/planninglist" element={<PlanningList />} />
+            <Route path="/planninglist/:areaCode" element={<PlanningList />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </>
   );
 }
