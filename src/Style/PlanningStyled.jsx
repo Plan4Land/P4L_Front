@@ -323,4 +323,37 @@ export const DayToggleContainer = styled.div`
   width: 85%;
   margin: 0 auto;
   background-color: azure;
+
+  .plan-place-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px;
+    background-color: #c7daf7;
+
+    .plan-place {
+      display: flex;
+      flex-direction: column;
+
+      .place-name {
+        margin: 5px;
+        font-size: 17px;
+        font-weight: bold;
+      }
+      .place-category {
+        margin: 0 5px 5px 5px;
+        font-size: 13px;
+        color: #333;
+      }
+    }
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
+    .memo-modal {
+      cursor: pointer;
+    }
+  }
 `;

@@ -15,7 +15,8 @@ import { useEffect, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { ProfileImg } from "../../Component/ProfileImg";
 import { Button } from "../../Component/ButtonComponent";
-import { Modal, CloseModal } from "../../Util/Modal";
+import { Modal, CloseModal, DraggableModal } from "../../Util/Modal";
+import MemoIcon from "../../Img/memo-icon.png";
 
 const plannerInfo = {
   title: "떠나요~ 두리서~",
@@ -143,6 +144,7 @@ const plans = [
 export const Planning = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isAddPlaceModalOpen, setIsAddPlaceModalOpen] = useState(false);
+  const [isMemoModalOpen, setIsMemoModalOpen] = useState(false);
   const [currentAddedPlace, setCurrentAddedPlace] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [submittedKeyword, setSubmittedKeyword] = useState("");
@@ -151,6 +153,7 @@ export const Planning = () => {
   const [arrowDirections, setArrowDirections] = useState([]);
   const [openDayToggle, setOpenDayToggle] = useState([]);
   const [groupPlans, setGroupPlans] = useState([]);
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
   useEffect(() => {
     if (currentAddedPlace && Object.keys(currentAddedPlace).length > 0) {
@@ -300,14 +303,36 @@ export const Planning = () => {
                 </div>
                 {openDayToggle[index] && (
                   <DayToggleContainer>
-                    <div>
-                      {groupPlans[date]?.map((plan, planIndex) => (
+                    {groupPlans[date]?.map((plan, planIndex) => (
+                      <>
                         <div key={planIndex} className="plan-place-container">
-                          <h4>{plan.spotName}</h4>
-                          <p>{plan.memo}</p>
+                          <div className="plan-place">
+                            <p className="place-name">{plan.spotName}</p>
+                            <p className="place-category">{plan.category}</p>
+                          </div>
+                          <img
+                            className="memo-modal"
+                            src={MemoIcon}
+                            alt="메모"
+                            onClick={() => {
+                              setSelectedPlan(plan);
+                              setIsMemoModalOpen(true);
+                            }}
+                          />
+                          {isMemoModalOpen && (
+                            <DraggableModal
+                              isOpen={isMemoModalOpen}
+                              onClose={() => setIsMemoModalOpen(false)}
+                              contentWidth="400px"
+                              contentHeight="500px"
+                            >
+                              {selectedPlan.spotName}
+                            </DraggableModal>
+                          )}
                         </div>
-                      ))}
-                    </div>
+                      </>
+                    ))}
+
                     <Button
                       className="add-place-button"
                       $margin={"1.5% 0"}
