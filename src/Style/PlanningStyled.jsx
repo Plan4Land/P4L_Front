@@ -103,14 +103,6 @@ export const MainPlanning = styled.div`
       right: 7px;
     }
   }
-
-  .day-toggle-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 80%;
-    margin: 0 auto;
-  }
 `;
 
 export const KakaoMapContainer = styled.div`
@@ -315,4 +307,20 @@ export const DatePickerContainer = styled.div`
     ) {
     background-color: #d5f0a9;
   }
+`;
+
+export const SearchInputContainer = styled.div`
+  width: 95%;
+  margin: 25px auto 10px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const DayToggleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 85%;
+  margin: 0 auto;
+  background-color: azure;
 `;
