@@ -2,34 +2,17 @@ import { HeaderSt, NavSt, FooterSt } from "../Style/GlobalStyle";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../Img/Plan4landLogo.png";
 import { useState } from "react";
-import { Button, CancelButton } from "./ButtonComponent";
 import { Modal } from "../Util/Modal";
 export const Header = () => {
   const location = useLocation();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  const isActive = (path, queryParams = null) => {
-    const currentPath = location.pathname;
-    const currentSearch = location.search;
-
-    if (path === "/post" && !queryParams) {
-      return currentPath === path && currentSearch === "";
-    }
-
-    const isPathMatch = currentPath === path;
-
-    if (queryParams) {
-      const currentParams = new URLSearchParams(currentSearch);
-      const targetParams = new URLSearchParams(queryParams);
-
-      const isQueryMatch = [...targetParams].every(
-        ([key, value]) => currentParams.get(key) === value
-      );
-      return isPathMatch && isQueryMatch;
-    }
-
-    return isPathMatch;
+  const isActive = (path, query = "") => {
+    const pathnameMatches = location.pathname.startsWith(path);
+    const queryMatches = query ? location.search.includes(query) : true;
+    return pathnameMatches && queryMatches;
   };
+
   return (
     <HeaderSt>
       <Link to="/" className="logo">
