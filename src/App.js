@@ -11,6 +11,7 @@ import KtxInquiry from "./Page/Traffic/KtxInquiry";
 import { TourList } from "./Page/Item/TourList";
 import { PlanningList } from "./Page/Item/PlanningList";
 import { AuthProvider } from "./Context/AuthContext";
+import TermsOfService from "./Page/signup/TermsOfService";
 
 function App() {
   return (
@@ -29,7 +30,11 @@ function App() {
               <Route path="/tourlist" element={<TourList />} />
               <Route path="/tourlist/:areaCode" element={<TourList />} />
               <Route path="/planninglist" element={<PlanningList />} />
-              <Route path="/planninglist/:areaCode" element={<PlanningList />} />
+              <Route
+                path="/planninglist/:areaCode"
+                element={<PlanningList />}
+              />
+              <Route path="/signup/terms" element={<TermsOfService />} />
             </Routes>
           </Router>
         </DndProvider>
