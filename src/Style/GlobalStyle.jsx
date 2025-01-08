@@ -29,7 +29,37 @@ export const HeaderSt = styled.div`
     background-color: ${colors.colorC};
     position: relative;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
   }
+
+  .profile-link.logged-in {
+    background-color: transparent;
+  }
+
+  .profile-link.logged-out {
+    background-color: transparent;
+  }
+
+  .profile-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .login-btn {
+    color: ${colors.colorA};
+    font-size: 15px;
+    background-color: transparent;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
   .dropdown {
     position: absolute;
     top: 100%;

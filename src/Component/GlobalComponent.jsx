@@ -3,10 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "../Img/Plan4landLogo.png";
 import { useState } from "react";
 import { Modal } from "../Util/Modal";
+import { useAuth } from "../Context/AuthContext";
 
 export const Header = () => {
   const location = useLocation();
-
+  const { user, logout } = useAuth(); // 로그인 상태와 로그아웃 함수 가져오기
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const isActive = (path, query = "") => {
@@ -43,33 +44,45 @@ export const Header = () => {
         </Link>
       </NavSt>
       <div className="recomm">추천합니다.</div>
-      <div
-        className="profile-link"
-        onClick={() => {
-          if (!showLogoutModal) {
-            window.location.href = "/mypage";
-          }
-        }}
-      >
-        <div className="dropdown" onClick={(e) => e.stopPropagation()}>
-          <Link to="/mypage" className="dropdown-item">
-            마이페이지
+      <div className={`profile-link ${user ? "logged-in" : "logged-out"}`}>
+        {user ? (
+          <>
+            {user.imgPath && (
+              <div
+                className="profile-img"
+                style={{
+                  backgroundImage: `url(${user.imgPath})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              />
+            )}
+            <div className="dropdown" onClick={(e) => e.stopPropagation()}>
+              <Link to="/mypage" className="dropdown-item">
+                마이페이지
+              </Link>
+              <button
+                className="dropdown-item"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowLogoutModal(true);
+                }}
+              >
+                로그아웃
+              </button>
+            </div>
+          </>
+        ) : (
+          <Link to="/login" className="login-btn">
+            로그인
           </Link>
-          <button
-            className="dropdown-item"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setShowLogoutModal(true);
-            }}
-          >
-            로그아웃
-          </button>
-        </div>
+        )}
         <Modal
           isOpen={showLogoutModal}
           onClose={() => setShowLogoutModal(false)}
           onConfirm={() => {
+            logout(); // 로그아웃 시 호출
             setShowLogoutModal(false);
           }}
         >
