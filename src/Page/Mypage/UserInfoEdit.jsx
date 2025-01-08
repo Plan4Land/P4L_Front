@@ -44,7 +44,7 @@ const UserInfoEdit = () => {
             <input
               id="userId"
               type="text"
-              value={user.data.id}
+              value={user.id}
               readOnly
             />
           </div>
@@ -80,7 +80,7 @@ const UserInfoEdit = () => {
             <input
               id="name"
               type="text"
-              value={user.data.name}
+              value={user.name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
@@ -92,7 +92,7 @@ const UserInfoEdit = () => {
             <input
               id="nickName"
               type="text"
-              value={user.data.nickname}
+              value={user.nickname}
               onChange={(e) => setNickName(e.target.value)}
             />
           </div>
@@ -104,7 +104,7 @@ const UserInfoEdit = () => {
             <input
               id="email"
               type="email"
-              value={user.data.email}
+              value={user.email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
