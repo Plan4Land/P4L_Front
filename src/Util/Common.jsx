@@ -54,6 +54,8 @@ export const themes = [
   "인생샷",
 ];
 
+export const cats = [""];
+
 export const areas = [
   {
     code: "1",
