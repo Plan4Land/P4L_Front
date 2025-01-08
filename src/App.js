@@ -12,6 +12,7 @@ import { TourList } from "./Page/Item/TourList";
 import { PlanningList } from "./Page/Item/PlanningList";
 import { AuthProvider } from "./Context/AuthContext";
 import TermsOfService from "./Page/signup/TermsOfService";
+import RequestPayment from "./Page/Payment/RequestPayment";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
                 element={<PlanningList />}
               />
               <Route path="/signup/terms" element={<TermsOfService />} />
+              <Route path="/payment" element={<RequestPayment />} />
             </Routes>
           </Router>
         </DndProvider>
