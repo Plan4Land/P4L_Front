@@ -13,10 +13,37 @@ const RequestPayment = () => {
       .map((word) => word.toString(16).padStart(8, "0"))
       .join("")
   }
-
-  const billingReq = {
+  const kgCardBillingReq = {
     storeId: process.env.REACT_APP_SHOP_ID,
-    channelKey: process.env.REACT_APP_SHOP_CHANNEL,
+    channelKey: process.env.REACT_APP_CHANNEL_KG,
+    billingKeyMethod: "CARD",
+    issueName: "멤버십 정기 결제",
+    issueId: randomId(),
+    displayAmount: 1,
+    currency: "KRW",
+    customer: {
+      customerId: "testCustomerId",
+      email: "test@test.com",
+      phoneNumber: "010-1234-5678",
+      fullName:"홍길동"
+    },
+    offerPeriod:{
+      interval: `${1}m`
+    },
+    popup:{
+      center:true,
+    },
+    bypass:{
+      smartro_v2:{
+        SkinColor:"PURPLE",
+        IsPwdPass:"Y"
+      }
+    }
+  }
+
+  const kakaoBillingReq = {
+    storeId: process.env.REACT_APP_SHOP_ID,
+    channelKey: process.env.REACT_APP_CHANNEL_KAKAOPAY,
     billingKeyMethod: "EASY_PAY",
     issueName: "멤버십 정기 결제",
     issueId: randomId(),
@@ -48,32 +75,20 @@ const RequestPayment = () => {
 
   const onClickPayment = () => {
     setPaymentStatus({status: "PENDING"})
-
   }
 
 
   const onClickPay = async () => {
-    console.log("클릭 시작", billingReq.issueId)
-    const rsp = await PortOne.requestIssueBillingKey(billingReq);
+    console.log("클릭 시작", kakaoBillingReq.issueId)
+    const rsp = await PortOne.requestIssueBillingKey(kakaoBillingReq);
     if (rsp.code !== undefined) {
       return alert(rsp.message);
     }
 
-    console.log("콘솔 ::::::::::::: ",rsp.message);
+    console.log("콘솔 ::::::::::::: ",rsp.billingKey);
 
-    // const response = await fetch(`${process.env.REACT_APP_IP}/billings`, {
-    //   method: "POST",
-    //   header: {"Content-Type": "application/json"},
-    //   body: JSON.stringify({
-    //     billingKey: rsp.code,
-    //   }),
-    // });
-    //
-    // if (!response.ok) throw new Error(`response: ${await response.json()}`);
   };
 
-  // const response = await PortOne.requestPayment(membership)
-  //     console.log(response)
 
 
   return (
