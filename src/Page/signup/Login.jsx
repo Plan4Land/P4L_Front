@@ -33,6 +33,7 @@ export const Login = () => {
     setState(e.target.value);
   };
 
+  // 로그인 기능
   const onClickLogin = async () => {
     setTextMessage("");
     if(!inputUserId.trim()) {
@@ -72,6 +73,13 @@ export const Login = () => {
     setIsPwShow((prev) => !prev);
   };
 
+  // 엔터키로 로그인
+  const handleEnterKey = (e) => {
+    if (e.key === 'Enter') {
+      onClickLogin();
+    }
+  }
+
   // 모달 열고 닫기
   const openModal = (modal, state) => {
     modal(state);
@@ -107,6 +115,7 @@ export const Login = () => {
                   placeholder="비밀번호 입력"
                   value={inputPw}
                   onChange={(e) => handleInputChange(e, setInputPw)}
+                  onKeyDown={handleEnterKey}
                 />
                 <div
                   className="iconBox-right"
