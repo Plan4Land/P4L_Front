@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
-import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditStyle";
-import UserInfoEdit from "./UserInfoEdit";
 import AxiosApi from "../../Api/AxiosApi";
+
+import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditStyle";
+
+import UserInfoEdit from "./UserInfoEdit";
+import UserUpdatePassword from "./UserUpdatePassword";
+
 
 
 const UserInfoValidate = () => {
@@ -17,31 +21,17 @@ const UserInfoValidate = () => {
   const { user } = useAuth();
   const [userPw, setUserPw] = useState("");
   const [message, setMessage] = useState("");
-  const [userPwCheck, setUserPwCheck] = useState("");
-  const [message2, setMessage2] = useState("");
-  const [isPwSame, setIsPwSame] = useState("");
+  
 
-  // 비밀번호 같은지 확인
-  // const handlePwCheck = (e) => {
-  //   setUserPwCheck(e.target.value);
-  //   userPw === userPwCheck ? setIsPwSame(true) : setIsPwSame(false);
-  // };
+  // 엔터키로 다음
+  const handleEnterKey = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  }
 
   const handleSubmit = async () => {
-  //   // 비밀번호 둘중 하나라도 값이 있는 경우
-  //   if(userPw.trim() || userPwCheck.trim()) {
-  //     if(userPw.length < 8) {
-  //       setMessage("비")
-  //       return;
-  //     } else if(!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(userPw)) {
-  //       // 모달
-  //       return;
-  //     }
-  //     if(userPw !== userPwCheck) {
-  //       // 모달
-  //       return;
-  //     }
-  //   }
+  
     try {
       const response = await AxiosApi.memberValidate(user.id, userPw);
       if (response.data) {
@@ -75,24 +65,10 @@ const UserInfoValidate = () => {
                     setUserPw(e.target.value);
                     setMessage("");
                   }}
+                  onKeyDown={handleEnterKey}
                 />
               </div>
             </InputBox>
-
-            {/* <div className="labelBox">
-              <label htmlFor="userPwCheck">비밀번호 확인</label>
-              <p className="message">{message2}</p>
-            </div>
-            <InputBox>
-              <div className="inputBox">
-                <input
-                  id="userPwCheck"
-                  type="password"
-                  value={userPwCheck}
-                  onChange={handlePwCheck}
-                />
-              </div>
-            </InputBox> */}
 
             <Button onClick={handleSubmit}>다음</Button>
           </Container>
@@ -128,6 +104,8 @@ const UserInfoValidate = () => {
         </Center>
       )}
       {selectedMenu === "회원정보 수정" && <UserInfoEdit />}
+      {selectedMenu === "비밀번호 변경" && <UserUpdatePassword />}
+      {selectedMenu === "회원 탈퇴" && <UserInfoEdit />}
     </>
   );
 };
