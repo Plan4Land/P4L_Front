@@ -1,11 +1,14 @@
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { useState, useEffect } from "react";
 import { areas, themes } from "../../Util/Common";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../Component/ButtonComponent";
-import { SelectTourItem } from "../../Style/ItemListStyled";
+import { SelectTourItem, SearchSt } from "../../Style/ItemListStyled";
+import { FaSearch } from "react-icons/fa";
 
 export const TourList = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
   const { areaCode, subAreaCode } = useParams();
   const location = useLocation();
   const [selectedAreaCode, setSelectedAreaCode] = useState("");
@@ -27,99 +30,111 @@ export const TourList = () => {
     setSelectedSubAreaCode("");
     setSelectedTheme("");
     setSelectedCategory("");
-    window.history.replaceState({}, "", "/tourlist");
+    setSearchQuery(""); // 검색어도 초기화
+    navigate("/tourlist"); // URL 쿼리 파라미터 제거
   };
-
-  const handleAreaChange = (areaCode) => {
-    let queryParams = new URLSearchParams();
-
-    // 지역을 선택한 경우
-    if (selectedAreaCode === areaCode) {
-      setSelectedAreaCode(""); // 지역 초기화
-      setSelectedSubAreaCode(""); // 세부지역 초기화
-      queryParams.delete("area"); // URL에서 area 파라미터 삭제
-      queryParams.delete("subarea"); // URL에서 subarea 파라미터 삭제
-    } else {
-      setSelectedAreaCode(areaCode);
-      setSelectedSubAreaCode(""); // 세부지역 초기화
-      queryParams.set("area", areaCode); // 선택한 지역을 URL에 추가
+  const handleSearch = () => {
+    if (searchQuery.length < 2) {
+      alert("검색어는 2자리 이상 입력해 주세요.");
+      return;
     }
 
-    // 테마, 카테고리, 세부지역 관련 값들을 쿼리에 추가
-    if (selectedTheme) queryParams.set("theme", selectedTheme);
-    if (selectedCategory) queryParams.set("category", selectedCategory);
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("search", searchQuery); // 검색어 추가
 
-    // URL을 업데이트 (pushState로 상태 변경)
-    window.history.pushState(
-      {},
-      "",
+    navigate(
+      `/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`
+    );
+    setSearchQuery(""); // 입력 필드 초기화
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+  const handleAreaChange = (areaCode) => {
+    const isSameArea = selectedAreaCode === areaCode;
+    const newAreaCode = isSameArea ? "" : areaCode;
+
+    // Query parameters 업데이트
+    let queryParams = new URLSearchParams(location.search);
+
+    if (newAreaCode) {
+      queryParams.set("area", newAreaCode); // 새로운 지역 코드 설정
+    } else {
+      queryParams.delete("area"); // 지역이 취소된 경우 area 파라미터 삭제
+    }
+
+    // 세부 지역 초기화
+    if (!newAreaCode) {
+      queryParams.delete("subarea");
+    }
+
+    // URL 변경
+    navigate(
+      `/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`
+    );
+
+    // 상태 업데이트
+    setSelectedAreaCode(newAreaCode);
+    setSelectedSubAreaCode("");
+  };
+
+  const handleSubAreaChange = (subAreaCode) => {
+    const queryParams = new URLSearchParams(location.search);
+
+    if (selectedSubAreaCode === subAreaCode) {
+      queryParams.delete("subarea"); // 세부지역 선택 취소
+      setSelectedSubAreaCode("");
+    } else {
+      queryParams.set("subarea", subAreaCode); // 새로운 세부지역 설정
+      setSelectedSubAreaCode(subAreaCode);
+    }
+
+    // 기존 검색어 유지
+    if (searchQuery) queryParams.set("search", searchQuery);
+
+    navigate(
       `/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`
     );
   };
 
-  const handleSubAreaChange = (subAreaCode) => {
-    const queryParams = new URLSearchParams();
-    if (selectedTheme) queryParams.append("theme", selectedTheme);
-    if (selectedCategory) queryParams.append("category", selectedCategory);
-
-    if (selectedSubAreaCode === subAreaCode) {
-      setSelectedSubAreaCode("");
-    } else {
-      setSelectedSubAreaCode(subAreaCode);
-      queryParams.append("subarea", subAreaCode);
-    }
-
-    const queryStr = queryParams.toString();
-    window.history.pushState(
-      {},
-      "",
-      `/tourlist${selectedAreaCode ? `?area=${selectedAreaCode}` : ""}${
-        queryStr ? `&${queryStr}` : ""
-      }`
-    );
-  };
-
   const handleThemeChange = (theme) => {
-    let queryParams = new URLSearchParams();
-
-    if (selectedAreaCode) queryParams.append("area", selectedAreaCode);
-    if (selectedSubAreaCode) queryParams.append("subarea", selectedSubAreaCode);
-    if (selectedCategory) queryParams.append("category", selectedCategory);
+    const queryParams = new URLSearchParams(location.search);
 
     if (selectedTheme === theme) {
-      setSelectedTheme(""); // 테마 선택 취소
+      queryParams.delete("theme"); // 테마 선택 취소
+      setSelectedTheme("");
     } else {
-      setSelectedTheme(theme); // 테마 선택
-      queryParams.append("theme", theme);
+      queryParams.set("theme", theme); // 새로운 테마 설정
+      setSelectedTheme(theme);
     }
 
-    const queryStr = queryParams.toString();
-    window.history.pushState(
-      {},
-      "",
-      `/tourlist${queryStr ? `?${queryStr}` : ""}`
+    // 기존 검색어 유지
+    if (searchQuery) queryParams.set("search", searchQuery);
+
+    navigate(
+      `/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`
     );
   };
 
   const handleCategoryChange = (category) => {
-    let queryParams = new URLSearchParams();
-
-    if (selectedAreaCode) queryParams.append("area", selectedAreaCode);
-    if (selectedSubAreaCode) queryParams.append("subarea", selectedSubAreaCode);
-    if (selectedTheme) queryParams.append("theme", selectedTheme);
+    const queryParams = new URLSearchParams(location.search);
 
     if (selectedCategory === category) {
-      setSelectedCategory(""); // 카테고리 선택 취소
+      queryParams.delete("category"); // 카테고리 선택 취소
+      setSelectedCategory("");
     } else {
-      setSelectedCategory(category); // 카테고리 선택
-      queryParams.append("category", category);
+      queryParams.set("category", category); // 새로운 카테고리 설정
+      setSelectedCategory(category);
     }
 
-    const queryStr = queryParams.toString();
-    window.history.pushState(
-      {},
-      "",
-      `/tourlist${queryStr ? `?${queryStr}` : ""}`
+    // 기존 검색어 유지
+    if (searchQuery) queryParams.set("search", searchQuery);
+
+    navigate(
+      `/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`
     );
   };
 
@@ -128,10 +143,30 @@ export const TourList = () => {
   return (
     <>
       <Header />
-      <Button onClick={handleResetSelections} style={{ marginBottom: "10px" }}>
-        선택 초기화
-      </Button>
+
       <SelectTourItem>
+        <Button
+          onClick={handleResetSelections}
+          style={{ marginBottom: "10px" }}
+        >
+          선택 초기화
+        </Button>
+        <SearchSt>
+          <div className="search-wrapper">
+            <input
+              type="text"
+              className="search"
+              placeholder="제목 검색!"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)} // 검색어 업데이트
+              onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
+            />
+            <button className="search-button" onClick={handleSearch}>
+              <FaSearch /> {/* 검색 아이콘 */}
+            </button>
+          </div>
+        </SearchSt>
+
         <div className="mainarea">
           <h3>지역 선택</h3>
           {areas.map((area) => (
