@@ -2,7 +2,7 @@ import { Header, Footer } from "../../Component/GlobalComponent";
 import { useState, useEffect } from "react";
 import { areas, themes } from "../../Util/Common";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { Button } from "../../Component/ButtonComponent";
+import { Button, ToggleButton } from "../../Component/ButtonComponent";
 import { SelectTourItem, SearchSt } from "../../Style/ItemListStyled";
 import { FaSearch, FaUndo } from "react-icons/fa";
 
@@ -14,6 +14,13 @@ export const PlanningList = () => {
   const [selectedAreaCode, setSelectedAreaCode] = useState("");
   const [selectedSubAreaCode, setSelectedSubAreaCode] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("");
+  const [isAreaOpen, setIsAreaOpen] = useState(true); // 지역 선택 토글 상태
+  const [isSubAreaOpen, setIsSubAreaOpen] = useState(true); // 세부지역 선택 토글 상태
+  const [isThemeOpen, setIsThemeOpen] = useState(true);
+
+  const handleToggleArea = () => setIsAreaOpen(!isAreaOpen);
+  const handleToggleSubArea = () => setIsSubAreaOpen(!isSubAreaOpen);
+  const handleToggleTheme = () => setIsThemeOpen(!isThemeOpen);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -45,7 +52,6 @@ export const PlanningList = () => {
         queryParams.toString() ? `?${queryParams.toString()}` : ""
       }`
     );
-    setSearchQuery(""); // 입력 필드 초기화
   };
 
   const handleKeyDown = (e) => {
@@ -152,48 +158,72 @@ export const PlanningList = () => {
           </div>
         </SearchSt>
         <div className="mainarea">
-          <h3>지역 선택</h3>
-          {areas.map((area) => (
-            <Button
-              key={area.code}
-              onClick={() => handleAreaChange(area.code)}
-              className={`area-button ${
-                selectedAreaCode === area.code ? "selected" : ""
-              }`}
-            >
-              {area.name}
-            </Button>
-          ))}
+          <h3>
+            지역 선택
+            <ToggleButton isOpen={isAreaOpen} onToggle={handleToggleArea} />
+          </h3>
+          {isAreaOpen && (
+            <div>
+              {areas.map((area) => (
+                <Button
+                  key={area.code}
+                  onClick={() => handleAreaChange(area.code)}
+                  className={`area-button ${
+                    selectedAreaCode === area.code ? "selected" : ""
+                  }`}
+                >
+                  {area.name}
+                </Button>
+              ))}
+            </div>
+          )}
         </div>
         {selectedAreaData && (
           <div className="subarea">
-            <h3>세부 지역 선택</h3>
-            {selectedAreaData.subAreas.map((subArea) => (
-              <Button
-                key={subArea.code}
-                onClick={() => handleSubAreaChange(subArea.code)}
-                className={`subarea-button ${
-                  selectedSubAreaCode === subArea.code ? "selected" : ""
-                }`}
-              >
-                {subArea.name}
-              </Button>
-            ))}
+            <h3>
+              세부 지역 선택{" "}
+              <ToggleButton
+                isOpen={isSubAreaOpen}
+                onToggle={handleToggleSubArea}
+              />
+            </h3>
+            {isSubAreaOpen && (
+              <div>
+                {selectedAreaData.subAreas.map((subArea) => (
+                  <Button
+                    key={subArea.code}
+                    onClick={() => handleSubAreaChange(subArea.code)}
+                    className={`subarea-button ${
+                      selectedSubAreaCode === subArea.code ? "selected" : ""
+                    }`}
+                  >
+                    {subArea.name}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
         )}
         <div className="theme">
-          <h3>테마 선택</h3>
-          {themes.map((theme) => (
-            <Button
-              key={theme}
-              onClick={() => handleThemeChange(theme)}
-              className={`theme-button ${
-                selectedTheme === theme ? "selected" : ""
-              }`}
-            >
-              {theme}
-            </Button>
-          ))}
+          <h3>
+            테마 선택{" "}
+            <ToggleButton isOpen={isThemeOpen} onToggle={handleToggleTheme} />
+          </h3>
+          {isThemeOpen && (
+            <div>
+              {themes.map((theme) => (
+                <Button
+                  key={theme}
+                  onClick={() => handleThemeChange(theme)}
+                  className={`theme-button ${
+                    selectedTheme === theme ? "selected" : ""
+                  }`}
+                >
+                  {theme}
+                </Button>
+              ))}
+            </div>
+          )}
         </div>
       </SelectTourItem>
       <Footer />

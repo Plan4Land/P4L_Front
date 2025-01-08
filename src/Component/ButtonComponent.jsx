@@ -58,3 +58,27 @@ export const CancelButton = ({ onClick, children }) => (
     {children}
   </Button>
 );
+const StyledToggleButton = styled.button`
+  background-color: transparent;
+  width: 20px !important;
+  height: 20px !important;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: ${(props) => (props.isOpen ? colors.colorB : "#666")};
+  transition: color 0.2s ease;
+  &:hover {
+    background-color: transparent !important;
+  }
+`;
+export const ToggleButton = ({ isOpen, onToggle }) => {
+  return (
+    <StyledToggleButton
+      StyledToggleButton
+      onClick={onToggle}
+      className="toggle-button"
+    >
+      {isOpen ? "▲" : "▼"}
+    </StyledToggleButton>
+  );
+};

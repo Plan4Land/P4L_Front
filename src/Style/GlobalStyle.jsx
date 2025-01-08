@@ -23,8 +23,9 @@ export const HeaderSt = styled.div`
     }
   }
   .profile-link {
-    height: 80px;
-    width: 80px;
+    height: 65px;
+    width: 65px;
+    margin-right: 20px;
     border-radius: 50%;
     background-color: ${colors.colorC};
     position: relative;
@@ -92,7 +93,7 @@ export const HeaderSt = styled.div`
 
   .dropdown-item:hover {
     background-color: #f0f0f0;
-    color: #4caf50;
+    color: ${colors.colorA};
   }
 
   .dropdown button {
@@ -111,25 +112,39 @@ export const HeaderSt = styled.div`
   .dropdown button:hover {
     background-color: #f0f0f0;
   }
-
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
+  .recomm {
+    cursor: pointer;
+    position: relative;
   }
 
-  .modal-content {
+  .recomm:hover .dropdown-list {
+    display: block;
+  }
+  .dropdown-list {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 200px;
     background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
+    border: 1px solid #ddd;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+  }
+
+  .dropdown-list ul {
+    margin: 0;
+    padding: 10px;
+    list-style: none;
+  }
+
+  .dropdown-list li {
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  .dropdown-list li:hover {
+    background-color: #f0f0f0;
   }
 `;
 

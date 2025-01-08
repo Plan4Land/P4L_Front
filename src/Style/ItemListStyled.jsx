@@ -37,6 +37,17 @@ export const SelectTourItem = styled.div`
       color: gray;
     }
   }
+  .toggle-button {
+    font-size: 16px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    color: ${colors.colorA}; /* 원하는 텍스트 색상 */
+  }
+
+  .toggle-button:hover {
+    color: ${colors.colorB}; /* 호버 시 색상 변경 */
+  }
 `;
 
 export const SearchSt = styled.div`
@@ -73,5 +84,21 @@ export const SearchSt = styled.div`
     cursor: pointer;
     font-size: 20px;
     color: ${colors.colorA};
+
+    /* hover 시 아무 변화가 없도록 설정 */
+    &:hover {
+      background: transparent;
+      color: ${colors.colorA};
+      border: none;
+      transform: none;
+    }
+  }
+
+  /* button의 다른 hover 스타일을 덮어쓸 수 있도록 구체적으로 설정 */
+  button.search-button:hover {
+    background: transparent;
+    color: ${colors.colorA};
+    border: none;
+    transform: none;
   }
 `;

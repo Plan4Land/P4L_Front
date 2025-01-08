@@ -1,14 +1,19 @@
 import { HeaderSt, NavSt, FooterSt } from "../Style/GlobalStyle";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../Img/Plan4landLogo.png";
 import { useState } from "react";
 import { Modal } from "../Util/Modal";
 import { useAuth } from "../Context/AuthContext";
 
 export const Header = () => {
+  const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout } = useAuth(); // 로그인 상태와 로그아웃 함수 가져오기
+  const { user, logout } = useAuth();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   const isActive = (path, query = "") => {
     const pathnameMatches = location.pathname.startsWith(path);
@@ -43,7 +48,19 @@ export const Header = () => {
           플래닝
         </Link>
       </NavSt>
-      <div className="recomm">추천합니다.</div>
+      <div className="recomm">
+        인기뭐시기
+        <div className="dropdown-list">
+          <ul>
+            <li>인기 관광지 1</li>
+            <li>인기 관광지 2</li>
+            <li>인기 관광지 3</li>
+            <li>인기 플래닝 1</li>
+            <li>인기 플래닝 2</li>
+            <li>인기 플래닝 3</li>
+          </ul>
+        </div>
+      </div>
       <div className={`profile-link ${user ? "logged-in" : "logged-out"}`}>
         {user ? (
           <>
@@ -81,10 +98,7 @@ export const Header = () => {
         <Modal
           isOpen={showLogoutModal}
           onClose={() => setShowLogoutModal(false)}
-          onConfirm={() => {
-            logout(); // 로그아웃 시 호출
-            setShowLogoutModal(false);
-          }}
+          onConfirm={handleLogout}
         >
           <p>로그아웃 하시겠습니까?</p>
         </Modal>
