@@ -54,7 +54,7 @@ const plannerInfo = {
     },
   ],
 };
-const plans = [
+const plansEx = [
   {
     id: 1,
     seq: 1,
@@ -142,9 +142,11 @@ const plans = [
 ];
 
 export const Planning = () => {
+  const [plans, setPlans] = useState([]);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isAddPlaceModalOpen, setIsAddPlaceModalOpen] = useState(false);
-  const [isMemoModalOpen, setIsMemoModalOpen] = useState(false);
+  const [isMemoClicked, setIsMemoClicked] = useState([]);
+  const [updatedMemo, setUpdatedMemo] = useState("");
   const [currentAddedPlace, setCurrentAddedPlace] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [submittedKeyword, setSubmittedKeyword] = useState("");
@@ -182,6 +184,28 @@ export const Planning = () => {
     });
   };
 
+  // 클릭한 메모 열고 닫기
+  const handleMemoClick = (date, planIndex) => {
+    setIsMemoClicked((prevMemo) => ({
+      ...prevMemo,
+      [date]: {
+        ...prevMemo[date],
+        [planIndex]: !prevMemo[date]?.[planIndex],
+      },
+    }));
+  };
+  const handleUpdateMemo = (date, planIndex, updatedMemo) => {
+    setGroupPlans((prevPlans) => ({
+      ...prevPlans,
+      [date]: prevPlans[date].map((plan, index) =>
+        index === planIndex ? { ...plan, memo: updatedMemo } : plan
+      ),
+    }));
+  };
+  useEffect(() => {
+    setPlans(plansEx);
+  }, []);
+
   useEffect(() => {
     setSearchKeyword("");
     setSubmittedKeyword("");
@@ -190,6 +214,7 @@ export const Planning = () => {
   useEffect(() => {
     setArrowDirections(Array(travelDays).fill("▼"));
     setOpenDayToggle(Array(travelDays).fill(false));
+    setIsMemoClicked(Array(travelDays).fill(false));
   }, [travelDays]);
 
   useEffect(() => {
@@ -310,25 +335,33 @@ export const Planning = () => {
                             <p className="place-name">{plan.spotName}</p>
                             <p className="place-category">{plan.category}</p>
                           </div>
-                          <img
-                            className="memo-modal"
-                            src={MemoIcon}
-                            alt="메모"
-                            onClick={() => {
-                              setSelectedPlan(plan);
-                              setIsMemoModalOpen(true);
-                            }}
-                          />
-                          {isMemoModalOpen && (
-                            <DraggableModal
-                              isOpen={isMemoModalOpen}
-                              onClose={() => setIsMemoModalOpen(false)}
-                              contentWidth="400px"
-                              contentHeight="500px"
-                            >
-                              {selectedPlan.spotName}
-                            </DraggableModal>
-                          )}
+                          <div className="memo-container">
+                            <img
+                              className="memo-icon"
+                              src={MemoIcon}
+                              alt="메모"
+                              onClick={() => {
+                                setSelectedPlan(plan);
+                                handleMemoClick(date, planIndex);
+                              }}
+                            />
+                            {isMemoClicked[date]?.[planIndex] && (
+                              <div className="memo-input">
+                                <input
+                                  type="text"
+                                  value={plan.memo || ""}
+                                  onChange={(e) => {
+                                    setUpdatedMemo(e.target.value);
+                                    handleUpdateMemo(
+                                      date,
+                                      planIndex,
+                                      updatedMemo
+                                    );
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </>
                     ))}
