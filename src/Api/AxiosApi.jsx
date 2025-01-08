@@ -42,10 +42,9 @@ const AxiosApi = {
     return await AxiosInstance.get(`/member/${userId}`);
   },
   // 회원 정보 수정
-  memberUpdate: async (id, password, name, nickname, email, profileImg) => {
+  memberUpdate: async (id, name, nickname, email, profileImg) => {
     const member = {
       id: id,
-      password: password,
       name: name,
       email: email,
       nickname: nickname,
@@ -56,6 +55,14 @@ const AxiosApi = {
   // 회원 정보 삭제
   memberDelete: async (userId) => {
     return await AxiosInstance.delete(`/member/${userId}`);
+  },
+  // 회원 비밀번호 검증
+  memberValidate: async (id, password) => {
+    const memberInfo = {
+      id: id,
+      password: password,
+    }
+    return await AxiosInstance.post("/member/validate", memberInfo);
   },
 }
 export default AxiosApi;

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditStyle";
 import { ProfilePicModal } from "../../Component/SignupModalComponent";
 import { useAuth } from "../../Context/AuthContext";
+import AxiosApi from "../../Api/AxiosApi";
 
 const UserInfoEdit = () => {
   const { user } = useAuth();
@@ -15,14 +16,10 @@ const UserInfoEdit = () => {
   const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
   const [isPicsModalOpen, setIsPicsModalOpen] = useState("");
 
-  const handleSave = () => {
-    alert(`저장되었습니다: \n이름: ${name}\n이메일: ${email}`);
-  };
-
   const handlePwCheck = (e) => {
     setUserPwCheck(e.target.value);
     userPw === userPwCheck ? setIsPwCheck(true) : setIsPwCheck(false);
-  }
+  };
 
   const handlePicSelect = (picName) => {
     setCurrentPic(`profile-pic/${picName}`);
@@ -31,7 +28,52 @@ const UserInfoEdit = () => {
     // 사진 추가하는 기능 구현하기.
     setCurrentPic(URL.createObjectURL(picture));
     console.log(picture);
-  }
+  };
+
+  // 정보 가져오기
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const response = await AxiosApi.memberInfo(user.id);
+        setUserId(response.data.id);
+        setName(response.data.name);
+        setEmail(response.data.email);
+        setNickName(response.data.nickname);
+        setCurrentPic(response.data.imgPath);
+      } catch (error) {
+        console.error("Error during getUserInfo: ", error);
+      }
+    };
+    getUserInfo();
+  }, []);
+  
+  // 회원정보 수정 기능
+  const handleSave = async () => {
+    // 비밀번호 둘중 하나라도 값이 있는 경우
+    // if(userPw.trim() || userPwCheck.trim()) {
+    //   if(userPw.length < 8) {
+    //     // 모달
+    //     return;
+    //   } else if(!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(userPw)) {
+    //     // 모달
+    //     return;
+    //   }
+    //   if(userPw !== userPwCheck) {
+    //     // 모달
+    //     return;
+    //   }
+    // }
+    try {
+      const rsp = await AxiosApi.memberUpdate(userId, name, nickName, email, currentPic);
+      console.log(rsp);
+      if (rsp.data) {
+        alert("회원정보가 수정되었습니다.");
+      }
+    } catch (e) {
+      console.error("Error during signup: ", e);
+      alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
 
   return (
     <Center>
@@ -44,13 +86,13 @@ const UserInfoEdit = () => {
             <input
               id="userId"
               type="text"
-              value={user.id}
+              value={userId}
               readOnly
             />
           </div>
         </InputBox>
 
-        <label htmlFor="userPw">비밀번호</label>
+        {/* <label htmlFor="userPw">비밀번호</label>
         <InputBox>
           <div className="inputBox">
             <input
@@ -72,7 +114,7 @@ const UserInfoEdit = () => {
               onChange={handlePwCheck}
             />
           </div>
-        </InputBox>
+        </InputBox> */}
 
         <label htmlFor="name">이름</label>
         <InputBox>
@@ -80,7 +122,7 @@ const UserInfoEdit = () => {
             <input
               id="name"
               type="text"
-              value={user.name}
+              value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
@@ -92,7 +134,7 @@ const UserInfoEdit = () => {
             <input
               id="nickName"
               type="text"
-              value={user.nickname}
+              value={nickName}
               onChange={(e) => setNickName(e.target.value)}
             />
           </div>
@@ -104,7 +146,7 @@ const UserInfoEdit = () => {
             <input
               id="email"
               type="email"
-              value={user.email}
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
