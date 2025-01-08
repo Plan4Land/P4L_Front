@@ -158,3 +158,62 @@ export const Button = styled.button`
     background-color: rgb(0, 160, 0);
   }
 `;
+
+export const Terms = styled.div`
+  margin-bottom: 30px;
+
+  .terms-label {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    cursor: pointer;
+  }
+
+  .iconBox-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+    svg {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+    }
+  }
+  .checked {
+    svg {
+      background-color: green;
+      path:nth-child(1) {
+        color: white;
+      }
+      path:nth-child(2) {
+        color: green;
+      }
+    }
+  }
+
+  .inputBox-big {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+  }
+
+  .inputBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+  }
+
+  .terms-content {
+    height: 200px;
+    overflow: auto;
+    padding: 15px;
+    margin: 9px 0 0 35px;
+    border: 1px solid #ddd;
+    p {
+      line-height: 1.5;
+    }
+  }
+`
