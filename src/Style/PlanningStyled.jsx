@@ -85,6 +85,8 @@ export const MainPlanning = styled.div`
   /* display: flex;
   flex-direction: column; */
   overflow-y: auto;
+  overflow-x: hidden;
+  overflow: visible;
   background-color: blanchedalmond;
 
   .planning-day {
@@ -110,6 +112,7 @@ export const KakaoMapContainer = styled.div`
   width: 40%;
   height: 400px;
   margin-left: 1%;
+  z-index: 1;
   background-color: antiquewhite;
 `;
 
@@ -318,6 +321,7 @@ export const SearchInputContainer = styled.div`
 
 export const DayToggleContainer = styled.div`
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
   width: 85%;
@@ -347,13 +351,28 @@ export const DayToggleContainer = styled.div`
         color: #333;
       }
     }
-
+  }
+  .memo-container {
+    display: flex;
+    position: relative;
     img {
       width: 30px;
       height: 30px;
     }
-    .memo-modal {
+    .memo-icon {
       cursor: pointer;
+    }
+
+    .memo-input {
+      display: flex;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      transform: translateX(98%) translateY(80%);
+      width: 200px;
+      min-height: 10vh;
+      background-color: white;
+      z-index: 2;
     }
   }
 `;
