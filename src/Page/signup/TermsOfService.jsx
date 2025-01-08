@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import {
   Center,
@@ -16,6 +17,32 @@ export const TermsOfService = () => {
   const [isCheckedFst, setIsCheckedFst] = useState(false);
   const [isCheckedScd, setIsCheckedScd] = useState(false);
 
+  const navigate = useNavigate();
+
+  // 전체 동의 버튼
+  const handleClickTotal = () => {
+    setIsCheckedTotal((prev) => !prev);
+    if(!isCheckedTotal) {
+      setIsCheckedFst(true);
+      setIsCheckedScd(true);
+    } else {
+      setIsCheckedFst(false);
+      setIsCheckedScd(false);
+    }
+  }
+
+  // 이용약관 버튼
+  const handleClickFst = () => {
+    setIsCheckedFst((prev) => !prev);
+  }
+
+  // 개인정보 수집 버튼
+  const handleClickScd = () => {
+    setIsCheckedScd((prev) => !prev);
+  }
+
+  const isButtonOn = isCheckedFst && isCheckedScd;
+
   return (
     <>
       <Header />
@@ -23,17 +50,31 @@ export const TermsOfService = () => {
         <SignupContainer>
           <Terms>
             <div 
-              className={isCheckedTotal ? "terms-label checked" : "terms-label"}
+              className="terms-label"
+              onClick={handleClickTotal}
             >
-              <div className="iconBox-left">
+              <div 
+                className={
+                  isCheckedTotal 
+                  ? "iconBox-left checked" 
+                  : "iconBox-left"}
+              >
               <GoCheckCircle />
               </div>
               <div className="inputBox-big">전체 동의하기</div>
             </div>
           </Terms>
           <Terms>
-            <div className="terms-label">
-              <div className="iconBox-left">
+            <div 
+              className="terms-label"
+              onClick={handleClickFst}
+            >
+              <div 
+                className={
+                  isCheckedFst 
+                  ? "iconBox-left checked" 
+                  : "iconBox-left"}
+              >
                 <GoCheckCircle />
               </div>
               <div className="inputBox">PLAN4LAND 이용약관</div>
@@ -119,8 +160,16 @@ export const TermsOfService = () => {
             </div>
           </Terms>
           <Terms>
-            <div className="terms-label">
-              <div className="iconBox-left">
+            <div 
+              className="terms-label"
+              onClick={handleClickScd}
+            >
+              <div 
+                className={
+                  isCheckedScd 
+                  ? "iconBox-left checked" 
+                  : "iconBox-left"}
+              >
                 <GoCheckCircle />
               </div>
               <div className="inputBox">개인정보 수집 및 이용</div>
@@ -129,6 +178,12 @@ export const TermsOfService = () => {
               일단 내용 보류
             </div>
           </Terms>
+          <Button 
+            onClick={()=>navigate("/signup")}
+            disabled={!isButtonOn}
+          >
+            다음
+          </Button>
         </SignupContainer>
       </Center>
       <Footer />

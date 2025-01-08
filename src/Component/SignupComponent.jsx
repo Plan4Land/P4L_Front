@@ -157,6 +157,10 @@ export const Button = styled.button`
   &:hover {
     background-color: rgb(0, 160, 0);
   }
+  &:disabled {
+    background-color: #aaa;
+    cursor: default;
+  }
 `;
 
 export const Terms = styled.div`
