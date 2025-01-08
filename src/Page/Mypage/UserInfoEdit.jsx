@@ -59,7 +59,7 @@ const UserInfoEdit = () => {
   return (
     <Center>
       <Container>
-        <h2 className="title">내 정보 수정</h2>
+        <h2 className="title">회원정보 수정</h2>
 
         <label htmlFor="userId">아이디</label>
         <InputBox>
