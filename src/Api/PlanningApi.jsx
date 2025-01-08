@@ -12,17 +12,6 @@ const PlanningApi = {
     thumbnail,
     isPublic
   ) => {
-    console.log(
-      title,
-      theme,
-      id,
-      startDate,
-      endDate,
-      area,
-      subArea,
-      thumbnail,
-      isPublic
-    );
     const plannerInfo = {
       title: title,
       theme: theme,

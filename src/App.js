@@ -23,7 +23,7 @@ function App() {
           <Router>
             <Routes>
               <Route path="/" element={<Main />} />
-              <Route path="/planning" element={<Planning />} />
+              <Route path="/planning/:plannerId" element={<Planning />} />
               <Route path="/makePlanning" element={<MakePlanning />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />

@@ -14,6 +14,7 @@ import { CheckModal } from "../../Util/Modal";
 import ThumbnailBasic from "../../Img/planning_thumbnail.jpg";
 import { Button } from "../../Component/ButtonComponent";
 import PlanningApi from "../../Api/PlanningApi";
+import { useNavigate } from "react-router-dom";
 
 export const MakePlanning = () => {
   // const [searchKeyword, setSearchKeyword] = useState("");
@@ -31,6 +32,7 @@ export const MakePlanning = () => {
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const memberId = JSON.parse(localStorage.getItem("user")).id;
+  const navigate = useNavigate();
   const isStepComplete =
     selectedSubArea && selectedThemes.length > 0 && endDate && title.trim();
 
@@ -87,7 +89,8 @@ export const MakePlanning = () => {
         isPublic
       );
       if (response.status === 200) {
-        console.log("플래너 생성 성공!!!!!!!!!!!!!");
+        console.log("플래너 생성 성공");
+        navigate(`/planning/${response.data}`);
       }
     } catch (e) {
       console.log("플래너 생성 중 에러", e);
