@@ -4,7 +4,7 @@ import { areas, themes } from "../../Util/Common";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../Component/ButtonComponent";
 import { SelectTourItem, SearchSt } from "../../Style/ItemListStyled";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaUndo } from "react-icons/fa";
 
 export const PlanningList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -131,14 +131,11 @@ export const PlanningList = () => {
   return (
     <>
       <Header />
-
       <SelectTourItem>
-        <Button
-          onClick={handleResetSelections}
-          style={{ marginBottom: "10px" }}
-        >
-          선택 초기화
-        </Button>
+        <button className="reset-button" onClick={handleResetSelections}>
+          초기화
+          <FaUndo style={{ marginLeft: "6px" }} />
+        </button>
         <SearchSt>
           <div className="search-wrapper">
             <input
@@ -154,7 +151,6 @@ export const PlanningList = () => {
             </button>
           </div>
         </SearchSt>
-
         <div className="mainarea">
           <h3>지역 선택</h3>
           {areas.map((area) => (

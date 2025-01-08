@@ -8,7 +8,7 @@ export const colors = {
 };
 
 export const HeaderSt = styled.div`
-  height: 100px;
+  height: 80px;
   background-color: ${colors.colorD};
   display: flex;
   justify-content: space-between;
