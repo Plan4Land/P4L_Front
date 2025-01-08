@@ -1,8 +1,15 @@
 import styled from "styled-components";
 
+export const colors = {
+  colorA: "#19660a",
+  colorB: "#579450",
+  colorC: "#d3eea9",
+  colorD: "#ffffcf",
+};
+
 export const HeaderSt = styled.div`
   height: 100px;
-  background-color: #f9ffe9;
+  background-color: ${colors.colorD};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,39 +22,119 @@ export const HeaderSt = styled.div`
       cursor: pointer;
     }
   }
-  .search-link {
+  .search-container {
+    position: relative;
     flex-grow: 1;
-    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
 
-    .search-container {
-      display: flex;
-      align-items: center;
-      background-color: white;
-      border: 1px solid #17520b;
-      border-radius: 50px;
-      overflow: hidden;
-      height: 50px;
-    }
-    .placeholder {
-      padding-left: 20px;
-      color: #aaa;
-      font-size: 14px;
-      width: 100%;
-    }
+  .search-wrapper {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .selected-option {
+    position: absolute;
+    left: 55px;
+    top: 48%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    font-weight: bold;
+    color: ${colors.colorA};
+    pointer-events: none;
+  }
+  .divider {
+    position: absolute;
+    left: 110px;
+    top: 43%;
+    transform: translateY(-50%);
+    color: ${colors.colorA};
+    font-size: 20px;
+    pointer-events: none;
+  }
+
+  .search {
+    font-size: 14px;
+    height: 40px;
+    border-radius: 50px;
+    border: 2.5px solid ${colors.colorA};
+    padding-left: 120px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .search-toggle {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 5px 10px;
+    background-color: ${colors.colorA};
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    z-index: 1;
+  }
+  .search-button {
+    position: absolute;
+    right: 15px;
+    top: 23%;
+    scale: 110%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: ${colors.colorA};
+  }
+
+  .search-options {
+    position: absolute;
+    top: 105%;
+    background-color: white;
+    border: 1px solid ${colors.colorA};
+    border-radius: 5px;
+    z-index: 10;
+    width: 120px;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .search-options.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .options-list p {
+    padding: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .options-list p:hover {
+    background-color: #f0f0f0;
   }
   .profile-link {
     height: 80px;
     width: 80px;
     border-radius: 50%;
-    background-color: #17520b;
+    background-color: ${colors.colorC};
     position: relative;
+    cursor: pointer;
   }
   .dropdown {
     position: absolute;
     top: 100%;
     right: 0;
     background-color: white;
-    border: 1px solid #ccc;
+    border: 1px solid ${colors.colorC};
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 10;
@@ -87,12 +174,11 @@ export const HeaderSt = styled.div`
     width: 100%;
     display: block;
     color: #333;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: all 0.3s ease;
   }
 
   .dropdown button:hover {
     background-color: #f0f0f0;
-    color: #4caf50;
   }
 
   .modal {
@@ -114,31 +200,16 @@ export const HeaderSt = styled.div`
     border-radius: 8px;
     text-align: center;
   }
-
-  .modal-content button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-  }
-
-  .modal-content button:hover {
-    background-color: #0056b3;
-  }
 `;
 
 export const NavSt = styled.div`
   height: 50px;
-  background-color: #e1ffb0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-grow: 0.6;
   .tag {
-    color: #17520b;
+    color: ${colors.colorA};
     font-weight: bold;
     text-decoration: none;
     flex: 0.8;
@@ -152,10 +223,10 @@ export const NavSt = styled.div`
   }
   .tag.active {
     text-decoration: underline;
-    color: #3c8dbc;
+    opacity: 0.7;
   }
   p {
-    color: #17520b;
+    color: ${colors.colorA};
     margin: -10px;
   }
 `;

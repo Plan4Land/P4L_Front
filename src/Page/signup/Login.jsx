@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { Center, SignupContainer, InputBox, Button } from "../../Component/SignupComponent";
 import { FindUserIdModal, ResultUserIdModal, FindPwModal, ResultPwModal } from "../../Component/SignupModalComponent"
+import AxiosApi from "../../Api/AxiosApi";
+import { useAuth } from "../../Context/AuthContext";
+import Common from "../../Util/Common";
 
 // icon
 import { GoLock, GoEye, GoEyeClosed } from "react-icons/go";
@@ -11,7 +14,9 @@ import { VscAccount } from "react-icons/vsc";
 
 export const Login = () => {
   const [inputUserId, setInputUserId] = useState("");
+  const userIdRef = useRef(null);
   const [inputPw, setInputPw] = useState("");
+  const pwRef = useRef(null);
   const [textMessage, setTextMessage] = useState("");
   const [isPwShow, setIsPwShow] = useState(false);
 
@@ -22,12 +27,45 @@ export const Login = () => {
 
   const navigate = useNavigate();
 
+  const { login } = useAuth();
+
   const handleInputChange = (e, setState) => {
     setState(e.target.value);
   };
 
   const onClickLogin = async () => {
-    // 로그인 기능 구현해야함
+    setTextMessage("");
+    if(!inputUserId.trim()) {
+      setTextMessage("아이디를 입력해주세요.");
+      userIdRef.current.focus();
+      return;
+    }
+    if(!inputPw.trim()) {
+      setTextMessage("비밀번호를 입력해주세요.");
+      pwRef.current.focus();
+      return;
+    }
+    
+    try {
+      const response = await AxiosApi.login(inputUserId, inputPw);
+      if (response.data.grantType === "Bearer"
+         && (response.status === 201 
+          || response.status === 200)
+      ) {
+        Common.setAccessToken(response.data.accessToken);
+        Common.setRefreshToken(response.data.refreshToken);
+
+        const userData = await AxiosApi.memberInfo(inputUserId);
+        login(userData);
+        console.log(userData);
+        navigate("/");
+      } else {
+        setTextMessage("로그인 실패. 아이디 또는 비밀번호를 확인하세요.");
+      }
+    } catch (error) {
+      console.error("Error during login: ", error);
+      setTextMessage("로그인 중 오류가 발생했습니다.");
+    }
   };
 
   // 비밀번호 보이기
@@ -52,6 +90,7 @@ export const Login = () => {
             <div className="iconBox-left"><VscAccount /></div>
               <div className="inputBox">
                 <input
+                  ref={userIdRef}
                   type="text" 
                   placeholder="아이디 입력"
                   value={inputUserId}
@@ -64,6 +103,7 @@ export const Login = () => {
               <div className="iconBox-left"><GoLock /></div>
               <div className="inputBox">
                 <input
+                  ref={pwRef}
                   type={isPwShow ? "text" : "password"} 
                   placeholder="비밀번호 입력"
                   value={inputPw}
@@ -90,7 +130,7 @@ export const Login = () => {
             </div>
           </div>
 
-          <Button onClick={()=>onClickLogin}>
+          <Button onClick={onClickLogin}>
             로그인
           </Button>
 

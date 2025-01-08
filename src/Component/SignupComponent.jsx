@@ -11,7 +11,6 @@ export const SignupContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 500px;
-  background-color: #eee;
   padding: 30px;
   box-sizing: border-box;
 

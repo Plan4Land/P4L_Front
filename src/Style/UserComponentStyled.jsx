@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "./GlobalStyle";
 
 export const UserMenuContainer = styled.div`
   display: flex;
@@ -9,15 +10,15 @@ export const UserMenuContainer = styled.div`
     cursor: pointer;
     font-size: 16px;
     color: #555;
-    transition: color 0.3s, font-weight 0.3s;
+    transition: all 0.3s ease;
 
     &.selected {
-      color: #007bff; /* 선택된 상태의 색상 */
+      color: ${colors.colorA}; /* 선택된 상태의 색상 */
       font-weight: bold;
     }
 
     &:hover {
-      color: #0056b3; /* 호버 상태의 색상 */
+      opacity: 0.7;
     }
   }
 `;

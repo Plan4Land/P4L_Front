@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "./GlobalStyle";
 
 export const MainBox = styled.div`
   display: grid;
@@ -11,7 +12,7 @@ export const MainBox = styled.div`
 
 export const GridItem = styled.div`
   display: flex;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   height: 100%;
 `;
 //         {/* 미니 검색창!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
@@ -19,11 +20,8 @@ export const QuickSearch = styled(GridItem)`
   grid-column: span 2;
   display: flex;
   flex-direction: column;
-
   .QuickSelect {
     display: flex;
-    justify-content: space-around;
-
     padding: 10px;
     border-radius: 8px;
 
@@ -32,64 +30,52 @@ export const QuickSearch = styled(GridItem)`
       background-color: transparent;
       border: none;
       width: 100%;
-      margin: 0 20px;
+      height: 30px;
+      margin: 0 20px 20px;
       transition: all 0.3s ease;
       font-size: 16px;
       color: #17520b;
       &:hover {
         opacity: 0.7;
       }
-      &:active {
-        opacity: 0.7;
+      &.active {
+        background-color: ${colors.colorC};
       }
     }
   }
 
   .SearchBox {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    width: 100%;
     height: 100%;
-
     .RegionSearch {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      input {
-        flex: 1;
-        padding: 8px;
-        margin-right: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-
+      flex-direction: column;
       button {
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 8px 16px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-
+        background-color: white;
+        color: ${colors.colorA};
+        height: 40px;
+        width: 30%;
+        margin: 5px;
+        transition: all 0.3s ease;
         &:hover {
-          background-color: #45a049;
-        }
-
-        &:active {
-          background-color: #3e8e41;
+          background-color: ${colors.colorB};
+          color: white;
+          transform: translateY(-3px);
         }
       }
     }
 
-    .SelectTheme {
+    .SelectCategory {
       display: flex;
       text-align: center;
-      height: 100%;
-      .Theme {
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      .Category {
         margin: 10px;
-        border: 1px solid black;
-        width: 100%;
+        text-align: center;
       }
     }
   }
@@ -98,6 +84,7 @@ export const QuickSearch = styled(GridItem)`
 //         {/* 상위 관광지 n개 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const RecommItem = styled(GridItem)`
   grid-column: span 2;
+  border: 1px solid black;
 `;
 //         {/* 상위 플래닝 3개!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const RecommPlan = styled(GridItem)`
@@ -118,6 +105,72 @@ export const PlanBox = styled.div`
 export const Festive = styled(GridItem)`
   grid-column: span 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  .react-calendar {
+    width: 100%;
+    height: 400px;
+  }
+
+  .react-calendar__tile {
+    position: relative;
+    height: 50px;
+    aspect-ratio: 1;
+    padding: 0;
+  }
+
+  .react-calendar__tile--now {
+    position: relative;
+    background: ${colors.colorD} !important;
+    border-radius: 20% !important;
+    padding: 0;
+  }
+  .red-dot {
+    width: 6px;
+    height: 6px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 5px;
+    left: 45%;
+  }
+  .react-calendar__month-view__days__day {
+    color: black;
+  }
+  .react-calendar-sunday {
+    color: red; /* 일요일 빨간색 */
+  }
+
+  .react-calendar-saturday {
+    color: blue; /* 토요일 파란색 */
+  }
+
+  .react-calendar__tile {
+    background-color: transparent;
+  }
+  .react-calendar__tile--inactive {
+    color: #d3d3d3;
+    pointer-events: none;
+  }
+`;
+
+export const HolidayList = styled.div`
+  margin: 10px;
+  width: 100%;
+  height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  ul {
+    margin: 0;
+    padding-left: 25px;
+  }
+
+  li {
+    padding: 3px 0;
+    font-size: 14px;
+  }
 `;

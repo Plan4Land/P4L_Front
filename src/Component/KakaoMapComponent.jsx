@@ -7,6 +7,7 @@ import {
 import { useKakaoLoader, useMap } from "react-kakao-maps-sdk";
 import { useState, useEffect } from "react";
 import MarkerPlace from "../Img/markerPlace.png";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const { kakao } = window;
 
@@ -236,7 +237,11 @@ export const KakaoEx = () => {
   );
 };
 
-export const SearchKakaoMap = ({ searchKeyword }) => {
+export const SearchKakaoMap = ({
+  searchKeyword,
+  setIsAddPlaceModalOpen,
+  setCurrentAddedPlace,
+}) => {
   const [info, setInfo] = useState(); // 현재 선택된 마커의 정보
   const [markers, setMarkers] = useState([]); // 지도에 표시할 마커 목록
   const [map, setMap] = useState(); // 카카오 지도 객체
@@ -264,28 +269,8 @@ export const SearchKakaoMap = ({ searchKeyword }) => {
         setMarkers(markers);
         map.setBounds(bounds);
       }
-      if (status === kakao.maps.services.Status.OK) {
-        const bounds = new kakao.maps.LatLngBounds();
-        let markers = [];
-
-        for (let i = 0; i < data.length; i++) {
-          console.log(data);
-          markers.push({
-            position: {
-              lat: data[i].y,
-              lng: data[i].x,
-            },
-            content: data[i].place_name, // 장소명
-            address: data[i].address_name,
-            category: data[i].category_name, // 카테고리 ex) 여행 > 관광,명소 > 테마파크
-          });
-          bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-        }
-        setMarkers(markers);
-        map.setBounds(bounds);
-      }
     });
-  }, [searchKeyword]);
+  }, [searchKeyword, map]);
 
   const handleListItemClick = (marker) => {
     // 마커 클릭 시 지도 이동 및 정보 업데이트
@@ -295,7 +280,8 @@ export const SearchKakaoMap = ({ searchKeyword }) => {
     );
     map.setCenter(position);
     setInfo(marker);
-    console.log(info);
+    setCurrentAddedPlace(marker);
+    setIsAddPlaceModalOpen(false);
   };
   return (
     <div>
@@ -305,8 +291,7 @@ export const SearchKakaoMap = ({ searchKeyword }) => {
           lng: 126.9786567,
         }}
         style={{
-          width: "0%",
-          height: "0%",
+          display: "none",
         }}
         level={3}
         onCreate={setMap}
@@ -321,14 +306,16 @@ export const SearchKakaoMap = ({ searchKeyword }) => {
       </Map>
       <div
         style={{
-          width: "30%",
-          height: "350px",
+          width: "90%",
+          height: "400px",
+          margin: "0 auto",
           overflowY: "auto",
           border: "1px solid #ddd",
           padding: "10px",
         }}
       >
-        <h3>검색 결과</h3>
+        <h3 style={{ margin: "10px auto" }}>검색 결과</h3>
+        <hr />
         <ul style={{ listStyleType: "none", padding: 0 }}>
           {markers.map((marker, index) => (
             <li

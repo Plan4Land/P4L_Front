@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+<<<<<<< HEAD
+=======
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+>>>>>>> e89c7d763e5f22cb2620a0417f3f8f58ea1d1094
     "@portone/browser-sdk": "^0.0.11",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
@@ -12,6 +18,8 @@
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
     "react-datepicker": "^7.5.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",
     "react-kakao-maps-sdk": "^1.1.27",
