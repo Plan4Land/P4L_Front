@@ -12,8 +12,8 @@ import { ToggleSwitch } from "../../Component/ToggleSwitch";
 import { EditImg } from "../../Component/ProfileImg";
 import { CheckModal } from "../../Util/Modal";
 import ThumbnailBasic from "../../Img/planning_thumbnail.jpg";
-import { SearchKakaoMap } from "../../Component/KakaoMapComponent";
 import { Button } from "../../Component/ButtonComponent";
+import PlanningApi from "../../Api/PlanningApi";
 
 export const MakePlanning = () => {
   // const [searchKeyword, setSearchKeyword] = useState("");
@@ -26,10 +26,11 @@ export const MakePlanning = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [title, setTitle] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState("planning_thumbnail.jpg");
   const [imagePreview, setImagePreview] = useState(null);
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const memberId = JSON.parse(localStorage.getItem("user")).id;
   const isStepComplete =
     selectedSubArea && selectedThemes.length > 0 && endDate && title.trim();
 
@@ -68,14 +69,29 @@ export const MakePlanning = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("selectedArea : ", selectedArea);
-    console.log("selectedSubArea : ", selectedSubArea);
-    console.log("selectedThemes : ", selectedThemes.join(","));
-    console.log("startDate : ", startDate);
-    console.log("endDate : ", endDate);
-    console.log("title : ", title);
-    console.log("selectedThumbnail : ", selectedImage);
-    console.log("isPublic : ", isPublic);
+    const areaCode = areas.find((area) => area.name === selectedArea)?.code;
+    const subAreaCode = areas
+      .find((area) => area.name === selectedArea)
+      ?.subAreas.find((subArea) => subArea.name === selectedSubArea)?.code;
+
+    try {
+      const response = await PlanningApi.makePlanning(
+        title,
+        selectedThemes.join(","),
+        memberId,
+        startDate,
+        endDate,
+        areaCode,
+        subAreaCode,
+        selectedImage,
+        isPublic
+      );
+      if (response.status === 200) {
+        console.log("플래너 생성 성공!!!!!!!!!!!!!");
+      }
+    } catch (e) {
+      console.log("플래너 생성 중 에러", e);
+    }
   };
 
   return (

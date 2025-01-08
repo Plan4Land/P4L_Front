@@ -11,7 +11,7 @@ import {
   DayToggleContainer,
 } from "../../Style/PlanningStyled";
 import { KakaoMap, SearchKakaoMap } from "../../Component/KakaoMapComponent";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { ProfileImg } from "../../Component/ProfileImg";
 import { Button } from "../../Component/ButtonComponent";
@@ -146,6 +146,7 @@ export const Planning = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isAddPlaceModalOpen, setIsAddPlaceModalOpen] = useState(false);
   const [isMemoClicked, setIsMemoClicked] = useState([]);
+  const [isCurrentMemoOpened, setIsCurrentMemoOpened] = useState(false);
   const [updatedMemo, setUpdatedMemo] = useState("");
   const [currentAddedPlace, setCurrentAddedPlace] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -155,7 +156,8 @@ export const Planning = () => {
   const [arrowDirections, setArrowDirections] = useState([]);
   const [openDayToggle, setOpenDayToggle] = useState([]);
   const [groupPlans, setGroupPlans] = useState([]);
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [selectedPlan, setSelectedPlan] = useState({});
+  const memoRef = useRef(null);
 
   useEffect(() => {
     if (currentAddedPlace && Object.keys(currentAddedPlace).length > 0) {
@@ -185,7 +187,7 @@ export const Planning = () => {
   };
 
   // 클릭한 메모 열고 닫기
-  const handleMemoClick = (date, planIndex) => {
+  const handleMemoClick = (date, planIndex, plan) => {
     setIsMemoClicked((prevMemo) => ({
       ...prevMemo,
       [date]: {
@@ -193,15 +195,40 @@ export const Planning = () => {
         [planIndex]: !prevMemo[date]?.[planIndex],
       },
     }));
+    setUpdatedMemo(plan.memo + "\n" || "");
+    setIsCurrentMemoOpened(!isCurrentMemoOpened);
+  };
+  const CloseMemo = () => {
+    if (selectedPlan.date !== undefined) {
+      setIsMemoClicked((prevMemo) => ({
+        ...prevMemo,
+        [selectedPlan.date]: {
+          ...prevMemo[selectedPlan.date],
+          [selectedPlan.planIndex]:
+            !prevMemo[selectedPlan.date]?.[selectedPlan.planIndex],
+        },
+      }));
+    }
+    setIsCurrentMemoOpened(false);
+    setSelectedPlan({});
   };
   const handleUpdateMemo = (date, planIndex, updatedMemo) => {
-    setGroupPlans((prevPlans) => ({
-      ...prevPlans,
-      [date]: prevPlans[date].map((plan, index) =>
+    setGroupPlans((prevPlans) => {
+      const updatedPlans = { ...prevPlans }; // 기존 그룹화된 상태 복사
+
+      // 해당 날짜에 대한 계획들을 업데이트
+      updatedPlans[date] = updatedPlans[date].map((plan, index) =>
         index === planIndex ? { ...plan, memo: updatedMemo } : plan
-      ),
-    }));
+      );
+
+      return updatedPlans; // 변경된 상태 반환
+    });
   };
+  const insertText = (newText, date, planIndex) => {
+    setUpdatedMemo(newText);
+    handleUpdateMemo(date, planIndex, newText);
+  };
+
   useEffect(() => {
     setPlans(plansEx);
   }, []);
@@ -215,6 +242,7 @@ export const Planning = () => {
     setArrowDirections(Array(travelDays).fill("▼"));
     setOpenDayToggle(Array(travelDays).fill(false));
     setIsMemoClicked(Array(travelDays).fill(false));
+    setIsCurrentMemoOpened(false);
   }, [travelDays]);
 
   useEffect(() => {
@@ -262,12 +290,12 @@ export const Planning = () => {
     };
     const groupedPlans = groupPlansByDate();
     setGroupPlans(groupedPlans);
-  }, [plannerInfo.startDate, plannerInfo.endDate]);
+  }, [plannerInfo.startDate, plannerInfo.endDate, plans]);
 
   return (
-    <>
+    <div>
       <Header />
-      <MainContainer>
+      <MainContainer onClick={() => CloseMemo()}>
         <Info>
           {/* <img src={Thumbnail} alt="" /> */}
           <ProfileImg
@@ -340,23 +368,38 @@ export const Planning = () => {
                               className="memo-icon"
                               src={MemoIcon}
                               alt="메모"
-                              onClick={() => {
-                                setSelectedPlan(plan);
-                                handleMemoClick(date, planIndex);
+                              style={{
+                                cursor: isCurrentMemoOpened
+                                  ? "default"
+                                  : "pointer",
+                              }}
+                              onClick={(e) => {
+                                if (isCurrentMemoOpened) {
+                                  e.stopPropagation();
+                                  return;
+                                }
+                                setSelectedPlan({
+                                  date: date,
+                                  planIndex: planIndex,
+                                  plan: plan,
+                                });
+                                handleMemoClick(date, planIndex, plan);
+                                e.stopPropagation();
                               }}
                             />
                             {isMemoClicked[date]?.[planIndex] && (
-                              <div className="memo-input">
-                                <input
-                                  type="text"
-                                  value={plan.memo || ""}
-                                  onChange={(e) => {
-                                    setUpdatedMemo(e.target.value);
-                                    handleUpdateMemo(
-                                      date,
-                                      planIndex,
-                                      updatedMemo
-                                    );
+                              <div className="memo-input" ref={memoRef}>
+                                <textarea
+                                  id="memo"
+                                  value={updatedMemo}
+                                  onChange={(e) =>
+                                    insertText(e.target.value, date, planIndex)
+                                  }
+                                  onClick={(e) => {
+                                    if (isCurrentMemoOpened) {
+                                      e.stopPropagation();
+                                      return;
+                                    }
                                   }}
                                 />
                               </div>
@@ -371,7 +414,10 @@ export const Planning = () => {
                       $margin={"1.5% 0"}
                       $width={"60%"}
                       $height={"30px"}
-                      onClick={() => setIsAddPlaceModalOpen(true)}
+                      onClick={() => {
+                        setIsAddPlaceModalOpen(true);
+                        console.log(plans);
+                      }}
                     >
                       + 장소 추가
                     </Button>
@@ -385,10 +431,6 @@ export const Planning = () => {
           </KakaoMapContainer>
         </ContentContainer>
       </MainContainer>
-      {/* <MemoContainer>
-        여기는 메모
-        <KakaoEx></KakaoEx>
-      </MemoContainer> */}
       {isUserModalOpen && (
         <Modal
           isOpen={isUserModalOpen}
@@ -441,6 +483,6 @@ export const Planning = () => {
         </CloseModal>
       )}
       <Footer />
-    </>
+    </div>
   );
 };

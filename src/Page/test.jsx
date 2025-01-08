@@ -10,18 +10,28 @@ const P = styled.p`
 `;
 
 const Test = () => {
+  const [userInfo, setUserInfo] = useState("");
+
+  useEffect(() => {
+    setUserInfo(localStorage.getItem("user"));
+  }, []);
+
   return (
-    <div>
-      <p>{localStorage.getItem("user")}</p>
-      <H4>아이디 : JSON.parse(localStorage.getItem("user")).id</H4>
-      <P>{JSON.parse(localStorage.getItem("user")).id}</P>
-      <H4>이름 : JSON.parse(localStorage.getItem("user")).name</H4>
-      <P>{JSON.parse(localStorage.getItem("user")).name}</P>
-      <H4>닉네임 : JSON.parse(localStorage.getItem("user")).nickname</H4>
-      <P>{JSON.parse(localStorage.getItem("user")).nickname}</P>
-      <H4>프로필 이미지 : JSON.parse(localStorage.getItem("user")).imgPath</H4>
-      <P>{JSON.parse(localStorage.getItem("user")).imgPath}</P>
-    </div>
+    userInfo && (
+      <div>
+        <p>{userInfo}</p>
+        <H4>아이디 : JSON.parse(localStorage.getItem("user")).id</H4>
+        <P>{JSON.parse(userInfo).id}</P>
+        <H4>이름 : JSON.parse(localStorage.getItem("user")).name</H4>
+        <P>{JSON.parse(userInfo).name}</P>
+        <H4>닉네임 : JSON.parse(localStorage.getItem("user")).nickname</H4>
+        <P>{JSON.parse(userInfo).nickname}</P>
+        <H4>
+          프로필 이미지 : JSON.parse(localStorage.getItem("user")).imgPath
+        </H4>
+        <P>{JSON.parse(userInfo).imgPath}</P>
+      </div>
+    )
   );
 };
 

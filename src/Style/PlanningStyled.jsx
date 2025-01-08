@@ -368,11 +368,19 @@ export const DayToggleContainer = styled.div`
       position: absolute;
       right: 0;
       bottom: 0;
-      transform: translateX(98%) translateY(80%);
-      width: 200px;
-      min-height: 10vh;
+      transform: translateX(92%) translateY(85%);
+      width: 230px;
+      height: 20vh;
+      /* max-height: 100vh; */
       background-color: white;
+      overflow-y: auto;
       z-index: 2;
+
+      textarea {
+        width: 100%;
+        resize: none;
+        padding: 6px;
+      }
     }
   }
 `;
