@@ -1,11 +1,14 @@
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { useState, useEffect } from "react";
 import { areas, themes } from "../../Util/Common";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../Component/ButtonComponent";
-import { SelectTourItem } from "../../Style/ItemListStyled";
+import { SelectTourItem, SearchSt } from "../../Style/ItemListStyled";
+import { FaSearch } from "react-icons/fa";
 
 export const PlanningList = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
   const { areaCode, subAreaCode } = useParams();
   const location = useLocation();
   const [selectedAreaCode, setSelectedAreaCode] = useState("");
@@ -14,98 +17,113 @@ export const PlanningList = () => {
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
-    setSelectedAreaCode(areaCode || "");
+    setSelectedAreaCode(areaCode || queryParams.get("area") || "");
     setSelectedSubAreaCode(queryParams.get("subarea") || "");
     setSelectedTheme(queryParams.get("theme") || "");
-  }, [areaCode, location.search]);
+  }, [areaCode, location.search]); // URL이 변경될 때마다 실행
 
   // 모든 선택 초기화
   const handleResetSelections = () => {
-    setSelectedAreaCode(""); // 지역 초기화
-    setSelectedSubAreaCode(""); // 세부지역 초기화
-    setSelectedTheme(""); // 테마 초기화
-    window.history.replaceState({}, "", "/planninglist"); // URL 초기화
+    setSelectedAreaCode("");
+    setSelectedSubAreaCode("");
+    setSelectedTheme("");
+    setSearchQuery(""); // 검색어도 초기화
+    navigate("/planninglist"); // URL 쿼리 파라미터 제거
   };
 
-  // 지역 선택
-  const handleAreaChange = (areaCode) => {
-    if (selectedAreaCode === areaCode) {
-      setSelectedAreaCode("");
-      setSelectedSubAreaCode("");
-      window.history.replaceState(
-        {},
-        "",
-        `/planninglist${selectedTheme ? `?theme=${selectedTheme}` : ""}`
-      );
-    } else {
-      setSelectedAreaCode(areaCode);
-      setSelectedSubAreaCode(""); // 지역 선택 시 세부지역 초기화
-      window.history.pushState(
-        {},
-        "",
-        `/planninglist/${areaCode}${
-          selectedTheme ? `?theme=${selectedTheme}` : ""
-        }`
-      );
+  const handleSearch = () => {
+    if (searchQuery.length < 2) {
+      alert("검색어는 2자리 이상 입력해 주세요.");
+      return;
+    }
+
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("search", searchQuery); // 검색어 추가
+
+    navigate(
+      `/planninglist${
+        queryParams.toString() ? `?${queryParams.toString()}` : ""
+      }`
+    );
+    setSearchQuery(""); // 입력 필드 초기화
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
     }
   };
 
-  // 세부지역 선택
+  const handleAreaChange = (areaCode) => {
+    const isSameArea = selectedAreaCode === areaCode;
+    const newAreaCode = isSameArea ? "" : areaCode;
+
+    // Query parameters 업데이트
+    let queryParams = new URLSearchParams(location.search);
+
+    if (newAreaCode) {
+      queryParams.set("area", newAreaCode); // 새로운 지역 코드 설정
+    } else {
+      queryParams.delete("area"); // 지역이 취소된 경우 area 파라미터 삭제
+    }
+
+    // 세부 지역 초기화
+    if (!newAreaCode) {
+      queryParams.delete("subarea");
+    }
+
+    // URL 변경
+    navigate(
+      `/planninglist${
+        queryParams.toString() ? `?${queryParams.toString()}` : ""
+      }`
+    );
+
+    // 상태 업데이트
+    setSelectedAreaCode(newAreaCode);
+    setSelectedSubAreaCode("");
+  };
+
   const handleSubAreaChange = (subAreaCode) => {
-    const queryParams = new URLSearchParams();
-    if (selectedTheme) queryParams.append("theme", selectedTheme);
+    const queryParams = new URLSearchParams(location.search);
 
     if (selectedSubAreaCode === subAreaCode) {
-      // 세부지역 취소
+      queryParams.delete("subarea"); // 세부지역 선택 취소
       setSelectedSubAreaCode("");
-      const queryString = queryParams.toString();
-      window.history.replaceState(
-        {},
-        "",
-        `/planninglist${queryString ? `?${queryString}` : ""}`
-      );
     } else {
+      queryParams.set("subarea", subAreaCode); // 새로운 세부지역 설정
       setSelectedSubAreaCode(subAreaCode);
-      queryParams.append("subarea", subAreaCode);
-      const queryString = queryParams.toString();
-      window.history.pushState(
-        {},
-        "",
-        `/planninglist${selectedAreaCode ? `/${selectedAreaCode}` : ""}${
-          queryString ? `?${queryString}` : ""
-        }`
-      );
     }
+
+    // 기존 검색어 유지
+    if (searchQuery) queryParams.set("search", searchQuery);
+
+    navigate(
+      `/planninglist${
+        queryParams.toString() ? `?${queryParams.toString()}` : ""
+      }`
+    );
   };
 
-  // 테마 선택
   const handleThemeChange = (theme) => {
-    const queryParams = new URLSearchParams();
-    if (selectedSubAreaCode) queryParams.append("subarea", selectedSubAreaCode);
+    const queryParams = new URLSearchParams(location.search);
 
     if (selectedTheme === theme) {
-      // 테마 취소
+      queryParams.delete("theme"); // 테마 선택 취소
       setSelectedTheme("");
-      const queryString = queryParams.toString();
-      window.history.replaceState(
-        {},
-        "",
-        `/planninglist${selectedAreaCode ? `/${selectedAreaCode}` : ""}${
-          queryString ? `?${queryString}` : ""
-        }`
-      );
     } else {
+      queryParams.set("theme", theme); // 새로운 테마 설정
       setSelectedTheme(theme);
-      queryParams.append("theme", theme);
-      const queryString = queryParams.toString();
-      window.history.pushState(
-        {},
-        "",
-        `/planninglist${selectedAreaCode ? `/${selectedAreaCode}` : ""}${
-          queryString ? `?${queryString}` : ""
-        }`
-      );
     }
+
+    // 기존 검색어 유지
+    if (searchQuery) queryParams.set("search", searchQuery);
+
+    navigate(
+      `/planninglist${
+        queryParams.toString() ? `?${queryParams.toString()}` : ""
+      }`
+    );
   };
 
   const selectedAreaData = areas.find((area) => area.code === selectedAreaCode);
@@ -113,10 +131,30 @@ export const PlanningList = () => {
   return (
     <>
       <Header />
-      <Button onClick={handleResetSelections} style={{ marginBottom: "10px" }}>
-        선택 초기화
-      </Button>
+
       <SelectTourItem>
+        <Button
+          onClick={handleResetSelections}
+          style={{ marginBottom: "10px" }}
+        >
+          선택 초기화
+        </Button>
+        <SearchSt>
+          <div className="search-wrapper">
+            <input
+              type="text"
+              className="search"
+              placeholder="제목 검색!"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)} // 검색어 업데이트
+              onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
+            />
+            <button className="search-button" onClick={handleSearch}>
+              <FaSearch /> {/* 검색 아이콘 */}
+            </button>
+          </div>
+        </SearchSt>
+
         <div className="mainarea">
           <h3>지역 선택</h3>
           {areas.map((area) => (

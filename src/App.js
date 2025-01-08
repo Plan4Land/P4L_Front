@@ -13,6 +13,7 @@ import { PlanningList } from "./Page/Item/PlanningList";
 import { AuthProvider } from "./Context/AuthContext";
 import TermsOfService from "./Page/signup/TermsOfService";
 import RequestPayment from "./Page/Payment/RequestPayment";
+import Test from "./Page/test";
 
 function App() {
   return (
@@ -29,14 +30,10 @@ function App() {
               <Route path="/mypage" element={<MyPageMain />} />
               <Route path="/ktxInquiry" element={<KtxInquiry />} />
               <Route path="/tourlist" element={<TourList />} />
-              <Route path="/tourlist/:areaCode" element={<TourList />} />
               <Route path="/planninglist" element={<PlanningList />} />
-              <Route
-                path="/planninglist/:areaCode"
-                element={<PlanningList />}
-              />
               <Route path="/signup/terms" element={<TermsOfService />} />
               <Route path="/payment" element={<RequestPayment />} />
+              <Route path="/test" element={<Test />} />
             </Routes>
           </Router>
         </DndProvider>
