@@ -7,7 +7,7 @@ import {
   UserInfo,
   FollowList,
 } from "../../Style/MyPageMainStyled";
-import UserInfoEdit from "./UserInfoEdit";
+import UserInfoValidate from "./UserInfoValidate";
 import MyPlanningList from "./MyPlanningList";
 import { CheckModal } from "../../Util/Modal";
 
@@ -122,7 +122,7 @@ export const MyPageMain = () => {
           {selectedMenu === "내 플래닝" && <MyPlanningList />}
           {selectedMenu === "좋아요 관광지"}
           {selectedMenu === "좋아요 플래닝"}
-          {selectedMenu === "내 정보 수정" && <UserInfoEdit />}
+          {selectedMenu === "내 정보 수정" && <UserInfoValidate />}
         </div>
       </MyPageMainContainer>
       <Footer />
