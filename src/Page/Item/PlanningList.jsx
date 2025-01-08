@@ -114,15 +114,31 @@ export const PlanningList = () => {
   const handleThemeChange = (theme) => {
     const queryParams = new URLSearchParams(location.search);
 
-    if (selectedTheme === theme) {
-      queryParams.delete("theme"); // 테마 선택 취소
-      setSelectedTheme("");
+    // 현재 selectedTheme가 비어있지 않으면 split, 비어있으면 빈 배열로 초기화
+    const currentSelectedThemes = selectedTheme ? selectedTheme.split(",") : [];
+
+    if (currentSelectedThemes.includes(theme)) {
+      currentSelectedThemes.splice(currentSelectedThemes.indexOf(theme), 1);
     } else {
-      queryParams.set("theme", theme); // 새로운 테마 설정
-      setSelectedTheme(theme);
+      if (currentSelectedThemes.length < 3) {
+        currentSelectedThemes.push(theme);
+      } else {
+        alert("최대 3개의 테마만 선택할 수 있습니다.");
+        return;
+      }
     }
 
-    // 기존 검색어 유지
+    // 선택된 테마가 없으면 theme 파라미터 삭제
+    if (currentSelectedThemes.length > 0) {
+      queryParams.set("theme", currentSelectedThemes.join(","));
+    } else {
+      queryParams.delete("theme");
+    }
+
+    // 상태 업데이트
+    setSelectedTheme(currentSelectedThemes.join(","));
+
+    // 검색어가 있을 경우, 쿼리 파라미터에 추가
     if (searchQuery) queryParams.set("search", searchQuery);
 
     navigate(
@@ -206,7 +222,7 @@ export const PlanningList = () => {
         )}
         <div className="theme">
           <h3>
-            테마 선택{" "}
+            테마 선택
             <ToggleButton isOpen={isThemeOpen} onToggle={handleToggleTheme} />
           </h3>
           {isThemeOpen && (
@@ -216,7 +232,7 @@ export const PlanningList = () => {
                   key={theme}
                   onClick={() => handleThemeChange(theme)}
                   className={`theme-button ${
-                    selectedTheme === theme ? "selected" : ""
+                    selectedTheme.split(",").includes(theme) ? "selected" : ""
                   }`}
                 >
                   {theme}

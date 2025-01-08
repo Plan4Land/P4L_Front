@@ -206,7 +206,6 @@ export const TourList = () => {
   return (
     <>
       <Header />
-
       <SelectTourItem>
         <button className="reset-button" onClick={handleResetSelections}>
           초기화

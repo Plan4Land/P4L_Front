@@ -3,7 +3,10 @@ import { colors } from "./GlobalStyle";
 
 export const SelectTourItem = styled.div`
   width: 500px;
+  padding-top: 60px;
   padding-left: 20px;
+  margin-bottom: 50px;
+  position: relative;
   button {
     font-size: 12px;
     background-color: white;
@@ -29,6 +32,9 @@ export const SelectTourItem = styled.div`
     border: none;
     border-radius: 50px;
     color: gray;
+    position: absolute;
+    top: 10px;
+    right: 60px;
 
     &:hover {
       cursor: pointer;
