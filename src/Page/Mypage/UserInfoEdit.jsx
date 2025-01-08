@@ -16,11 +16,6 @@ const UserInfoEdit = () => {
   const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
   const [isPicsModalOpen, setIsPicsModalOpen] = useState("");
 
-  const handlePwCheck = (e) => {
-    setUserPwCheck(e.target.value);
-    userPw === userPwCheck ? setIsPwCheck(true) : setIsPwCheck(false);
-  };
-
   const handlePicSelect = (picName) => {
     setCurrentPic(`profile-pic/${picName}`);
   };
@@ -49,20 +44,6 @@ const UserInfoEdit = () => {
   
   // 회원정보 수정 기능
   const handleSave = async () => {
-    // 비밀번호 둘중 하나라도 값이 있는 경우
-    // if(userPw.trim() || userPwCheck.trim()) {
-    //   if(userPw.length < 8) {
-    //     // 모달
-    //     return;
-    //   } else if(!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(userPw)) {
-    //     // 모달
-    //     return;
-    //   }
-    //   if(userPw !== userPwCheck) {
-    //     // 모달
-    //     return;
-    //   }
-    // }
     try {
       const rsp = await AxiosApi.memberUpdate(userId, name, nickName, email, currentPic);
       console.log(rsp);
@@ -91,30 +72,6 @@ const UserInfoEdit = () => {
             />
           </div>
         </InputBox>
-
-        {/* <label htmlFor="userPw">비밀번호</label>
-        <InputBox>
-          <div className="inputBox">
-            <input
-              id="userPw"
-              type="password"
-              value={userPw}
-              onChange={(e) => setUserPw(e.target.value)}
-            />
-          </div>
-        </InputBox>
-
-        <label htmlFor="userPwCheck">비밀번호 확인</label>
-        <InputBox>
-          <div className="inputBox">
-            <input
-              id="userPwCheck"
-              type="password"
-              value={userPwCheck}
-              onChange={handlePwCheck}
-            />
-          </div>
-        </InputBox> */}
 
         <label htmlFor="name">이름</label>
         <InputBox>

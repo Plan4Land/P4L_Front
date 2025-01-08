@@ -17,8 +17,22 @@ export const Container = styled.div`
     justify-content: center;
   }
 
+  .labelBox {
+    display: flex;
+    justify-content: space-between;
+  }
+
   label {
     margin-bottom: 5px;
+  }
+
+  .message {
+    display: flex;
+    align-items: end;
+    margin: 0;
+    font-size: 12px;
+    color: red;
+    padding-bottom: 5px;
   }
 
   .picture-box {
@@ -115,5 +129,11 @@ export const Button = styled.button`
   cursor: pointer;
   &:hover {
     background-color: rgb(0, 160, 0);
+  }
+  &.red {
+    background-color: rgb(220, 0, 0);
+    &:hover {
+      background-color: rgb(200, 0, 0);
+    }
   }
 `;
