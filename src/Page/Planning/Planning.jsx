@@ -5,18 +5,16 @@ import {
   UserProfile,
   UserName,
   ContentContainer,
-  MainPlanning,
   KakaoMapContainer,
   SearchInputContainer,
-  DayToggleContainer,
 } from "../../Style/PlanningStyled";
 import { KakaoMap, SearchKakaoMap } from "../../Component/KakaoMapComponent";
-import { useEffect, useRef, useState } from "react";
+import { PlansComponent } from "../../Component/PlanningComponents/PlansComponent";
+import { useEffect, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { ProfileImg } from "../../Component/ProfileImg";
 import { Button } from "../../Component/ButtonComponent";
-import { Modal, CloseModal, DraggableModal } from "../../Util/Modal";
-import MemoIcon from "../../Img/memo-icon.png";
+import { Modal, CloseModal } from "../../Util/Modal";
 
 const plannerInfo = {
   title: "떠나요~ 두리서~",
@@ -143,161 +141,70 @@ const plansEx = [
 
 export const Planning = () => {
   const [plans, setPlans] = useState([]);
-  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
-  const [isAddPlaceModalOpen, setIsAddPlaceModalOpen] = useState(false);
-  const [isMemoClicked, setIsMemoClicked] = useState([]);
-  const [isCurrentMemoOpened, setIsCurrentMemoOpened] = useState(false);
-  const [updatedMemo, setUpdatedMemo] = useState("");
-  const [currentAddedPlace, setCurrentAddedPlace] = useState([]);
-  const [searchKeyword, setSearchKeyword] = useState("");
-  const [submittedKeyword, setSubmittedKeyword] = useState("");
-  const [travelDays, setTravelDays] = useState("");
-  const [travelDates, setTravelDates] = useState([]);
-  const [arrowDirections, setArrowDirections] = useState([]);
-  const [openDayToggle, setOpenDayToggle] = useState([]);
-  const [groupPlans, setGroupPlans] = useState([]);
-  const [selectedPlan, setSelectedPlan] = useState({});
-  const memoRef = useRef(null);
+  const [modals, setModals] = useState({
+    userModal: false, // 초대된 users 모달 open 여부
+    addPlaceModal: false, // 장소 추가 모달 open 여부
+  });
+  const [memoState, setMemoState] = useState({
+    isClicked: [], // 메모마다 open 여부
+    isOpened: false, // 현재 열린 메모가 있는지 여부
+    updatedMemo: "", // 작성한 메모 내용
+  });
+  const [currentAddedPlace, setCurrentAddedPlace] = useState({}); // 검색에서 선택된 장소 정보
+  const [searchState, setSearchState] = useState({
+    keyword: "", // 실시간 입력한 키워드
+    submittedKeyword: "", // 검색에 보낼 키워드
+  });
+  const [travelInfo, setTravelInfo] = useState({
+    days: 0, // 여행 기간
+    dates: [], // 여행 날짜들
+    arrowDirections: [], // 토글 화살표 클릭 여부
+    dayToggle: [], // 토글 열림 여부
+  });
+  const [groupPlans, setGroupPlans] = useState({}); // 계획 정렬
+  const [selectedPlan, setSelectedPlan] = useState({}); // date, planIndex, plan
 
   useEffect(() => {
-    if (currentAddedPlace && Object.keys(currentAddedPlace).length > 0) {
+    if (Object.keys(currentAddedPlace).length > 0) {
       console.log(currentAddedPlace);
       setCurrentAddedPlace({});
     }
   }, [currentAddedPlace]);
 
-  const handleInputChange = (e) => {
-    setSearchKeyword(e.target.value);
-  };
-
-  const handleSearch = () => {
-    setSubmittedKeyword(searchKeyword);
-  };
-  const handleDayClick = (index) => {
-    setArrowDirections((prevDirections) => {
-      const newDirections = [...prevDirections];
-      newDirections[index] = newDirections[index] === "▼" ? "▲" : "▼"; // 화살표 방향을 토글
-      return newDirections;
-    });
-    setOpenDayToggle((prevDayToggle) => {
-      const newDayToggle = [...prevDayToggle];
-      newDayToggle[index] = !newDayToggle[index]; // 해당 인덱스 열림/닫힘 토글
-      return newDayToggle;
-    });
-  };
-
-  // 클릭한 메모 열고 닫기
-  const handleMemoClick = (date, planIndex, plan) => {
-    setIsMemoClicked((prevMemo) => ({
-      ...prevMemo,
-      [date]: {
-        ...prevMemo[date],
-        [planIndex]: !prevMemo[date]?.[planIndex],
-      },
-    }));
-    setUpdatedMemo(plan.memo + "\n" || "");
-    setIsCurrentMemoOpened(!isCurrentMemoOpened);
-  };
-  const CloseMemo = () => {
+  const handleInputChange = (e) =>
+    setSearchState({ ...searchState, keyword: e.target.value });
+  const handleSearch = () =>
+    setSearchState({ ...searchState, submittedKeyword: searchState.keyword });
+  const closeMemo = () => {
     if (selectedPlan.date !== undefined) {
-      setIsMemoClicked((prevMemo) => ({
-        ...prevMemo,
-        [selectedPlan.date]: {
-          ...prevMemo[selectedPlan.date],
-          [selectedPlan.planIndex]:
-            !prevMemo[selectedPlan.date]?.[selectedPlan.planIndex],
+      setMemoState((prevState) => ({
+        ...prevState,
+        isClicked: {
+          ...prevState.isClicked,
+          [selectedPlan.date]: {
+            ...prevState.isClicked[selectedPlan.date],
+            [selectedPlan.planIndex]:
+              !prevState.isClicked[selectedPlan.date]?.[selectedPlan.planIndex],
+          },
         },
+        isOpened: false,
+        updatedMemo: "",
       }));
     }
-    setIsCurrentMemoOpened(false);
     setSelectedPlan({});
   };
-  const handleUpdateMemo = (date, planIndex, updatedMemo) => {
-    setGroupPlans((prevPlans) => {
-      const updatedPlans = { ...prevPlans }; // 기존 그룹화된 상태 복사
 
-      // 해당 날짜에 대한 계획들을 업데이트
-      updatedPlans[date] = updatedPlans[date].map((plan, index) =>
-        index === planIndex ? { ...plan, memo: updatedMemo } : plan
-      );
-
-      return updatedPlans; // 변경된 상태 반환
-    });
-  };
-  const insertText = (newText, date, planIndex) => {
-    setUpdatedMemo(newText);
-    handleUpdateMemo(date, planIndex, newText);
-  };
-
-  useEffect(() => {
-    setPlans(plansEx);
-  }, []);
-
-  useEffect(() => {
-    setSearchKeyword("");
-    setSubmittedKeyword("");
-  }, [isAddPlaceModalOpen]);
-
-  useEffect(() => {
-    setArrowDirections(Array(travelDays).fill("▼"));
-    setOpenDayToggle(Array(travelDays).fill(false));
-    setIsMemoClicked(Array(travelDays).fill(false));
-    setIsCurrentMemoOpened(false);
-  }, [travelDays]);
-
-  useEffect(() => {
-    const startDate = new Date(plannerInfo.startDate);
-    const endDate = new Date(plannerInfo.endDate);
-    const timeDiff = endDate.getTime() - startDate.getTime();
-    const diffInDays = timeDiff / (1000 * 3600 * 24);
-    setTravelDays(diffInDays + 1);
-
-    const generateTravelDates = (start, end) => {
-      const dates = [];
-      let currentDate = new Date(start);
-      let lastDate = new Date(end);
-      currentDate.setDate(currentDate.getDate() + 1);
-      lastDate.setDate(lastDate.getDate() + 1);
-      while (currentDate <= lastDate) {
-        dates.push(new Date(currentDate).toISOString().split("T")[0]); // YYYY-MM-DD 포맷
-        // dates.push(new Date(currentDate));
-        currentDate.setDate(currentDate.getDate() + 1); // 하루씩 증가
-      }
-      return dates;
-    };
-    const dates = generateTravelDates(
-      plannerInfo.startDate,
-      plannerInfo.endDate
-    );
-    setTravelDates(dates);
-
-    const groupPlansByDate = () => {
-      // 1. 날짜별로 그룹화
-      const groupedPlans = plans.reduce((acc, plan) => {
-        const dateKey = plan.date.split("T")[0]; // "2025-01-10" 형태로 날짜만 추출
-        if (!acc[dateKey]) {
-          acc[dateKey] = [];
-        }
-        acc[dateKey].push(plan);
-        return acc;
-      }, {});
-
-      // 2. 각 날짜 그룹 내에서 seq 순으로 정렬
-      Object.keys(groupedPlans).forEach((date) => {
-        groupedPlans[date].sort((a, b) => a.seq - b.seq);
-      });
-      return groupedPlans;
-    };
-    const groupedPlans = groupPlansByDate();
-    setGroupPlans(groupedPlans);
-  }, [plannerInfo.startDate, plannerInfo.endDate, plans]);
+  useEffect(() => setPlans(plansEx), []);
+  useEffect(
+    () => setSearchState({ keyword: "", submittedKeyword: "" }),
+    [modals.addPlaceModal]
+  );
 
   return (
     <div>
       <Header />
-      <MainContainer onClick={() => CloseMemo()}>
+      <MainContainer onClick={() => closeMemo()}>
         <Info>
-          {/* <img src={Thumbnail} alt="" /> */}
           <ProfileImg
             file={plannerInfo.thumbnail}
             width={"250px"}
@@ -326,7 +233,9 @@ export const Planning = () => {
               id={participant.id}
               nickname={participant.nickname}
               profileImg={participant.profileImg}
-              onClick={() => setIsUserModalOpen(true)}
+              onClick={() =>
+                setModals((prevModals) => ({ ...prevModals, userModal: true }))
+              }
             >
               <img
                 src={participant.profileImg}
@@ -342,101 +251,32 @@ export const Planning = () => {
           ))}
         </Users>
         <ContentContainer>
-          <MainPlanning>
-            {travelDates.map((date, index) => (
-              <>
-                <div
-                  key={index}
-                  className="planning-day"
-                  onClick={() => handleDayClick(index)}
-                >
-                  <span>{index + 1}일차</span>&nbsp;&nbsp;/&nbsp;&nbsp;
-                  <span>{date}</span>
-                  <span className="arrow">{arrowDirections[index]}</span>
-                </div>
-                {openDayToggle[index] && (
-                  <DayToggleContainer>
-                    {groupPlans[date]?.map((plan, planIndex) => (
-                      <>
-                        <div key={planIndex} className="plan-place-container">
-                          <div className="plan-place">
-                            <p className="place-name">{plan.spotName}</p>
-                            <p className="place-category">{plan.category}</p>
-                          </div>
-                          <div className="memo-container">
-                            <img
-                              className="memo-icon"
-                              src={MemoIcon}
-                              alt="메모"
-                              style={{
-                                cursor: isCurrentMemoOpened
-                                  ? "default"
-                                  : "pointer",
-                              }}
-                              onClick={(e) => {
-                                if (isCurrentMemoOpened) {
-                                  e.stopPropagation();
-                                  return;
-                                }
-                                setSelectedPlan({
-                                  date: date,
-                                  planIndex: planIndex,
-                                  plan: plan,
-                                });
-                                handleMemoClick(date, planIndex, plan);
-                                e.stopPropagation();
-                              }}
-                            />
-                            {isMemoClicked[date]?.[planIndex] && (
-                              <div className="memo-input" ref={memoRef}>
-                                <textarea
-                                  id="memo"
-                                  value={updatedMemo}
-                                  onChange={(e) =>
-                                    insertText(e.target.value, date, planIndex)
-                                  }
-                                  onClick={(e) => {
-                                    if (isCurrentMemoOpened) {
-                                      e.stopPropagation();
-                                      return;
-                                    }
-                                  }}
-                                />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </>
-                    ))}
-
-                    <Button
-                      className="add-place-button"
-                      $margin={"1.5% 0"}
-                      $width={"60%"}
-                      $height={"30px"}
-                      onClick={() => {
-                        setIsAddPlaceModalOpen(true);
-                        console.log(plans);
-                      }}
-                    >
-                      + 장소 추가
-                    </Button>
-                  </DayToggleContainer>
-                )}
-              </>
-            ))}
-          </MainPlanning>
+          <PlansComponent
+            travelInfo={travelInfo}
+            setTravelInfo={setTravelInfo}
+            groupPlans={groupPlans}
+            setGroupPlans={setGroupPlans}
+            setSelectedPlan={setSelectedPlan}
+            memoState={memoState}
+            setMemoState={setMemoState}
+            plansEx={plansEx}
+            plans={plans}
+            plannerInfo={plannerInfo}
+            setModals={setModals}
+          />
           <KakaoMapContainer>
             <KakaoMap />
           </KakaoMapContainer>
         </ContentContainer>
       </MainContainer>
-      {isUserModalOpen && (
+      {modals.userModal && (
         <Modal
-          isOpen={isUserModalOpen}
-          onClose={() => setIsUserModalOpen(false)}
+          isOpen={modals.userModal}
+          onClose={() =>
+            setModals((prevModals) => ({ ...prevModals, userModal: false }))
+          }
           onConfirm={() => {
-            setIsUserModalOpen(false);
+            setModals((prevModals) => ({ ...prevModals, userModal: false }));
           }}
         >
           <div>
@@ -445,10 +285,12 @@ export const Planning = () => {
           </div>
         </Modal>
       )}
-      {isAddPlaceModalOpen && (
+      {modals.addPlaceModal && (
         <CloseModal
-          isOpen={isAddPlaceModalOpen}
-          onClose={() => setIsAddPlaceModalOpen(false)}
+          isOpen={modals.addPlaceModal}
+          onClose={() =>
+            setModals((prevModals) => ({ ...prevModals, addPlaceModal: false }))
+          }
           contentWidth="400px"
           contentHeight="500px"
         >
@@ -456,7 +298,7 @@ export const Planning = () => {
             <input
               type="text"
               placeholder="검색어를 입력하세요"
-              value={searchKeyword}
+              value={searchState.keyword}
               onChange={handleInputChange}
               style={{
                 width: "80%",
@@ -476,8 +318,8 @@ export const Planning = () => {
             </Button>
           </SearchInputContainer>
           <SearchKakaoMap
-            searchKeyword={submittedKeyword}
-            setIsAddPlaceModalOpen={setIsAddPlaceModalOpen}
+            searchKeyword={searchState.submittedKeyword}
+            setModals={setModals}
             setCurrentAddedPlace={setCurrentAddedPlace}
           />
         </CloseModal>

@@ -86,7 +86,7 @@ export const MainPlanning = styled.div`
   flex-direction: column; */
   overflow-y: auto;
   overflow-x: hidden;
-  overflow: visible;
+  /* overflow-x: visible; */
   background-color: blanchedalmond;
 
   .planning-day {
@@ -368,7 +368,7 @@ export const DayToggleContainer = styled.div`
       position: absolute;
       right: 0;
       bottom: 0;
-      transform: translateX(92%) translateY(85%);
+      transform: translateX(-5%) translateY(90%);
       width: 230px;
       height: 20vh;
       /* max-height: 100vh; */

@@ -239,7 +239,7 @@ export const KakaoEx = () => {
 
 export const SearchKakaoMap = ({
   searchKeyword,
-  setIsAddPlaceModalOpen,
+  setModals,
   setCurrentAddedPlace,
 }) => {
   const [info, setInfo] = useState(); // 현재 선택된 마커의 정보
@@ -281,7 +281,7 @@ export const SearchKakaoMap = ({
     map.setCenter(position);
     setInfo(marker);
     setCurrentAddedPlace(marker);
-    setIsAddPlaceModalOpen(false);
+    setModals((prevModals) => ({ ...prevModals, addPlaceModal: false }));
   };
   return (
     <div>
