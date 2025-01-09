@@ -57,12 +57,12 @@ export const TourItem = ({
   height,
   margin,
 }) => {
-  console.log("TourItem props:", { thumbnail, title, address, subCategory });
-
+  const defaultImage = "/profile-pic/basic7.png";
+  const imageUrl = thumbnail ? thumbnail : defaultImage;
   return (
     <TourItemStyled width={width} height={height} margin={margin}>
       <div className="img">
-        <img className="thumbnail" src={thumbnail} alt={title} />
+        <img className="thumbnail" src={imageUrl} alt={title} />
       </div>
       <div className="infoWrapper">
         <h3 className="title">{title}</h3>

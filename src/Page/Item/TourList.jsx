@@ -450,12 +450,10 @@ export const TourList = () => {
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 0}
             >
-              이전
+              ◀
             </button>
-            <span>{currentPage + 1} 페이지</span>
-            <button onClick={() => handlePageChange(currentPage + 1)}>
-              다음
-            </button>
+            <span> {currentPage + 1} 페이지 </span>
+            <button onClick={() => handlePageChange(currentPage + 1)}>▶</button>
           </div>
         </ItemList>
       </List>
