@@ -9,6 +9,7 @@ export const PlansComponent = ({
   groupPlans,
   setGroupPlans,
   setSelectedPlan,
+  setCurrentAddedPlace,
   memoState,
   setMemoState,
   plansEx,
@@ -108,9 +109,17 @@ export const PlansComponent = ({
     const groupPlansByDate = () => {
       // 1. 날짜별로 그룹화
       const groupedPlans = plans.reduce((acc, plan) => {
-        const dateKey = plan.date.split("T")[0]; // "2025-01-10" 형태로 날짜만 추출
+        console.log(plan);
+        const dateKey = plan.date; // "2025-01-10" 형태로 날짜만 추출
         if (!acc[dateKey]) {
           acc[dateKey] = [];
+        }
+        if (!plan.seq) {
+          const maxSeq =
+            acc[dateKey].length > 0
+              ? Math.max(...acc[dateKey].map((p) => p.seq || 0)) // seq가 없는 경우 기본값 0
+              : 0;
+          plan.seq = maxSeq + 1;
         }
         acc[dateKey].push(plan);
         return acc;
@@ -123,6 +132,7 @@ export const PlansComponent = ({
       return groupedPlans;
     };
     const groupedPlans = groupPlansByDate();
+    console.log(groupedPlans);
     setGroupPlans(groupedPlans); // 정렬된 일정
   }, [plannerInfo, plans]);
 
@@ -196,9 +206,13 @@ export const PlansComponent = ({
                   $margin="1.5% 0"
                   $width="60%"
                   $height="30px"
-                  onClick={() =>
-                    setModals((prev) => ({ ...prev, addPlaceModal: true }))
-                  }
+                  onClick={() => {
+                    setModals((prev) => ({ ...prev, addPlaceModal: true }));
+                    setCurrentAddedPlace((prev) => ({
+                      ...prev,
+                      date: date,
+                    }));
+                  }}
                 >
                   + 장소 추가
                 </Button>

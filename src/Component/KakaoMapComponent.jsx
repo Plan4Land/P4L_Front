@@ -280,7 +280,12 @@ export const SearchKakaoMap = ({
     );
     map.setCenter(position);
     setInfo(marker);
-    setCurrentAddedPlace(marker);
+
+    setCurrentAddedPlace((prev) => ({
+      ...prev,
+      ...marker,
+    }));
+
     setModals((prevModals) => ({ ...prevModals, addPlaceModal: false }));
   };
   return (

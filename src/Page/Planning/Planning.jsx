@@ -177,9 +177,15 @@ export const Planning = () => {
   const [isEditting, setIsEditting] = useState(true);
 
   useEffect(() => {
-    if (Object.keys(currentAddedPlace).length > 0) {
-      console.log(currentAddedPlace);
+    if (
+      currentAddedPlace.content &&
+      Object.keys(currentAddedPlace.content).length > 0
+    ) {
+      // currentAddedPlace가 유효하고, content가 비어있지 않으면 plans에 추가
+      setPlans((prevPlans) => [...prevPlans, currentAddedPlace]);
+      console.log("이게 추가될 일정", currentAddedPlace);
       setCurrentAddedPlace({});
+      setSelectedPlan({});
     }
   }, [currentAddedPlace]);
 
@@ -302,6 +308,7 @@ export const Planning = () => {
               groupPlans={groupPlans}
               setGroupPlans={setGroupPlans}
               setSelectedPlan={setSelectedPlan}
+              setCurrentAddedPlace={setCurrentAddedPlace}
               memoState={memoState}
               setMemoState={setMemoState}
               plansEx={plansEx}
@@ -349,6 +356,12 @@ export const Planning = () => {
                 placeholder="검색어를 입력하세요"
                 value={searchState.keyword}
                 onChange={handleInputChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault(); // 기본 엔터키 동작 방지 (예: 폼 제출)
+                    handleSearch(); // 엔터키 눌렀을 때 검색 함수 실행
+                  }
+                }}
                 style={{
                   width: "80%",
                   height: "25px",
@@ -370,6 +383,7 @@ export const Planning = () => {
               searchKeyword={searchState.submittedKeyword}
               setModals={setModals}
               setCurrentAddedPlace={setCurrentAddedPlace}
+              setPlans={setPlans}
             />
           </CloseModal>
         )}
