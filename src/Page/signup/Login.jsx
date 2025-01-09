@@ -64,7 +64,11 @@ export const Login = () => {
       }
     } catch (error) {
       console.error("Error during login: ", error);
-      setTextMessage("아이디 또는 비밀번호가 일치하지 않습니다.");
+      if(error.response && error.response.data.message === "탈퇴한 회원입니다.") {
+        setTextMessage("탈퇴한 회원입니다.");
+      } else {
+        setTextMessage("아이디 또는 비밀번호가 일치하지 않습니다.");
+      }
     }
   };
 
