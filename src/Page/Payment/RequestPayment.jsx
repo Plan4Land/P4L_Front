@@ -1,14 +1,29 @@
 import * as PortOne from "@portone/browser-sdk/v2";
 import {Button} from "../../Component/ButtonComponent";
 import {useState} from "react";
+import {useAuth} from "../../Context/AuthContext";
+import {Footer, Header} from "../../Component/GlobalComponent";
+import {InputBox} from "../../Style/UserInfoEditStyle";
 //yarn add @portone/browser-sdk
 
 const RequestPayment = () => {
+  const [userEmail, setUserEmail] = useState("");
+  const [userPhone, setUserPhone] = useState("");
+  const [userName, setUserName] = useState("");
+  const [paySelect, setPaySelect] = useState("");
+  const user = useAuth();
+
+  const payList = ['kakao', 'card']
+
+  const handleInputChange = (e, setState) => {
+    setState(e.target.value);
+  };
+
   const [paymentStatus, setPaymentStatus] = useState({
     status: "IDLE",
   })
 
-  const randomId = () =>{
+  const randomId = () => {
     return [...crypto.getRandomValues(new Uint32Array(2))]
       .map((word) => word.toString(16).padStart(8, "0"))
       .join("")
@@ -22,21 +37,21 @@ const RequestPayment = () => {
     displayAmount: 1,
     currency: "KRW",
     customer: {
-      customerId: "testCustomerId",
-      email: "test@test.com",
-      phoneNumber: "010-1234-5678",
-      fullName:"홍길동"
+      customerId: user.id,
+      email: userEmail,
+      phoneNumber: userPhone,
+      fullName: userName,
     },
-    offerPeriod:{
+    offerPeriod: {
       interval: `${1}m`
     },
-    popup:{
-      center:true,
+    popup: {
+      center: true,
     },
-    bypass:{
-      smartro_v2:{
-        SkinColor:"PURPLE",
-        IsPwdPass:"Y"
+    bypass: {
+      smartro_v2: {
+        SkinColor: "PURPLE",
+        IsPwdPass: "Y"
       }
     }
   }
@@ -50,16 +65,16 @@ const RequestPayment = () => {
     displayAmount: 1,
     currency: "KRW",
     customer: {
-      customerId: "testCustomerId",
+      customerId: user.id,
     },
-    offerPeriod:{
-      interval: `${31}d`
+    offerPeriod: {
+      interval: `${30}d`
     },
-    popup:{
-      center:true,
+    popup: {
+      center: true,
     },
     easyPay: {
-      easyPayProvider:"KAKAOPAY"
+      easyPayProvider: "KAKAOPAY"
     },
   }
 
@@ -84,20 +99,60 @@ const RequestPayment = () => {
     if (rsp.code !== undefined) {
       return alert(rsp.message);
     }
-
-    console.log("콘솔 ::::::::::::: ",rsp.billingKey);
-
   };
-
 
 
   return (
     <>
+      <Button onClick={()=>setPaySelect('kakao')}>
+        카카오페이
+      </Button>
+      <Button onClick={()=>setPaySelect('card')}>
+        신용카드
+      </Button>
+      {paySelect === "kakao" ? "" :
+        <>
+          <InputBox>
+          <div className="inputBox">
+            <input
+              type="text"
+              placeholder="이메일을 입력 해 주세요"
+              value={userEmail}
+              onChange={(e) => handleInputChange(e, setUserEmail)}
+            />
+          </div>
+        </InputBox>
+
+          <InputBox>
+            <div className="inputBox">
+              <input
+                type="text"
+                placeholder="이름 입력 해 주세요"
+                value={userName}
+                onChange={(e) => handleInputChange(e, setUserName)}
+              />
+            </div>
+          </InputBox>
+
+          <InputBox>
+            <div className="inputBox">
+              <input
+                type="text"
+                placeholder="전화번호를 입력 해 주세요"
+                value={userPhone}
+                onChange={(e) => handleInputChange(e, setUserPhone)}
+              />
+            </div>
+          </InputBox>
+        </>
+      }
+
       <Button onClick={onClickPay}>
         결제
       </Button>
     </>
-  );
+  )
+    ;
 }
 
 export default RequestPayment;
