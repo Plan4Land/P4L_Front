@@ -22,7 +22,7 @@ export const Signup = () => {
   const [inputUserId, setInputUserId] = useState("");
   const [inputEmail, setInputEmail] = useState("");
   const [inputPw, setInputPw] = useState("");
-  const [inputPwCheck, setInputPwCheck] = useState("");
+  const [inputPw2, setInputPw2] = useState("");
   const [inputName, setInputName] = useState("");
   const [inputNickName, setInputNickName] = useState("");
 
@@ -30,7 +30,7 @@ export const Signup = () => {
   const [idMsg, setIdMsg] = useState("");
   const [emailMsg, setEmailMsg] = useState("");
   const [pwMsg, setPwMsg] = useState("");
-  const [pwCheckMsg, setPwCheckMsg] = useState("");
+  const [pw2Msg, setPw2Msg] = useState("");
   const [nameMsg, setNameMsg] = useState("");
   const [nickNameMsg, setNickNameMsg] = useState("");
 
@@ -38,7 +38,7 @@ export const Signup = () => {
   const userIdRef = useRef(null);
   const emailRef = useRef(null);
   const pwRef = useRef(null);
-  const pwCheckRef = useRef(null);
+  const pw2Ref = useRef(null);
   const nameRef = useRef(null);
   const nickNameRef = useRef(null);
 
@@ -48,60 +48,117 @@ export const Signup = () => {
 
   const navigate = useNavigate();
 
-  const handleInputChange = (e, setState) => {
-    setState(e.target.value);
-  };
+  // 아이디 체크
+  const handleIdCheck = (e) => {
+    const input = e.target.value;
+    setInputUserId(e.target.value);
+    if (!input.trim()) {
+      setIdMsg("아이디를 입력해주세요.");
+      userIdRef.current.focus();
+      return false;
+    } else if (input.length < 5) {
+      setIdMsg("아이디는 5자리 이상이어야 합니다.");
+      userIdRef.current.focus();
+      return false;
+    } else {
+      setIdMsg("");
+      return true;
+    }
+  }
+  
+  // 이메일 체크
+  const handleEmailCheck = (e) => {
+    const input = e.target.value;
+    setInputEmail(input);
+    if (!input.trim()) {
+      setEmailMsg("이메일을 입력해주세요.");
+      emailRef.current.focus();
+      return false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input)) {
+      setEmailMsg("올바른 이메일 형식을 입력해주세요.");
+      emailRef.current.focus();
+      return false;
+    } else {
+      setEmailMsg("");
+      return true;
+    }
+  }
 
+  // 비밀번호 체크
+  const handlePwCheck = (e) => {
+    const input = e.target.value;
+    setInputPw(input);
+    if (input.length < 8) {
+      setPwMsg("비밀번호는 8자리 이상이어야 합니다.");
+      pwRef.current.focus();
+      return false;
+    } else if (!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(input)) {
+      setPwMsg("비밀번호는 영어, 숫자, 특수문자를 포함해야 합니다.");
+      pwRef.current.focus();
+      return false;
+    } else {
+      setPwMsg("");
+      return true;
+    }
+  };
   // 비밀번호 보이기
   const onClickPwEye = () => {
     setIsPwShow((prev) => !prev);
   };
+  // 비밀번호 확인 체크
+  const handlePw2Check = (e) => {
+    const input = e.target.value;
+    setInputPw2(input);
+    if (inputPw !== input) {
+      setPw2Msg("비밀번호가 일치하지 않습니다.");
+      pw2Ref.current.focus();
+      return false;
+    } else {
+      setPw2Msg("");
+      return true;
+    }
+  }
+  
+  // 이름 체크
+  const handleNameCheck = (e) => {
+    const input = e.target.value;
+    setInputName(input);
+    if (!input.trim()) {
+      setNameMsg("이름을 입력해주세요.");
+      nameRef.current.focus();
+      return false;
+    } else {
+      setNameMsg("");
+      return true;
+    }
+  }
+
+  // 닉네임 체크
+  const handleNicknameCheck = (e) => {
+    const input = e.target.value;
+    setInputNickName(input);
+    if (!input.trim()) {
+      setNickNameMsg("닉네임을 입력해주세요.");
+      nickNameRef.current.focus();
+      return false;
+    } else {
+      setNickNameMsg("");
+      return true;
+    }
+  }
+
 
   // 회원가입 기능
   const onClickSignup = async () => {
-    setIdMsg("");
-    setEmailMsg("");
-    setPwMsg("");
-    setPwCheckMsg("");
-    setNameMsg("");
-    setNickNameMsg("");
-
-    if (!inputUserId.trim()) {
-      setIdMsg("아이디를 입력해주세요.");
-      userIdRef.current.focus();
-      return;
-    } else if (inputUserId < 5) {
-      setIdMsg("아이디는 5자리 이상이어야 합니다.");
-      userIdRef.current.focus();
-      return;
-    }
-    if (!inputEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputEmail)) {
-      setEmailMsg("올바른 이메일 형식을 입력해주세요.");
-      emailRef.current.focus();
-      return;
-    }
-    if (inputPw.length < 8) {
-      setPwMsg("비밀번호는 8자리 이상이어야 합니다.");
-      pwRef.current.focus();
-      return;
-    } else if (!/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(inputPw)) {
-      setPwMsg("비밀번호는 영어, 숫자, 특수문자를 포함해야 합니다.");
-      pwRef.current.focus();
-      return;
-    }
-    if (inputPw !== inputPwCheck) {
-      setPwCheckMsg("비밀번호가 일치하지 않습니다.");
-      pwCheckRef.current.focus();
-      return;
-    }
-    if (!inputName.trim()) {
-      setNameMsg("이름을 입력해주세요.");
-      nameRef.current.focus();
-      return;
-    }
-    if (!inputNickName.trim()) {
-      setNickNameMsg("닉네임을 입력해주세요.");
-      nickNameRef.current.focus();
+    // 체크 함수 한 번씩 실행
+    const isIdValid = handleIdCheck({ target: { value: inputUserId } });
+    const isEmailValid = handleEmailCheck({ target: { value: inputEmail } });
+    const isPwValid = handlePwCheck({ target: { value: inputPw } });
+    const isPw2Valid = handlePw2Check({ target: { value: inputPw2 } });
+    const isNameValid = handleNameCheck({ target: { value: inputName } });
+    const isNicknameValid = handleNicknameCheck({ target: { value: inputNickName } });
+    // 하나라도 유효하지 않으면 메시지 표시 후 종료
+    if(!isIdValid || !isEmailValid || !isPwValid || !isPw2Valid || !isNameValid || !isNicknameValid){
       return;
     }
 
@@ -141,7 +198,7 @@ export const Signup = () => {
                   type="text"
                   placeholder="아이디 입력"
                   value={inputUserId}
-                  onChange={(e) => handleInputChange(e, setInputUserId)}
+                  onChange={(e) => handleIdCheck(e)}
                 />
               </div>
             </InputBox>
@@ -159,7 +216,7 @@ export const Signup = () => {
                   type="email"
                   placeholder="이메일 입력"
                   value={inputEmail}
-                  onChange={(e) => handleInputChange(e, setInputEmail)}
+                  onChange={(e) => handleEmailCheck(e)}
                 />
               </div>
             </InputBox>
@@ -177,7 +234,7 @@ export const Signup = () => {
                   type={isPwShow ? "text" : "password"}
                   placeholder="비밀번호 입력"
                   value={inputPw}
-                  onChange={(e) => handleInputChange(e, setInputPw)}
+                  onChange={(e) => handlePwCheck(e)}
                 />
                 <div className="iconBox-right" onClick={onClickPwEye}>
                   {isPwShow ? <GoEye /> : <GoEyeClosed />}
@@ -187,18 +244,18 @@ export const Signup = () => {
           </div>
 
           <div className="input-container">
-            <div className="textMessage">{pwCheckMsg}</div>
+            <div className="textMessage">{pw2Msg}</div>
             <InputBox>
               <div className="iconBox-left">
                 <GoLock />
               </div>
               <div className="inputBox">
                 <input
-                  ref={pwCheckRef}
+                  ref={pw2Ref}
                   type="password"
                   placeholder="비밀번호 확인"
-                  value={inputPwCheck}
-                  onChange={(e) => handleInputChange(e, setInputPwCheck)}
+                  value={inputPw2}
+                  onChange={(e) => handlePw2Check(e)}
                 />
               </div>
             </InputBox>
@@ -216,7 +273,7 @@ export const Signup = () => {
                   type="text"
                   placeholder="이름 입력"
                   value={inputName}
-                  onChange={(e) => handleInputChange(e, setInputName)}
+                  onChange={(e) => handleNameCheck(e)}
                 />
               </div>
             </InputBox>
@@ -234,7 +291,7 @@ export const Signup = () => {
                   type="text"
                   placeholder="닉네임 입력"
                   value={inputNickName}
-                  onChange={(e) => handleInputChange(e, setInputNickName)}
+                  onChange={(e) => handleNicknameCheck(e)}
                 />
               </div>
             </InputBox>

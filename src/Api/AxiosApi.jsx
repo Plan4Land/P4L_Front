@@ -15,6 +15,11 @@ const AxiosApi = {
     };
     return await AxiosInstance.post(`/auth/login`, login);
   },
+  // 로그아웃
+  logout: async (userId) => {
+    const member = { id: userId, };
+    return await AxiosInstance.post("/auth/logout", member);
+  },
   // 회원가입
   signup: async (id, password, name, nickname, email, profileImg) => {
     try {

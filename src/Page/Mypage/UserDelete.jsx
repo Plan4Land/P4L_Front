@@ -12,13 +12,18 @@ const UserDelete = () => {
 
   const navigate = useNavigate();
 
+  // 탈퇴 기능 구현
   const handleSubmit = async () => {
     const response = await AxiosApi.memberDelete(user.id);
     if(response.data) {
-      setIsModalOpen(true);
+      const logout = await AxiosApi.logout(user.id);
+      if(logout.data) {
+        setIsModalOpen(true);
+      }
     }
   }
 
+  // 모달 닫기
   const closeModal = () => {
     setIsModalOpen(false);
     logout();
