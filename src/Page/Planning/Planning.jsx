@@ -20,6 +20,7 @@ import { useParams } from "react-router-dom";
 import { areas } from "../../Util/Common";
 import LikePlanning from "../../Img/likePlanning.png";
 import UnlikePlanning from "../../Img/unlikePlanning.png";
+import MenuIcon from "../../Img/menu-icon.png";
 
 // const plannerInfo = {
 //   title: "떠나요~ 두리서~",
@@ -268,6 +269,7 @@ export const Planning = () => {
                 {new Date(plannerInfo.endDate).toLocaleDateString()}
               </h3>
             </div>
+            <img src={MenuIcon} alt="" className="menu-icon" />
           </Info>
           <Users>
             <UserProfile>

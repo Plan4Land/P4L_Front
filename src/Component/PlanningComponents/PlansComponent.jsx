@@ -41,7 +41,7 @@ export const PlansComponent = ({
           [planIndex]: !prevState.isClicked[date]?.[planIndex],
         },
       },
-      updatedMemo: plan.memo + "\n" || "",
+      updatedMemo: plan.memo ? plan.memo + "\n" : "",
       isOpened: !prevState.isOpened,
     }));
     setSelectedPlan({ date, planIndex, plan });
@@ -159,7 +159,9 @@ export const PlansComponent = ({
                   className="plan-place-container"
                 >
                   <div className="plan-place">
-                    <p className="place-name">{plan.spotName}</p>
+                    <p className="place-name">
+                      {plan.spotName || plan.content}
+                    </p>
                     <p className="place-category">{plan.category}</p>
                   </div>
                   <div className="memo-container">

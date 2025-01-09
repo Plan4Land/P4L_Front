@@ -23,16 +23,13 @@ export const Info = styled.div`
     margin: 3px;
   }
 
-  /* img {
+  .menu-icon {
     display: flex;
-    right: 0;
-    width: 250px;
-    height: 250px;
-    margin: auto 0;
-    background-color: #eafcd5;
-    border-radius: 50%;
-    text-align: center;
-  } */
+    position: absolute;
+    right: 20px;
+    top: 25px;
+    width: 3rem;
+  }
 `;
 
 export const Users = styled.div`
