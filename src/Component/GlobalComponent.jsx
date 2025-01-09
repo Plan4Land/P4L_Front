@@ -4,15 +4,26 @@ import logo from "../Img/Plan4landLogo.png";
 import { useState } from "react";
 import { Modal } from "../Util/Modal";
 import { useAuth } from "../Context/AuthContext";
+import AxiosApi from "../Api/AxiosApi";
 
 export const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      const response = await AxiosApi.logout(user.id);
+      if(response.status === 204) {
+        logout();
+        navigate("/login");
+      } else {
+        console.error("Logout failed: Invalid response data");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+    
   };
 
   const isActive = (path, query = "") => {
