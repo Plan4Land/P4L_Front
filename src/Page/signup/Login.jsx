@@ -60,11 +60,11 @@ export const Login = () => {
         login(userData);
         navigate("/");
       } else {
-        setTextMessage("로그인 실패. 아이디 또는 비밀번호를 확인하세요.");
+        setTextMessage("아이디 또는 비밀번호가 일치하지 않습니다.");
       }
     } catch (error) {
       console.error("Error during login: ", error);
-      setTextMessage("로그인 중 오류가 발생했습니다.");
+      setTextMessage("아이디 또는 비밀번호가 일치하지 않습니다.");
     }
   };
 

@@ -52,6 +52,14 @@ const AxiosApi = {
     };
     return await AxiosInstance.put("/member/update", member);
   },
+  // 회원 비밀번호 변경
+  memberUpdatePassword: async (id, password) => {
+    const member = {
+      id: id,
+      password: password,
+    }
+    return await AxiosInstance.put("/member/update/password", member);
+  },
   // 회원 정보 삭제
   memberDelete: async (userId) => {
     return await AxiosInstance.delete(`/member/${userId}`);

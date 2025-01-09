@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import { useAuth } from "../../Context/AuthContext";
 import {
   Center,
   Container,
@@ -9,6 +11,7 @@ import {
 import AxiosApi from "../../Api/AxiosApi";
 
 const UserUpdatePassword = () => {
+  const { user } = useAuth();
   const [userPw, setUserPw] = useState("");
   const userPwRef = useRef();
   const [userPwCheck, setUserPwCheck] = useState("");
@@ -17,12 +20,15 @@ const UserUpdatePassword = () => {
 
   const [isPwSame, setIsPwSame] = useState("");
 
+  const navigate = useNavigate();
+
   // 비밀번호 같은지 확인
   const handlePwCheck = (e) => {
     setUserPwCheck(e.target.value);
     userPw === userPwCheck ? setIsPwSame(true) : setIsPwSame(false);
   };
 
+  // 비밀번호 변경 기능 구현
   const handleSubmit = async () => {
     if (!userPw.trim()) {
       setMessage("비밀번호를 입력하세요.");
@@ -44,6 +50,11 @@ const UserUpdatePassword = () => {
 
     // 기능 구현
     try {
+      const response = await AxiosApi.memberUpdatePassword(user.id, userPw);
+      if(response.data) {
+        alert("비밀번호가 변경되었습니다.");
+        navigate("/mypage");
+      }
     } catch (error) {
       console.error("Error during update password: ", error);
       setMessage("비밀번호 변경 도중 오류가 발생했습니다.");
