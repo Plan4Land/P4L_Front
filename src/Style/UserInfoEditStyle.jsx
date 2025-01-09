@@ -64,6 +64,12 @@ export const Container = styled.div`
       cursor: pointer;
     }
   }
+
+  .userDeleteBtn {
+    font-size: 12px;
+    margin-top: 4px;
+    cursor: pointer;
+  }
 `;
 
 export const InputBox = styled.div`
@@ -137,3 +143,41 @@ export const Button = styled.button`
     }
   }
 `;
+
+export const EditBox = styled.div`
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  .iconBox {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 200px;
+    cursor: pointer;
+  }
+  .iconBox:nth-child(1) {
+    border-right: 1px solid #ddd;
+    padding-right: 30px;
+  }
+  .iconBox:nth-child(2) {
+    padding-left: 30px;
+  }
+  .name {
+    margin: 0;
+    text-align: center;
+  }
+  .icon {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+`

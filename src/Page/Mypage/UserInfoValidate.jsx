@@ -3,11 +3,14 @@ import { useLocation } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import AxiosApi from "../../Api/AxiosApi";
 
-import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditStyle";
+import { Center, Container, InputBox, Button, EditBox } from "../../Style/UserInfoEditStyle";
 
 import UserInfoEdit from "./UserInfoEdit";
 import UserUpdatePassword from "./UserUpdatePassword";
 import UserDelete from "./UserDelete";
+// icon
+import { FaUserEdit } from "react-icons/fa";
+import { BiSolidLock } from "react-icons/bi";
 
 const UserInfoValidate = () => {
   const location = useLocation();
@@ -77,28 +80,36 @@ const UserInfoValidate = () => {
       {passValidate && !selectedMenu && (
         <Center>
           <Container>
-          <h2 className="title">내 정보 수정</h2>
-
-          <Button 
-            onClick={()=>setSelectedMenu("회원정보 수정")}
-          >
-            회원정보 수정
-          </Button>
-
-          <Button 
-            onClick={()=>setSelectedMenu("비밀번호 변경")}
-          >
-            비밀번호 변경
-          </Button>
-
-          <Button 
-            className="red"
-            onClick={()=>setSelectedMenu("회원 탈퇴")}
-          >
-            회원 탈퇴
-          </Button>
-
-          
+            <h2 className="title">내 정보 수정</h2>
+            
+            <EditBox>
+              <div 
+                className="iconBox"
+                onClick={()=>setSelectedMenu("회원정보 수정")}
+              >
+                <p className="name">회원정보 수정</p>
+                <div className="icon">
+                  <FaUserEdit />
+                </div>
+              </div>
+              <div 
+                className="iconBox"
+                onClick={()=>setSelectedMenu("비밀번호 변경")}
+              >
+                <p className="name">비밀번호 변경</p>
+                <div className="icon">
+                  <BiSolidLock />
+                </div>
+              </div>
+            </EditBox>
+            <div style={{display: "flex", justifyContent: "right"}}>
+              <span 
+                className="userDeleteBtn"
+                onClick={()=>setSelectedMenu("회원 탈퇴")}
+              >
+                회원 탈퇴
+              </span>
+            </div>
           </Container>
         </Center>
       )}
