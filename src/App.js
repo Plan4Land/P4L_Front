@@ -15,6 +15,7 @@ import TermsOfService from "./Page/signup/TermsOfService";
 import RequestPayment from "./Page/Payment/RequestPayment";
 import Test from "./Page/test";
 import ProtectedRoute from "./Util/ProtectedRoute";
+import { TourItemInfo } from "./Page/Item/TourItemInfo";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/ktxInquiry" element={<KtxInquiry />} />
               <Route path="/tourlist" element={<TourList />} />
+              <Route path="/tourItemInfo" element={<TourItemInfo />} />
               <Route path="/planninglist" element={<PlanningList />} />
               <Route path="/signup/terms" element={<TermsOfService />} />
               <Route path="/payment" element={<RequestPayment />} />
