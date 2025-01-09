@@ -14,6 +14,7 @@ import { AuthProvider } from "./Context/AuthContext";
 import TermsOfService from "./Page/signup/TermsOfService";
 import RequestPayment from "./Page/Payment/RequestPayment";
 import Test from "./Page/test";
+import ProtectedRoute from "./Util/ProtectedRoute";
 
 function App() {
   return (
@@ -22,18 +23,29 @@ function App() {
         <DndProvider backend={HTML5Backend}>
           <Router>
             <Routes>
+              {/* 로그인 필요 없는 페이지 */}
               <Route path="/" element={<Main />} />
               <Route path="/planning/:plannerId" element={<Planning />} />
-              <Route path="/makePlanning" element={<MakePlanning />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/mypage" element={<MyPageMain />} />
               <Route path="/ktxInquiry" element={<KtxInquiry />} />
               <Route path="/tourlist" element={<TourList />} />
               <Route path="/planninglist" element={<PlanningList />} />
               <Route path="/signup/terms" element={<TermsOfService />} />
               <Route path="/payment" element={<RequestPayment />} />
               <Route path="/test" element={<Test />} />
+              
+              {/* 로그인 필요한 페이지 */}
+              <Route path="/makePlanning" element={
+                <ProtectedRoute>
+                  <MakePlanning />
+                </ProtectedRoute>} 
+              />
+              <Route path="/mypage" element={
+                <ProtectedRoute>
+                  <MyPageMain />
+                </ProtectedRoute>} 
+              />
             </Routes>
           </Router>
         </DndProvider>

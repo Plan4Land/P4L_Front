@@ -33,7 +33,6 @@ const UserInfoValidate = () => {
   }
 
   const handleSubmit = async () => {
-  
     try {
       const response = await AxiosApi.memberValidate(user.id, userPw);
       if (response.data) {
