@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { useAuth } from "../../Context/AuthContext";
+import AxiosApi from "../../Api/AxiosApi";
 import {
   Center,
   Container,
   InputBox,
   Button,
 } from "../../Style/UserInfoEditStyle";
-import AxiosApi from "../../Api/AxiosApi";
+import { CheckModal } from "../../Util/Modal";
+
 
 const UserUpdatePassword = () => {
   const { user } = useAuth();
@@ -17,16 +19,9 @@ const UserUpdatePassword = () => {
   const [userPwCheck, setUserPwCheck] = useState("");
   const userPwCheckRef = useRef();
   const [message, setMessage] = useState("");
-
-  const [isPwSame, setIsPwSame] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
-
-  // 비밀번호 같은지 확인
-  const handlePwCheck = (e) => {
-    setUserPwCheck(e.target.value);
-    userPw === userPwCheck ? setIsPwSame(true) : setIsPwSame(false);
-  };
 
   // 비밀번호 변경 기능 구현
   const handleSubmit = async () => {
@@ -52,13 +47,18 @@ const UserUpdatePassword = () => {
     try {
       const response = await AxiosApi.memberUpdatePassword(user.id, userPw);
       if(response.data) {
-        alert("비밀번호가 변경되었습니다.");
-        navigate("/mypage");
+        setIsModalOpen(true);
+        // navigate("/mypage");
       }
     } catch (error) {
       console.error("Error during update password: ", error);
       setMessage("비밀번호 변경 도중 오류가 발생했습니다.");
     }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    navigate("/mypage");
   };
 
   return (
@@ -95,12 +95,23 @@ const UserUpdatePassword = () => {
               id="userPwCheck"
               type="password"
               value={userPwCheck}
-              onChange={handlePwCheck}
+              onChange={(e) => {
+                setUserPwCheck(e.target.value);
+                setMessage("");
+              }}
             />
           </div>
         </InputBox>
 
         <Button onClick={handleSubmit}>변경</Button>
+
+        <CheckModal 
+          isOpen={isModalOpen} 
+          onClose={closeModal}
+        >
+          <p>비밀번호가 변경되었습니다.</p>
+        </CheckModal>
+
       </Container>
     </Center>
   );
