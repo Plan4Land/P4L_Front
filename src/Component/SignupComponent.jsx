@@ -31,6 +31,13 @@ export const SignupContainer = styled.div`
     font-size: 12px;
   }
 
+  .inputWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .linkBox {
     display: flex;
     justify-content: space-between;
@@ -89,6 +96,22 @@ export const SignupContainer = styled.div`
     .picture-button {
       height: 30%;
       cursor: pointer;
+    }
+  }
+
+  .duplicateButton {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+    padding: 2px;
+    margin-bottom: 10px;
+    background-color: rgb(0, 180, 0);
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+    cursor: pointer;
+    &:hover {
+      background-color: rgb(0, 160, 0);
     }
   }
 `;

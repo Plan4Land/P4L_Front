@@ -32,7 +32,7 @@ const RequestPayment = () => {
     storeId: process.env.REACT_APP_SHOP_ID,
     channelKey: process.env.REACT_APP_CHANNEL_KG,
     billingKeyMethod: "CARD",
-    issueName: "멤버십 정기 결제",
+    issueName: "멤버십 정기 결제 PLAN4LAND",
     issueId: randomId(),
     displayAmount: 1,
     currency: "KRW",
@@ -60,7 +60,7 @@ const RequestPayment = () => {
     storeId: process.env.REACT_APP_SHOP_ID,
     channelKey: process.env.REACT_APP_CHANNEL_KAKAOPAY,
     billingKeyMethod: "EASY_PAY",
-    issueName: "멤버십 정기 결제",
+    issueName: "멤버십 정기 결제 PLAN4LAND",
     issueId: randomId(),
     displayAmount: 1,
     currency: "KRW",
@@ -93,35 +93,41 @@ const RequestPayment = () => {
   }
 
 
-  const onClickPay = async () => {
-    console.log("클릭 시작", kakaoBillingReq.issueId)
-    const rsp = await PortOne.requestIssueBillingKey(kakaoBillingReq);
+  const onClickPay = async (req) => {
+    console.log("클릭 시작", req.issueId)
+    const rsp = await PortOne.requestIssueBillingKey(req);
     if (rsp.code !== undefined) {
       return alert(rsp.message);
     }
+
+    console.log(rsp.billingKey)
   };
 
 
   return (
     <>
-      <Button onClick={()=>setPaySelect('kakao')}>
+      <Button onClick={() => setPaySelect('kakao')}>
         카카오페이
       </Button>
-      <Button onClick={()=>setPaySelect('card')}>
+      <Button onClick={() => setPaySelect('card')}>
         신용카드
       </Button>
-      {paySelect === "kakao" ? "" :
+      {paySelect === "kakao" ?
+        <Button onClick={() => onClickPay(kakaoBillingReq)}>
+          결제
+        </Button>
+        :
         <>
           <InputBox>
-          <div className="inputBox">
-            <input
-              type="text"
-              placeholder="이메일을 입력 해 주세요"
-              value={userEmail}
-              onChange={(e) => handleInputChange(e, setUserEmail)}
-            />
-          </div>
-        </InputBox>
+            <div className="inputBox">
+              <input
+                type="text"
+                placeholder="이메일을 입력 해 주세요"
+                value={userEmail}
+                onChange={(e) => handleInputChange(e, setUserEmail)}
+              />
+            </div>
+          </InputBox>
 
           <InputBox>
             <div className="inputBox">
@@ -144,12 +150,14 @@ const RequestPayment = () => {
               />
             </div>
           </InputBox>
+
+          <Button onClick={() => onClickPay(kgCardBillingReq)}>
+            결제
+          </Button>
         </>
       }
 
-      <Button onClick={onClickPay}>
-        결제
-      </Button>
+
     </>
   )
     ;
