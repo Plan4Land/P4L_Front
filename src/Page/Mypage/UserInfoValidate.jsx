@@ -7,8 +7,7 @@ import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditSty
 
 import UserInfoEdit from "./UserInfoEdit";
 import UserUpdatePassword from "./UserUpdatePassword";
-
-
+import UserDelete from "./UserDelete";
 
 const UserInfoValidate = () => {
   const location = useLocation();
@@ -105,7 +104,7 @@ const UserInfoValidate = () => {
       )}
       {selectedMenu === "회원정보 수정" && <UserInfoEdit />}
       {selectedMenu === "비밀번호 변경" && <UserUpdatePassword />}
-      {selectedMenu === "회원 탈퇴" && <UserInfoEdit />}
+      {selectedMenu === "회원 탈퇴" && <UserDelete />}
     </>
   );
 };
