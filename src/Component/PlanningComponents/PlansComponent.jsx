@@ -15,6 +15,7 @@ export const PlansComponent = ({
   plans,
   plannerInfo,
   setModals,
+  isEditting,
 }) => {
   const toggleDay = (index) => {
     setTravelInfo((prev) => ({
@@ -128,8 +129,14 @@ export const PlansComponent = ({
   return (
     <MainPlanning>
       {travelInfo.dates.map((date, index) => (
-        <>
-          <div className="planning-day" onClick={() => toggleDay(index)}>
+        <div key={index}>
+          <div
+            className="planning-day"
+            onClick={() => {
+              toggleDay(index);
+              console.log(travelInfo);
+            }}
+          >
             <span>{index + 1}일차</span>&nbsp;&nbsp;/&nbsp;&nbsp;
             <span>{date}</span>
             <span className="arrow">{travelInfo.arrowDirections[index]}</span>
@@ -137,7 +144,10 @@ export const PlansComponent = ({
           {travelInfo.dayToggle[index] && (
             <DayToggleContainer>
               {groupPlans[date]?.map((plan, planIndex) => (
-                <div key={planIndex} className="plan-place-container">
+                <div
+                  key={`${date}-${planIndex}`}
+                  className="plan-place-container"
+                >
                   <div className="plan-place">
                     <p className="place-name">{plan.spotName}</p>
                     <p className="place-category">{plan.category}</p>
@@ -180,20 +190,22 @@ export const PlansComponent = ({
                   </div>
                 </div>
               ))}
-              <Button
-                className="add-place-button"
-                $margin="1.5% 0"
-                $width="60%"
-                $height="30px"
-                onClick={() =>
-                  setModals((prev) => ({ ...prev, addPlaceModal: true }))
-                }
-              >
-                + 장소 추가
-              </Button>
+              {isEditting && (
+                <Button
+                  className="add-place-button"
+                  $margin="1.5% 0"
+                  $width="60%"
+                  $height="30px"
+                  onClick={() =>
+                    setModals((prev) => ({ ...prev, addPlaceModal: true }))
+                  }
+                >
+                  + 장소 추가
+                </Button>
+              )}
             </DayToggleContainer>
           )}
-        </>
+        </div>
       ))}
     </MainPlanning>
   );

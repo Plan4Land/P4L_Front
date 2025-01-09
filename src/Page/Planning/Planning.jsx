@@ -17,6 +17,9 @@ import { Button } from "../../Component/ButtonComponent";
 import { Modal, CloseModal } from "../../Util/Modal";
 import PlanningApi from "../../Api/PlanningApi";
 import { useParams } from "react-router-dom";
+import { areas } from "../../Util/Common";
+import LikePlanning from "../../Img/likePlanning.png";
+import UnlikePlanning from "../../Img/unlikePlanning.png";
 
 // const plannerInfo = {
 //   title: "떠나요~ 두리서~",
@@ -58,7 +61,7 @@ const plansEx = [
   {
     id: 1,
     seq: 1,
-    date: "2025-01-10T10:00:00", // 계획일 (ISO 8601 형식)
+    date: "2025-01-21T10:00:00", // 계획일 (ISO 8601 형식)
     spotName: "Namsan Tower",
     category: "관광명소",
     memo: "서울의 멋진 야경을 볼 수 있는 곳",
@@ -72,7 +75,7 @@ const plansEx = [
   {
     id: 2,
     seq: 2,
-    date: "2025-01-10T12:00:00",
+    date: "2025-01-21T12:00:00",
     spotName: "Gwangjang Market",
     category: "음식점",
     memo: "한국 전통 시장 탐방",
@@ -86,7 +89,7 @@ const plansEx = [
   {
     id: 3,
     seq: 3,
-    date: "2025-01-10T14:00:00",
+    date: "2025-01-21T14:00:00",
     spotName: "Bukchon Hanok Village",
     category: "문화체험",
     memo: "전통 한옥 체험",
@@ -100,7 +103,7 @@ const plansEx = [
   {
     id: 4,
     seq: 1,
-    date: "2025-01-11T16:00:00",
+    date: "2025-01-22T16:00:00",
     spotName: "Lotte World Tower",
     category: "쇼핑",
     memo: "서울의 고층 빌딩에서 쇼핑과 전망 즐기기",
@@ -114,7 +117,7 @@ const plansEx = [
   {
     id: 5,
     seq: 2,
-    date: "2025-01-11T18:00:00",
+    date: "2025-01-22T18:00:00",
     spotName: "Dongdaemun Design Plaza",
     category: "문화예술",
     memo: "현대적인 디자인과 전시 관람",
@@ -128,7 +131,7 @@ const plansEx = [
   {
     id: 6,
     seq: 3,
-    date: "2025-01-11T20:00:00",
+    date: "2025-01-22T20:00:00",
     spotName: "Han River Park",
     category: "야외활동",
     memo: "한강공원에서 자전거와 산책",
@@ -144,6 +147,10 @@ const plansEx = [
 export const Planning = () => {
   const { plannerId } = useParams();
   const [plannerInfo, setPlannerInfo] = useState();
+  const [areaState, setAreaState] = useState({
+    area: "",
+    subArea: "",
+  });
   const [plans, setPlans] = useState([]);
   const [modals, setModals] = useState({
     userModal: false, // 초대된 users 모달 open 여부
@@ -167,6 +174,7 @@ export const Planning = () => {
   });
   const [groupPlans, setGroupPlans] = useState({}); // 계획 정렬
   const [selectedPlan, setSelectedPlan] = useState({}); // date, planIndex, plan
+  const [isEditting, setIsEditting] = useState(true);
 
   useEffect(() => {
     if (Object.keys(currentAddedPlace).length > 0) {
@@ -213,6 +221,21 @@ export const Planning = () => {
     setPlans(plansEx);
   }, [plannerId]);
 
+  useEffect(() => {
+    if (plannerInfo) {
+      const areaName = areas.find(
+        (area) => area.code === plannerInfo.area
+      ).name;
+      const subAreaName = areas
+        .find((area) => area.code === plannerInfo.area)
+        ?.subAreas.find((sub) => sub.code === plannerInfo.subArea)?.name;
+      setAreaState({
+        area: areaName || "",
+        subArea: subAreaName || "",
+      });
+    }
+  }, [plannerInfo]);
+
   useEffect(
     () => setSearchState({ keyword: "", submittedKeyword: "" }),
     [modals.addPlaceModal]
@@ -227,11 +250,11 @@ export const Planning = () => {
               file={plannerInfo.thumbnail}
               width={"250px"}
               height={"250px"}
-            />
+            ></ProfileImg>
             <div>
               <h1>{plannerInfo.title}</h1>
               <h3>
-                {plannerInfo.area} {plannerInfo.subArea} / {plannerInfo.theme}
+                {areaState.area} {areaState.subArea} / {plannerInfo.theme}
               </h3>
               <h3>
                 {new Date(plannerInfo.startDate).toLocaleDateString()}
@@ -285,6 +308,7 @@ export const Planning = () => {
               plans={plans}
               plannerInfo={plannerInfo}
               setModals={setModals}
+              isEditting={isEditting}
             />
             <KakaoMapContainer>
               <KakaoMap />

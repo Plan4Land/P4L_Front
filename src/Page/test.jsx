@@ -31,6 +31,7 @@ const Test = () => {
         </H4>
         <P>{JSON.parse(userInfo).imgPath}</P>
         <p>refreshToken : {localStorage.getItem("refreshToken")}</p>
+        <p>accessToken : {localStorage.getItem("accessToken")}</p>
       </div>
     )
   );
