@@ -30,6 +30,7 @@ const Test = () => {
           프로필 이미지 : JSON.parse(localStorage.getItem("user")).imgPath
         </H4>
         <P>{JSON.parse(userInfo).imgPath}</P>
+        <p>refreshToken : {localStorage.getItem("refreshToken")}</p>
       </div>
     )
   );

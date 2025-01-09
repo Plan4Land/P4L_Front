@@ -23,7 +23,10 @@ const PlanningApi = {
       thumbnail: thumbnail,
       isPublic: isPublic,
     };
-    return await AxiosInstance.post(`/planner/make`, plannerInfo);
+    return await AxiosInstance.post(`/planner/insert`, plannerInfo);
+  },
+  getPlanning: async (plannerId) => {
+    return await AxiosInstance.get(`/planner/${plannerId}`).data;
   },
 };
 
