@@ -10,7 +10,7 @@ export const TravelSpotApi = {
         params: { page, size },
       });
       console.log("API 응답 데이터:", response.data);
-      return response.data.content || [];
+      return response.data || [];
     } catch (error) {
       console.error("여행지 데이터 조회 오류:", error);
       throw error;

@@ -77,5 +77,17 @@ const AxiosApi = {
     }
     return await AxiosInstance.post("/member/validate", memberInfo);
   },
+  // 회원 아이디 중복 확인
+  memberIdExists: async (id) => {
+    return await AxiosInstance.post(`/member/idExists/${id}`);
+  },
+  // 회원 이메일 중복 확인
+  memberEmailExists: async (email) => {
+    return await AxiosInstance.post(`/member/emailExists/${email}`);
+  },
+  // 회원 닉네임 중복 확인
+  memberNicknameExists: async (nickname) => {
+    return await AxiosInstance.post(`/member/nicknameExists/${nickname}`);
+  },
 }
 export default AxiosApi;

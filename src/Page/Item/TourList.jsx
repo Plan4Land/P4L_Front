@@ -425,15 +425,24 @@ export const TourList = () => {
         </SelectTourItem>
         <ItemList>
           <div className="tour-list">
-            {travelSpots.map((spot) => (
-              <TourItem
-                key={spot.id}
-                thumbnail={spot.thumbnail}
-                title={spot.title}
-                address={spot.address || "정보 없음"}
-                subCategory={spot.subCategory || "정보 없음"}
-              />
-            ))}
+            {travelSpots.map((spot) => {
+              // 각 여행지의 cat3 값을 찾기
+              const cat3Name = ServiceCode.flatMap((cat) =>
+                cat.cat2List.flatMap((cat2) =>
+                  cat2.cat3List.filter((cat3) => cat3.cat3 === spot.cat3)
+                )
+              ).map((cat3) => cat3.cat3Name)[0]; // 첫 번째로 일치하는 cat3Name을 반환
+
+              return (
+                <TourItem
+                  key={spot.id}
+                  thumbnail={spot.thumbnail}
+                  title={spot.title}
+                  address={spot.addr1 || "정보 없음"}
+                  subCategory={cat3Name || "정보 없음"} // cat3Name을 subCategory로 사용
+                />
+              );
+            })}
           </div>
 
           <div>

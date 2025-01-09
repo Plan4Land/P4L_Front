@@ -65,6 +65,21 @@ export const Signup = () => {
       return true;
     }
   }
+  // 아이디 중복 체크
+  const handleIdDuplicate = async () => {
+    // 유효성 검사 먼저 수행
+    const isValid = handleIdCheck({ target: { value: inputUserId } });
+    if (!isValid) {
+      return; // 유효성 검사 실패 시 중복 검사를 진행하지 않음
+    }
+    // 유효성 통과하면 중복 검사 수행
+    const response = await AxiosApi.memberIdExists(inputUserId);
+    if (response.data) {
+      setIdMsg("중복된 아이디입니다.");
+    } else {
+      setIdMsg("사용가능한 아이디입니다.");
+    }
+  }
   
   // 이메일 체크
   const handleEmailCheck = (e) => {
@@ -81,6 +96,21 @@ export const Signup = () => {
     } else {
       setEmailMsg("");
       return true;
+    }
+  }
+  // 이메일 중복 체크
+  const handleEmailDuplicate = async () => {
+    // 유효성 검사 먼저 수행
+    const isValid = handleEmailCheck({ target: { value: inputEmail } });
+    if (!isValid) {
+      return; // 유효성 검사 실패 시 중복 검사를 진행하지 않음
+    }
+    // 유효성 통과하면 중복 검사 수행
+    const response = await AxiosApi.memberEmailExists(inputEmail);
+    if (response.data) {
+      setEmailMsg("중복된 이메일입니다.");
+    } else {
+      setEmailMsg("사용가능한 이메일입니다.");
     }
   }
 
@@ -146,17 +176,31 @@ export const Signup = () => {
       return true;
     }
   }
-
+  // 닉네임 중복 체크
+  const handleNicknameDuplicate = async () => {
+    // 유효성 검사 먼저 수행
+    const isValid = handleNicknameCheck({ target: { value: inputNickName } });
+    if (!isValid) {
+      return; // 유효성 검사 실패 시 중복 검사를 진행하지 않음
+    }
+    // 유효성 통과하면 중복 검사 수행
+    const response = await AxiosApi.memberNicknameExists(inputNickName);
+    if (response.data) {
+      setNickNameMsg("중복된 이메일입니다.");
+    } else {
+      setNickNameMsg("사용가능한 이메일입니다.");
+    }
+  }
 
   // 회원가입 기능
   const onClickSignup = async () => {
     // 체크 함수 한 번씩 실행
-    const isIdValid = handleIdCheck({ target: { value: inputUserId } });
-    const isEmailValid = handleEmailCheck({ target: { value: inputEmail } });
+    const isIdValid = handleIdDuplicate({ target: { value: inputUserId } });
+    const isEmailValid = handleEmailDuplicate({ target: { value: inputEmail } });
     const isPwValid = handlePwCheck({ target: { value: inputPw } });
     const isPw2Valid = handlePw2Check({ target: { value: inputPw2 } });
     const isNameValid = handleNameCheck({ target: { value: inputName } });
-    const isNicknameValid = handleNicknameCheck({ target: { value: inputNickName } });
+    const isNicknameValid = handleNicknameDuplicate({ target: { value: inputNickName } });
     // 하나라도 유효하지 않으면 메시지 표시 후 종료
     if(!isIdValid || !isEmailValid || !isPwValid || !isPw2Valid || !isNameValid || !isNicknameValid){
       return;
@@ -188,38 +232,54 @@ export const Signup = () => {
 
           <div className="input-container">
             <div className="textMessage">{idMsg}</div>
-            <InputBox>
-              <div className="iconBox-left">
-                <VscAccount />
-              </div>
-              <div className="inputBox">
-                <input
-                  ref={userIdRef}
-                  type="text"
-                  placeholder="아이디 입력"
-                  value={inputUserId}
-                  onChange={(e) => handleIdCheck(e)}
-                />
-              </div>
-            </InputBox>
+            <div className="inputWrapper">
+              <InputBox style={{width: "360px"}}>
+                <div className="iconBox-left">
+                  <VscAccount />
+                </div>
+                <div className="inputBox">
+                  <input
+                    ref={userIdRef}
+                    type="text"
+                    placeholder="아이디 입력"
+                    value={inputUserId}
+                    onChange={(e) => handleIdCheck(e)}
+                  />
+                </div>
+              </InputBox>
+              <button 
+                className="duplicateButton"
+                onClick={handleIdDuplicate}
+              >
+                중복확인
+              </button>
+            </div>
           </div>
 
           <div className="input-container">
             <div className="textMessage">{emailMsg}</div>
-            <InputBox>
-              <div className="iconBox-left">
-                <GoMail />
-              </div>
-              <div className="inputBox">
-                <input
-                  ref={emailRef}
-                  type="email"
-                  placeholder="이메일 입력"
-                  value={inputEmail}
-                  onChange={(e) => handleEmailCheck(e)}
-                />
-              </div>
-            </InputBox>
+            <div className="inputWrapper">
+              <InputBox style={{width: "360px"}}>
+                <div className="iconBox-left">
+                  <GoMail />
+                </div>
+                <div className="inputBox">
+                  <input
+                    ref={emailRef}
+                    type="email"
+                    placeholder="이메일 입력"
+                    value={inputEmail}
+                    onChange={(e) => handleEmailCheck(e)}
+                  />
+                </div>
+              </InputBox>
+              <button 
+                className="duplicateButton"
+                onClick={handleEmailDuplicate}
+              >
+                중복확인
+              </button>
+            </div>
           </div>
 
           <div className="input-container">
@@ -281,20 +341,28 @@ export const Signup = () => {
 
           <div className="input-container">
             <div className="textMessage">{nickNameMsg}</div>
-            <InputBox>
-              <div className="iconBox-left">
-                <GoPencil />
-              </div>
-              <div className="inputBox">
-                <input
-                  ref={nickNameRef}
-                  type="text"
-                  placeholder="닉네임 입력"
-                  value={inputNickName}
-                  onChange={(e) => handleNicknameCheck(e)}
-                />
-              </div>
-            </InputBox>
+            <div className="inputWrapper">
+              <InputBox style={{width: "360px"}}>
+                <div className="iconBox-left">
+                  <GoPencil />
+                </div>
+                <div className="inputBox">
+                  <input
+                    ref={nickNameRef}
+                    type="text"
+                    placeholder="닉네임 입력"
+                    value={inputNickName}
+                    onChange={(e) => handleNicknameCheck(e)}
+                  />
+                </div>
+              </InputBox>
+              <button 
+                className="duplicateButton"
+                onClick={handleNicknameDuplicate}
+              >
+                중복확인
+              </button>
+            </div>
           </div>
 
           <div className="picture-box">
