@@ -9,9 +9,9 @@ export const List = styled.div`
 `;
 
 export const SelectTourItem = styled.div`
-  width: 650px;
+  width: 450px;
   padding-top: 60px;
-  padding-left: 20px;
+  left: 20px;
   position: relative;
   button {
     font-size: 12px;
@@ -88,7 +88,7 @@ export const SearchSt = styled.div`
 
   .search-button {
     position: absolute;
-    right: -50px;
+    right: 15px;
     top: 5%;
     scale: 110%;
     background: transparent;
@@ -96,6 +96,7 @@ export const SearchSt = styled.div`
     cursor: pointer;
     font-size: 20px;
     color: ${colors.colorA};
+    width: 20px;
 
     /* hover 시 아무 변화가 없도록 설정 */
     &:hover {
@@ -117,8 +118,11 @@ export const SearchSt = styled.div`
 
 export const ItemList = styled.div`
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   align-items: center;
-  overflow-y: scroll;
-  width: 100%;
+
+  .tour-list {
+    width: 90%;
+  }
 `;

@@ -2,17 +2,17 @@ import React from "react";
 import styled from "styled-components";
 
 const TourItemStyled = styled.div`
-  width: ${(props) => props.width || "80%"};
+  width: ${(props) => props.width || "100%"};
   height: ${(props) => props.height || "250px"};
   margin: ${(props) => props.margin || "10px"};
   display: flex;
-  border: 1px solid black;
+  border: 1px solid grey;
   cursor: pointer;
   background-color: #fff;
   align-items: center;
 
   .img {
-    width: 300px;
+    width: 400px;
     height: 250px;
     display: flex;
     align-items: center;
