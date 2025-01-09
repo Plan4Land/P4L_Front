@@ -3,7 +3,12 @@ import { useState, useEffect } from "react";
 import { areas, themes } from "../../Util/Common";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Button, ToggleButton } from "../../Component/ButtonComponent";
-import { SelectTourItem, SearchSt } from "../../Style/ItemListStyled";
+import {
+  SelectTourItem,
+  SearchSt,
+  List,
+  ItemList,
+} from "../../Style/ItemListStyled";
 import { FaSearch, FaUndo } from "react-icons/fa";
 
 export const PlanningList = () => {
@@ -153,95 +158,98 @@ export const PlanningList = () => {
   return (
     <>
       <Header />
-      <SelectTourItem>
-        <button className="reset-button" onClick={handleResetSelections}>
-          초기화
-          <FaUndo style={{ marginLeft: "6px" }} />
-        </button>
-        <SearchSt>
-          <div className="search-wrapper">
-            <input
-              type="text"
-              className="search"
-              placeholder="제목 검색!"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)} // 검색어 업데이트
-              onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
-            />
-            <button className="search-button" onClick={handleSearch}>
-              <FaSearch /> {/* 검색 아이콘 */}
-            </button>
-          </div>
-        </SearchSt>
-        <div className="mainarea">
-          <h3>
-            지역 선택
-            <ToggleButton isOpen={isAreaOpen} onToggle={handleToggleArea} />
-          </h3>
-          {isAreaOpen && (
-            <div>
-              {areas.map((area) => (
-                <Button
-                  key={area.code}
-                  onClick={() => handleAreaChange(area.code)}
-                  className={`area-button ${
-                    selectedAreaCode === area.code ? "selected" : ""
-                  }`}
-                >
-                  {area.name}
-                </Button>
-              ))}
-            </div>
-          )}
-        </div>
-        {selectedAreaData && (
-          <div className="subarea">
-            <h3>
-              세부 지역 선택{" "}
-              <ToggleButton
-                isOpen={isSubAreaOpen}
-                onToggle={handleToggleSubArea}
+      <List>
+        <SelectTourItem>
+          <button className="reset-button" onClick={handleResetSelections}>
+            초기화
+            <FaUndo style={{ marginLeft: "6px" }} />
+          </button>
+          <SearchSt>
+            <div className="search-wrapper">
+              <input
+                type="text"
+                className="search"
+                placeholder="제목 검색!"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)} // 검색어 업데이트
+                onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
               />
+              <button className="search-button" onClick={handleSearch}>
+                <FaSearch /> {/* 검색 아이콘 */}
+              </button>
+            </div>
+          </SearchSt>
+          <div className="mainarea">
+            <h3>
+              지역 선택
+              <ToggleButton isOpen={isAreaOpen} onToggle={handleToggleArea} />
             </h3>
-            {isSubAreaOpen && (
+            {isAreaOpen && (
               <div>
-                {selectedAreaData.subAreas.map((subArea) => (
+                {areas.map((area) => (
                   <Button
-                    key={subArea.code}
-                    onClick={() => handleSubAreaChange(subArea.code)}
-                    className={`subarea-button ${
-                      selectedSubAreaCode === subArea.code ? "selected" : ""
+                    key={area.code}
+                    onClick={() => handleAreaChange(area.code)}
+                    className={`area-button ${
+                      selectedAreaCode === area.code ? "selected" : ""
                     }`}
                   >
-                    {subArea.name}
+                    {area.name}
                   </Button>
                 ))}
               </div>
             )}
           </div>
-        )}
-        <div className="theme">
-          <h3>
-            테마 선택
-            <ToggleButton isOpen={isThemeOpen} onToggle={handleToggleTheme} />
-          </h3>
-          {isThemeOpen && (
-            <div>
-              {themes.map((theme) => (
-                <Button
-                  key={theme}
-                  onClick={() => handleThemeChange(theme)}
-                  className={`theme-button ${
-                    selectedTheme.split(",").includes(theme) ? "selected" : ""
-                  }`}
-                >
-                  {theme}
-                </Button>
-              ))}
+          {selectedAreaData && (
+            <div className="subarea">
+              <h3>
+                세부 지역 선택{" "}
+                <ToggleButton
+                  isOpen={isSubAreaOpen}
+                  onToggle={handleToggleSubArea}
+                />
+              </h3>
+              {isSubAreaOpen && (
+                <div>
+                  {selectedAreaData.subAreas.map((subArea) => (
+                    <Button
+                      key={subArea.code}
+                      onClick={() => handleSubAreaChange(subArea.code)}
+                      className={`subarea-button ${
+                        selectedSubAreaCode === subArea.code ? "selected" : ""
+                      }`}
+                    >
+                      {subArea.name}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
-        </div>
-      </SelectTourItem>
+          <div className="theme">
+            <h3>
+              테마 선택
+              <ToggleButton isOpen={isThemeOpen} onToggle={handleToggleTheme} />
+            </h3>
+            {isThemeOpen && (
+              <div>
+                {themes.map((theme) => (
+                  <Button
+                    key={theme}
+                    onClick={() => handleThemeChange(theme)}
+                    className={`theme-button ${
+                      selectedTheme.split(",").includes(theme) ? "selected" : ""
+                    }`}
+                  >
+                    {theme}
+                  </Button>
+                ))}
+              </div>
+            )}
+          </div>
+        </SelectTourItem>
+        <ItemList></ItemList>
+      </List>
       <Footer />
     </>
   );

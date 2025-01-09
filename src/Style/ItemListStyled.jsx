@@ -1,18 +1,24 @@
 import styled from "styled-components";
 import { colors } from "./GlobalStyle";
 
+export const List = styled.div`
+  display: flex;
+  width: 100%;
+  margin: 20px;
+  margin-bottom: 50px;
+`;
+
 export const SelectTourItem = styled.div`
-  width: 500px;
+  width: 650px;
   padding-top: 60px;
   padding-left: 20px;
-  margin-bottom: 50px;
   position: relative;
   button {
     font-size: 12px;
     background-color: white;
     color: ${colors.colorA};
     height: 35px;
-    width: 140px;
+    width: 130px;
     margin: 4px;
     &:hover {
       background-color: ${colors.colorB};
@@ -64,7 +70,7 @@ export const SearchSt = styled.div`
 
   .search-wrapper {
     position: relative;
-    flex-grow: 0.8;
+    flex-grow: 0.9;
     display: flex;
     align-items: center;
   }
@@ -107,4 +113,12 @@ export const SearchSt = styled.div`
     border: none;
     transform: none;
   }
+`;
+
+export const ItemList = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: scroll;
+  width: 100%;
 `;
