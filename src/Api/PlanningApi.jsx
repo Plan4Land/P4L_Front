@@ -26,7 +26,9 @@ const PlanningApi = {
     return await AxiosInstance.post(`/planner/insert`, plannerInfo);
   },
   getPlanning: async (plannerId) => {
-    return await AxiosInstance.get(`/planner/${plannerId}`).data;
+    console.log(plannerId);
+    console.log((await AxiosInstance.get(`/planner/${plannerId}`)).data);
+    return (await AxiosInstance.get(`/planner/${plannerId}`)).data;
   },
 };
 
