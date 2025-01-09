@@ -25,6 +25,7 @@ export const Signup = () => {
   const [inputPw2, setInputPw2] = useState("");
   const [inputName, setInputName] = useState("");
   const [inputNickName, setInputNickName] = useState("");
+  const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
 
   // message
   const [idMsg, setIdMsg] = useState("");
@@ -43,7 +44,7 @@ export const Signup = () => {
   const nickNameRef = useRef(null);
 
   const [isPwShow, setIsPwShow] = useState(false);
-  const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
+  
   const [isPicsModalOpen, setIsPicsModalOpen] = useState("");
 
   const navigate = useNavigate();
