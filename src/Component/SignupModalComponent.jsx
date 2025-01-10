@@ -178,7 +178,7 @@ export const FindUserIdModal = (props) => {
   const onClickFindUserId = async () => {
     try {
       const response = await AxiosApi.memberFindId(inputName, inputEmail);
-      if(response.data) {
+      if (response.data) {
         openResult(response.data);
         handleCloseModal();
       }
@@ -200,10 +200,10 @@ export const FindUserIdModal = (props) => {
 
   // 엔터로 버튼 클릭
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       onClickFindUserId();
     }
-  }
+  };
 
   return (
     <ModalStyle>
@@ -331,30 +331,47 @@ export const FindPwModal = (props) => {
   // 비밀번호 찾기 기능
   const onClickFindPw = async () => {
     try {
-      const response = await AxiosApi.mbmerFindPassword(inputUserId, inputEmail);
+      const response = await AxiosApi.memerFindPassword(
+        inputUserId,
+        inputEmail
+      );
       if (response.data) {
-        sendEmail();
+        passwordChange(response.data);
       }
     } catch (error) {
       setTextMessage("해당 회원이 존재하지 않습니다.");
     }
-    
+  };
+
+  // 유저 비밀번호 변경 -> 이메일 보내기
+  const passwordChange = async (newPassword) => {
+    const response = await AxiosApi.memberUpdatePassword(
+      inputUserId,
+      newPassword
+    );
+    if (response.data) {
+      sendEmail(newPassword);
+    } else {
+      setTextMessage(
+        "예기치 못한 오류가 발생했습니다. 관리자에게 문의해주세요."
+      );
+    }
   };
 
   // 이메일 보내기
-  const sendEmail = () => {
+  const sendEmail = (password) => {
     const templateParams = {
       to_email: inputEmail,
       from_name: "plan4land",
-      message: "test 메시지 입니다.",
+      message: `${password}`,
     };
 
     emailjs
       .send(
-        "plan4land",  // service id
+        "plan4land", // service id
         "template_59cggwi", // template id
         templateParams,
-        "26R74sBvTB5bxhbNn",  // public-key
+        "26R74sBvTB5bxhbNn" // public-key
       )
       .then((response) => {
         openResult(inputEmail);
@@ -362,7 +379,7 @@ export const FindPwModal = (props) => {
       })
       .catch((error) => {
         setTextMessage("이메일 발송에 실패했습니다. 관리자에게 문의해주세요.");
-      })
+      });
   };
 
   // 아이디 찾기로 이동
@@ -380,10 +397,10 @@ export const FindPwModal = (props) => {
 
   // 엔터로 버튼 클릭
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       onClickFindPw();
     }
-  }
+  };
 
   return (
     <ModalStyle>
@@ -454,7 +471,6 @@ export const FindPwModal = (props) => {
 // 비밀번호 찾기 결과 모달
 export const ResultPwModal = (props) => {
   const { open, close, email } = props;
-  
 
   const handleBackgroundClick = (e) => {
     e.stopPropagation(); // 내부 클릭 시 닫히지 않게 설정

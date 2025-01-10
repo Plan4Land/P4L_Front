@@ -3,7 +3,12 @@ import { useNavigate } from "react-router-dom";
 import AxiosApi from "../../Api/AxiosApi";
 
 import { Header, Footer } from "../../Component/GlobalComponent";
-import { Center, SignupContainer, InputBox, Button } from "../../Component/SignupComponent";
+import {
+  Center,
+  SignupContainer,
+  InputBox,
+  Button,
+} from "../../Component/SignupComponent";
 import { ProfilePicModal } from "../../Component/SignupModalComponent";
 import { CheckModal } from "../../Util/Modal";
 
@@ -43,7 +48,7 @@ export const Signup = () => {
   const [nicknameDuple, setNicknameDuple] = useState(false);
 
   const [isPwShow, setIsPwShow] = useState(false);
-  
+
   const [isPicsModalOpen, setIsPicsModalOpen] = useState(false);
   const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
   const [checkModalMessage, setCheckModalMessage] = useState("");
@@ -71,7 +76,6 @@ export const Signup = () => {
   };
   useEffect(() => {
     setIdDuple(false);
-    setIdMsg("");
   }, [inputUserId]);
   // 아이디 중복 체크
   const handleIdDuplicate = async () => {
@@ -89,7 +93,6 @@ export const Signup = () => {
     }
   };
 
-  
   // 이메일 체크
   const handleEmailCheck = (e) => {
     const input = e.target.value;
@@ -109,7 +112,6 @@ export const Signup = () => {
   };
   useEffect(() => {
     setEmailDuple(false);
-    setEmailMsg("");
   }, [inputEmail]);
   // 이메일 중복 체크
   const handleEmailDuplicate = async () => {
@@ -161,7 +163,7 @@ export const Signup = () => {
       return true;
     }
   };
-  
+
   // 이름 체크
   const handleNameCheck = (e) => {
     const input = e.target.value;
@@ -191,7 +193,6 @@ export const Signup = () => {
   };
   useEffect(() => {
     setNicknameDuple(false);
-    setNickNameMsg("");
   }, [inputNickName]);
   // 닉네임 중복 체크
   const handleNicknameDuplicate = async () => {
@@ -202,12 +203,10 @@ export const Signup = () => {
     const response = await AxiosApi.memberNicknameExists(inputNickName);
     if (response.data) {
       setNickNameMsg("중복된 이메일입니다.");
-      setNicknameDuple(true);
-      return false;
+      setNicknameDuple(false);
     } else {
       setNickNameMsg("사용가능한 이메일입니다.");
       setNicknameDuple(true);
-      return true;
     }
   };
 
@@ -219,30 +218,47 @@ export const Signup = () => {
     const isPwValid = handlePwCheck({ target: { value: inputPw } });
     const isPw2Valid = handlePw2Check({ target: { value: inputPw2 } });
     const isNameValid = handleNameCheck({ target: { value: inputName } });
-    const isNicknameValid = handleNicknameCheck({ target: { value: inputNickName } });
+    const isNicknameValid = handleNicknameCheck({
+      target: { value: inputNickName },
+    });
 
     // 유효성 검사 중 하나라도 실패하면 종료
-    if(!isIdValid || !isEmailValid || !isPwValid || !isPw2Valid || !isNameValid || !isNicknameValid){
+    if (
+      !isIdValid ||
+      !isEmailValid ||
+      !isPwValid ||
+      !isPw2Valid ||
+      !isNameValid ||
+      !isNicknameValid
+    ) {
       return;
     }
 
     // 중복검사
-    if(!idDuple || !emailDuple || !nicknameDuple) {
+    if (!idDuple || !emailDuple || !nicknameDuple) {
       setCheckModalMessage("중복검사를 모두 완료해주세요.");
       setIsCheckModalOpen(true);
       return;
     }
 
     try {
-      const response = await AxiosApi.signup(inputUserId, inputPw, inputName, inputNickName, inputEmail, currentPic);
-      if (response.status === 201 
-          || response.status === 200) {
+      const response = await AxiosApi.signup(
+        inputUserId,
+        inputPw,
+        inputName,
+        inputNickName,
+        inputEmail,
+        currentPic
+      );
+      if (response.status === 201 || response.status === 200) {
         setCheckModalMessage("회원가입이 완료되었습니다.");
         setIsCheckModalOpen(true);
         setAllSuccess(true);
       }
     } catch (error) {
-      setCheckModalMessage("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setCheckModalMessage(
+        "회원가입 중 오류가 발생했습니다. 다시 시도해주세요."
+      );
       setIsCheckModalOpen(true);
     }
   };
@@ -253,7 +269,7 @@ export const Signup = () => {
 
   const closeCheckModal = () => {
     setIsCheckModalOpen(false);
-    if(allSuccess) navigate("/login");
+    if (allSuccess) navigate("/login");
   };
 
   return (
@@ -266,7 +282,7 @@ export const Signup = () => {
           <div className="input-container">
             <div className="textMessage">{idMsg}</div>
             <div className="inputWrapper">
-              <InputBox style={{width: "360px"}}>
+              <InputBox style={{ width: "360px" }}>
                 <div className="iconBox-left">
                   <VscAccount />
                 </div>
@@ -280,7 +296,7 @@ export const Signup = () => {
                   />
                 </div>
               </InputBox>
-              <button 
+              <button
                 className="duplicateButton"
                 onClick={handleIdDuplicate}
                 disabled={idDuple}
@@ -293,7 +309,7 @@ export const Signup = () => {
           <div className="input-container">
             <div className="textMessage">{emailMsg}</div>
             <div className="inputWrapper">
-              <InputBox style={{width: "360px"}}>
+              <InputBox style={{ width: "360px" }}>
                 <div className="iconBox-left">
                   <GoMail />
                 </div>
@@ -307,7 +323,7 @@ export const Signup = () => {
                   />
                 </div>
               </InputBox>
-              <button 
+              <button
                 className="duplicateButton"
                 onClick={handleEmailDuplicate}
                 disabled={emailDuple}
@@ -377,7 +393,7 @@ export const Signup = () => {
           <div className="input-container">
             <div className="textMessage">{nickNameMsg}</div>
             <div className="inputWrapper">
-              <InputBox style={{width: "360px"}}>
+              <InputBox style={{ width: "360px" }}>
                 <div className="iconBox-left">
                   <GoPencil />
                 </div>
@@ -391,7 +407,7 @@ export const Signup = () => {
                   />
                 </div>
               </InputBox>
-              <button 
+              <button
                 className="duplicateButton"
                 onClick={handleNicknameDuplicate}
                 disabled={nicknameDuple}
@@ -402,7 +418,10 @@ export const Signup = () => {
           </div>
 
           <div className="picture-box">
-            <div className="current-pic" onClick={() => setIsPicsModalOpen(true)}>
+            <div
+              className="current-pic"
+              onClick={() => setIsPicsModalOpen(true)}
+            >
               <img src={currentPic} alt="프로필 이미지" />
             </div>
             <button
@@ -425,10 +444,7 @@ export const Signup = () => {
           />
 
           {/* 완료 모달 */}
-          <CheckModal 
-            isOpen={isCheckModalOpen} 
-            onClose={closeCheckModal}
-          >
+          <CheckModal isOpen={isCheckModalOpen} onClose={closeCheckModal}>
             {checkModalMessage}
           </CheckModal>
         </SignupContainer>
