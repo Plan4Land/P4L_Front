@@ -56,6 +56,21 @@ export const themes = [
 
 export const cats = [""];
 
+export const types = [
+  {
+    code: "100",
+    name: "관광지",
+  },
+  {
+    code: "200",
+    name: "숙소",
+  },
+  {
+    code: "300",
+    name: "음식점",
+  },
+];
+
 export const areas = [
   {
     code: "1",

@@ -2,35 +2,25 @@ import styled from "styled-components";
 import { colors } from "./GlobalStyle";
 
 export const TourItemInfoBox = styled.div`
-   width: 80%;
+  width: 80%;
   margin: 0 auto;
   padding: 20px;
   border-radius: 10px;
-  .tour-title {
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 20px;
-}
+  border: 1px solid black;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  .tour-image {
+    width: 500px;
+    height: auto;
+    border-radius: 10px;
+  }
+  .item-map {
+    width: 500px;
+    border: 1px solid black;
+  }
 
-.tour-image {
-  display: block;
-  width: 500px;
-  height: auto;
-  margin: 0 auto 20px;
-  border-radius: 10px;
-}
-
-.tour-description {
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.tour-details {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.5;
-  padding: 15px;
-  border-radius: 8px;
-}
-
+  .tour-details {
+    grid-column: span 2;
+  }
 `;

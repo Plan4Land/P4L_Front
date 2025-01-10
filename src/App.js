@@ -32,21 +32,28 @@ function App() {
               <Route path="/ktxInquiry" element={<KtxInquiry />} />
               <Route path="/tourlist" element={<TourList />} />
               <Route path="/tourItemInfo" element={<TourItemInfo />} />
+              <Route path="/tourItemInfo/:id" element={<TourItemInfo />} />
               <Route path="/planninglist" element={<PlanningList />} />
               <Route path="/signup/terms" element={<TermsOfService />} />
               <Route path="/payment" element={<RequestPayment />} />
               <Route path="/test" element={<Test />} />
-              
+
               {/* 로그인 필요한 페이지 */}
-              <Route path="/makePlanning" element={
-                <ProtectedRoute>
-                  <MakePlanning />
-                </ProtectedRoute>} 
+              <Route
+                path="/makePlanning"
+                element={
+                  <ProtectedRoute>
+                    <MakePlanning />
+                  </ProtectedRoute>
+                }
               />
-              <Route path="/mypage" element={
-                <ProtectedRoute>
-                  <MyPageMain />
-                </ProtectedRoute>} 
+              <Route
+                path="/mypage"
+                element={
+                  <ProtectedRoute>
+                    <MyPageMain />
+                  </ProtectedRoute>
+                }
               />
             </Routes>
           </Router>

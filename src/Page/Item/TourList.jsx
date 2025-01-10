@@ -1,6 +1,6 @@
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { useState, useEffect } from "react";
-import { areas } from "../../Util/Common";
+import { areas, types } from "../../Util/Common";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Button, ToggleButton } from "../../Component/ButtonComponent";
 import {
@@ -408,15 +408,15 @@ export const TourList = () => {
             </h3>
             {isCategoryOpen && (
               <div>
-                {["관광지", "숙소", "음식점"].map((category) => (
+                {types.map((type) => (
                   <Button
-                    key={category}
-                    onClick={() => handleCategoryChange(category)}
+                    key={type.code}
+                    onClick={() => handleCategoryChange(type.code)}
                     className={`category-button ${
-                      selectedCategory === category ? "selected" : ""
+                      selectedCategory === type.code ? "selected" : ""
                     }`}
                   >
-                    {category}
+                    {type.name}
                   </Button>
                 ))}
               </div>
@@ -426,20 +426,24 @@ export const TourList = () => {
         <ItemList>
           <div className="tour-list">
             {travelSpots.map((spot) => {
-              // 각 여행지의 cat3 값을 찾기
               const cat3Name = ServiceCode.flatMap((cat) =>
                 cat.cat2List.flatMap((cat2) =>
                   cat2.cat3List.filter((cat3) => cat3.cat3 === spot.cat3)
                 )
-              ).map((cat3) => cat3.cat3Name)[0]; // 첫 번째로 일치하는 cat3Name을 반환
+              ).map((cat3) => cat3.cat3Name)[0];
+              const typeName = types.find(
+                (type) => type.code === spot.typeId
+              )?.name;
 
               return (
                 <TourItem
                   key={spot.id}
+                  id={spot.id}
                   thumbnail={spot.thumbnail}
                   title={spot.title}
                   address={spot.addr1 || "정보 없음"}
-                  subCategory={cat3Name || "정보 없음"} // cat3Name을 subCategory로 사용
+                  subCategory={cat3Name || "정보 없음"}
+                  type={typeName || "정보 없음"}
                 />
               );
             })}
