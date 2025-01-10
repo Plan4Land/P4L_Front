@@ -10,6 +10,7 @@ import {
 } from "../../Style/PlanningStyled";
 import { KakaoMap, SearchKakaoMap } from "../../Component/KakaoMapComponent";
 import { PlansComponent } from "../../Component/PlanningComponents/PlansComponent";
+import { ChatComponent } from "../../Component/PlanningComponents/ChatComponent";
 import { useEffect, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { ProfileImg } from "../../Component/ProfileImg";
@@ -20,17 +21,10 @@ import { useParams } from "react-router-dom";
 import { areas } from "../../Util/Common";
 import LikePlanning from "../../Img/likePlanning.png";
 import UnlikePlanning from "../../Img/unlikePlanning.png";
-import MenuIcon from "../../Img/menu-icon.png";
-import {
-  FaComment,
-  FaCommentDots,
-  FaTelegramPlane,
-  FaWhatsapp,
-  FaRegComment,
-} from "react-icons/fa";
 import { AiOutlineMessage } from "react-icons/ai";
-import { BiMessageSquare } from "react-icons/bi";
-import { MdMessage } from "react-icons/md";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import { BiLock, BiLockOpen } from "react-icons/bi";
+import { BiTrash } from "react-icons/bi"; // Boxicons Trash 아이콘
 
 // const plannerInfo = {
 //   title: "떠나요~ 두리서~",
@@ -186,24 +180,16 @@ export const Planning = () => {
   const [groupPlans, setGroupPlans] = useState({}); // 계획 정렬
   const [selectedPlan, setSelectedPlan] = useState({}); // date, planIndex, plan
   const [isEditting, setIsEditting] = useState(true);
-
-  useEffect(() => {
-    if (
-      currentAddedPlace.content &&
-      Object.keys(currentAddedPlace.content).length > 0
-    ) {
-      // currentAddedPlace가 유효하고, content가 비어있지 않으면 plans에 추가
-      setPlans((prevPlans) => [...prevPlans, currentAddedPlace]);
-      console.log("이게 추가될 일정", currentAddedPlace);
-      setCurrentAddedPlace({});
-      setSelectedPlan({});
-    }
-  }, [currentAddedPlace]);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [typingMsg, setTypingMsg] = useState("");
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const handleInputChange = (e) =>
     setSearchState({ ...searchState, keyword: e.target.value });
+
   const handleSearch = () =>
     setSearchState({ ...searchState, submittedKeyword: searchState.keyword });
+
   const closeMemo = () => {
     if (selectedPlan.date !== undefined) {
       setMemoState((prevState) => ({
@@ -221,6 +207,10 @@ export const Planning = () => {
       }));
     }
     setSelectedPlan({});
+  };
+
+  const handleBookmarked = () => {
+    setIsBookmarked(!isBookmarked);
   };
 
   useEffect(() => {
@@ -253,10 +243,24 @@ export const Planning = () => {
     }
   }, [plannerInfo]);
 
+  useEffect(() => {
+    if (
+      currentAddedPlace.content &&
+      Object.keys(currentAddedPlace.content).length > 0
+    ) {
+      // currentAddedPlace가 유효하고, content가 비어있지 않으면 plans에 추가
+      setPlans((prevPlans) => [...prevPlans, currentAddedPlace]);
+      console.log("이게 추가될 일정", currentAddedPlace);
+      setCurrentAddedPlace({});
+      setSelectedPlan({});
+    }
+  }, [currentAddedPlace]);
+
   useEffect(
     () => setSearchState({ keyword: "", submittedKeyword: "" }),
     [modals.addPlaceModal]
   );
+
   if (plannerInfo) {
     return (
       <div>
@@ -264,7 +268,8 @@ export const Planning = () => {
         <MainContainer onClick={() => closeMemo()}>
           <Info>
             <ProfileImg
-              file={plannerInfo.thumbnail}
+              // file={plannerInfo.thumbnail}
+              file={`/img/${plannerInfo.thumbnail}`}
               width={"250px"}
               height={"250px"}
             ></ProfileImg>
@@ -280,8 +285,37 @@ export const Planning = () => {
               </h3>
             </div>
             <div className="menu-icons">
-              <AiOutlineMessage className="menu-icon" />
+              {isBookmarked ? (
+                <FaBookmark
+                  className="menu-icon"
+                  title="북마크"
+                  onClick={() => handleBookmarked()}
+                />
+              ) : (
+                <FaRegBookmark
+                  className="menu-icon"
+                  title="북마크"
+                  onClick={() => handleBookmarked()}
+                />
+              )}
+              {plannerInfo.public ? (
+                <BiLockOpen className="menu-icon" title="공개/비공개" />
+              ) : (
+                <BiLock className="menu-icon" title="공개/비공개" />
+              )}
+              <BiTrash className="menu-icon" title="플래닝 삭제" />
+              <AiOutlineMessage
+                className="menu-icon"
+                title="채팅"
+                onClick={() => setIsChatOpen(!isChatOpen)}
+              />
             </div>
+            {isChatOpen && (
+              <ChatComponent
+                typingMsg={typingMsg}
+                setTypingMsg={setTypingMsg}
+              />
+            )}
           </Info>
           <Users>
             <UserProfile>

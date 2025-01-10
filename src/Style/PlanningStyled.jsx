@@ -28,12 +28,13 @@ export const Info = styled.div`
     position: absolute;
     right: 0;
     top: 25px;
-    width: 3rem;
 
     .menu-icon {
       font-size: 2rem;
       color: #666666;
-      stroke-width: 1;
+      cursor: pointer;
+      margin-right: 4px;
+      margin-left: 0.8vw;
     }
   }
 `;
@@ -385,5 +386,33 @@ export const DayToggleContainer = styled.div`
         padding: 6px;
       }
     }
+  }
+`;
+
+export const ChatContainer = styled.div`
+  display: flex;
+  position: fixed;
+  right: 10px;
+  top: 130px;
+  width: 300px;
+  height: 60vh;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  z-index: 99;
+  background-color: #fefff3;
+
+  .sendChat {
+    width: 100%;
+  }
+
+  textarea {
+    display: flex;
+    position: absolute;
+    width: 70%;
+    min-height: 20px;
+    max-height: 40px;
+    bottom: 0;
+    font-size: 14px;
+    resize: none;
   }
 `;
