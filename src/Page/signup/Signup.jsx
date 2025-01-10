@@ -1,21 +1,15 @@
-import { useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { Header, Footer } from "../../Component/GlobalComponent";
-import {
-  Center,
-  SignupContainer,
-  InputBox,
-  Button,
-  Pic,
-} from "../../Component/SignupComponent";
-import { ProfilePicModal } from "../../Component/SignupModalComponent";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import AxiosApi from "../../Api/AxiosApi";
+
+import { Header, Footer } from "../../Component/GlobalComponent";
+import { Center, SignupContainer, InputBox, Button } from "../../Component/SignupComponent";
+import { ProfilePicModal } from "../../Component/SignupModalComponent";
+import { CheckModal } from "../../Util/Modal";
 
 // icon
 import { VscAccount } from "react-icons/vsc";
 import { GoMail, GoPencil, GoLock, GoEye, GoEyeClosed } from "react-icons/go";
-
 
 export const Signup = () => {
   // input
@@ -43,9 +37,18 @@ export const Signup = () => {
   const nameRef = useRef(null);
   const nickNameRef = useRef(null);
 
+  // duplicate
+  const [idDuple, setIdDuple] = useState(false);
+  const [emailDuple, setEmailDuple] = useState(false);
+  const [nicknameDuple, setNicknameDuple] = useState(false);
+
   const [isPwShow, setIsPwShow] = useState(false);
   
-  const [isPicsModalOpen, setIsPicsModalOpen] = useState("");
+  const [isPicsModalOpen, setIsPicsModalOpen] = useState(false);
+  const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
+  const [checkModalMessage, setCheckModalMessage] = useState("");
+
+  const [allSuccess, setAllSuccess] = useState(false);
 
   const navigate = useNavigate();
 
@@ -65,22 +68,27 @@ export const Signup = () => {
       setIdMsg("");
       return true;
     }
-  }
+  };
+  useEffect(() => {
+    setIdDuple(false);
+    setIdMsg("");
+  }, [inputUserId]);
   // 아이디 중복 체크
   const handleIdDuplicate = async () => {
     // 유효성 검사 먼저 수행
-    const isValid = handleIdCheck({ target: { value: inputUserId } });
-    if (!isValid) {
-      return; // 유효성 검사 실패 시 중복 검사를 진행하지 않음
-    }
+    if (!handleIdCheck({ target: { value: inputUserId } })) return;
+
     // 유효성 통과하면 중복 검사 수행
     const response = await AxiosApi.memberIdExists(inputUserId);
     if (response.data) {
       setIdMsg("중복된 아이디입니다.");
+      setIdDuple(false);
     } else {
       setIdMsg("사용가능한 아이디입니다.");
+      setIdDuple(true);
     }
-  }
+  };
+
   
   // 이메일 체크
   const handleEmailCheck = (e) => {
@@ -98,22 +106,26 @@ export const Signup = () => {
       setEmailMsg("");
       return true;
     }
-  }
+  };
+  useEffect(() => {
+    setEmailDuple(false);
+    setEmailMsg("");
+  }, [inputEmail]);
   // 이메일 중복 체크
   const handleEmailDuplicate = async () => {
     // 유효성 검사 먼저 수행
-    const isValid = handleEmailCheck({ target: { value: inputEmail } });
-    if (!isValid) {
-      return; // 유효성 검사 실패 시 중복 검사를 진행하지 않음
-    }
+    if (!handleEmailCheck({ target: { value: inputEmail } })) return;
+
     // 유효성 통과하면 중복 검사 수행
     const response = await AxiosApi.memberEmailExists(inputEmail);
     if (response.data) {
       setEmailMsg("중복된 이메일입니다.");
+      setEmailDuple(false);
     } else {
       setEmailMsg("사용가능한 이메일입니다.");
+      setEmailDuple(true);
     }
-  }
+  };
 
   // 비밀번호 체크
   const handlePwCheck = (e) => {
@@ -148,7 +160,7 @@ export const Signup = () => {
       setPw2Msg("");
       return true;
     }
-  }
+  };
   
   // 이름 체크
   const handleNameCheck = (e) => {
@@ -162,7 +174,7 @@ export const Signup = () => {
       setNameMsg("");
       return true;
     }
-  }
+  };
 
   // 닉네임 체크
   const handleNicknameCheck = (e) => {
@@ -176,34 +188,48 @@ export const Signup = () => {
       setNickNameMsg("");
       return true;
     }
-  }
+  };
+  useEffect(() => {
+    setNicknameDuple(false);
+    setNickNameMsg("");
+  }, [inputNickName]);
   // 닉네임 중복 체크
   const handleNicknameDuplicate = async () => {
     // 유효성 검사 먼저 수행
-    const isValid = handleNicknameCheck({ target: { value: inputNickName } });
-    if (!isValid) {
-      return; // 유효성 검사 실패 시 중복 검사를 진행하지 않음
-    }
+    if (!handleNicknameCheck({ target: { value: inputNickName } })) return;
+
     // 유효성 통과하면 중복 검사 수행
     const response = await AxiosApi.memberNicknameExists(inputNickName);
     if (response.data) {
       setNickNameMsg("중복된 이메일입니다.");
+      setNicknameDuple(true);
+      return false;
     } else {
       setNickNameMsg("사용가능한 이메일입니다.");
+      setNicknameDuple(true);
+      return true;
     }
-  }
+  };
 
   // 회원가입 기능
   const onClickSignup = async () => {
-    // 체크 함수 한 번씩 실행
-    const isIdValid = handleIdDuplicate({ target: { value: inputUserId } });
-    const isEmailValid = handleEmailDuplicate({ target: { value: inputEmail } });
+    // 유효성 검사 한 번씩 실행
+    const isIdValid = handleIdCheck({ target: { value: inputUserId } });
+    const isEmailValid = handleEmailCheck({ target: { value: inputEmail } });
     const isPwValid = handlePwCheck({ target: { value: inputPw } });
     const isPw2Valid = handlePw2Check({ target: { value: inputPw2 } });
     const isNameValid = handleNameCheck({ target: { value: inputName } });
-    const isNicknameValid = handleNicknameDuplicate({ target: { value: inputNickName } });
-    // 하나라도 유효하지 않으면 메시지 표시 후 종료
+    const isNicknameValid = handleNicknameCheck({ target: { value: inputNickName } });
+
+    // 유효성 검사 중 하나라도 실패하면 종료
     if(!isIdValid || !isEmailValid || !isPwValid || !isPw2Valid || !isNameValid || !isNicknameValid){
+      return;
+    }
+
+    // 중복검사
+    if(!idDuple || !emailDuple || !nicknameDuple) {
+      setCheckModalMessage("중복검사를 모두 완료해주세요.");
+      setIsCheckModalOpen(true);
       return;
     }
 
@@ -211,17 +237,23 @@ export const Signup = () => {
       const response = await AxiosApi.signup(inputUserId, inputPw, inputName, inputNickName, inputEmail, currentPic);
       if (response.status === 201 
           || response.status === 200) {
-        alert("회원가입이 성공적으로 완료되었습니다.");
-        navigate("/login");
+        setCheckModalMessage("회원가입이 완료되었습니다.");
+        setIsCheckModalOpen(true);
+        setAllSuccess(true);
       }
     } catch (error) {
-      console.error("Error during signup: ", error);
-      alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setCheckModalMessage("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setIsCheckModalOpen(true);
     }
   };
 
   const handlePicSelect = (picName) => {
     setCurrentPic(`profile-pic/${picName}`);
+  };
+
+  const closeCheckModal = () => {
+    setIsCheckModalOpen(false);
+    if(allSuccess) navigate("/login");
   };
 
   return (
@@ -251,6 +283,7 @@ export const Signup = () => {
               <button 
                 className="duplicateButton"
                 onClick={handleIdDuplicate}
+                disabled={idDuple}
               >
                 중복확인
               </button>
@@ -277,6 +310,7 @@ export const Signup = () => {
               <button 
                 className="duplicateButton"
                 onClick={handleEmailDuplicate}
+                disabled={emailDuple}
               >
                 중복확인
               </button>
@@ -360,6 +394,7 @@ export const Signup = () => {
               <button 
                 className="duplicateButton"
                 onClick={handleNicknameDuplicate}
+                disabled={nicknameDuple}
               >
                 중복확인
               </button>
@@ -388,6 +423,14 @@ export const Signup = () => {
             onSelect={handlePicSelect}
             type="new"
           />
+
+          {/* 완료 모달 */}
+          <CheckModal 
+            isOpen={isCheckModalOpen} 
+            onClose={closeCheckModal}
+          >
+            {checkModalMessage}
+          </CheckModal>
         </SignupContainer>
       </Center>
       <Footer />
