@@ -26,6 +26,7 @@ export const Login = () => {
   const [pwResultModalOpen, setPwResultModalOpen] = useState(false);
 
   const [findIdResult, setFindIdResult] = useState("");
+  const [findPwResult, setFindPwResult] = useState("");
 
   const navigate = useNavigate();
 
@@ -95,6 +96,12 @@ export const Login = () => {
   const handleFindIdResultModal = (data) => {
     setFindIdResult(data);
     setFindIdResultModalOpen(true);
+  }
+
+  // 비밀번호 찾기 결과 모달
+  const handleFindPwResultModal = (data) => {
+    setFindPwResult(data);
+    setPwResultModalOpen(true);
   }
 
   return (
@@ -175,7 +182,7 @@ export const Login = () => {
           <FindPwModal
             open={pwModalOpen}
             close={()=>openModal(setPwModalOpen, false)}
-            openResult={()=>openModal(setPwResultModalOpen, true)}
+            openResult={handleFindPwResultModal}
             openFindUserId={()=>openModal(setFindIdModalOpen, true)}
           />
 
@@ -183,7 +190,7 @@ export const Login = () => {
           <ResultPwModal
             open={pwResultModalOpen}
             close={()=>openModal(setPwResultModalOpen, false)}
-            email="test123@gmail.com" // 나중에 이메일 넣어야 함.
+            email={findPwResult}
           />
 
         </SignupContainer>

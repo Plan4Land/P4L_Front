@@ -97,5 +97,13 @@ const AxiosApi = {
     }
     return await AxiosInstance.post("/member/find-id", memberInfo);
   },
+  // 회원 비밀번호 찾기
+  mbmerFindPassword: async (id, email) => {
+    const memberInfo = {
+      id: id,
+      email: email,
+    }
+    return await AxiosInstance.post("/member/find-password", memberInfo);
+  },
 }
 export default AxiosApi;
