@@ -1,8 +1,7 @@
 import * as PortOne from "@portone/browser-sdk/v2";
 import {Button} from "../../Component/ButtonComponent";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useAuth} from "../../Context/AuthContext";
-import {Footer, Header} from "../../Component/GlobalComponent";
 import {InputBox} from "../../Style/UserInfoEditStyle";
 //yarn add @portone/browser-sdk
 
@@ -11,17 +10,17 @@ const RequestPayment = () => {
   const [userPhone, setUserPhone] = useState("");
   const [userName, setUserName] = useState("");
   const [paySelect, setPaySelect] = useState("");
-  const user = useAuth();
+  const [userInfo, setUserInfo] = useState("");
 
-  const payList = ['kakao', 'card']
+  useEffect(() => {
+    const info = localStorage.getItem("user")
+    setUserInfo(JSON.parse(info))
+  }, []);
 
   const handleInputChange = (e, setState) => {
     setState(e.target.value);
   };
 
-  const [paymentStatus, setPaymentStatus] = useState({
-    status: "IDLE",
-  })
 
   const randomId = () => {
     return [...crypto.getRandomValues(new Uint32Array(2))]
@@ -37,7 +36,7 @@ const RequestPayment = () => {
     displayAmount: 1,
     currency: "KRW",
     customer: {
-      customerId: user.id,
+      customerId: userInfo.id,
       email: userEmail,
       phoneNumber: userPhone,
       fullName: userName,
@@ -65,7 +64,7 @@ const RequestPayment = () => {
     displayAmount: 1,
     currency: "KRW",
     customer: {
-      customerId: user.id,
+      customerId: userInfo.id,
     },
     offerPeriod: {
       interval: `${30}d`
@@ -78,29 +77,47 @@ const RequestPayment = () => {
     },
   }
 
-  const membership = {
-    storeId: process.env.REACT_APP_SHOP_ID,
-    channelKey: process.env.REACT_APP_SHOP_CHANNEL,
-    paymentId: "testpay1",
-    orderName: "testorder",
-    totalAmount: 4900,
-    currency: "CURRENCY_KRW",
-    payMethod: "EASY_PAY",
-  }
-
-  const onClickPayment = () => {
-    setPaymentStatus({status: "PENDING"})
-  }
-
 
   const onClickPay = async (req) => {
+    const now = new Date();
+    console.log(req.customer.customerId)
+
+    // expire_date는 31일 23시간 뒤
+    const expireDate = new Date(now);
+    expireDate.setDate(expireDate.getDate() + 31);
+    expireDate.setHours(23, 0, 0, 0);
+
+    // payment_date는 31일 뒤
+    const paymentDate = new Date(now);
+    paymentDate.setDate(paymentDate.getDate() + 31);
+    paymentDate.setHours(0, 0, 0, 0);
+
     console.log("클릭 시작", req.issueId)
     const rsp = await PortOne.requestIssueBillingKey(req);
     if (rsp.code !== undefined) {
       return alert(rsp.message);
     }
 
-    console.log(rsp.billingKey)
+
+
+    const newMembershipRsp = await fetch('http://localhost:5000/pay/new-membership',
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: req.customer.customerId,
+          billingKey: rsp.billingKey,
+          payType: paySelect,
+          payId: req.issueId,
+          payTime: now.toISOString(),
+          expireDate: expireDate.toISOString(),
+          paymentDate: paymentDate.toISOString(),
+        })
+      })
+
+    console.log(newMembershipRsp)
   };
 
 
