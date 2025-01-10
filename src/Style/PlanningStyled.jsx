@@ -23,12 +23,18 @@ export const Info = styled.div`
     margin: 3px;
   }
 
-  .menu-icon {
+  .menu-icons {
     display: flex;
     position: absolute;
-    right: 20px;
+    right: 0;
     top: 25px;
     width: 3rem;
+
+    .menu-icon {
+      font-size: 2rem;
+      color: #666666;
+      stroke-width: 1;
+    }
   }
 `;
 

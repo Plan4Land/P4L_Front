@@ -453,7 +453,7 @@ export const ProfilePicModal = (props) => {
   const addNewPic = (picture) => {
     addPicture(picture);
     close();
-  }
+  };
 
   const pictures = [
     { name: "basic1.png", alt: "기본1" },
@@ -469,11 +469,11 @@ export const ProfilePicModal = (props) => {
     if (file) {
       setSelectedImage(file);
     }
-  }
+  };
 
   const openFilePicker = () => {
     fileInputRef.current.click();
-  }
+  };
 
   return (
     <ModalStyle>
@@ -484,7 +484,11 @@ export const ProfilePicModal = (props) => {
         {open && (
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
             <h1 className="title">프로필 선택</h1>
-            <div className={type === "new" ? "picture-container-new" : "picture-container" }>
+            <div
+              className={
+                type === "new" ? "picture-container-new" : "picture-container"
+              }
+            >
               {pictures.map((picture, index) => (
                 <div className="picture-box" key={index}>
                   <img
@@ -496,7 +500,7 @@ export const ProfilePicModal = (props) => {
               ))}
               {type === "edit" && (
                 <>
-                  <input 
+                  <input
                     ref={fileInputRef}
                     type="file"
                     accept="image/*"
@@ -505,7 +509,7 @@ export const ProfilePicModal = (props) => {
                   />
                   <div className="picture-box">
                     {selectedImage && (
-                      <img 
+                      <img
                         src={URL.createObjectURL(selectedImage)}
                         alt="Selected"
                         onClick={() => addNewPic(selectedImage)}
@@ -513,11 +517,8 @@ export const ProfilePicModal = (props) => {
                     )}
                   </div>
                   <div className="picture-box" />
-                  <div 
-                    className="picture-box" 
-                    onClick={openFilePicker}
-                  >
-                    <img 
+                  <div className="picture-box" onClick={openFilePicker}>
+                    <img
                       src="profile-pic/plus.png"
                       alt="이미지 선택"
                       className="plusPic"

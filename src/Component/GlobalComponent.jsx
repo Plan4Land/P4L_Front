@@ -14,7 +14,7 @@ export const Header = () => {
   const handleLogout = async () => {
     try {
       const response = await AxiosApi.logout(user.id);
-      if(response.status === 204) {
+      if (response.status === 204) {
         logout();
         navigate("/login");
       } else {
@@ -23,7 +23,6 @@ export const Header = () => {
     } catch (error) {
       console.error("Logout error:", error);
     }
-    
   };
 
   const isActive = (path, query = "") => {
@@ -79,7 +78,7 @@ export const Header = () => {
               <div
                 className="profile-img"
                 style={{
-                  backgroundImage: `url(${user.imgPath})`,
+                  backgroundImage: `url(/${user.imgPath})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}

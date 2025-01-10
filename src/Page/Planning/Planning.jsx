@@ -21,6 +21,16 @@ import { areas } from "../../Util/Common";
 import LikePlanning from "../../Img/likePlanning.png";
 import UnlikePlanning from "../../Img/unlikePlanning.png";
 import MenuIcon from "../../Img/menu-icon.png";
+import {
+  FaComment,
+  FaCommentDots,
+  FaTelegramPlane,
+  FaWhatsapp,
+  FaRegComment,
+} from "react-icons/fa";
+import { AiOutlineMessage } from "react-icons/ai";
+import { BiMessageSquare } from "react-icons/bi";
+import { MdMessage } from "react-icons/md";
 
 // const plannerInfo = {
 //   title: "떠나요~ 두리서~",
@@ -269,7 +279,9 @@ export const Planning = () => {
                 {new Date(plannerInfo.endDate).toLocaleDateString()}
               </h3>
             </div>
-            <img src={MenuIcon} alt="" className="menu-icon" />
+            <div className="menu-icons">
+              <AiOutlineMessage className="menu-icon" />
+            </div>
           </Info>
           <Users>
             <UserProfile>
