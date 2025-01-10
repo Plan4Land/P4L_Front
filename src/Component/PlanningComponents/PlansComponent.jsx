@@ -88,8 +88,8 @@ export const PlansComponent = ({
       const dates = [];
       let currentDate = new Date(start);
       let lastDate = new Date(end);
-      currentDate.setDate(currentDate.getDate() + 1);
-      lastDate.setDate(lastDate.getDate() + 1);
+      currentDate.setDate(currentDate.getDate());
+      lastDate.setDate(lastDate.getDate());
       while (currentDate <= lastDate) {
         dates.push(new Date(currentDate).toISOString().split("T")[0]); // YYYY-MM-DD 포맷
         // dates.push(new Date(currentDate));
@@ -174,7 +174,7 @@ export const PlansComponent = ({
                       }}
                       onClick={(e) => {
                         if (memoState.isOpened) {
-                          e.stopPropagation();
+                          // e.stopPropagation();
                           return;
                         }
                         setSelectedPlan({ date, planIndex, plan });
