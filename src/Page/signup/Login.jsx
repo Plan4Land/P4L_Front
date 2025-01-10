@@ -25,6 +25,9 @@ export const Login = () => {
   const [pwModalOpen, setPwModalOpen] = useState(false);
   const [pwResultModalOpen, setPwResultModalOpen] = useState(false);
 
+  const [findIdResult, setFindIdResult] = useState("");
+  const [findPwResult, setFindPwResult] = useState("");
+
   const navigate = useNavigate();
 
   const { login } = useAuth();
@@ -87,6 +90,18 @@ export const Login = () => {
   // 모달 열고 닫기
   const openModal = (modal, state) => {
     modal(state);
+  }
+
+  // 아이디 찾기 결과 모달
+  const handleFindIdResultModal = (data) => {
+    setFindIdResult(data);
+    setFindIdResultModalOpen(true);
+  }
+
+  // 비밀번호 찾기 결과 모달
+  const handleFindPwResultModal = (data) => {
+    setFindPwResult(data);
+    setPwResultModalOpen(true);
   }
 
   return (
@@ -152,14 +167,14 @@ export const Login = () => {
           <FindUserIdModal
             open={findIdModalOpen}
             close={()=>openModal(setFindIdModalOpen, false)}
-            openResult={()=>openModal(setFindIdResultModalOpen, true)}
+            openResult={handleFindIdResultModal}
           />
 
           {/* 아이디 찾기 결과 모달 */}
           <ResultUserIdModal
             open={findIdResultModalOpen}
             close={()=>openModal(setFindIdResultModalOpen, false)}
-            userId="test123" // 나중에 아이디 넣어야 함.
+            userId={findIdResult}
             openFindPw={()=>openModal(setPwModalOpen, true)}
           />
           
@@ -167,7 +182,7 @@ export const Login = () => {
           <FindPwModal
             open={pwModalOpen}
             close={()=>openModal(setPwModalOpen, false)}
-            openResult={()=>openModal(setPwResultModalOpen, true)}
+            openResult={handleFindPwResultModal}
             openFindUserId={()=>openModal(setFindIdModalOpen, true)}
           />
 
@@ -175,7 +190,7 @@ export const Login = () => {
           <ResultPwModal
             open={pwResultModalOpen}
             close={()=>openModal(setPwResultModalOpen, false)}
-            email="test123@gmail.com" // 나중에 이메일 넣어야 함.
+            email={findPwResult}
           />
 
         </SignupContainer>

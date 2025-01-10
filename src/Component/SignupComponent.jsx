@@ -113,6 +113,10 @@ export const SignupContainer = styled.div`
     &:hover {
       background-color: rgb(0, 160, 0);
     }
+    &:disabled {
+      background-color: #bbb;
+      cursor: default;
+    }
   }
 `;
 

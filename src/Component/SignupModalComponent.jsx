@@ -1,11 +1,13 @@
 import styled, { css } from "styled-components";
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import emailjs from "emailjs-com";
 
 // icon
 import { GoMail, GoPencil } from "react-icons/go";
 import { IoClose } from "react-icons/io5";
 import { VscAccount } from "react-icons/vsc";
+import AxiosApi from "../Api/AxiosApi";
 
 export const InputBox = styled.div`
   display: flex;
@@ -173,10 +175,16 @@ export const FindUserIdModal = (props) => {
     setState(e.target.value);
   };
 
-  const onClickFindUserId = () => {
-    // 아이디 찾기 기능 구현
-    openResult();
-    handleCloseModal();
+  const onClickFindUserId = async () => {
+    try {
+      const response = await AxiosApi.memberFindId(inputName, inputEmail);
+      if(response.data) {
+        openResult(response.data);
+        handleCloseModal();
+      }
+    } catch (erorr) {
+      setTextMessage("해당 회원이 존재하지 않습니다.");
+    }
   };
 
   const handleBackgroundClick = (e) => {
@@ -189,6 +197,13 @@ export const FindUserIdModal = (props) => {
     setInputName("");
     setInputEmail("");
   };
+
+  // 엔터로 버튼 클릭
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      onClickFindUserId();
+    }
+  }
 
   return (
     <ModalStyle>
@@ -211,6 +226,7 @@ export const FindUserIdModal = (props) => {
                     placeholder="이름 입력"
                     value={inputName}
                     onChange={(e) => handleInputChange(e, setInputName)}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </InputBox>
@@ -224,6 +240,7 @@ export const FindUserIdModal = (props) => {
                     placeholder="이메일 입력"
                     value={inputEmail}
                     onChange={(e) => handleInputChange(e, setInputEmail)}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </InputBox>
@@ -311,22 +328,62 @@ export const FindPwModal = (props) => {
     setState(e.target.value);
   };
 
-  const onClickFindPw = () => {
-    // 비밀번호 찾기 기능 구현
-    openResult();
-    handleCloseModal();
+  // 비밀번호 찾기 기능
+  const onClickFindPw = async () => {
+    try {
+      const response = await AxiosApi.mbmerFindPassword(inputUserId, inputEmail);
+      if (response.data) {
+        sendEmail();
+      }
+    } catch (error) {
+      setTextMessage("해당 회원이 존재하지 않습니다.");
+    }
+    
   };
 
+  // 이메일 보내기
+  const sendEmail = () => {
+    const templateParams = {
+      to_email: inputEmail,
+      from_name: "plan4land",
+      message: "test 메시지 입니다.",
+    };
+
+    emailjs
+      .send(
+        "plan4land",  // service id
+        "template_59cggwi", // template id
+        templateParams,
+        "26R74sBvTB5bxhbNn",  // public-key
+      )
+      .then((response) => {
+        openResult(inputEmail);
+        handleCloseModal();
+      })
+      .catch((error) => {
+        setTextMessage("이메일 발송에 실패했습니다. 관리자에게 문의해주세요.");
+      })
+  };
+
+  // 아이디 찾기로 이동
   const onClickFindUserId = () => {
     openFindUserId();
     handleCloseModal();
   };
 
+  // 모달 닫기
   const handleCloseModal = () => {
     close();
     setInputUserId("");
     setInputEmail("");
   };
+
+  // 엔터로 버튼 클릭
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      onClickFindPw();
+    }
+  }
 
   return (
     <ModalStyle>
@@ -349,6 +406,7 @@ export const FindPwModal = (props) => {
                     placeholder="아이디 입력"
                     value={inputUserId}
                     onChange={(e) => handleInputChange(e, setInputUserId)}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </InputBox>
@@ -362,6 +420,7 @@ export const FindPwModal = (props) => {
                     placeholder="이메일 입력"
                     value={inputEmail}
                     onChange={(e) => handleInputChange(e, setInputEmail)}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </InputBox>
@@ -395,6 +454,7 @@ export const FindPwModal = (props) => {
 // 비밀번호 찾기 결과 모달
 export const ResultPwModal = (props) => {
   const { open, close, email } = props;
+  
 
   const handleBackgroundClick = (e) => {
     e.stopPropagation(); // 내부 클릭 시 닫히지 않게 설정
