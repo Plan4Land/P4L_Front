@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { GoMail, GoPencil } from "react-icons/go";
 import { IoClose } from "react-icons/io5";
 import { VscAccount } from "react-icons/vsc";
+import AxiosApi from "../Api/AxiosApi";
 
 export const InputBox = styled.div`
   display: flex;
@@ -173,10 +174,16 @@ export const FindUserIdModal = (props) => {
     setState(e.target.value);
   };
 
-  const onClickFindUserId = () => {
-    // 아이디 찾기 기능 구현
-    openResult();
-    handleCloseModal();
+  const onClickFindUserId = async () => {
+    try {
+      const response = await AxiosApi.memberFindId(inputName, inputEmail);
+      if(response.data) {
+        openResult(response.data);
+        handleCloseModal();
+      }
+    } catch (erorr) {
+      setTextMessage("해당 회원이 존재하지 않습니다.");
+    }
   };
 
   const handleBackgroundClick = (e) => {
@@ -189,6 +196,13 @@ export const FindUserIdModal = (props) => {
     setInputName("");
     setInputEmail("");
   };
+
+  // 엔터로 버튼 클릭
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      onClickFindUserId();
+    }
+  }
 
   return (
     <ModalStyle>
@@ -211,6 +225,7 @@ export const FindUserIdModal = (props) => {
                     placeholder="이름 입력"
                     value={inputName}
                     onChange={(e) => handleInputChange(e, setInputName)}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </InputBox>
@@ -224,6 +239,7 @@ export const FindUserIdModal = (props) => {
                     placeholder="이메일 입력"
                     value={inputEmail}
                     onChange={(e) => handleInputChange(e, setInputEmail)}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </InputBox>

@@ -89,5 +89,13 @@ const AxiosApi = {
   memberNicknameExists: async (nickname) => {
     return await AxiosInstance.post(`/member/nicknameExists/${nickname}`);
   },
+  // 회원 아이디 찾기
+  memberFindId: async (name, email) => {
+    const memberInfo = {
+      name: name,
+      email: email,
+    }
+    return await AxiosInstance.post("/member/find-id", memberInfo);
+  },
 }
 export default AxiosApi;
