@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   MyPageMainContainer,
+  UserMain,
   UserInfo,
+  UserPlanning,
   FollowList,
 } from "../../Style/MyPageMainStyled";
 import UserInfoValidate from "./UserInfoValidate";
@@ -60,18 +62,13 @@ export const MyPageMain = () => {
         </div>
         <div className="MyPageMenu">
           {!selectedMenu && (
+            <UserMain>
             <UserInfo>
               <div className="ProfileImg"></div>
               <div className="UserExplain">
-                <div className="UserDetail">
-                  <span className="label">닉네임:</span>
-                  <span className="value">홍길동</span>
-                </div>
-                <div className="UserDetail">
-                  <span className="label">아이디:</span>
-                  <span className="value">honggildong</span>
-                </div>
-                <div className="UserDetail" onClick={handleUserDetailClick}>
+                <p>닉네임: 어쩌구</p>
+                <p>아이디: 뭐뭐</p>
+                <div className="follow"  onClick={handleUserDetailClick}>
                   <span className="label">팔로잉:</span>
                   <span className="value">150</span>
                   <span className="label">팔로워:</span>
@@ -79,8 +76,20 @@ export const MyPageMain = () => {
                 </div>
               </div>
             </UserInfo>
+            <UserPlanning>
+<p>여기에 플래닝 리스트?</p>
+            </UserPlanning>
+            </UserMain>
           )}
-          <CheckModal isOpen={isModalOpen} onClose={closeModal}>
+          
+          
+          {selectedMenu === "내 플래닝" && <MyPlanningList />}
+          {selectedMenu === "좋아요 관광지"}
+          {selectedMenu === "좋아요 플래닝"}
+          {selectedMenu === "내 정보 수정" && <UserInfoValidate />}
+        </div>
+      </MyPageMainContainer>
+      <CheckModal isOpen={isModalOpen} onClose={closeModal}>
             <FollowList>
               <div className="tabs">
                 <button
@@ -119,12 +128,6 @@ export const MyPageMain = () => {
               </div>
             </FollowList>
           </CheckModal>
-          {selectedMenu === "내 플래닝" && <MyPlanningList />}
-          {selectedMenu === "좋아요 관광지"}
-          {selectedMenu === "좋아요 플래닝"}
-          {selectedMenu === "내 정보 수정" && <UserInfoValidate />}
-        </div>
-      </MyPageMainContainer>
       <Footer />
     </>
   );

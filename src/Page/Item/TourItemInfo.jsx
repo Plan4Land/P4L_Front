@@ -53,8 +53,7 @@ export const TourItemInfo = ({ spotId }) => {
       try {
         const data = await TourItemApi.getSpotDetails(id);
         console.log(data); // 데이터 구조 확인
-        setSpotDetails(data.spotDetails);
-        setBookmarkCount(data.bookmarkCount);
+        setSpotDetails(data);
       } catch (error) {
         console.error("여행지 상세 정보 조회 오류:", error);
       }
@@ -87,7 +86,7 @@ export const TourItemInfo = ({ spotId }) => {
               <h1 className="tour-title">{spotDetails.title}</h1>
               <p>주소: {spotDetails.addr1 || "정보 없음"}</p>
               <p>연락처: {spotDetails.tel || "정보 없음"}</p>
-              <p>북마크 수: {bookmarkCount}</p>
+              <p>북마크 수: {spotDetails.bookmark}</p>
             </div>
             <div className="item-map">
               <p>위치 지도</p>

@@ -17,41 +17,38 @@ export const MyPageMainContainer = styled.div`
     border: 1px solid black;
   }
 `;
-export const UserInfo = styled.div`
+export const UserMain = styled.div`
   width: 100%;
   height: 600px;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+`;
+export const UserInfo = styled.div`
+width: 100%;
+height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
   gap: 20px;
   .ProfileImg {
-    height: 300px;
-    width: 300px;
+    height: 100px;
+    width: 100px;
     border: 1px solid black;
     border-radius: 50%;
   }
-  .UserExplain {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .UserDetail {
-    margin-bottom: 10px;
-  }
-  .UserDetail:last-child {
+  .follow {
     cursor: pointer;
   }
-
-  .label {
-    font-weight: bold;
-    margin-right: 5px;
-  }
-
-  .value {
-    color: #333;
-  }
 `;
+export const UserPlanning = styled.div`
+width: 100%;
+height: 100%;
+  border: 1px solid black;
+`
+
 
 export const FollowList = styled.div`
   width: 500px;
