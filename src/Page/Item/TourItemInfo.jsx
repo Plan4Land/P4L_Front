@@ -12,19 +12,9 @@ export const TourItemInfo = () => {
   const { id } = useParams();
   const { user } = useAuth(); // useAuth 훅을 통해 user 객체 가져오기
   const [spotDetails, setSpotDetails] = useState(null);
+  const [bookmarkCount, setBookmarkCount] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
-
-  const checkBookmarkStatus = async () => {
-    try {
-      if (user?.id) {
-        const response = await BookmarkApi.getBookmarkStatus(user.id, id); // 북마크 상태 확인 API 호출
-        setIsBookmarked(response.data); // isBookmarked 상태 업데이트
-      }
-    } catch (error) {
-      console.error("북마크 상태 확인 실패:", error);
-    }
-  };
-
+  
   // 북마크 상태 변경 함수
   const toggleBookmark = async () => {
     try {
@@ -44,11 +34,13 @@ export const TourItemInfo = () => {
         );
         console.log("북마크 삭제 결과:", result);
         setIsBookmarked(false);
+        setBookmarkCount((prev) => prev - 1);
       } else {
         // 북마크 추가
         const result = await BookmarkApi.addBookmark(user.id, spotDetails.id);
         console.log("북마크 추가 결과:", result);
         setIsBookmarked(true);
+        setBookmarkCount((prev) => prev + 1);
       }
     } catch (error) {
       console.error("북마크 상태 변경 실패:", error);
@@ -60,20 +52,19 @@ export const TourItemInfo = () => {
     const fetchSpotDetails = async () => {
       try {
         const data = await TourItemApi.getSpotDetails(id);
-        console.log(data); // 데이터 구조 확인
         setSpotDetails(data);
+
+        if (user?.id) {
+          const bookmarkStatus = await BookmarkApi.getBookmarkStatus(user.id, id);
+          setIsBookmarked(bookmarkStatus); 
+        }
       } catch (error) {
         console.error("여행지 상세 정보 조회 오류:", error);
       }
     };
 
     fetchSpotDetails();
-  }, [id]);
-
-  // 컴포넌트가 로드되었을 때 북마크 상태 확인
-  useEffect(() => {
-    checkBookmarkStatus();
-  }, [user, id]); // user와 id가 변경될 때마다 호출
+  }, [id, user]);
 
   if (!spotDetails) {
     return <div>Loading...</div>;
