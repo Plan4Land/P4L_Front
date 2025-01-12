@@ -55,4 +55,17 @@ export const BookmarkApi = {
       throw error;
     }
   },
+
+    // 북마크 상태 확인
+    getBookmarkStatus: async (memberId, spotId) => {
+      try {
+        const response = await AxiosInstance.get("/api/bookmarks/status", {
+          params: { memberId, spotId },
+        });
+        return response.data; 
+      } catch (error) {
+        console.error("북마크 상태 조회 실패:", error);
+        throw error;
+      }
+    }
 };

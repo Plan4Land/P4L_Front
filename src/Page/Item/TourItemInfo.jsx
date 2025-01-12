@@ -8,12 +8,22 @@ import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-ico
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth } from "../../Context/AuthContext";
 
-export const TourItemInfo = ({ spotId }) => {
+export const TourItemInfo = () => {
   const { id } = useParams();
   const { user } = useAuth(); // useAuth 훅을 통해 user 객체 가져오기
   const [spotDetails, setSpotDetails] = useState(null);
-  const [bookmarkCount, setBookmarkCount] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
+
+  const checkBookmarkStatus = async () => {
+    try {
+      if (user?.id) {
+        const response = await BookmarkApi.getBookmarkStatus(user.id, id); // 북마크 상태 확인 API 호출
+        setIsBookmarked(response.data); // isBookmarked 상태 업데이트
+      }
+    } catch (error) {
+      console.error("북마크 상태 확인 실패:", error);
+    }
+  };
 
   // 북마크 상태 변경 함수
   const toggleBookmark = async () => {
@@ -34,13 +44,11 @@ export const TourItemInfo = ({ spotId }) => {
         );
         console.log("북마크 삭제 결과:", result);
         setIsBookmarked(false);
-        setBookmarkCount((prev) => prev - 1);
       } else {
         // 북마크 추가
         const result = await BookmarkApi.addBookmark(user.id, spotDetails.id);
         console.log("북마크 추가 결과:", result);
         setIsBookmarked(true);
-        setBookmarkCount((prev) => prev + 1);
       }
     } catch (error) {
       console.error("북마크 상태 변경 실패:", error);
@@ -61,6 +69,11 @@ export const TourItemInfo = ({ spotId }) => {
 
     fetchSpotDetails();
   }, [id]);
+
+  // 컴포넌트가 로드되었을 때 북마크 상태 확인
+  useEffect(() => {
+    checkBookmarkStatus();
+  }, [user, id]); // user와 id가 변경될 때마다 호출
 
   if (!spotDetails) {
     return <div>Loading...</div>;
