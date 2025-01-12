@@ -160,6 +160,8 @@ export const Planning = () => {
   const [modals, setModals] = useState({
     userModal: false, // 초대된 users 모달 open 여부
     addPlaceModal: false, // 장소 추가 모달 open 여부
+    public: false,
+    deletePlanning: false,
   });
   const [memoState, setMemoState] = useState({
     isClicked: [], // 메모마다 open 여부
@@ -299,11 +301,38 @@ export const Planning = () => {
                 />
               )}
               {plannerInfo.public ? (
-                <BiLockOpen className="menu-icon" title="공개/비공개" />
+                <BiLockOpen
+                  className="menu-icon"
+                  title="공개/비공개"
+                  onClick={() =>
+                    setModals((prevModals) => ({
+                      ...prevModals,
+                      public: true,
+                    }))
+                  }
+                />
               ) : (
-                <BiLock className="menu-icon" title="공개/비공개" />
+                <BiLock
+                  className="menu-icon"
+                  title="공개/비공개"
+                  onClick={() =>
+                    setModals((prevModals) => ({
+                      ...prevModals,
+                      public: true,
+                    }))
+                  }
+                />
               )}
-              <BiTrash className="menu-icon" title="플래닝 삭제" />
+              <BiTrash
+                className="menu-icon"
+                title="플래닝 삭제"
+                onClick={() =>
+                  setModals((prev) => ({
+                    ...prev,
+                    deletePlanning: true,
+                  }))
+                }
+              />
               <AiOutlineMessage
                 className="menu-icon"
                 title="채팅"
@@ -434,6 +463,37 @@ export const Planning = () => {
               setPlans={setPlans}
             />
           </CloseModal>
+        )}
+        {modals.public && (
+          <Modal
+            isOpen={modals.public}
+            onClose={() => setModals((prev) => ({ ...prev, public: false }))}
+            onConfirm={() => {
+              setPlannerInfo((prevInfo) => ({
+                ...prevInfo,
+                public: !prevInfo.public,
+              }));
+              setModals((prev) => ({ ...prev, public: false }));
+            }}
+          >
+            <p>
+              {plannerInfo.public === true ? "비공개" : "공개"}로
+              전환하시겠습니까?
+            </p>
+          </Modal>
+        )}
+        {modals.deletePlanning && (
+          <Modal
+            isOpen={modals.deletePlanning}
+            onClose={() =>
+              setModals((prev) => ({ ...prev, deletePlanning: false }))
+            }
+            onConfirm={() => {
+              setModals((prev) => ({ ...prev, deletePlanning: false }));
+            }}
+          >
+            <p>플래닝을 삭제하시겠습니까?</p>
+          </Modal>
         )}
         <Footer />
       </div>

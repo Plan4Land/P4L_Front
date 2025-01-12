@@ -403,16 +403,66 @@ export const ChatContainer = styled.div`
 
   .sendChat {
     width: 100%;
-  }
-
-  textarea {
     display: flex;
     position: absolute;
-    width: 70%;
-    min-height: 20px;
-    max-height: 40px;
+    justify-content: space-between;
     bottom: 0;
-    font-size: 14px;
-    resize: none;
+    margin-bottom: 8px;
+
+    textarea {
+      width: 15rem;
+      min-height: 40px;
+      /* max-height: 70px; */
+      font-size: 14px;
+      padding: 4px;
+      box-sizing: border-box;
+      resize: none;
+
+      scrollbar-width: thin;
+      scrollbar-color: #ccc #f0f0f0;
+
+      /* &::-webkit-scrollbar {
+        width: 6px;
+      } */
+      /* &::-webkit-scrollbar-track {
+        background: #f0f0f0;
+      } */
+      /* &::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 10px;
+        border: 2px solid #f0f0f0;
+      } */
+      /* &::-webkit-scrollbar-thumb:hover {
+        background-color: #b3b3b3;
+      } */
+    }
+
+    button {
+      width: 2.5rem;
+      margin-right: 11px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-radius: 7px;
+      background-color: ${colors.colorB};
+      border: 1px solid ${colors.colorA};
+      color: #e4f3e2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &:disabled {
+        background-color: #ccc;
+        color: #666;
+        cursor: default;
+      }
+
+      svg {
+        font-size: 1.3rem;
+      }
+    }
   }
 `;
