@@ -25,6 +25,7 @@ import { AiOutlineMessage } from "react-icons/ai";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { BiLock, BiLockOpen } from "react-icons/bi";
 import { BiTrash } from "react-icons/bi"; // Boxicons Trash 아이콘
+import { useAuth } from "../../Context/AuthContext";
 
 // const plannerInfo = {
 //   title: "떠나요~ 두리서~",
@@ -151,6 +152,7 @@ const plansEx = [
 
 export const Planning = () => {
   const { plannerId } = useParams();
+  const { user } = useAuth();
   const [plannerInfo, setPlannerInfo] = useState();
   const [areaState, setAreaState] = useState({
     area: "",
@@ -183,7 +185,7 @@ export const Planning = () => {
   const [selectedPlan, setSelectedPlan] = useState({}); // date, planIndex, plan
   const [isEditting, setIsEditting] = useState(true);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(null);
   const [inputMsg, setInputMsg] = useState(""); // 입력 메시지
   const [chatList, setChatList] = useState([]); // 채팅 글 목록
   const [socketConnected, setSocketConnected] = useState(false); // 웹소켓 연결 여부
@@ -215,7 +217,13 @@ export const Planning = () => {
     setSelectedPlan({});
   };
 
-  const handleBookmarked = () => {
+  const handleBookmarked = async () => {
+    console.log("북마크 상태 : ", isBookmarked);
+    if (isBookmarked) {
+      await PlanningApi.deleteBookmarked(user.id, plannerId);
+    } else {
+      await PlanningApi.putBookmarked(user.id, plannerId);
+    }
     setIsBookmarked(!isBookmarked);
   };
 
@@ -223,12 +231,9 @@ export const Planning = () => {
   useEffect(() => {
     if (
       plannerInfo &&
-      (plannerInfo.ownerNickname ===
-        JSON.parse(localStorage.getItem("user")).nickname ||
+      (plannerInfo.ownerNickname === user.nickname ||
         plannerInfo.participants.some(
-          (participant) =>
-            participant.nickname ===
-            JSON.parse(localStorage.getItem("user")).nickname
+          (participant) => participant.nickname === user.nickname
         )) &&
       !ws.current
     ) {
@@ -250,6 +255,15 @@ export const Planning = () => {
         console.log("플래너 불러오는 중 에러", e);
       }
     };
+    const fetchIsBookmarked = async () => {
+      try {
+        const response = await PlanningApi.getIsBookmarked(user.id, plannerId);
+        setIsBookmarked(response);
+        console.log("isBookmarked : ", response);
+      } catch (e) {
+        console.log("북마크 여부 조회 중 에러", e);
+      }
+    };
     const fetchChatMsg = async () => {
       try {
         const response = await PlanningApi.getChatMsgs(plannerId);
@@ -260,9 +274,10 @@ export const Planning = () => {
       }
     };
     fetchPlanner();
+    fetchIsBookmarked();
     fetchChatMsg();
     setPlans(plansEx);
-    setSender(JSON.parse(localStorage.getItem("user")).nickname);
+    setSender(user.nickname);
   }, [plannerId]);
 
   useEffect(() => {
