@@ -91,7 +91,7 @@ export const MyPageMain = () => {
                 <div
                   className="ProfileImg"
                   style={{
-                    backgroundImage: `url(/${user.imgPath})`,
+                    backgroundImage: `url(${user.imgPath})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                   }}

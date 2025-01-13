@@ -6,7 +6,7 @@ import AxiosApi from "../../Api/AxiosApi";
 import { storage } from "../../Api/Firebase";
 
 const UserInfoEdit = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [userId, setUserId] = useState("test1");
   const [userPw, setUserPw] = useState("");
   const [userPwCheck, setUserPwCheck] = useState("");
@@ -64,6 +64,11 @@ const UserInfoEdit = () => {
       console.log(rsp);
       if (rsp.data) {
         alert("회원정보가 수정되었습니다.");
+        updateUser({
+          nickName: nickName,
+          email,
+          imgPath: currentPic,
+        });
       }
     } catch (e) {
       console.error("Error during signup: ", e);
