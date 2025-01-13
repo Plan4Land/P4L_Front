@@ -12,7 +12,9 @@ import {
   InvitePlanning,
 } from "../../Style/MyPageMainStyled";
 import UserInfoValidate from "./UserInfoValidate";
+import { MyBookmarkTourItem } from "./MyBookmarkTourItem";
 import { CheckModal } from "../../Util/Modal";
+import { useAuth } from "../../Context/AuthContext";
 
 export const MyPageMain = () => {
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
@@ -20,6 +22,7 @@ export const MyPageMain = () => {
   const [selectedTab, setSelectedTab] = useState("followings");
   const [followings, setFollowings] = useState(["사용자1", "사용자2"]);
   const [followers, setFollowers] = useState(["사용자4", "사용자5"]);
+  const { user } = useAuth();
   const [invitedPlannings, setInvitedPlannings] = useState([
     { title: "전주 여행", owner: "aaa" },
     { title: "대전 여행", owner: "bbb" },
@@ -85,17 +88,22 @@ export const MyPageMain = () => {
           {!selectedMenu && (
             <UserMain>
               <UserInfo>
-                <div className="ProfileImg"></div>
+                <div
+                  className="ProfileImg"
+                  style={{
+                    backgroundImage: `url(/${user.imgPath})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                />
                 <div className="UserExplain">
-                  <p>닉네임: 어쩌구</p>
-                  <p>아이디: 뭐뭐</p>
+                  <p>닉네임: {user.nickname}</p>
+                  <p>아이디: {user.id}</p>
                   <div className="follow" onClick={openFollowModal}>
-                    <span className="label">팔로잉:</span>
-                    <span className="value">150</span>
-                    <span className="label">팔로워:</span>
-                    <span className="value">200</span>
+                    <p>팔로잉: 숫자 팔로워: 숫자</p>
                   </div>
                 </div>
+
                 <div className="planningButton">
                   <Link to={"/makeplanning"}>
                     <Button>플래닝 만들기</Button>
@@ -109,9 +117,10 @@ export const MyPageMain = () => {
               </UserPlanning>
             </UserMain>
           )}
-          {selectedMenu === "좋아요 관광지"}
+          {selectedMenu === "좋아요 관광지" && <MyBookmarkTourItem />}
           {selectedMenu === "좋아요 플래닝"}
           {selectedMenu === "내 정보 수정" && <UserInfoValidate />}
+          {selectedMenu === "멤버십"}
         </div>
       </MyPageMainContainer>
 

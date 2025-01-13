@@ -56,16 +56,31 @@ export const BookmarkApi = {
     }
   },
 
-    // 북마크 상태 확인
-    getBookmarkStatus: async (memberId, spotId) => {
-      try {
-        const response = await AxiosInstance.get("/api/bookmarks/status", {
-          params: { memberId, spotId },
-        });
-        return response.data; 
-      } catch (error) {
-        console.error("북마크 상태 조회 실패:", error);
-        throw error;
-      }
+  // 북마크 상태 확인
+  getBookmarkStatus: async (memberId, spotId) => {
+    try {
+      const response = await AxiosInstance.get("/api/bookmarks/status", {
+        params: { memberId, spotId },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("북마크 상태 조회 실패:", error);
+      throw error;
     }
+  },
+};
+
+export const BookmarkedSpotsApi = {
+  getBookmarkedSpots: async (memberId) => {
+    try {
+      const response = await AxiosInstance.get(`/api/bookmarks/myBookmarks`, {
+        params: { memberId },
+      });
+      console.log("API 응답 데이터:", response.data);
+      return response.data || [];
+    } catch (error) {
+      console.error("북마크된 여행지 조회 오류:", error);
+      throw error;
+    }
+  },
 };
