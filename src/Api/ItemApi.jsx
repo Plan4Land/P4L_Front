@@ -71,15 +71,14 @@ export const BookmarkApi = {
 };
 
 export const BookmarkedSpotsApi = {
-  getBookmarkedSpots: async (memberId) => {
+  getBookmarkedSpots: async (memberId, page = 0, size = 3) => {
     try {
       const response = await AxiosInstance.get(`/api/bookmarks/myBookmarks`, {
-        params: { memberId },
+        params: { memberId, page, size },
       });
-      console.log("API 응답 데이터:", response.data);
-      return response.data || [];
+      return response.data; // 응답 데이터에는 Page 객체가 포함됩니다.
     } catch (error) {
-      console.error("북마크된 여행지 조회 오류:", error);
+      console.error("북마크 여행지 조회 오류:", error);
       throw error;
     }
   },

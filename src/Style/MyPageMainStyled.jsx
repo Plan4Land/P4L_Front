@@ -14,7 +14,6 @@ export const MyPageMainContainer = styled.div`
   }
   .MyPageMenu {
     width: 70%;
-    border: 1px solid black;
   }
 `;
 export const UserMain = styled.div`
