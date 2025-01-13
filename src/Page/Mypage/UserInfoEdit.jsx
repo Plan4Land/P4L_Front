@@ -24,11 +24,24 @@ const UserInfoEdit = () => {
     // 사진 추가하는 기능 구현하기.
     setCurrentPic(URL.createObjectURL(picture));
 
-    const storageRef = storage.ref(`/UserProfilePic/${user.id}/`); // Firebase Storage 참조
-    const fileRef = storageRef.child(picture.name); // 파일 저장 위치 지정
-    fileRef.put(picture)  // 파일 업로드
+    // Firebase Storage 참조
+    const storageRef = storage.ref(`/UserProfilePic/${user.id}/`); 
+    const fileRef = storageRef.child(picture.name);
+
+    // 폴더 비우기
+    storageRef.listAll()
+      .then((result) => {
+        // 폴더 내 모든 파일 삭제
+        const deletePromises = result.items.map((item) => item.delete());
+        return Promise.all(deletePromises);
+      })
       .then(() => {
-        console.log("파일 업로드 성공.");
+        console.log("폴더 비우기 완료.");
+        // 새 파일 업로드
+        return fileRef.put(picture);
+      })
+      .then(() => {
+        console.log("새 파일 업로드 성공.");
         return fileRef.getDownloadURL(); // 업로드된 파일의 URL 가져오기
       })
       .then((downloadUrl) => {
