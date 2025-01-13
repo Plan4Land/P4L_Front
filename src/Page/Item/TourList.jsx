@@ -1,8 +1,8 @@
-import {useState, useEffect} from "react";
-import {useParams, useLocation, useNavigate} from "react-router-dom";
-import {Header, Footer} from "../../Component/GlobalComponent";
+import {useEffect, useState} from "react";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {Footer, Header} from "../../Component/GlobalComponent";
 import {Button, ToggleButton} from "../../Component/ButtonComponent";
-import {SelectTourItem, SearchSt, List, ItemList} from "../../Style/ItemListStyled";
+import {ItemList, List, SearchSt, SelectTourItem} from "../../Style/ItemListStyled";
 import {FaSearch, FaUndo} from "react-icons/fa";
 import {ServiceCode} from "../../Util/Service_code_final";
 import {TourItem} from "../../Component/ItemListComponent";
@@ -19,7 +19,7 @@ export const TourList = () => {
       subAreaCode: "",
       topTheme: "",
       middleTheme: "",
-      bottomTheme: [],
+      bottomTheme: "",
       category: "",
       searchQuery: "",
     });
@@ -35,43 +35,6 @@ export const TourList = () => {
     const [isBottomThemeOpen, setIsBottomThemeOpen] = useState(true);
     const [isCategoryOpen, setIsCategoryOpen] = useState(true);
 
-    // useEffect(() => {
-    //   const queryParams = new URLSearchParams(location.search);
-    //   const newFilters = ({
-    //     areaCode: areaCode || queryParams.get("area") || "",
-    //     subAreaCode: queryParams.get("subarea") || "",
-    //     topTheme: queryParams.get("cat1") || "",
-    //     middleTheme: queryParams.get("cat2") || "",
-    //     bottomTheme: queryParams.get("cat3") ? queryParams.get("cat3").split(",") : [],
-    //     category: queryParams.get("category") || "",
-    //     searchQuery: queryParams.get("search") || "",
-    //   });
-    //
-    //   // 기존 filters와 같지 않은 경우에만 업데이트
-    //   if (JSON.stringify(filters) !== JSON.stringify(newFilters)) {
-    //     setFilters(newFilters);
-    //   }
-    //
-    // }, [location.search]);
-    //
-    // useEffect(() => {
-    //   const fetchFilteredTravelSpots = async () => {
-    //     try {
-    //       setLoading(true);
-    //       const validFilters = Object.entries(filters).reduce((acc, [key, value]) => {
-    //         if (value) acc[key] = value;
-    //         return acc;
-    //       }, {});
-    //       const data = await TravelSpotApi.getTravelSpots(validFilters, currentPage, pageSize);
-    //       setTravelSpots(data);
-    //     } catch (error) {
-    //       setError("여행지 데이터를 가져오는 데 실패했습니다.");
-    //     } finally {
-    //       setLoading(false);
-    //     }
-    //   };
-    //   fetchFilteredTravelSpots();
-    // }, [filters, currentPage, pageSize]);
     useEffect(() => {
       const fetchFilteredTravelSpots = async () => {
         try {
@@ -91,22 +54,32 @@ export const TourList = () => {
       fetchFilteredTravelSpots();
     }, [filters]);
 
-    const updateFilters = (key, value) => {
-      setFilters((prevState) => ({...prevState, [key]: value}));
-      const queryParams = new URLSearchParams(location.search);
-      queryParams.delete(key);
-      if (key === "bottomTheme") {
-        value.forEach((v) => queryParams.append(key, v)); // 배열의 각 요소를 별도로 추가
-      } else if (Array.isArray(value)) {
-        value.forEach(v => queryParams.append(key, v));
-      } else if (value) {
-        queryParams.set(key, value);
+  const updateFilters = (key, value) => {
+    setFilters((prevState) => {
+      const newFilters = { ...prevState, [key]: value };
+      if (key === "bottomTheme" && Array.isArray(value)) {
+        newFilters[key] = value.join(','); // 배열일 때만 join 사용
       }
-      const newParams = queryParams.toString();
-      navigate(`/tourlist${newParams ? `?${newParams}` : ""}`, {replace: true});
-    };
+      return newFilters;
+    });
 
-    const handlePageChange = (newPage) => {
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.delete(key);
+
+    if (key === "bottomTheme" && Array.isArray(value)) {
+      queryParams.set(key, value.join(','));
+    } else if (Array.isArray(value)) {
+      value.forEach((v) => queryParams.append(key, encodeURIComponent(v)));
+    } else if (value) {
+      queryParams.set(key, encodeURIComponent(value));
+    }
+
+    navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`, { replace: true });
+  };
+
+
+
+  const handlePageChange = (newPage) => {
       setCurrentPage(newPage);
     };
 
@@ -116,7 +89,7 @@ export const TourList = () => {
         subAreaCode: "",
         topTheme: "",
         middleTheme: "",
-        bottomTheme: [],
+        bottomTheme: "",
         category: "",
         searchQuery: "",
       });
@@ -169,7 +142,7 @@ export const TourList = () => {
         ...prev,
         topTheme: newTopTheme,
         middleTheme: "",
-        bottomTheme: [], // 상위 분류 변경 시 하위 분류 초기화
+        bottomTheme: "", // 상위 분류 변경 시 하위 분류 초기화
       }));
       if (newTopTheme) {
         queryParams.set("cat1", newTopTheme);
@@ -188,7 +161,7 @@ export const TourList = () => {
       setFilters((prev) => ({
         ...prev,
         middleTheme: newMiddleTheme,
-        bottomTheme: [], // 중분류 변경 시 소분류 초기화
+        bottomTheme: "", // 중분류 변경 시 소분류 초기화
       }));
       if (newMiddleTheme) {
         queryParams.set("cat2", newMiddleTheme);
@@ -212,18 +185,16 @@ export const TourList = () => {
         }
         newSelectedBottomThemes.push(cat3);
       }
+      console.log("HandleBottomThemeChange")
+      console.log(newSelectedBottomThemes);
+      setFilters((prev) => {
+        return {...prev, bottomTheme: newSelectedBottomThemes.join(',')};
+      });
 
-      setFilters((prev) => ({
-        ...prev,
-        bottomTheme: newSelectedBottomThemes,
-      }));
-
-      queryParams.delete("cat3");
-      newSelectedBottomThemes.forEach((theme) => queryParams.append("cat3", theme));
-
-
+      queryParams.set("cat3", newSelectedBottomThemes.join(','));
       navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
     };
+
 
     const handleCategoryChange = (category) => {
       const queryParams = new URLSearchParams(location.search);
