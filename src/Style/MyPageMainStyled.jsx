@@ -26,8 +26,8 @@ export const UserMain = styled.div`
   flex-direction: column;
 `;
 export const UserInfo = styled.div`
-width: 100%;
-height: 200px;
+  width: 100%;
+  height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,11 +44,10 @@ height: 200px;
   }
 `;
 export const UserPlanning = styled.div`
-width: 100%;
-height: 100%;
+  width: 100%;
+  height: 100%;
   border: 1px solid black;
-`
-
+`;
 
 export const FollowList = styled.div`
   width: 500px;
@@ -72,5 +71,34 @@ export const FollowList = styled.div`
         background-color: ${colors.colorC};
       }
     }
+  }
+`;
+export const InvitePlanning = styled.div`
+  .invited-planning-list {
+    margin-top: 20px;
+    width: 500px;
+  }
+
+  .invited-planning-item {
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .planning-details {
+    margin: 10px;
+  }
+
+  .label {
+    font-weight: bold;
+  }
+  .buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 `;
