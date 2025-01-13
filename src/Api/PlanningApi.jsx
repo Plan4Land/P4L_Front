@@ -28,6 +28,12 @@ const PlanningApi = {
   getPlanning: async (plannerId) => {
     return (await AxiosInstance.get(`/planner/${plannerId}`)).data;
   },
+  getChatMsgs: async (plannerId) => {
+    return (await AxiosInstance.get(`/chat/msg/${plannerId}`)).data;
+  },
+  chatDetail: async (plannerId) => {
+    return (await AxiosInstance.get(`/chat/room/${plannerId}`)).data;
+  },
 };
 
 export default PlanningApi;

@@ -1,6 +1,11 @@
 import { useEffect, useRef } from "react";
-import { ChatContainer } from "../../Style/PlanningStyled";
+import {
+  ChatContainer,
+  ChatMsgContainer,
+  Message,
+} from "../../Style/PlanningStyled";
 import { HiArrowCircleUp } from "react-icons/hi";
+import PlanningApi from "../../Api/PlanningApi";
 
 export const ChatComponent = ({
   inputMsg,
@@ -35,6 +40,7 @@ export const ChatComponent = ({
       })
     );
     setInputMsg("");
+    console.log("전송");
   };
 
   // 채팅 종료
@@ -48,16 +54,32 @@ export const ChatComponent = ({
       })
     );
     ws.current.close();
+    console.log("채팅 종료");
   };
+
+  // 채팅방 정보 가져오기
+  useEffect(() => {
+    const getChatRoom = async () => {
+      try {
+        const response = await PlanningApi.chatDetail(plannerId);
+        console.log("response가 아무것도 안오는거지??");
+        console.log(">>", response);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getChatRoom();
+  }, []);
 
   // 웹 소켓 연결하기
   useEffect(() => {
-    if (!ws.current) {
-      ws.current = new WebSocket("ws://localhost:8111/ws/chat");
-      ws.current.onopen = () => {
-        setSocketConnected(true);
-      };
-    }
+    // if (!ws.current) {
+    //   ws.current = new WebSocket("ws://localhost:8111/ws/chat");
+    //   ws.current.onopen = () => {
+    //     setSocketConnected(true);
+    //     console.log("소켓 연결 완료");
+    //   };
+    // }
     if (socketConnected && sender) {
       ws.current.send(
         JSON.stringify({
@@ -94,13 +116,13 @@ export const ChatComponent = ({
 
   return (
     <ChatContainer>
-      <div className="chatMsgContainer" ref={ChatContainerRef}>
+      <ChatMsgContainer ref={ChatContainerRef}>
         {chatList.map((chat, index) => (
-          <div key={index} isSender={chat.sender === sender}>
+          <Message key={index} isSender={chat.sender === sender}>
             {`${chat.sender} > ${chat.message}`}
-          </div>
+          </Message>
         ))}
-      </div>
+      </ChatMsgContainer>
       <div className="sendChat">
         <textarea
           id="chatTyping"

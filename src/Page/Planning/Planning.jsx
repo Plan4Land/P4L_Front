@@ -219,18 +219,48 @@ export const Planning = () => {
     setIsBookmarked(!isBookmarked);
   };
 
+  // 웹 소켓 연결하기
+  useEffect(() => {
+    if (
+      plannerInfo &&
+      (plannerInfo.ownerNickname ===
+        JSON.parse(localStorage.getItem("user")).nickname ||
+        plannerInfo.participants.some(
+          (participant) =>
+            participant.nickname ===
+            JSON.parse(localStorage.getItem("user")).nickname
+        )) &&
+      !ws.current
+    ) {
+      ws.current = new WebSocket("ws://localhost:8111/ws/chat");
+      ws.current.onopen = () => {
+        setSocketConnected(true);
+        console.log("소켓 연결 완료");
+      };
+    }
+  }, [socketConnected, plannerInfo]);
+
   useEffect(() => {
     const fetchPlanner = async () => {
       try {
         const response = await PlanningApi.getPlanning(plannerId);
         setPlannerInfo(response); // 데이터를 상태에 저장
-        console.log(response);
+        console.log("fetchPlanner : ", response);
       } catch (e) {
         console.log("플래너 불러오는 중 에러", e);
       }
     };
-
+    const fetchChatMsg = async () => {
+      try {
+        const response = await PlanningApi.getChatMsgs(plannerId);
+        setChatList(response);
+        console.log("fetchChatMsg : ", response);
+      } catch (e) {
+        console.log("채팅 메시지 목록 불러오는 중 에러", e);
+      }
+    };
     fetchPlanner();
+    fetchChatMsg();
     setPlans(plansEx);
     setSender(JSON.parse(localStorage.getItem("user")).nickname);
   }, [plannerId]);
@@ -446,8 +476,8 @@ export const Planning = () => {
                 onChange={handleInputChange}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    e.preventDefault(); // 기본 엔터키 동작 방지 (예: 폼 제출)
-                    handleSearch(); // 엔터키 눌렀을 때 검색 함수 실행
+                    e.preventDefault();
+                    handleSearch();
                   }
                 }}
                 style={{

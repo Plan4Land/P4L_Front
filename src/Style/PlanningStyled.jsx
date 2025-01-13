@@ -464,3 +464,20 @@ export const ChatContainer = styled.div`
     }
   }
 `;
+
+export const ChatMsgContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-y: auto;
+  margin-bottom: 10px;
+`;
+
+export const Message = styled.div`
+  max-width: 70%;
+  font-size: 14px;
+  background-color: ${(props) => (props.isSender ? "#cfebbb" : "#E0E0E0")};
+  align-self: ${(props) => (props.isSender ? "flex-end" : "flex-start")};
+  border: ${(props) =>
+    props.isSender ? "1px solid #DCF8C6" : "1px solid #E0E0E0"};
+`;
