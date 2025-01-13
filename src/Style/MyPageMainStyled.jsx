@@ -7,13 +7,15 @@ export const MyPageMainContainer = styled.div`
   height: 100%;
   justify-content: center;
   margin: 20px 0 20px 0;
+
   .menu {
     display: flex;
     justify-content: space-between;
     padding: 20px;
   }
   .MyPageMenu {
-    width: 70%;
+    margin-left: 20px;
+    width: 60%;
   }
 `;
 export const UserMain = styled.div`
@@ -30,7 +32,7 @@ export const UserInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 
   .ProfileImg {
     height: 100px;

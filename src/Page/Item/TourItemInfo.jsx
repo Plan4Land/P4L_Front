@@ -36,12 +36,22 @@ export const TourItemInfo = () => {
         console.log("북마크 삭제 결과:", result);
         setIsBookmarked(false);
         setBookmarkCount((prev) => prev - 1);
+        // 북마크 수 직접 업데이트
+        setSpotDetails((prevDetails) => ({
+          ...prevDetails,
+          bookmark: prevDetails.bookmark - 1, // 바로 반영
+        }));
       } else {
         // 북마크 추가
         const result = await BookmarkApi.addBookmark(user.id, spotDetails.id);
         console.log("북마크 추가 결과:", result);
         setIsBookmarked(true);
         setBookmarkCount((prev) => prev + 1);
+        // 북마크 수 직접 업데이트
+        setSpotDetails((prevDetails) => ({
+          ...prevDetails,
+          bookmark: prevDetails.bookmark + 1, // 바로 반영
+        }));
       }
     } catch (error) {
       console.error("북마크 상태 변경 실패:", error);
