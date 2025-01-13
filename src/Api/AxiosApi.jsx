@@ -105,5 +105,20 @@ const AxiosApi = {
     };
     return await AxiosInstance.post("/member/find-password", memberInfo);
   },
+  // 이메일로 회원 탈퇴 확인
+  isActivateByEmail: async (email) => {
+    const memberInfo = {
+      email: email,
+    };
+    return await AxiosInstance.post("/auth/isActivate/byEmail", memberInfo);
+  },
+  // 아이디+이메일로 회원 탈퇴 확인
+  isActivateByIdAndEmail: async (id, email) => {
+    const memberInfo = {
+      id: id,
+      email: email,
+    };
+    return await AxiosInstance.post("/auth/isActivate/byIdAndEmail", memberInfo);
+  },
 };
 export default AxiosApi;
