@@ -410,7 +410,7 @@ export const ChatContainer = styled.div`
     margin-bottom: 8px;
 
     textarea {
-      width: 15rem;
+      width: 16rem;
       min-height: 40px;
       /* max-height: 70px; */
       font-size: 14px;
@@ -438,14 +438,13 @@ export const ChatContainer = styled.div`
     }
 
     button {
-      width: 2.5rem;
-      margin-right: 11px;
+      width: 2.6rem;
+      margin-right: 6px;
       cursor: pointer;
-      transition: all 0.2s ease;
-      border-radius: 7px;
-      background-color: ${colors.colorB};
-      border: 1px solid ${colors.colorA};
-      color: #e4f3e2;
+      /* transition: all 0.2s ease; */
+      background-color: transparent;
+      border: none;
+      color: #3762d8;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -455,13 +454,12 @@ export const ChatContainer = styled.div`
       }
 
       &:disabled {
-        background-color: #ccc;
         color: #666;
         cursor: default;
       }
 
       svg {
-        font-size: 1.3rem;
+        font-size: 2rem;
       }
     }
   }

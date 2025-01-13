@@ -11,7 +11,7 @@ import {
 import { KakaoMap, SearchKakaoMap } from "../../Component/KakaoMapComponent";
 import { PlansComponent } from "../../Component/PlanningComponents/PlansComponent";
 import { ChatComponent } from "../../Component/PlanningComponents/ChatComponent";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { ProfileImg } from "../../Component/ProfileImg";
 import { Button } from "../../Component/ButtonComponent";
@@ -182,9 +182,13 @@ export const Planning = () => {
   const [groupPlans, setGroupPlans] = useState({}); // 계획 정렬
   const [selectedPlan, setSelectedPlan] = useState({}); // date, planIndex, plan
   const [isEditting, setIsEditting] = useState(true);
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const [typingMsg, setTypingMsg] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [inputMsg, setInputMsg] = useState(""); // 입력 메시지
+  const [chatList, setChatList] = useState([]); // 채팅 글 목록
+  const [socketConnected, setSocketConnected] = useState(false); // 웹소켓 연결 여부
+  const [sender, setSender] = useState(""); // 메시지를 보낸 사람
+  const ws = useRef(null); // 웹소켓 객체 생성, 소켓 연결 정보를 유지해야 하지만, 렌더링과는 무관
 
   const handleInputChange = (e) =>
     setSearchState({ ...searchState, keyword: e.target.value });
@@ -228,6 +232,7 @@ export const Planning = () => {
 
     fetchPlanner();
     setPlans(plansEx);
+    setSender(JSON.parse(localStorage.getItem("user")).nickname);
   }, [plannerId]);
 
   useEffect(() => {
@@ -258,10 +263,9 @@ export const Planning = () => {
     }
   }, [currentAddedPlace]);
 
-  useEffect(
-    () => setSearchState({ keyword: "", submittedKeyword: "" }),
-    [modals.addPlaceModal]
-  );
+  useEffect(() => {
+    setSearchState({ keyword: "", submittedKeyword: "" });
+  }, [modals.addPlaceModal]);
 
   if (plannerInfo) {
     return (
@@ -341,8 +345,15 @@ export const Planning = () => {
             </div>
             {isChatOpen && (
               <ChatComponent
-                typingMsg={typingMsg}
-                setTypingMsg={setTypingMsg}
+                inputMsg={inputMsg}
+                setInputMsg={setInputMsg}
+                ws={ws}
+                plannerId={plannerId}
+                sender={sender}
+                socketConnected={socketConnected}
+                setSocketConnected={setSocketConnected}
+                chatList={chatList}
+                setChatList={setChatList}
               />
             )}
           </Info>

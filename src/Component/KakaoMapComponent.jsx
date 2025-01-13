@@ -3,6 +3,8 @@ import {
   MapTypeControl,
   ZoomControl,
   MapMarker,
+  Roadview,
+  RoadviewMarker,
 } from "react-kakao-maps-sdk";
 import { useKakaoLoader, useMap } from "react-kakao-maps-sdk";
 import { useState, useEffect } from "react";
@@ -10,6 +12,67 @@ import MarkerPlace from "../Img/markerPlace.png";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const { kakao } = window;
+
+export const KakaoMapSpot = ({ mapX, mapY }) => {
+  const [toggle, setToggle] = useState("map");
+  const placePosition = {
+    lat: mapY,
+    lng: mapX,
+  };
+  return (
+    <div style={{ width: "100%", height: "100%", position: "relative" }}>
+      <Map // 로드뷰를 표시할 Container
+        center={placePosition}
+        style={{
+          display: toggle === "map" ? "block" : "none",
+          width: "100%",
+          height: "100%",
+        }}
+        level={3}
+      >
+        <MapMarker position={placePosition} />
+        {toggle === "map" && (
+          <input
+            style={{
+              position: "absolute",
+              top: "5px",
+              left: "5px",
+              zIndex: 10,
+            }}
+            type="button"
+            onClick={() => setToggle("roadview")}
+            title="로드뷰 보기"
+            value="로드뷰"
+          />
+        )}
+      </Map>
+      <Roadview // 로드뷰를 표시할 Container
+        position={{ ...placePosition, radius: 50 }}
+        style={{
+          display: toggle === "roadview" ? "block" : "none",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <RoadviewMarker position={placePosition} />
+        {toggle === "roadview" && (
+          <input
+            style={{
+              position: "absolute",
+              top: "5px",
+              left: "5px",
+              zIndex: 10,
+            }}
+            type="button"
+            onClick={() => setToggle("map")}
+            title="지도 보기"
+            value="지도"
+          />
+        )}
+      </Roadview>
+    </div>
+  );
+};
 
 export const KakaoMap = () => {
   useKakaoLoader();

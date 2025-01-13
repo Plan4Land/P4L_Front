@@ -3,6 +3,7 @@ import { TourItemInfoBox } from "../../Style/TourItemInfoStyled";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TourItemApi, BookmarkApi } from "../../Api/ItemApi";
+import { KakaoMapSpot } from "../../Component/KakaoMapComponent";
 import { faBookmark as solidBookmark } from "@fortawesome/free-solid-svg-icons"; // 채워진 북마크
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons"; // 빈 북마크
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,7 +15,7 @@ export const TourItemInfo = () => {
   const [spotDetails, setSpotDetails] = useState(null);
   const [bookmarkCount, setBookmarkCount] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  
+
   // 북마크 상태 변경 함수
   const toggleBookmark = async () => {
     try {
@@ -55,8 +56,11 @@ export const TourItemInfo = () => {
         setSpotDetails(data);
 
         if (user?.id) {
-          const bookmarkStatus = await BookmarkApi.getBookmarkStatus(user.id, id);
-          setIsBookmarked(bookmarkStatus); 
+          const bookmarkStatus = await BookmarkApi.getBookmarkStatus(
+            user.id,
+            id
+          );
+          setIsBookmarked(bookmarkStatus);
         }
       } catch (error) {
         console.error("여행지 상세 정보 조회 오류:", error);
@@ -93,7 +97,7 @@ export const TourItemInfo = () => {
               <p>북마크 수: {spotDetails.bookmark}</p>
             </div>
             <div className="item-map">
-              <p>위치 지도</p>
+              <KakaoMapSpot mapX={spotDetails.mapX} mapY={spotDetails.mapY} />
             </div>
           </>
         ) : (

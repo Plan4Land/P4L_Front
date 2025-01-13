@@ -1,10 +1,18 @@
+import { useEffect, useRef } from "react";
 import { ChatContainer } from "../../Style/PlanningStyled";
+import { HiArrowCircleUp } from "react-icons/hi";
 
-import { IoPaperPlaneOutline, IoArrowForwardCircle } from "react-icons/io5"; // Ionicons
-import { HiArrowCircleRight } from "react-icons/hi";
-import { FiSend, FiArrowRight } from "react-icons/fi";
-
-export const ChatComponent = ({ typingMsg, setTypingMsg }) => {
+export const ChatComponent = ({
+  inputMsg,
+  setInputMsg,
+  ws,
+  plannerId,
+  sender,
+  socketConnected,
+  setSocketConnected,
+  chatList,
+  setChatList,
+}) => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey && !event.ctrlKey) {
       event.preventDefault(); // 기본 Enter 동작 막기
@@ -12,61 +20,96 @@ export const ChatComponent = ({ typingMsg, setTypingMsg }) => {
     }
 
     if (event.key === "Enter" && event.shiftKey) {
-      adjustTextareaHeight(); // 높이 조정 함수 호출
     }
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (e) => {
     alert("버튼이 눌렸습니다!");
-    setTypingMsg("");
+    // 메시지 전송
+    ws.current.send(
+      JSON.stringify({
+        type: "TALK",
+        plannerId: plannerId,
+        sender: sender,
+        message: inputMsg,
+      })
+    );
+    setInputMsg("");
   };
 
-  const adjustTextareaHeight = () => {
-    const textarea = document.getElementById("chatTyping");
-    const minHeight = 20; // 최소 높이 20px
-    const maxHeight = 70; // 최대 높이 70px
-    textarea.style.height = `${minHeight}px`;
-    if (textarea.scrollHeight <= maxHeight) {
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    } else {
-      textarea.style.height = `${maxHeight}px`;
-    }
+  // 채팅 종료
+  const onClickMsgClose = () => {
+    ws.current.send(
+      JSON.stringify({
+        type: "CLOSE",
+        plannerId: plannerId,
+        sender: sender,
+        message: inputMsg,
+      })
+    );
+    ws.current.close();
   };
+
+  // 웹 소켓 연결하기
+  useEffect(() => {
+    if (!ws.current) {
+      ws.current = new WebSocket("ws://localhost:8111/ws/chat");
+      ws.current.onopen = () => {
+        setSocketConnected(true);
+      };
+    }
+    if (socketConnected && sender) {
+      ws.current.send(
+        JSON.stringify({
+          type: "ENTER",
+          plannerId: plannerId,
+          sender: sender,
+          message: "입장합니다.",
+        })
+      );
+    }
+    ws.current.onmessage = (msg) => {
+      const data = JSON.parse(msg.data);
+      setChatList((prev) => [...prev, data]); // 기존의 채팅 리스트에 새로운 메시지 추가
+    };
+  }, [socketConnected, sender]);
+
+  // 화면 하단으로 자동 스크롤
+  const ChatContainerRef = useRef(null);
+  useEffect(() => {
+    if (ChatContainerRef.current) {
+      ChatContainerRef.current.scrollTop =
+        ChatContainerRef.current.scrollHeight;
+    }
+  }, [chatList]);
 
   // const icons = [
-  //   IoPaperPlaneOutline,
+  //   // IoPaperPlaneOutline,
   //   IoArrowForwardCircle,
   //   HiArrowCircleRight,
+  //   HiArrowCircleUp,
   //   FiSend,
   //   FiArrowRight,
   // ];
 
   return (
     <ChatContainer>
-      {/* <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "20px",
-          fontSize: "24px",
-        }}
-      >
-        {icons.map((Icon, index) => (
-          <div key={index} style={{ textAlign: "center" }}>
-            <Icon />
-            <p>{Icon.name}</p>
+      <div className="chatMsgContainer" ref={ChatContainerRef}>
+        {chatList.map((chat, index) => (
+          <div key={index} isSender={chat.sender === sender}>
+            {`${chat.sender} > ${chat.message}`}
           </div>
         ))}
-      </div> */}
+      </div>
       <div className="sendChat">
         <textarea
           id="chatTyping"
-          value={typingMsg ?? ""}
-          onChange={(e) => setTypingMsg(e.target.value)}
+          value={inputMsg ?? ""}
+          onChange={(e) => setInputMsg(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <button onClick={handleButtonClick} disabled={!typingMsg?.trim()}>
-          <FiSend className="sendIcon" />
+        <button onClick={handleButtonClick} disabled={!inputMsg?.trim()}>
+          <HiArrowCircleUp className="sendIcon" />
         </button>
       </div>
     </ChatContainer>
