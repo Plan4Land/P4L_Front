@@ -13,6 +13,7 @@ import {
 } from "../../Style/MyPageMainStyled";
 import UserInfoValidate from "./UserInfoValidate";
 import { CheckModal } from "../../Util/Modal";
+import { useAuth } from "../../Context/AuthContext";
 
 export const MyPageMain = () => {
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
@@ -24,6 +25,7 @@ export const MyPageMain = () => {
     { title: "전주 여행", owner: "aaa" },
     { title: "대전 여행", owner: "bbb" },
   ]);
+  const { user } = useAuth();
 
   const openFollowModal = () => {
     setIsFollowModalOpen(true);
@@ -85,7 +87,14 @@ export const MyPageMain = () => {
           {!selectedMenu && (
             <UserMain>
               <UserInfo>
-                <div className="ProfileImg"></div>
+                <div 
+                  className="ProfileImg"
+                  style={{
+                    backgroundImage: `url(${user.imgPath})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                ></div>
                 <div className="UserExplain">
                   <p>닉네임: 어쩌구</p>
                   <p>아이디: 뭐뭐</p>
