@@ -34,6 +34,7 @@ export const TourList = () => {
     const [isMiddleThemeOpen, setIsMiddleThemeOpen] = useState(true);
     const [isBottomThemeOpen, setIsBottomThemeOpen] = useState(true);
     const [isCategoryOpen, setIsCategoryOpen] = useState(true);
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
       const fetchFilteredTravelSpots = async () => {
@@ -52,7 +53,7 @@ export const TourList = () => {
         }
       };
       fetchFilteredTravelSpots();
-    }, [filters]);
+    }, [filters, currentPage]);
 
   const updateFilters = (key, value) => {
     setFilters((prevState) => {
@@ -97,11 +98,11 @@ export const TourList = () => {
     };
 
     const handleSearch = () => {
-      if (filters.searchQuery.length < 2) {
+      if (searchQuery.length < 2) {
         alert("검색어는 2자리 이상 입력해 주세요.");
         return;
       }
-      updateFilters("searchQuery", filters.searchQuery);
+      updateFilters("searchQuery", searchQuery);
     }
 
     const handleKeyDown = (e) => {
@@ -233,8 +234,8 @@ export const TourList = () => {
                   type="text"
                   className="search"
                   placeholder="제목 검색!"
-                  value={filters.searchQuery}
-                  onChange={(e) => updateFilters("searchQuery", e.target.value)}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                 />
                 <button className="search-button" onClick={handleSearch}>
