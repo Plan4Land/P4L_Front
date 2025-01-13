@@ -23,12 +23,20 @@ export const AuthProvider = ({ children }) => {
   };
   const logout = () => setUser(null);
 
+  const updateUser = (updatedData) => {
+    setUser((pervUser) => ({
+      ...pervUser,
+      ...updatedData,
+    }));
+  };
+
   return (
     <AuthContext.Provider 
       value={{ 
         user, 
         login,
-        logout
+        logout,
+        updateUser,
       }}
     >
       {children}

@@ -3,9 +3,10 @@ import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditSty
 import { ProfilePicModal } from "../../Component/SignupModalComponent";
 import { useAuth } from "../../Context/AuthContext";
 import AxiosApi from "../../Api/AxiosApi";
+import { storage } from "../../Api/Firebase";
 
 const UserInfoEdit = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [userId, setUserId] = useState("test1");
   const [userPw, setUserPw] = useState("");
   const [userPwCheck, setUserPwCheck] = useState("");
@@ -22,7 +23,34 @@ const UserInfoEdit = () => {
   const handlePicAdd = (picture) => {
     // 사진 추가하는 기능 구현하기.
     setCurrentPic(URL.createObjectURL(picture));
-    console.log(picture);
+
+    // Firebase Storage 참조
+    const storageRef = storage.ref(`/UserProfilePic/${user.id}/`); 
+    const fileRef = storageRef.child(picture.name);
+
+    // 폴더 비우기
+    storageRef.listAll()
+      .then((result) => {
+        // 폴더 내 모든 파일 삭제
+        const deletePromises = result.items.map((item) => item.delete());
+        return Promise.all(deletePromises);
+      })
+      .then(() => {
+        console.log("폴더 비우기 완료.");
+        // 새 파일 업로드
+        return fileRef.put(picture);
+      })
+      .then(() => {
+        console.log("새 파일 업로드 성공.");
+        return fileRef.getDownloadURL(); // 업로드된 파일의 URL 가져오기
+      })
+      .then((downloadUrl) => {
+        console.log("저장된 경로:", downloadUrl);
+        setCurrentPic(downloadUrl); // 이미지 URL 상태 업데이트
+      })
+      .catch((error) => {
+        console.error("업로드 중 에러 발생:", error);
+      });
   };
 
   // 정보 가져오기
@@ -49,6 +77,11 @@ const UserInfoEdit = () => {
       console.log(rsp);
       if (rsp.data) {
         alert("회원정보가 수정되었습니다.");
+        updateUser({
+          nickName: nickName,
+          email,
+          imgPath: currentPic,
+        });
       }
     } catch (e) {
       console.error("Error during signup: ", e);

@@ -75,6 +75,15 @@ export const Login = () => {
     }
   };
 
+  // 카카오 로그인
+  const Rest_api_key = process.env.REACT_APP_KAKAO_API_KEY;
+  const redirect_uri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
+  // oauth 요청 url
+  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`;
+  const kakaoLogin = () => {
+    window.location.href = kakaoURL;
+  };
+
   // 비밀번호 보이기
   const onClickPwEye = () => {
     setIsPwShow((prev) => !prev);
@@ -161,7 +170,12 @@ export const Login = () => {
             로그인
           </Button>
 
-          <button className="kakaoBtn">카카오 로그인</button>
+          <button 
+            className="kakaoBtn"
+            onClick={kakaoLogin}
+          >
+            카카오 로그인
+          </button>
 
           {/* 아이디 찾기 모달 */}
           <FindUserIdModal
