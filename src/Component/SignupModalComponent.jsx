@@ -177,6 +177,13 @@ export const FindUserIdModal = (props) => {
 
   const onClickFindUserId = async () => {
     try {
+      // 탈퇴 확인
+      const isActivate = await AxiosApi.isActivateByEmail(inputEmail);
+      if(isActivate.data === "탈퇴한 회원입니다.") {
+        setTextMessage("탈퇴한 회원입니다.");
+        return;
+      }
+      // 찾기 기능
       const response = await AxiosApi.memberFindId(inputName, inputEmail);
       if (response.data) {
         openResult(response.data);
@@ -345,6 +352,13 @@ export const FindPwModal = (props) => {
 
   // 유저 비밀번호 변경 -> 이메일 보내기
   const passwordChange = async (newPassword) => {
+    // 탈퇴 확인
+    const isActivate = await AxiosApi.isActivateByIdAndEmail(inputUserId, inputEmail);
+    if (isActivate.data === "탈퇴한 회원입니다.") {
+      setTextMessage("탈퇴한 회원입니다.");
+      return;
+    }
+    // 찾기 기능
     const response = await AxiosApi.memberUpdatePassword(
       inputUserId,
       newPassword
