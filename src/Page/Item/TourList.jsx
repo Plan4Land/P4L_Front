@@ -172,28 +172,30 @@ export const TourList = () => {
       navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
     };
 
-    const handleBottomThemeChange = (cat3) => {
-      const queryParams = new URLSearchParams(location.search);
-      let newSelectedBottomThemes = [...filters.bottomTheme];
+  const handleBottomThemeChange = (cat3) => {
+    let newSelectedBottomThemes = filters.bottomTheme ? filters.bottomTheme.split(',') : [];
+    console.log(newSelectedBottomThemes)
 
-      if (newSelectedBottomThemes.includes(cat3)) {
-        newSelectedBottomThemes = newSelectedBottomThemes.filter((item) => item !== cat3);
-      } else {
-        if (newSelectedBottomThemes.length >= 3) {
-          alert("최대 3개의 소분류만 선택할 수 있습니다.");
-          return;
-        }
-        newSelectedBottomThemes.push(cat3);
+    if (newSelectedBottomThemes.includes(cat3)) {
+      // 이미 선택된 항목인 경우, 제거
+      newSelectedBottomThemes = newSelectedBottomThemes.filter((item) => item !== cat3);
+    } else {
+      // 아직 선택되지 않은 항목인 경우
+      if (newSelectedBottomThemes.length >= 3) {
+        alert("최대 3개의 소분류만 선택할 수 있습니다.");
+        return; // 더 이상 추가하지 않고 함수 종료
       }
-      console.log("HandleBottomThemeChange")
-      console.log(newSelectedBottomThemes);
-      setFilters((prev) => {
-        return {...prev, bottomTheme: newSelectedBottomThemes.join(',')};
-      });
+      newSelectedBottomThemes.push(cat3); // 배열에 추가
+    }
 
-      queryParams.set("cat3", newSelectedBottomThemes.join(','));
-      navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
-    };
+    setFilters((prev) => ({
+      ...prev,
+      bottomTheme: newSelectedBottomThemes.join(','), // 상태 업데이트
+    }));
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set("cat3", newSelectedBottomThemes.join(','));
+    navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
+  };
 
 
     const handleCategoryChange = (category) => {
