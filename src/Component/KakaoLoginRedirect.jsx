@@ -1,23 +1,42 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
-function KakaoLoginRedirect() {
+export function KakaoRedirect() {
   const navigate = useNavigate();
+  const code = new URL(window.location.href).searchParams.get("code");
+  console.log(code);
 
   useEffect(() => {
-    const code = new URL(window.location.href).searchParams.get("code");
-    console.log('Authorization Code:', code);
+    // axios로 POST 요청
+    axios
+      .post(
+        `보내줄 주소?code=${code}`,
+        {}, // POST 요청 본문 (비어 있을 경우 {})
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        console.log(response.data.result.user_id);
+        console.log(response.data.result.jwt);
 
-    if (code) {
-      // 백엔트로 code 전송해 토큰 요청
+        // 인증이 성공하면 페이지 이동 (예: 메인 페이지로 이동)
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("오류 발생", error);
+      });
+  }, [code, navigate]);
 
-      // 인증 후 이동
-      navigate("/");
-    } else {
-      console.error('Authorization code not found');
-    }
-  }, [navigate]);
+  return (
+    <div>
+      <h1>로그인 중입니다.</h1>
+    </div>
+  );
+}
 
-  return <div>카카오 인증 처리중...</div>;
-};
-export default KakaoLoginRedirect;
+export default KakaoRedirect;
