@@ -23,7 +23,9 @@ export const TourList = () => {
           middleTheme: queryParams.get("cat2") || "",
           bottomTheme: queryParams.get("cat3") || "",
           category: queryParams.get("category") || "",
-          searchQuery: queryParams.get("searchQuery") || "",
+          searchQuery: queryParams.get("searchQuery") ? decodeURIComponent(queryParams.get("searchQuery")) : "",
+          currentPage: parseInt(queryParams.get("currentPage")) || 0,
+          pageSize: parseInt(queryParams.get("pageSize")) || 10,
         };
       }
     )
@@ -31,25 +33,23 @@ export const TourList = () => {
     const [travelSpots, setTravelSpots] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [pageSize] = useState(10);
     const [isAreaOpen, setIsAreaOpen] = useState(true);
     const [isSubAreaOpen, setIsSubAreaOpen] = useState(true);
     const [isTopThemeOpen, setIsTopThemeOpen] = useState(true);
     const [isMiddleThemeOpen, setIsMiddleThemeOpen] = useState(true);
     const [isBottomThemeOpen, setIsBottomThemeOpen] = useState(true);
     const [isCategoryOpen, setIsCategoryOpen] = useState(true);
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState(filters.searchQuery);
+
 
     useEffect(() => {
       const fetchFilteredTravelSpots = async () => {
         try {
           setLoading(true);
-          const validFilters = Object.entries(filters).reduce((acc, [key, value]) => {
-            if (value) acc[key] = value;
-            return acc;
-          }, {});
-          const data = await TravelSpotApi.getTravelSpots(validFilters, currentPage, pageSize);
+          const validFilters = Object.fromEntries(
+            Object.entries(filters).filter(([, value]) => value)
+          );
+          const data = await TravelSpotApi.getTravelSpots(validFilters);
           setTravelSpots(data);
         } catch (error) {
           setError("여행지 데이터를 가져오는 데 실패했습니다.");
@@ -57,36 +57,68 @@ export const TourList = () => {
           setLoading(false);
         }
       };
+
+      const queryParams = new URLSearchParams();
+      for (const [key, value] of Object.entries(filters)) {
+        if (value) {
+          if (key === 'bottomTheme' && typeof value === 'string') {
+            queryParams.set("cat3", value);
+          } else if (key === 'topTheme') {
+            queryParams.set("cat1", value);
+          } else if (key === 'middleTheme') {
+            queryParams.set("cat2", value);
+          } else if (key === 'searchQuery') {
+            queryParams.set(key, encodeURIComponent(value));
+          } else if (key === 'areaCode') {
+            queryParams.set(key, value);
+          } else if (key === 'subAreaCode') {
+            queryParams.set(key, value);
+          } else if (key === 'category') {
+            queryParams.set(key, value);
+          } else if (key === 'currentPage') {
+            queryParams.set(key, value); // currentPage를 쿼리 파라미터에 추가
+          } else if (key === 'pageSize') {
+            queryParams.set(key, value); // pageSize를 쿼리 파라미터에 추가
+          }
+        }
+      }
+      navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`, {replace: true});
       fetchFilteredTravelSpots();
-    }, [filters, currentPage]);
+    }, [filters, navigate, filters.currentPage]);
 
     const updateFilters = (key, value) => {
-      setFilters((prevState) => {
-        const newFilters = {...prevState, [key]: value};
-        if (key === "bottomTheme" && Array.isArray(value)) {
-          newFilters[key] = value.join(','); // 배열일 때만 join 사용
-        }
-        return newFilters;
-      });
-
-      const queryParams = new URLSearchParams(location.search);
-      queryParams.delete(key);
-
-      if (key === "bottomTheme" && Array.isArray(value)) {
-        queryParams.set(key, value.join(','));
-      } else if (Array.isArray(value)) {
-        value.forEach((v) => queryParams.append(key, encodeURIComponent(v)));
-      } else if (value) {
-        queryParams.set(key, encodeURIComponent(value));
+      if (key !== "currentPage") {
+        setFilters((prev) => {
+          const newFilters = {
+            ...prev,
+            [key]: value,
+            currentPage: 0,
+          };
+          if (key === "topTheme") {
+            newFilters.middleTheme = "";
+            newFilters.bottomTheme = "";
+          } else if (key === "middleTheme") {
+            newFilters.bottomTheme = "";
+          }
+          return newFilters;
+        });
+      } else {
+        setFilters((prev) => {
+          const newFilters = {
+            ...prev,
+            [key]: value,
+          };
+          if (key === "topTheme") {
+            newFilters.middleTheme = "";
+            newFilters.bottomTheme = "";
+          } else if (key === "middleTheme") {
+            newFilters.bottomTheme = "";
+          }
+          return newFilters;
+        })
       }
-
-      navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`, {replace: true});
     };
 
-
-    const handlePageChange = (newPage) => {
-      setCurrentPage(newPage);
-    };
 
     const handleResetSelections = () => {
       setFilters({
@@ -97,9 +129,16 @@ export const TourList = () => {
         bottomTheme: "",
         category: "",
         searchQuery: "",
+        currentPage: 0,
+        pageSize: 10,
       });
-      navigate("/tourlist");
+      // navigate("/tourlist");
     };
+
+    const handlePageChange = (newPage) => {
+      updateFilters("currentPage", newPage);
+    };
+
 
     const handleSearch = () => {
       if (searchQuery.length < 2) {
@@ -118,19 +157,8 @@ export const TourList = () => {
     const handleAreaChange = (areaCode) => {
       const isSameArea = filters.areaCode === areaCode;
       const newAreaCode = isSameArea ? "" : areaCode;
-      const queryParams = new URLSearchParams(location.search);
-      setFilters((prev) => ({
-        ...prev,
-        areaCode: newAreaCode,
-        subAreaCode: "", // 지역 변경 시 세부지역 초기화
-      }));
-      if (newAreaCode) {
-        queryParams.set("areaCode", newAreaCode);
-      } else {
-        queryParams.delete("areaCode");
-        queryParams.delete("subAreaCode");
-      }
-      navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
+      updateFilters("areaCode", newAreaCode);
+      updateFilters("subAreaCode", "");
     };
 
     const handleSubAreaChange = (subAreaCode) => {
@@ -140,88 +168,161 @@ export const TourList = () => {
     };
 
     const handleTopThemeChange = (cat1) => {
-      const queryParams = new URLSearchParams(location.search);
       const isSameTopTheme = filters.topTheme === cat1;
       const newTopTheme = isSameTopTheme ? "" : cat1;
-      setFilters((prev) => ({
-        ...prev,
-        topTheme: newTopTheme,
-        middleTheme: "",
-        bottomTheme: "", // 상위 분류 변경 시 하위 분류 초기화
-      }));
-      if (newTopTheme) {
-        queryParams.set("cat1", newTopTheme);
-      } else {
-        queryParams.delete("cat1");
-        queryParams.delete("cat2");
-        queryParams.delete("cat3");
-      }
-      navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
+      updateFilters("topTheme", newTopTheme);
     };
 
     const handleMiddleThemeChange = (cat2) => {
-      const queryParams = new URLSearchParams(location.search);
       const isSameMiddleTheme = filters.middleTheme === cat2;
       const newMiddleTheme = isSameMiddleTheme ? "" : cat2;
-      setFilters((prev) => ({
-        ...prev,
-        middleTheme: newMiddleTheme,
-        bottomTheme: "", // 중분류 변경 시 소분류 초기화
-      }));
-      if (newMiddleTheme) {
-        queryParams.set("cat2", newMiddleTheme);
-      } else {
-        queryParams.delete("cat2");
-        queryParams.delete("cat3");
-      }
-      navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
+      updateFilters("middleTheme", newMiddleTheme);
     };
 
     const handleBottomThemeChange = (cat3) => {
-      let newSelectedBottomThemes = filters.bottomTheme ? filters.bottomTheme.split(',') : [];
-      console.log(newSelectedBottomThemes)
+      setFilters((prev) => {
+        let newSelectedBottomThemes = prev.bottomTheme ? prev.bottomTheme.split(',') : [];
 
-      if (newSelectedBottomThemes.includes(cat3)) {
-        // 이미 선택된 항목인 경우, 제거
-        newSelectedBottomThemes = newSelectedBottomThemes.filter((item) => item !== cat3);
-      } else {
-        // 아직 선택되지 않은 항목인 경우
-        if (newSelectedBottomThemes.length >= 3) {
-          alert("최대 3개의 소분류만 선택할 수 있습니다.");
-          return; // 더 이상 추가하지 않고 함수 종료
+        if (newSelectedBottomThemes.includes(cat3)) {
+          newSelectedBottomThemes = newSelectedBottomThemes.filter((item) => item !== cat3);
+        } else {
+          if (newSelectedBottomThemes.length >= 3) {
+            alert("최대 3개의 소분류만 선택할 수 있습니다.");
+            return prev;
+          }
+          newSelectedBottomThemes.push(cat3);
         }
-        newSelectedBottomThemes.push(cat3); // 배열에 추가
-      }
-
-      setFilters((prev) => ({
-        ...prev,
-        bottomTheme: newSelectedBottomThemes.join(','), // 상태 업데이트
-      }));
-      const queryParams = new URLSearchParams(location.search);
-      queryParams.set("cat3", newSelectedBottomThemes.join(','));
-      navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
+        return {
+          ...prev,
+          bottomTheme: newSelectedBottomThemes.join(','),
+        };
+      });
     };
 
-
     const handleCategoryChange = (category) => {
-      const queryParams = new URLSearchParams(location.search);
-      const isSameCategory = filters.category === category;
-      const newCategory = isSameCategory ? "" : category;
-
-      setFilters((prev) => ({
-        ...prev,
-        category: newCategory,
-      }));
-
-      if (newCategory) {
-        queryParams.set("category", newCategory);
-      } else {
-        queryParams.delete("category");
-      }
-      navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
+      updateFilters("category", category);
     };
 
     const selectedAreaData = areas.find((area) => area.code === filters.areaCode);
+
+
+    // const updateFilters = (key, value) => {
+    //   setFilters(prev => {
+    //     const newFilters = {
+    //       ...prev,
+    //       [key]: value,
+    //       currentPage: 0,
+    //     };
+    //     if (key === "bottomTheme" && Array.isArray(value)) {
+    //       newFilters[key] = value.join(',');
+    //     }
+    //     const queryParams = new URLSearchParams();
+    //     for (const [filterKey, filterValue] of Object.entries(newFilters)) {
+    //       if (filterValue !== "" && filterValue !== null && filterValue !== undefined) {
+    //         if (filterKey === 'bottomTheme' && typeof filterValue === 'string') {
+    //           queryParams.set(filterKey, filterValue);
+    //         } else if (filterKey === 'searchQuery') {
+    //           queryParams.set(filterKey, encodeURIComponent(filterValue));
+    //         } else {
+    //           queryParams.set(filterKey, filterValue);
+    //         }
+    //       }
+    //     }
+    //     navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`, {replace: true});
+    //     return newFilters;
+    //   })
+    // };
+
+
+    // const handlePageChange = (newPage) => {
+    //   setCurrentPage(newPage);
+    //   const queryParams = new URLSearchParams(location.search);
+    //   queryParams.set("currentPage", newPage);
+    //   updateFilters(queryParams);
+    // }
+
+    // const handleTopThemeChange = (cat1) => {
+    //   const queryParams = new URLSearchParams(location.search);
+    //   const isSameTopTheme = filters.topTheme === cat1;
+    //   const newTopTheme = isSameTopTheme ? "" : cat1;
+    //   setFilters((prev) => ({
+    //     ...prev,
+    //     topTheme: newTopTheme,
+    //     middleTheme: "",
+    //     bottomTheme: "", // 상위 분류 변경 시 하위 분류 초기화
+    //   }));
+    //   if (newTopTheme) {
+    //     queryParams.set("cat1", newTopTheme);
+    //   } else {
+    //     queryParams.delete("cat1");
+    //     queryParams.delete("cat2");
+    //     queryParams.delete("cat3");
+    //   }
+    //   navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
+    // };
+    //
+    // const handleMiddleThemeChange = (cat2) => {
+    //   const queryParams = new URLSearchParams(location.search);
+    //   const isSameMiddleTheme = filters.middleTheme === cat2;
+    //   const newMiddleTheme = isSameMiddleTheme ? "" : cat2;
+    //   setFilters((prev) => ({
+    //     ...prev,
+    //     middleTheme: newMiddleTheme,
+    //     bottomTheme: "", // 중분류 변경 시 소분류 초기화
+    //   }));
+    //   if (newMiddleTheme) {
+    //     queryParams.set("cat2", newMiddleTheme);
+    //   } else {
+    //     queryParams.delete("cat2");
+    //     queryParams.delete("cat3");
+    //   }
+    //   navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
+    // };
+    //
+    // const handleBottomThemeChange = (cat3) => {
+    //   let newSelectedBottomThemes = filters.bottomTheme ? filters.bottomTheme.split(',') : [];
+    //   console.log(newSelectedBottomThemes)
+    //
+    //   if (newSelectedBottomThemes.includes(cat3)) {
+    //     // 이미 선택된 항목인 경우, 제거
+    //     newSelectedBottomThemes = newSelectedBottomThemes.filter((item) => item !== cat3);
+    //   } else {
+    //     // 아직 선택되지 않은 항목인 경우
+    //     if (newSelectedBottomThemes.length >= 3) {
+    //       alert("최대 3개의 소분류만 선택할 수 있습니다.");
+    //       return; // 더 이상 추가하지 않고 함수 종료
+    //     }
+    //     newSelectedBottomThemes.push(cat3); // 배열에 추가
+    //   }
+    //
+    //   setFilters((prev) => ({
+    //     ...prev,
+    //     bottomTheme: newSelectedBottomThemes.join(','), // 상태 업데이트
+    //   }));
+    //   const queryParams = new URLSearchParams(location.search);
+    //   queryParams.set("cat3", newSelectedBottomThemes.join(','));
+    //   navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
+    // };
+
+
+    // const handleCategoryChange = (category) => {
+    //   const queryParams = new URLSearchParams(location.search);
+    //   const isSameCategory = filters.category === category;
+    //   const newCategory = isSameCategory ? "" : category;
+    //
+    //   setFilters((prev) => ({
+    //     ...prev,
+    //     category: newCategory,
+    //   }));
+    //
+    //   if (newCategory) {
+    //     queryParams.set("category", newCategory);
+    //   } else {
+    //     queryParams.delete("category");
+    //   }
+    //   navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
+    // };
+
 
     return (
       <>
@@ -408,13 +509,13 @@ export const TourList = () => {
             }
             <div>
               <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 0}
+                onClick={() => handlePageChange(filters.currentPage - 1)}
+                disabled={filters.currentPage === 0}
               >
                 ◀
               </button>
-              <span> {currentPage + 1} 페이지 </span>
-              <button onClick={() => handlePageChange(currentPage + 1)}>▶</button>
+              <span> {filters.currentPage + 1} 페이지 </span>
+              <button onClick={() => handlePageChange(filters.currentPage + 1)}>▶</button>
             </div>
           </ItemList>
         </List>

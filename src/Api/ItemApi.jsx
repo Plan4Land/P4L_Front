@@ -2,12 +2,10 @@ import AxiosInstance from "./AxiosInstance";
 
 export const TravelSpotApi = {
   // 여행지 리스트 조회
-  getTravelSpots: async (filters, page = 0, size = 10) => {
+  getTravelSpots: async (filters) => {
     try {
       const params = {
         ...filters,
-        page,
-        size,
       }
 
       console.log("******************************")
