@@ -11,7 +11,6 @@ import {
 } from "../../Style/UserInfoEditStyle";
 import { CheckModal } from "../../Util/Modal";
 
-
 const UserUpdatePassword = () => {
   const { user } = useAuth();
   const [userPw, setUserPw] = useState("");

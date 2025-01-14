@@ -11,7 +11,6 @@ import { ko } from "date-fns/locale";
 import { ToggleSwitch } from "../../Component/ToggleSwitch";
 import { EditImg } from "../../Component/ProfileImg";
 import { CheckModal } from "../../Util/Modal";
-import ThumbnailBasic from "../../Img/planning_thumbnail.jpg";
 import { Button } from "../../Component/ButtonComponent";
 import PlanningApi from "../../Api/PlanningApi";
 import { useNavigate } from "react-router-dom";
@@ -215,7 +214,7 @@ export const MakePlanning = () => {
             <h2 className="question-title">플래닝 사진</h2>
             <div className="profile-container">
               <EditImg
-                basic={ThumbnailBasic}
+                basic={"/img/planning_thumbnail.jpg"}
                 setSelectedImage={setSelectedImage}
                 imagePreview={imagePreview}
                 setImagePreview={setImagePreview}

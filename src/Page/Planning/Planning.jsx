@@ -10,7 +10,8 @@ import {
 } from "../../Style/PlanningStyled";
 import { KakaoMap, SearchKakaoMap } from "../../Component/KakaoMapComponent";
 import { PlansComponent } from "../../Component/PlanningComponents/PlansComponent";
-import { useEffect, useState } from "react";
+import { ChatComponent } from "../../Component/PlanningComponents/ChatComponent";
+import { useEffect, useRef, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { ProfileImg } from "../../Component/ProfileImg";
 import { Button } from "../../Component/ButtonComponent";
@@ -20,7 +21,11 @@ import { useParams } from "react-router-dom";
 import { areas } from "../../Util/Common";
 import LikePlanning from "../../Img/likePlanning.png";
 import UnlikePlanning from "../../Img/unlikePlanning.png";
-import MenuIcon from "../../Img/menu-icon.png";
+import { AiOutlineMessage } from "react-icons/ai";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import { BiLock, BiLockOpen } from "react-icons/bi";
+import { BiTrash } from "react-icons/bi"; // Boxicons Trash 아이콘
+import { useAuth } from "../../Context/AuthContext";
 
 // const plannerInfo = {
 //   title: "떠나요~ 두리서~",
@@ -147,6 +152,7 @@ const plansEx = [
 
 export const Planning = () => {
   const { plannerId } = useParams();
+  const { user } = useAuth();
   const [plannerInfo, setPlannerInfo] = useState();
   const [areaState, setAreaState] = useState({
     area: "",
@@ -156,6 +162,8 @@ export const Planning = () => {
   const [modals, setModals] = useState({
     userModal: false, // 초대된 users 모달 open 여부
     addPlaceModal: false, // 장소 추가 모달 open 여부
+    public: false,
+    deletePlanning: false,
   });
   const [memoState, setMemoState] = useState({
     isClicked: [], // 메모마다 open 여부
@@ -176,24 +184,20 @@ export const Planning = () => {
   const [groupPlans, setGroupPlans] = useState({}); // 계획 정렬
   const [selectedPlan, setSelectedPlan] = useState({}); // date, planIndex, plan
   const [isEditting, setIsEditting] = useState(true);
-
-  useEffect(() => {
-    if (
-      currentAddedPlace.content &&
-      Object.keys(currentAddedPlace.content).length > 0
-    ) {
-      // currentAddedPlace가 유효하고, content가 비어있지 않으면 plans에 추가
-      setPlans((prevPlans) => [...prevPlans, currentAddedPlace]);
-      console.log("이게 추가될 일정", currentAddedPlace);
-      setCurrentAddedPlace({});
-      setSelectedPlan({});
-    }
-  }, [currentAddedPlace]);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(null);
+  const [inputMsg, setInputMsg] = useState(""); // 입력 메시지
+  const [chatList, setChatList] = useState([]); // 채팅 글 목록
+  const [socketConnected, setSocketConnected] = useState(false); // 웹소켓 연결 여부
+  const [sender, setSender] = useState(""); // 메시지를 보낸 사람
+  const ws = useRef(null); // 웹소켓 객체 생성, 소켓 연결 정보를 유지해야 하지만, 렌더링과는 무관
 
   const handleInputChange = (e) =>
     setSearchState({ ...searchState, keyword: e.target.value });
+
   const handleSearch = () =>
     setSearchState({ ...searchState, submittedKeyword: searchState.keyword });
+
   const closeMemo = () => {
     if (selectedPlan.date !== undefined) {
       setMemoState((prevState) => ({
@@ -213,19 +217,67 @@ export const Planning = () => {
     setSelectedPlan({});
   };
 
+  const handleBookmarked = async () => {
+    console.log("북마크 상태 : ", isBookmarked);
+    if (isBookmarked) {
+      await PlanningApi.deleteBookmarked(user.id, plannerId);
+    } else {
+      await PlanningApi.putBookmarked(user.id, plannerId);
+    }
+    setIsBookmarked(!isBookmarked);
+  };
+
+  // 웹 소켓 연결하기
+  useEffect(() => {
+    if (
+      plannerInfo &&
+      (plannerInfo.ownerNickname === user.nickname ||
+        plannerInfo.participants.some(
+          (participant) => participant.nickname === user.nickname
+        )) &&
+      !ws.current
+    ) {
+      ws.current = new WebSocket("ws://localhost:8111/ws/chat");
+      ws.current.onopen = () => {
+        setSocketConnected(true);
+        console.log("소켓 연결 완료");
+      };
+    }
+  }, [socketConnected, plannerInfo]);
+
   useEffect(() => {
     const fetchPlanner = async () => {
       try {
         const response = await PlanningApi.getPlanning(plannerId);
         setPlannerInfo(response); // 데이터를 상태에 저장
-        console.log(response);
+        console.log("fetchPlanner : ", response);
       } catch (e) {
         console.log("플래너 불러오는 중 에러", e);
       }
     };
-
+    const fetchIsBookmarked = async () => {
+      try {
+        const response = await PlanningApi.getIsBookmarked(user.id, plannerId);
+        setIsBookmarked(response);
+        console.log("isBookmarked : ", response);
+      } catch (e) {
+        console.log("북마크 여부 조회 중 에러", e);
+      }
+    };
+    const fetchChatMsg = async () => {
+      try {
+        const response = await PlanningApi.getChatMsgs(plannerId);
+        setChatList(response);
+        console.log("fetchChatMsg : ", response);
+      } catch (e) {
+        console.log("채팅 메시지 목록 불러오는 중 에러", e);
+      }
+    };
     fetchPlanner();
+    fetchIsBookmarked();
+    fetchChatMsg();
     setPlans(plansEx);
+    setSender(user.nickname);
   }, [plannerId]);
 
   useEffect(() => {
@@ -243,10 +295,23 @@ export const Planning = () => {
     }
   }, [plannerInfo]);
 
-  useEffect(
-    () => setSearchState({ keyword: "", submittedKeyword: "" }),
-    [modals.addPlaceModal]
-  );
+  useEffect(() => {
+    if (
+      currentAddedPlace.content &&
+      Object.keys(currentAddedPlace.content).length > 0
+    ) {
+      // currentAddedPlace가 유효하고, content가 비어있지 않으면 plans에 추가
+      setPlans((prevPlans) => [...prevPlans, currentAddedPlace]);
+      console.log("이게 추가될 일정", currentAddedPlace);
+      setCurrentAddedPlace({});
+      setSelectedPlan({});
+    }
+  }, [currentAddedPlace]);
+
+  useEffect(() => {
+    setSearchState({ keyword: "", submittedKeyword: "" });
+  }, [modals.addPlaceModal]);
+
   if (plannerInfo) {
     return (
       <div>
@@ -254,7 +319,8 @@ export const Planning = () => {
         <MainContainer onClick={() => closeMemo()}>
           <Info>
             <ProfileImg
-              file={plannerInfo.thumbnail}
+              // file={plannerInfo.thumbnail}
+              file={`/img/${plannerInfo.thumbnail}`}
               width={"250px"}
               height={"250px"}
             ></ProfileImg>
@@ -269,7 +335,72 @@ export const Planning = () => {
                 {new Date(plannerInfo.endDate).toLocaleDateString()}
               </h3>
             </div>
-            <img src={MenuIcon} alt="" className="menu-icon" />
+            <div className="menu-icons">
+              {isBookmarked ? (
+                <FaBookmark
+                  className="menu-icon"
+                  title="북마크"
+                  onClick={() => handleBookmarked()}
+                />
+              ) : (
+                <FaRegBookmark
+                  className="menu-icon"
+                  title="북마크"
+                  onClick={() => handleBookmarked()}
+                />
+              )}
+              {plannerInfo.public ? (
+                <BiLockOpen
+                  className="menu-icon"
+                  title="공개/비공개"
+                  onClick={() =>
+                    setModals((prevModals) => ({
+                      ...prevModals,
+                      public: true,
+                    }))
+                  }
+                />
+              ) : (
+                <BiLock
+                  className="menu-icon"
+                  title="공개/비공개"
+                  onClick={() =>
+                    setModals((prevModals) => ({
+                      ...prevModals,
+                      public: true,
+                    }))
+                  }
+                />
+              )}
+              <BiTrash
+                className="menu-icon"
+                title="플래닝 삭제"
+                onClick={() =>
+                  setModals((prev) => ({
+                    ...prev,
+                    deletePlanning: true,
+                  }))
+                }
+              />
+              <AiOutlineMessage
+                className="menu-icon"
+                title="채팅"
+                onClick={() => setIsChatOpen(!isChatOpen)}
+              />
+            </div>
+            {isChatOpen && (
+              <ChatComponent
+                inputMsg={inputMsg}
+                setInputMsg={setInputMsg}
+                ws={ws}
+                plannerId={plannerId}
+                sender={sender}
+                socketConnected={socketConnected}
+                setSocketConnected={setSocketConnected}
+                chatList={chatList}
+                setChatList={setChatList}
+              />
+            )}
           </Info>
           <Users>
             <UserProfile>
@@ -360,8 +491,8 @@ export const Planning = () => {
                 onChange={handleInputChange}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    e.preventDefault(); // 기본 엔터키 동작 방지 (예: 폼 제출)
-                    handleSearch(); // 엔터키 눌렀을 때 검색 함수 실행
+                    e.preventDefault();
+                    handleSearch();
                   }
                 }}
                 style={{
@@ -388,6 +519,37 @@ export const Planning = () => {
               setPlans={setPlans}
             />
           </CloseModal>
+        )}
+        {modals.public && (
+          <Modal
+            isOpen={modals.public}
+            onClose={() => setModals((prev) => ({ ...prev, public: false }))}
+            onConfirm={() => {
+              setPlannerInfo((prevInfo) => ({
+                ...prevInfo,
+                public: !prevInfo.public,
+              }));
+              setModals((prev) => ({ ...prev, public: false }));
+            }}
+          >
+            <p>
+              {plannerInfo.public === true ? "비공개" : "공개"}로
+              전환하시겠습니까?
+            </p>
+          </Modal>
+        )}
+        {modals.deletePlanning && (
+          <Modal
+            isOpen={modals.deletePlanning}
+            onClose={() =>
+              setModals((prev) => ({ ...prev, deletePlanning: false }))
+            }
+            onConfirm={() => {
+              setModals((prev) => ({ ...prev, deletePlanning: false }));
+            }}
+          >
+            <p>플래닝을 삭제하시겠습니까?</p>
+          </Modal>
         )}
         <Footer />
       </div>

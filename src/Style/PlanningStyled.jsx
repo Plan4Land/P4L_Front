@@ -23,12 +23,19 @@ export const Info = styled.div`
     margin: 3px;
   }
 
-  .menu-icon {
+  .menu-icons {
     display: flex;
     position: absolute;
-    right: 20px;
+    right: 0;
     top: 25px;
-    width: 3rem;
+
+    .menu-icon {
+      font-size: 2rem;
+      color: #666666;
+      cursor: pointer;
+      margin-right: 4px;
+      margin-left: 0.8vw;
+    }
   }
 `;
 
@@ -380,4 +387,97 @@ export const DayToggleContainer = styled.div`
       }
     }
   }
+`;
+
+export const ChatContainer = styled.div`
+  display: flex;
+  position: fixed;
+  right: 10px;
+  top: 130px;
+  width: 300px;
+  height: 60vh;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  z-index: 99;
+  background-color: #fefff3;
+
+  .sendChat {
+    width: 100%;
+    display: flex;
+    position: absolute;
+    justify-content: space-between;
+    bottom: 0;
+    margin-bottom: 8px;
+
+    textarea {
+      width: 16rem;
+      min-height: 40px;
+      /* max-height: 70px; */
+      font-size: 14px;
+      padding: 4px;
+      box-sizing: border-box;
+      resize: none;
+
+      scrollbar-width: thin;
+      scrollbar-color: #ccc #f0f0f0;
+
+      /* &::-webkit-scrollbar {
+        width: 6px;
+      } */
+      /* &::-webkit-scrollbar-track {
+        background: #f0f0f0;
+      } */
+      /* &::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 10px;
+        border: 2px solid #f0f0f0;
+      } */
+      /* &::-webkit-scrollbar-thumb:hover {
+        background-color: #b3b3b3;
+      } */
+    }
+
+    button {
+      width: 2.6rem;
+      margin-right: 6px;
+      cursor: pointer;
+      /* transition: all 0.2s ease; */
+      background-color: transparent;
+      border: none;
+      color: #3762d8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &:disabled {
+        color: #666;
+        cursor: default;
+      }
+
+      svg {
+        font-size: 2rem;
+      }
+    }
+  }
+`;
+
+export const ChatMsgContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-y: auto;
+  margin-bottom: 10px;
+`;
+
+export const Message = styled.div`
+  max-width: 70%;
+  font-size: 14px;
+  background-color: ${(props) => (props.isSender ? "#cfebbb" : "#E0E0E0")};
+  align-self: ${(props) => (props.isSender ? "flex-end" : "flex-start")};
+  border: ${(props) =>
+    props.isSender ? "1px solid #DCF8C6" : "1px solid #E0E0E0"};
 `;

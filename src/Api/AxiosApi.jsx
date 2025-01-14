@@ -17,7 +17,7 @@ const AxiosApi = {
   },
   // 로그아웃
   logout: async (userId) => {
-    const member = { id: userId, };
+    const member = { id: userId };
     return await AxiosInstance.post("/auth/logout", member);
   },
   // 회원가입
@@ -62,7 +62,7 @@ const AxiosApi = {
     const member = {
       id: id,
       password: password,
-    }
+    };
     return await AxiosInstance.put("/member/update/password", member);
   },
   // 회원 삭제
@@ -74,7 +74,7 @@ const AxiosApi = {
     const memberInfo = {
       id: id,
       password: password,
-    }
+    };
     return await AxiosInstance.post("/member/validate", memberInfo);
   },
   // 회원 아이디 중복 확인
@@ -89,5 +89,36 @@ const AxiosApi = {
   memberNicknameExists: async (nickname) => {
     return await AxiosInstance.post(`/member/nicknameExists/${nickname}`);
   },
-}
+  // 회원 아이디 찾기
+  memberFindId: async (name, email) => {
+    const memberInfo = {
+      name: name,
+      email: email,
+    };
+    return await AxiosInstance.post("/member/find-id", memberInfo);
+  },
+  // 회원 비밀번호 찾기
+  memerFindPassword: async (id, email) => {
+    const memberInfo = {
+      id: id,
+      email: email,
+    };
+    return await AxiosInstance.post("/member/find-password", memberInfo);
+  },
+  // 이메일로 회원 탈퇴 확인
+  isActivateByEmail: async (email) => {
+    const memberInfo = {
+      email: email,
+    };
+    return await AxiosInstance.post("/auth/isActivate/byEmail", memberInfo);
+  },
+  // 아이디+이메일로 회원 탈퇴 확인
+  isActivateByIdAndEmail: async (id, email) => {
+    const memberInfo = {
+      id: id,
+      email: email,
+    };
+    return await AxiosInstance.post("/auth/isActivate/byIdAndEmail", memberInfo);
+  },
+};
 export default AxiosApi;

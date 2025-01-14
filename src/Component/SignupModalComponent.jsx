@@ -1,11 +1,13 @@
 import styled, { css } from "styled-components";
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import emailjs from "emailjs-com";
 
 // icon
 import { GoMail, GoPencil } from "react-icons/go";
 import { IoClose } from "react-icons/io5";
 import { VscAccount } from "react-icons/vsc";
+import AxiosApi from "../Api/AxiosApi";
 
 export const InputBox = styled.div`
   display: flex;
@@ -173,10 +175,23 @@ export const FindUserIdModal = (props) => {
     setState(e.target.value);
   };
 
-  const onClickFindUserId = () => {
-    // 아이디 찾기 기능 구현
-    openResult();
-    handleCloseModal();
+  const onClickFindUserId = async () => {
+    try {
+      // 탈퇴 확인
+      const isActivate = await AxiosApi.isActivateByEmail(inputEmail);
+      if(isActivate.data === "탈퇴한 회원입니다.") {
+        setTextMessage("탈퇴한 회원입니다.");
+        return;
+      }
+      // 찾기 기능
+      const response = await AxiosApi.memberFindId(inputName, inputEmail);
+      if (response.data) {
+        openResult(response.data);
+        handleCloseModal();
+      }
+    } catch (erorr) {
+      setTextMessage("해당 회원이 존재하지 않습니다.");
+    }
   };
 
   const handleBackgroundClick = (e) => {
@@ -188,6 +203,13 @@ export const FindUserIdModal = (props) => {
     close();
     setInputName("");
     setInputEmail("");
+  };
+
+  // 엔터로 버튼 클릭
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      onClickFindUserId();
+    }
   };
 
   return (
@@ -211,6 +233,7 @@ export const FindUserIdModal = (props) => {
                     placeholder="이름 입력"
                     value={inputName}
                     onChange={(e) => handleInputChange(e, setInputName)}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </InputBox>
@@ -224,6 +247,7 @@ export const FindUserIdModal = (props) => {
                     placeholder="이메일 입력"
                     value={inputEmail}
                     onChange={(e) => handleInputChange(e, setInputEmail)}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </InputBox>
@@ -311,21 +335,85 @@ export const FindPwModal = (props) => {
     setState(e.target.value);
   };
 
-  const onClickFindPw = () => {
-    // 비밀번호 찾기 기능 구현
-    openResult();
-    handleCloseModal();
+  // 비밀번호 찾기 기능
+  const onClickFindPw = async () => {
+    try {
+      const response = await AxiosApi.memerFindPassword(
+        inputUserId,
+        inputEmail
+      );
+      if (response.data) {
+        passwordChange(response.data);
+      }
+    } catch (error) {
+      setTextMessage("해당 회원이 존재하지 않습니다.");
+    }
   };
 
+  // 유저 비밀번호 변경 -> 이메일 보내기
+  const passwordChange = async (newPassword) => {
+    // 탈퇴 확인
+    const isActivate = await AxiosApi.isActivateByIdAndEmail(inputUserId, inputEmail);
+    if (isActivate.data === "탈퇴한 회원입니다.") {
+      setTextMessage("탈퇴한 회원입니다.");
+      return;
+    }
+    // 찾기 기능
+    const response = await AxiosApi.memberUpdatePassword(
+      inputUserId,
+      newPassword
+    );
+    if (response.data) {
+      sendEmail(newPassword);
+    } else {
+      setTextMessage(
+        "예기치 못한 오류가 발생했습니다. 관리자에게 문의해주세요."
+      );
+    }
+  };
+
+  // 이메일 보내기
+  const sendEmail = (password) => {
+    const templateParams = {
+      to_email: inputEmail,
+      from_name: "plan4land",
+      message: `${password}`,
+    };
+
+    emailjs
+      .send(
+        "plan4land", // service id
+        "template_59cggwi", // template id
+        templateParams,
+        "26R74sBvTB5bxhbNn" // public-key
+      )
+      .then((response) => {
+        openResult(inputEmail);
+        handleCloseModal();
+      })
+      .catch((error) => {
+        setTextMessage("이메일 발송에 실패했습니다. 관리자에게 문의해주세요.");
+      });
+  };
+
+  // 아이디 찾기로 이동
   const onClickFindUserId = () => {
     openFindUserId();
     handleCloseModal();
   };
 
+  // 모달 닫기
   const handleCloseModal = () => {
     close();
     setInputUserId("");
     setInputEmail("");
+  };
+
+  // 엔터로 버튼 클릭
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      onClickFindPw();
+    }
   };
 
   return (
@@ -349,6 +437,7 @@ export const FindPwModal = (props) => {
                     placeholder="아이디 입력"
                     value={inputUserId}
                     onChange={(e) => handleInputChange(e, setInputUserId)}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </InputBox>
@@ -362,6 +451,7 @@ export const FindPwModal = (props) => {
                     placeholder="이메일 입력"
                     value={inputEmail}
                     onChange={(e) => handleInputChange(e, setInputEmail)}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
               </InputBox>
@@ -453,7 +543,7 @@ export const ProfilePicModal = (props) => {
   const addNewPic = (picture) => {
     addPicture(picture);
     close();
-  }
+  };
 
   const pictures = [
     { name: "basic1.png", alt: "기본1" },
@@ -469,11 +559,11 @@ export const ProfilePicModal = (props) => {
     if (file) {
       setSelectedImage(file);
     }
-  }
+  };
 
   const openFilePicker = () => {
     fileInputRef.current.click();
-  }
+  };
 
   return (
     <ModalStyle>
@@ -484,7 +574,11 @@ export const ProfilePicModal = (props) => {
         {open && (
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
             <h1 className="title">프로필 선택</h1>
-            <div className={type === "new" ? "picture-container-new" : "picture-container" }>
+            <div
+              className={
+                type === "new" ? "picture-container-new" : "picture-container"
+              }
+            >
               {pictures.map((picture, index) => (
                 <div className="picture-box" key={index}>
                   <img
@@ -496,7 +590,7 @@ export const ProfilePicModal = (props) => {
               ))}
               {type === "edit" && (
                 <>
-                  <input 
+                  <input
                     ref={fileInputRef}
                     type="file"
                     accept="image/*"
@@ -505,7 +599,7 @@ export const ProfilePicModal = (props) => {
                   />
                   <div className="picture-box">
                     {selectedImage && (
-                      <img 
+                      <img
                         src={URL.createObjectURL(selectedImage)}
                         alt="Selected"
                         onClick={() => addNewPic(selectedImage)}
@@ -513,11 +607,8 @@ export const ProfilePicModal = (props) => {
                     )}
                   </div>
                   <div className="picture-box" />
-                  <div 
-                    className="picture-box" 
-                    onClick={openFilePicker}
-                  >
-                    <img 
+                  <div className="picture-box" onClick={openFilePicker}>
+                    <img
                       src="profile-pic/plus.png"
                       alt="이미지 선택"
                       className="plusPic"

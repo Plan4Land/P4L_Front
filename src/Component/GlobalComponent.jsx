@@ -14,7 +14,7 @@ export const Header = () => {
   const handleLogout = async () => {
     try {
       const response = await AxiosApi.logout(user.id);
-      if(response.status === 204) {
+      if (response.status === 204) {
         logout();
         navigate("/login");
       } else {
@@ -23,7 +23,6 @@ export const Header = () => {
     } catch (error) {
       console.error("Logout error:", error);
     }
-    
   };
 
   const isActive = (path, query = "") => {
@@ -47,7 +46,9 @@ export const Header = () => {
         <p>|</p>
         <Link
           to="/tourlist"
-          className={`tag ${isActive("/tourlist") ? "active" : ""}`}
+          className={`tag ${
+            isActive("/tourlist") || isActive("/tourItemInfo") ? "active" : ""
+          }`}
         >
           관광지
         </Link>

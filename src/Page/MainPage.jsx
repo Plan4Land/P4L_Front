@@ -11,7 +11,7 @@ import {
 import { Button } from "../Component/ButtonComponent";
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { areas } from "../Util/Common";
+import { areas, types } from "../Util/Common";
 import { Swiper, SwiperSlide } from "swiper/react"; // 추천 관광지 스와이퍼
 import "swiper/css"; // 추천 관광지 스와이퍼
 import "swiper/css/navigation"; // 추천 관광지 스와이퍼
@@ -23,7 +23,6 @@ import axios from "axios";
 
 export const Main = () => {
   const [selectedMenu, setSelectedMenu] = useState("지역"); // 미니검색창
-  const categories = ["관광지", "숙소", "음식점"];
   const [selectedArea, setSelectedArea] = useState("");
   const [value, onChange] = useState(new Date()); // 축제 캘린더
   const [holidays, setHolidays] = useState([]); // 공휴일 목록
@@ -97,7 +96,7 @@ export const Main = () => {
               <div className="RegionSearch">
                 <div className="area-list">
                   {areas.map((area) => (
-                    <Link key={area.code} to={`/tourlist?area=${area.code}`}>
+                    <Link key={area.code} to={`/tourlist?areaCode=${area.code}`}>
                       <Button
                         key={area.code}
                         onClick={() => handleAreaClick(area.name)}
@@ -112,9 +111,9 @@ export const Main = () => {
             )}
             {selectedMenu === "카테고리" && (
               <div className="SelectCategory">
-                {categories.map((category) => (
-                  <Link key={category} to={`/tourlist?category=${category}`}>
-                    <Button className="Category">{category}</Button>
+                {types.map((type) => (
+                  <Link key={type.code} to={`/tourlist?category=${type.code}`}>
+                    <Button className="Category">{type.name}</Button>
                   </Link>
                 ))}
               </div>

@@ -25,6 +25,9 @@ export const Login = () => {
   const [pwModalOpen, setPwModalOpen] = useState(false);
   const [pwResultModalOpen, setPwResultModalOpen] = useState(false);
 
+  const [findIdResult, setFindIdResult] = useState("");
+  const [findPwResult, setFindPwResult] = useState("");
+
   const navigate = useNavigate();
 
   const { login } = useAuth();
@@ -72,6 +75,15 @@ export const Login = () => {
     }
   };
 
+  // 카카오 로그인
+  const Rest_api_key = process.env.REACT_APP_KAKAO_API_KEY;
+  const redirect_uri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
+  // oauth 요청 url
+  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`;
+  const kakaoLogin = () => {
+    window.location.href = kakaoURL;
+  };
+
   // 비밀번호 보이기
   const onClickPwEye = () => {
     setIsPwShow((prev) => !prev);
@@ -87,6 +99,18 @@ export const Login = () => {
   // 모달 열고 닫기
   const openModal = (modal, state) => {
     modal(state);
+  }
+
+  // 아이디 찾기 결과 모달
+  const handleFindIdResultModal = (data) => {
+    setFindIdResult(data);
+    setFindIdResultModalOpen(true);
+  }
+
+  // 비밀번호 찾기 결과 모달
+  const handleFindPwResultModal = (data) => {
+    setFindPwResult(data);
+    setPwResultModalOpen(true);
   }
 
   return (
@@ -146,20 +170,25 @@ export const Login = () => {
             로그인
           </Button>
 
-          <button className="kakaoBtn">카카오 로그인</button>
+          <button 
+            className="kakaoBtn"
+            onClick={kakaoLogin}
+          >
+            카카오 로그인
+          </button>
 
           {/* 아이디 찾기 모달 */}
           <FindUserIdModal
             open={findIdModalOpen}
             close={()=>openModal(setFindIdModalOpen, false)}
-            openResult={()=>openModal(setFindIdResultModalOpen, true)}
+            openResult={handleFindIdResultModal}
           />
 
           {/* 아이디 찾기 결과 모달 */}
           <ResultUserIdModal
             open={findIdResultModalOpen}
             close={()=>openModal(setFindIdResultModalOpen, false)}
-            userId="test123" // 나중에 아이디 넣어야 함.
+            userId={findIdResult}
             openFindPw={()=>openModal(setPwModalOpen, true)}
           />
           
@@ -167,7 +196,7 @@ export const Login = () => {
           <FindPwModal
             open={pwModalOpen}
             close={()=>openModal(setPwModalOpen, false)}
-            openResult={()=>openModal(setPwResultModalOpen, true)}
+            openResult={handleFindPwResultModal}
             openFindUserId={()=>openModal(setFindIdModalOpen, true)}
           />
 
@@ -175,7 +204,7 @@ export const Login = () => {
           <ResultPwModal
             open={pwResultModalOpen}
             close={()=>openModal(setPwResultModalOpen, false)}
-            email="test123@gmail.com" // 나중에 이메일 넣어야 함.
+            email={findPwResult}
           />
 
         </SignupContainer>

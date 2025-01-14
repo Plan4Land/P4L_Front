@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import firebase from "firebase/compat";
+import firebase from "firebase/compat/app";
+import "firebase/compat/storage";
 
 // 플래너 폴더 : /PlannerPic
 // 유저 폴더 : /UserProfilePic
@@ -15,5 +16,5 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 export const storage = firebase.storage();

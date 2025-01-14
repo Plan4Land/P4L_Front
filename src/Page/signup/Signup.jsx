@@ -1,26 +1,27 @@
-import { useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import AxiosApi from "../../Api/AxiosApi";
+import emailjs from "emailjs-com";
+
 import { Header, Footer } from "../../Component/GlobalComponent";
 import {
   Center,
   SignupContainer,
   InputBox,
   Button,
-  Pic,
 } from "../../Component/SignupComponent";
 import { ProfilePicModal } from "../../Component/SignupModalComponent";
-import AxiosApi from "../../Api/AxiosApi";
+import { CheckModal } from "../../Util/Modal";
 
 // icon
 import { VscAccount } from "react-icons/vsc";
 import { GoMail, GoPencil, GoLock, GoEye, GoEyeClosed } from "react-icons/go";
 
-
 export const Signup = () => {
   // input
   const [inputUserId, setInputUserId] = useState("");
   const [inputEmail, setInputEmail] = useState("");
+  const [inputEmail2, setInputEmail2] = useState("");
   const [inputPw, setInputPw] = useState("");
   const [inputPw2, setInputPw2] = useState("");
   const [inputName, setInputName] = useState("");
@@ -30,6 +31,7 @@ export const Signup = () => {
   // message
   const [idMsg, setIdMsg] = useState("");
   const [emailMsg, setEmailMsg] = useState("");
+  const [email2Msg, setEmail2Msg] = useState("");
   const [pwMsg, setPwMsg] = useState("");
   const [pw2Msg, setPw2Msg] = useState("");
   const [nameMsg, setNameMsg] = useState("");
@@ -38,19 +40,35 @@ export const Signup = () => {
   // input ref
   const userIdRef = useRef(null);
   const emailRef = useRef(null);
+  const email2Ref = useRef(null);
   const pwRef = useRef(null);
   const pw2Ref = useRef(null);
   const nameRef = useRef(null);
   const nickNameRef = useRef(null);
 
+  // check
+  const [idCheck, setIdCheck] = useState(false);
+  const [emailCheck, setEmailCheck] = useState(false);
+  const [email2Check, setEmail2Check] = useState(false);
+  const [nicknameCheck, setNicknameCheck] = useState(false);
+
+  // show
+  const [isEmail2Show, setIsEmail2Show] = useState(true);
   const [isPwShow, setIsPwShow] = useState(false);
-  
-  const [isPicsModalOpen, setIsPicsModalOpen] = useState("");
+
+  // modal
+  const [isPicsModalOpen, setIsPicsModalOpen] = useState(false);
+  const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
+  const [checkModalMessage, setCheckModalMessage] = useState("");
+
+  // result
+  const [emailResult, setEmailResult] = useState("");
+  const [allSuccess, setAllSuccess] = useState(false);
 
   const navigate = useNavigate();
 
-  // 아이디 체크
-  const handleIdCheck = (e) => {
+  // 아이디 유효성 검사
+  const handleIdInput = (e) => {
     const input = e.target.value;
     setInputUserId(e.target.value);
     if (!input.trim()) {
@@ -65,25 +83,28 @@ export const Signup = () => {
       setIdMsg("");
       return true;
     }
-  }
-  // 아이디 중복 체크
-  const handleIdDuplicate = async () => {
+  };
+  useEffect(() => {
+    setIdCheck(false);
+  }, [inputUserId]);
+  // 아이디 체크
+  const handleIdCheck = async () => {
     // 유효성 검사 먼저 수행
-    const isValid = handleIdCheck({ target: { value: inputUserId } });
-    if (!isValid) {
-      return; // 유효성 검사 실패 시 중복 검사를 진행하지 않음
-    }
+    if (!handleIdInput({ target: { value: inputUserId } })) return;
+
     // 유효성 통과하면 중복 검사 수행
     const response = await AxiosApi.memberIdExists(inputUserId);
     if (response.data) {
       setIdMsg("중복된 아이디입니다.");
+      setIdCheck(false);
     } else {
       setIdMsg("사용가능한 아이디입니다.");
+      setIdCheck(true);
     }
-  }
-  
-  // 이메일 체크
-  const handleEmailCheck = (e) => {
+  };
+
+  // 이메일 유효성 검사
+  const handleEmailInput = (e) => {
     const input = e.target.value;
     setInputEmail(input);
     if (!input.trim()) {
@@ -98,25 +119,78 @@ export const Signup = () => {
       setEmailMsg("");
       return true;
     }
-  }
-  // 이메일 중복 체크
-  const handleEmailDuplicate = async () => {
+  };
+  useEffect(() => {
+    setEmailCheck(false);
+    setEmail2Check(false);
+    setIsEmail2Show(false);
+  }, [inputEmail]);
+  // 이메일 체크
+  const handleEmailCheck = async () => {
     // 유효성 검사 먼저 수행
-    const isValid = handleEmailCheck({ target: { value: inputEmail } });
-    if (!isValid) {
-      return; // 유효성 검사 실패 시 중복 검사를 진행하지 않음
-    }
+    if (!handleEmailInput({ target: { value: inputEmail } })) return;
+
     // 유효성 통과하면 중복 검사 수행
     const response = await AxiosApi.memberEmailExists(inputEmail);
     if (response.data) {
       setEmailMsg("중복된 이메일입니다.");
-    } else {
-      setEmailMsg("사용가능한 이메일입니다.");
+      return;
     }
-  }
 
-  // 비밀번호 체크
-  const handlePwCheck = (e) => {
+    // 중복 검사 통과하면 이메일 인증
+    const newCode = generateRandomCode();
+    setEmailResult(newCode);
+
+    // 메일 전송
+    setTimeout(() => {
+      const templateParams = {
+        to_email: inputEmail,
+        from_name: "plan4land",
+        message: newCode,
+      };
+      emailjs
+        .send(
+          "plan4land", // service id
+          "template_9hjizwi", // template id
+          templateParams,
+          "26R74sBvTB5bxhbNn" // public-key
+        )
+        .then((response) => {
+          setEmailMsg("아래의 이메일로 인증번호가 전송되었습니다.");
+          setEmailCheck(true);
+          setEmail2Msg("");
+          setInputEmail2("");
+          setIsEmail2Show(true);
+        })
+        .catch((error) => {
+          setEmailMsg(
+            "이메일 전송에 오류가 발생했습니다. 관리자에게 문의해주세요."
+          );
+          setEmailCheck(false);
+        });
+    }, 0);
+  };
+  const generateRandomCode = () => {
+    const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+    for (let i = 0; i < 4; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters[randomIndex];
+    }
+    return result;
+  };
+  // 이메일 인증
+  const handleEmail2Check = () => {
+    if (inputEmail2 === emailResult) {
+      setEmail2Msg("인증번호가 일치합니다.");
+      setEmail2Check(true);
+    } else {
+      setEmail2Msg("인증번호가 일치하지 않습니다.");
+    }
+  };
+
+  // 비밀번호 유효성 검사
+  const handlePwInput = (e) => {
     const input = e.target.value;
     setInputPw(input);
     if (input.length < 8) {
@@ -136,8 +210,8 @@ export const Signup = () => {
   const onClickPwEye = () => {
     setIsPwShow((prev) => !prev);
   };
-  // 비밀번호 확인 체크
-  const handlePw2Check = (e) => {
+  // 비밀번호2 유효성 검사
+  const handlePw2Input = (e) => {
     const input = e.target.value;
     setInputPw2(input);
     if (inputPw !== input) {
@@ -148,10 +222,10 @@ export const Signup = () => {
       setPw2Msg("");
       return true;
     }
-  }
-  
-  // 이름 체크
-  const handleNameCheck = (e) => {
+  };
+
+  // 이름 유효성 검사
+  const handleNameInput = (e) => {
     const input = e.target.value;
     setInputName(input);
     if (!input.trim()) {
@@ -162,10 +236,10 @@ export const Signup = () => {
       setNameMsg("");
       return true;
     }
-  }
+  };
 
-  // 닉네임 체크
-  const handleNicknameCheck = (e) => {
+  // 닉네임 유효성 검사
+  const handleNicknameInput = (e) => {
     const input = e.target.value;
     setInputNickName(input);
     if (!input.trim()) {
@@ -176,52 +250,86 @@ export const Signup = () => {
       setNickNameMsg("");
       return true;
     }
-  }
-  // 닉네임 중복 체크
-  const handleNicknameDuplicate = async () => {
+  };
+  useEffect(() => {
+    setNicknameCheck(false);
+  }, [inputNickName]);
+  // 닉네임 체크
+  const handleNicknameCheck = async () => {
     // 유효성 검사 먼저 수행
-    const isValid = handleNicknameCheck({ target: { value: inputNickName } });
-    if (!isValid) {
-      return; // 유효성 검사 실패 시 중복 검사를 진행하지 않음
-    }
+    if (!handleNicknameInput({ target: { value: inputNickName } })) return;
+
     // 유효성 통과하면 중복 검사 수행
     const response = await AxiosApi.memberNicknameExists(inputNickName);
     if (response.data) {
       setNickNameMsg("중복된 이메일입니다.");
+      setNicknameCheck(false);
     } else {
       setNickNameMsg("사용가능한 이메일입니다.");
+      setNicknameCheck(true);
     }
-  }
+  };
 
   // 회원가입 기능
   const onClickSignup = async () => {
-    // 체크 함수 한 번씩 실행
-    const isIdValid = handleIdDuplicate({ target: { value: inputUserId } });
-    const isEmailValid = handleEmailDuplicate({ target: { value: inputEmail } });
-    const isPwValid = handlePwCheck({ target: { value: inputPw } });
-    const isPw2Valid = handlePw2Check({ target: { value: inputPw2 } });
-    const isNameValid = handleNameCheck({ target: { value: inputName } });
-    const isNicknameValid = handleNicknameDuplicate({ target: { value: inputNickName } });
-    // 하나라도 유효하지 않으면 메시지 표시 후 종료
-    if(!isIdValid || !isEmailValid || !isPwValid || !isPw2Valid || !isNameValid || !isNicknameValid){
+    // 유효성 검사 한 번씩 실행
+    const isIdValid = handleIdInput({ target: { value: inputUserId } });
+    const isEmailValid = handleEmailInput({ target: { value: inputEmail } });
+    const isPwValid = handlePwInput({ target: { value: inputPw } });
+    const isPw2Valid = handlePw2Input({ target: { value: inputPw2 } });
+    const isNameValid = handleNameInput({ target: { value: inputName } });
+    const isNicknameValid = handleNicknameInput({
+      target: { value: inputNickName },
+    });
+
+    // 유효성 검사 중 하나라도 실패하면 종료
+    if (
+      !isIdValid ||
+      !isEmailValid ||
+      !isPwValid ||
+      !isPw2Valid ||
+      !isNameValid ||
+      !isNicknameValid
+    ) {
+      return;
+    }
+
+    // 중복검사
+    if (!idCheck || !emailCheck || !nicknameCheck) {
+      setCheckModalMessage("중복검사를 모두 완료해주세요.");
+      setIsCheckModalOpen(true);
       return;
     }
 
     try {
-      const response = await AxiosApi.signup(inputUserId, inputPw, inputName, inputNickName, inputEmail, currentPic);
-      if (response.status === 201 
-          || response.status === 200) {
-        alert("회원가입이 성공적으로 완료되었습니다.");
-        navigate("/login");
+      const response = await AxiosApi.signup(
+        inputUserId,
+        inputPw,
+        inputName,
+        inputNickName,
+        inputEmail,
+        currentPic
+      );
+      if (response.status === 201 || response.status === 200) {
+        setCheckModalMessage("회원가입이 완료되었습니다.");
+        setIsCheckModalOpen(true);
+        setAllSuccess(true);
       }
     } catch (error) {
-      console.error("Error during signup: ", error);
-      alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setCheckModalMessage(
+        "회원가입 중 오류가 발생했습니다. 다시 시도해주세요."
+      );
+      setIsCheckModalOpen(true);
     }
   };
 
   const handlePicSelect = (picName) => {
     setCurrentPic(`profile-pic/${picName}`);
+  };
+
+  const closeCheckModal = () => {
+    setIsCheckModalOpen(false);
+    if (allSuccess) navigate("/login");
   };
 
   return (
@@ -234,7 +342,7 @@ export const Signup = () => {
           <div className="input-container">
             <div className="textMessage">{idMsg}</div>
             <div className="inputWrapper">
-              <InputBox style={{width: "360px"}}>
+              <InputBox style={{ width: "360px" }}>
                 <div className="iconBox-left">
                   <VscAccount />
                 </div>
@@ -244,13 +352,14 @@ export const Signup = () => {
                     type="text"
                     placeholder="아이디 입력"
                     value={inputUserId}
-                    onChange={(e) => handleIdCheck(e)}
+                    onChange={(e) => handleIdInput(e)}
                   />
                 </div>
               </InputBox>
-              <button 
+              <button
                 className="duplicateButton"
-                onClick={handleIdDuplicate}
+                onClick={handleIdCheck}
+                disabled={idCheck}
               >
                 중복확인
               </button>
@@ -260,7 +369,7 @@ export const Signup = () => {
           <div className="input-container">
             <div className="textMessage">{emailMsg}</div>
             <div className="inputWrapper">
-              <InputBox style={{width: "360px"}}>
+              <InputBox style={{ width: "360px" }}>
                 <div className="iconBox-left">
                   <GoMail />
                 </div>
@@ -270,18 +379,48 @@ export const Signup = () => {
                     type="email"
                     placeholder="이메일 입력"
                     value={inputEmail}
-                    onChange={(e) => handleEmailCheck(e)}
+                    onChange={(e) => handleEmailInput(e)}
                   />
                 </div>
               </InputBox>
-              <button 
+              <button
                 className="duplicateButton"
-                onClick={handleEmailDuplicate}
+                onClick={handleEmailCheck}
+                disabled={emailCheck}
               >
-                중복확인
+                인증
               </button>
             </div>
           </div>
+
+          {isEmail2Show && (
+            <div className="input-container">
+              <div className="textMessage">{email2Msg}</div>
+              <div className="inputWrapper">
+                <InputBox style={{ width: "360px" }}>
+                  <div className="iconBox-left">
+                    <GoMail />
+                  </div>
+                  <div className="inputBox">
+                    <input
+                      ref={email2Ref}
+                      type="text"
+                      placeholder="이메일 인증번호"
+                      value={inputEmail2}
+                      onChange={(e) => setInputEmail2(e.target.value)}
+                    />
+                  </div>
+                </InputBox>
+                <button
+                  className="duplicateButton"
+                  onClick={handleEmail2Check}
+                  disabled={email2Check}
+                >
+                  인증
+                </button>
+              </div>
+            </div>
+          )}
 
           <div className="input-container">
             <div className="textMessage">{pwMsg}</div>
@@ -295,7 +434,7 @@ export const Signup = () => {
                   type={isPwShow ? "text" : "password"}
                   placeholder="비밀번호 입력"
                   value={inputPw}
-                  onChange={(e) => handlePwCheck(e)}
+                  onChange={(e) => handlePwInput(e)}
                 />
                 <div className="iconBox-right" onClick={onClickPwEye}>
                   {isPwShow ? <GoEye /> : <GoEyeClosed />}
@@ -316,7 +455,7 @@ export const Signup = () => {
                   type="password"
                   placeholder="비밀번호 확인"
                   value={inputPw2}
-                  onChange={(e) => handlePw2Check(e)}
+                  onChange={(e) => handlePw2Input(e)}
                 />
               </div>
             </InputBox>
@@ -334,7 +473,7 @@ export const Signup = () => {
                   type="text"
                   placeholder="이름 입력"
                   value={inputName}
-                  onChange={(e) => handleNameCheck(e)}
+                  onChange={(e) => handleNameInput(e)}
                 />
               </div>
             </InputBox>
@@ -343,7 +482,7 @@ export const Signup = () => {
           <div className="input-container">
             <div className="textMessage">{nickNameMsg}</div>
             <div className="inputWrapper">
-              <InputBox style={{width: "360px"}}>
+              <InputBox style={{ width: "360px" }}>
                 <div className="iconBox-left">
                   <GoPencil />
                 </div>
@@ -353,13 +492,14 @@ export const Signup = () => {
                     type="text"
                     placeholder="닉네임 입력"
                     value={inputNickName}
-                    onChange={(e) => handleNicknameCheck(e)}
+                    onChange={(e) => handleNicknameInput(e)}
                   />
                 </div>
               </InputBox>
-              <button 
+              <button
                 className="duplicateButton"
-                onClick={handleNicknameDuplicate}
+                onClick={handleNicknameCheck}
+                disabled={nicknameCheck}
               >
                 중복확인
               </button>
@@ -367,7 +507,10 @@ export const Signup = () => {
           </div>
 
           <div className="picture-box">
-            <div className="current-pic" onClick={() => setIsPicsModalOpen(true)}>
+            <div
+              className="current-pic"
+              onClick={() => setIsPicsModalOpen(true)}
+            >
               <img src={currentPic} alt="프로필 이미지" />
             </div>
             <button
@@ -388,6 +531,11 @@ export const Signup = () => {
             onSelect={handlePicSelect}
             type="new"
           />
+
+          {/* 완료 모달 */}
+          <CheckModal isOpen={isCheckModalOpen} onClose={closeCheckModal}>
+            {checkModalMessage}
+          </CheckModal>
         </SignupContainer>
       </Center>
       <Footer />

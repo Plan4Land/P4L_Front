@@ -54,11 +54,11 @@ export const SelectTourItem = styled.div`
     cursor: pointer;
     background: transparent;
     border: none;
-    color: ${colors.colorA}; /* 원하는 텍스트 색상 */
+    color: ${colors.colorA};
   }
 
   .toggle-button:hover {
-    color: ${colors.colorB}; /* 호버 시 색상 변경 */
+    color: ${colors.colorB};
   }
 `;
 
@@ -98,7 +98,6 @@ export const SearchSt = styled.div`
     color: ${colors.colorA};
     width: 20px;
 
-    /* hover 시 아무 변화가 없도록 설정 */
     &:hover {
       background: transparent;
       color: ${colors.colorA};
@@ -107,7 +106,6 @@ export const SearchSt = styled.div`
     }
   }
 
-  /* button의 다른 hover 스타일을 덮어쓸 수 있도록 구체적으로 설정 */
   button.search-button:hover {
     background: transparent;
     color: ${colors.colorA};

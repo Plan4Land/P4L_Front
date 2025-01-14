@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useAuth } from "../Context/AuthContext";
 
 const H4 = styled.h4`
   margin: 0;
@@ -11,6 +12,7 @@ const P = styled.p`
 
 const Test = () => {
   const [userInfo, setUserInfo] = useState("");
+  const { user } = useAuth();
 
   useEffect(() => {
     setUserInfo(localStorage.getItem("user"));

@@ -28,6 +28,33 @@ const PlanningApi = {
   getPlanning: async (plannerId) => {
     return (await AxiosInstance.get(`/planner/${plannerId}`)).data;
   },
+  getIsBookmarked: async (memberId, plannerId) => {
+    const params = {
+      memberId,
+      plannerId,
+    };
+    return (await AxiosInstance.get(`/bookmarkPlanner`, { params })).data;
+  },
+  putBookmarked: async (memberId, plannerId) => {
+    const params = {
+      memberId,
+      plannerId,
+    };
+    return (await AxiosInstance.put(`/bookmarkPlanner`, null, { params })).data;
+  },
+  deleteBookmarked: async (memberId, plannerId) => {
+    const params = {
+      memberId,
+      plannerId,
+    };
+    return (await AxiosInstance.delete(`/bookmarkPlanner`, { params })).data;
+  },
+  getChatMsgs: async (plannerId) => {
+    return (await AxiosInstance.get(`/chat/msg/${plannerId}`)).data;
+  },
+  chatDetail: async (plannerId) => {
+    return (await AxiosInstance.get(`/chat/room/${plannerId}`)).data;
+  },
 };
 
 export default PlanningApi;

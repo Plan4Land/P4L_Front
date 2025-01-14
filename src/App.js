@@ -16,6 +16,7 @@ import RequestPayment from "./Page/Payment/RequestPayment";
 import Test from "./Page/test";
 import ProtectedRoute from "./Util/ProtectedRoute";
 import { TourItemInfo } from "./Page/Item/TourItemInfo";
+import KakaoRedirect from "./Component/KakaoLoginRedirect";
 
 function App() {
   return (
@@ -28,25 +29,33 @@ function App() {
               <Route path="/" element={<Main />} />
               <Route path="/planning/:plannerId" element={<Planning />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/login/auth/kakao" element={<KakaoRedirect />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/ktxInquiry" element={<KtxInquiry />} />
               <Route path="/tourlist" element={<TourList />} />
               <Route path="/tourItemInfo" element={<TourItemInfo />} />
+              <Route path="/tourItemInfo/:id" element={<TourItemInfo />} />
               <Route path="/planninglist" element={<PlanningList />} />
               <Route path="/signup/terms" element={<TermsOfService />} />
               <Route path="/payment" element={<RequestPayment />} />
               <Route path="/test" element={<Test />} />
-              
+
               {/* 로그인 필요한 페이지 */}
-              <Route path="/makePlanning" element={
-                <ProtectedRoute>
-                  <MakePlanning />
-                </ProtectedRoute>} 
+              <Route
+                path="/makePlanning"
+                element={
+                  <ProtectedRoute>
+                    <MakePlanning />
+                  </ProtectedRoute>
+                }
               />
-              <Route path="/mypage" element={
-                <ProtectedRoute>
-                  <MyPageMain />
-                </ProtectedRoute>} 
+              <Route
+                path="/mypage"
+                element={
+                  <ProtectedRoute>
+                    <MyPageMain />
+                  </ProtectedRoute>
+                }
               />
             </Routes>
           </Router>
