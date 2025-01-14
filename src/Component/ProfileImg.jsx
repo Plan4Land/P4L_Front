@@ -21,8 +21,8 @@ export const ProfileImgContainer = styled.div`
     background-color: ${colors.colorA};
     color: white;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 2rem;
+    height: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
