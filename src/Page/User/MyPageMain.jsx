@@ -88,23 +88,24 @@ export const MyPageMain = () => {
           {!selectedMenu && (
             <UserMain>
               <UserInfo>
-                <div
-                  className="ProfileImg"
-                  style={{
-                    backgroundImage: `url(${user.imgPath})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                />
-                <div className="UserExplain">
-                  <p>닉네임: {user.nickname}</p>
-                  <p>아이디: {user.id}</p>
-                  <div className="follow" onClick={openFollowModal}>
-                    <p>팔로잉: 숫자 팔로워: 숫자</p>
+                <div className="user">
+                  <div
+                    className="ProfileImg"
+                    style={{
+                      backgroundImage: `url(${user.imgPath})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  />
+                  <div className="UserExplain">
+                    <p>닉네임: {user.nickname}</p>
+                    <p>아이디: {user.id}</p>
+                    <div className="follow" onClick={openFollowModal}>
+                      <p>팔로잉: 숫자 팔로워: 숫자</p>
+                    </div>
                   </div>
                 </div>
-
-                <div className="planningButton">
+                <div className="Button">
                   <Link to={"/makeplanning"}>
                     <Button>플래닝 만들기</Button>
                   </Link>

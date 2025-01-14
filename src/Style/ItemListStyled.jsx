@@ -120,7 +120,8 @@ export const ItemList = styled.div`
   flex-direction: column;
   align-items: center;
 
-  .tour-list {
+  .tour-list,
+  .plannerList {
     width: 90%;
   }
 `;

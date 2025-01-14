@@ -88,3 +88,23 @@ export const BookmarkedSpotsApi = {
     }
   },
 };
+
+export const PlannerItemApi = {
+  // 플래너 리스트 조회
+  getPlanners: async (filters, page = 0, size = 10) => {
+    try {
+      const params = {
+        ...filters, // 필터 추가
+        page,
+        size,
+      };
+      // API 호출
+      const response = await AxiosInstance.get("/planner/planners", { params });
+      console.log("API 응답 데이터:", response.data);
+      return response.data || [];
+    } catch (error) {
+      console.error("플래너 데이터 조회 오류:", error);
+      throw error;
+    }
+  },
+};

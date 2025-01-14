@@ -19,6 +19,7 @@ export const MyPageMainContainer = styled.div`
   }
 `;
 export const UserMain = styled.div`
+  margin: 50px auto;
   width: 100%;
   height: 600px;
   display: flex;
@@ -32,24 +33,37 @@ export const UserInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* border: 1px solid black; */
+  background-color: #e7e7e7;
+  border-radius: 20px;
+  margin-bottom: 15px;
 
   .ProfileImg {
     height: 100px;
     width: 100px;
+    min-width: 100px;
     border: 1px solid black;
     border-radius: 50%;
   }
   .follow {
     cursor: pointer;
   }
-  .planningButton {
-    margin: 10px;
+  .Button {
+    margin-right: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .user {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px 0 20px;
   }
 `;
 
 export const UserPlanning = styled.div`
-  width: 100%;
+  width: 90%;
   height: 100%;
   border: 1px solid black;
 `;
