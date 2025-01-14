@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditStyle";
-import { ProfilePicModal } from "../../Component/SignupComponents/SignupModalComponent";
+import { ProfilePicModal } from "../../Component/PictureModalComponent";
 import { useAuth } from "../../Context/AuthContext";
 import AxiosApi from "../../Api/AxiosApi";
 import { storage } from "../../Api/Firebase";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
 
 const UserInfoEdit = () => {
   const { user, updateUser } = useAuth();
@@ -143,15 +145,15 @@ const UserInfoEdit = () => {
         </InputBox>
 
         <div className="picture-box">
-          <div className="current-pic" onClick={() => setIsPicsModalOpen(true)}>
-            <img src={currentPic} alt="프로필 이미지" />
-          </div>
-          <button
-            className="picture-button"
+          <div 
+            className="current-pic" 
             onClick={() => setIsPicsModalOpen(true)}
           >
-            변경
-          </button>
+            <img src={currentPic} alt="프로필 이미지" />
+            <label htmlFor="profile-upload" className="upload-label">
+              <FontAwesomeIcon icon={faCamera} />
+            </label>
+          </div>
         </div>
         
         <Button onClick={handleSave}>저장하기</Button>

@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { colors } from "../Style/GlobalStyle";
 
 export const Center = styled.div`
   display: flex;
@@ -39,16 +40,16 @@ export const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
     margin: 20px 0;
 
     .current-pic {
+      display: flex;
+      position: relative;
       border-radius: 50%;
       border: 1px solid #ddd;
-      overflow: hidden;
       cursor: pointer;
-      width: 100px;
-      height: 100px;
+      width: 120px;
+      height: 120px;
       &:hover {
         border: 1px solid #bbb;
       }
@@ -57,11 +58,25 @@ export const Container = styled.div`
     img {
       width: 100%;
       height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
     }
 
-    .picture-button {
-      height: 30%;
+    .upload-label {
+      position: absolute;
+      bottom: 0.2rem;
+      right: 0.2rem;
+      background-color: ${colors.colorA};
+      color: white;
+      border-radius: 50%;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      z-index: 10;
     }
   }
 

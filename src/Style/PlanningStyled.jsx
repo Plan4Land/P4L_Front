@@ -46,6 +46,13 @@ export const Users = styled.div`
   align-items: center;
   position: relative;
   /* background-color: bisque; */
+
+  .edit-button {
+    display: flex;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
 `;
 
 export const UserProfile = styled.div`

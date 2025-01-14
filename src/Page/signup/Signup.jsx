@@ -10,13 +10,15 @@ import {
   InputBox,
   Button,
 } from "../../Component/SignupComponents/SignupComponent";
-import { ProfilePicModal } from "../../Component/SignupComponents/SignupModalComponent";
+import { ProfilePicModal } from "../../Component/PictureModalComponent";
 import { CheckModal } from "../../Util/Modal";
 import { EditImg } from "../../Component/ProfileImg";
 
 // icon
 import { VscAccount } from "react-icons/vsc";
 import { GoMail, GoPencil, GoLock, GoEye, GoEyeClosed } from "react-icons/go";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
 
 export const Signup = () => {
   // input
@@ -513,13 +515,10 @@ export const Signup = () => {
               onClick={() => setIsPicsModalOpen(true)}
             >
               <img src={currentPic} alt="프로필 이미지" />
+              <label htmlFor="profile-upload" className="upload-label">
+                <FontAwesomeIcon icon={faCamera} />
+              </label>
             </div>
-            <button
-              className="picture-button"
-              onClick={() => setIsPicsModalOpen(true)}
-            >
-              변경
-            </button>
           </div>
 
           <Button onClick={onClickSignup}>회원가입</Button>

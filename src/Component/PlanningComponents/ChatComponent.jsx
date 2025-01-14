@@ -21,7 +21,9 @@ export const ChatComponent = ({
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey && !event.ctrlKey) {
       event.preventDefault(); // 기본 Enter 동작 막기
-      handleButtonClick(); // 버튼 클릭 함수 호출
+      if (inputMsg?.trim()) {
+        handleButtonClick(); // 버튼 클릭 함수 호출
+      }
     }
 
     if (event.key === "Enter" && event.shiftKey) {
@@ -58,18 +60,18 @@ export const ChatComponent = ({
   };
 
   // 채팅방 정보 가져오기
-  useEffect(() => {
-    const getChatRoom = async () => {
-      try {
-        const response = await PlanningApi.chatDetail(plannerId);
-        console.log("response가 아무것도 안오는거지??");
-        console.log(">>", response);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    getChatRoom();
-  }, []);
+  // useEffect(() => {
+  //   const getChatRoom = async () => {
+  //     try {
+  //       const response = await PlanningApi.chatDetail(plannerId);
+  //       console.log("response가 아무것도 안오는거지??");
+  //       console.log(">>", response);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
+  //   getChatRoom();
+  // }, []);
 
   // 웹 소켓 연결하기
   useEffect(() => {
@@ -80,16 +82,16 @@ export const ChatComponent = ({
     //     console.log("소켓 연결 완료");
     //   };
     // }
-    if (socketConnected && sender) {
-      ws.current.send(
-        JSON.stringify({
-          type: "ENTER",
-          plannerId: plannerId,
-          sender: sender,
-          message: "입장합니다.",
-        })
-      );
-    }
+    // if (socketConnected && sender) {
+    //   ws.current.send(
+    //     JSON.stringify({
+    //       type: "ENTER",
+    //       plannerId: plannerId,
+    //       sender: sender,
+    //       message: "입장합니다.",
+    //     })
+    //   );
+    // }
     ws.current.onmessage = (msg) => {
       const data = JSON.parse(msg.data);
       setChatList((prev) => [...prev, data]); // 기존의 채팅 리스트에 새로운 메시지 추가
