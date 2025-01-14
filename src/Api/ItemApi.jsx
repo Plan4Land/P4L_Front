@@ -13,7 +13,7 @@ export const TravelSpotApi = {
 
       const response = await AxiosInstance.get("/api/travelspots", { params });
       console.log("API 응답 데이터:", response.data);
-      console.log(response);
+
       return response || [];
     } catch (error) {
       console.error("여행지 데이터 조회 오류:", error);

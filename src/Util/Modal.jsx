@@ -36,6 +36,7 @@ const CloseModalContent = styled.div`
   text-align: center;
   width: ${({ width }) => width || "auto"};
   height: ${({ height }) => height || "auto"};
+  min-height: ${({ minHeight }) => minHeight || "auto"};
 `;
 
 const CloseButton = styled.div`
@@ -94,12 +95,17 @@ export const CloseModal = ({
   children,
   contentWidth,
   contentHeight,
+  minHeight,
 }) => {
   if (!isOpen) return null;
 
   return (
     <ModalBackdrop>
-      <CloseModalContent width={contentWidth} height={contentHeight}>
+      <CloseModalContent
+        width={contentWidth}
+        height={contentHeight}
+        minHeight={minHeight}
+      >
         {children}
         <CloseButton onClick={onClose}>
           <IoClose />

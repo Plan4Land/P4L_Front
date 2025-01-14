@@ -191,7 +191,7 @@ export const Planning = () => {
   const [socketConnected, setSocketConnected] = useState(false); // 웹소켓 연결 여부
   const [sender, setSender] = useState(""); // 메시지를 보낸 사람
   const ws = useRef(null); // 웹소켓 객체 생성, 소켓 연결 정보를 유지해야 하지만, 렌더링과는 무관
-
+  const [isParticipant, setIsParticipant] = useState(false);
   const handleInputChange = (e) =>
     setSearchState({ ...searchState, keyword: e.target.value });
 
@@ -227,34 +227,24 @@ export const Planning = () => {
     setIsBookmarked(!isBookmarked);
   };
 
-  const handleChatOpen = () => {
-    setIsChatOpen(!isChatOpen);
-    // ws.current.send(
-    //   JSON.stringify({
-    //     type: "CLOSE",
-    //     plannerId: plannerId,
-    //     sender: sender,
-    //     message: inputMsg,
-    //   })
-    // );
-    // console.log("채팅 종료");
-  };
-
   // 웹 소켓 연결하기
   useEffect(() => {
-    if (
-      plannerInfo &&
-      (plannerInfo.ownerNickname === user.nickname ||
+    if (plannerInfo) {
+      const participant =
+        plannerInfo.ownerNickname === user.nickname ||
         plannerInfo.participants.some(
           (participant) => participant.nickname === user.nickname
-        )) &&
-      !ws.current
-    ) {
-      ws.current = new WebSocket("ws://localhost:8111/ws/chat");
-      ws.current.onopen = () => {
-        setSocketConnected(true);
-        console.log("소켓 연결 완료");
-      };
+        );
+
+      setIsParticipant(participant);
+
+      if (participant && !ws.current) {
+        ws.current = new WebSocket("ws://localhost:8111/ws/chat");
+        ws.current.onopen = () => {
+          setSocketConnected(true);
+          console.log("소켓 연결 완료");
+        };
+      }
     }
 
     return () => {
@@ -336,7 +326,6 @@ export const Planning = () => {
       currentAddedPlace.content &&
       Object.keys(currentAddedPlace.content).length > 0
     ) {
-      // currentAddedPlace가 유효하고, content가 비어있지 않으면 plans에 추가
       setPlans((prevPlans) => [...prevPlans, currentAddedPlace]);
       console.log("이게 추가될 일정", currentAddedPlace);
       setCurrentAddedPlace({});
@@ -385,44 +374,49 @@ export const Planning = () => {
                   onClick={() => handleBookmarked()}
                 />
               )}
-              {plannerInfo.public ? (
-                <BiLockOpen
-                  className="menu-icon"
-                  title="공개/비공개"
-                  onClick={() =>
-                    setModals((prevModals) => ({
-                      ...prevModals,
-                      public: true,
-                    }))
-                  }
-                />
-              ) : (
-                <BiLock
-                  className="menu-icon"
-                  title="공개/비공개"
-                  onClick={() =>
-                    setModals((prevModals) => ({
-                      ...prevModals,
-                      public: true,
-                    }))
-                  }
-                />
+              {isParticipant && (
+                <>
+                  {plannerInfo.ownerNickname === user.nickname &&
+                    (plannerInfo.public ? (
+                      <BiLockOpen
+                        className="menu-icon"
+                        title="공개/비공개"
+                        onClick={() =>
+                          setModals((prevModals) => ({
+                            ...prevModals,
+                            public: true,
+                          }))
+                        }
+                      />
+                    ) : (
+                      <BiLock
+                        className="menu-icon"
+                        title="공개/비공개"
+                        onClick={() =>
+                          setModals((prevModals) => ({
+                            ...prevModals,
+                            public: true,
+                          }))
+                        }
+                      />
+                    ))}
+                  <BiTrash
+                    className="menu-icon"
+                    title="플래닝 삭제"
+                    onClick={() =>
+                      setModals((prev) => ({
+                        ...prev,
+                        deletePlanning: true,
+                      }))
+                    }
+                  />
+                  <AiOutlineMessage
+                    className="menu-icon"
+                    title="채팅"
+                    onClick={() => setIsChatOpen(!isChatOpen)}
+                  />
+                </>
               )}
-              <BiTrash
-                className="menu-icon"
-                title="플래닝 삭제"
-                onClick={() =>
-                  setModals((prev) => ({
-                    ...prev,
-                    deletePlanning: true,
-                  }))
-                }
-              />
-              <AiOutlineMessage
-                className="menu-icon"
-                title="채팅"
-                onClick={() => handleChatOpen()}
-              />
             </div>
             {isChatOpen && (
               <ChatComponent
@@ -443,7 +437,7 @@ export const Planning = () => {
               <ProfileImg file={plannerInfo.ownerProfileImg} />
             </UserProfile>
             <UserName>{plannerInfo.ownerNickname}</UserName>
-            {plannerInfo.participants &&
+            {plannerInfo.participants && plannerInfo.participants.length > 0 ? (
               plannerInfo.participants.map((participant, index) => (
                 <UserProfile
                   key={index}
@@ -468,8 +462,28 @@ export const Planning = () => {
                     }}
                   />
                 </UserProfile>
-              ))}
-            <Button className="edit-button">편집</Button>
+              ))
+            ) : (
+              <button
+                className="no-participants"
+                onClick={() =>
+                  setModals((prevModals) => ({
+                    ...prevModals,
+                    userModal: true,
+                  }))
+                }
+              >
+                +
+              </button>
+            )}
+            {isParticipant && (
+              <Button
+                className="edit-button"
+                onClick={() => setIsEditting(true)}
+              >
+                편집
+              </Button>
+            )}
           </Users>
           <ContentContainer>
             <PlansComponent
@@ -493,20 +507,48 @@ export const Planning = () => {
           </ContentContainer>
         </MainContainer>
         {modals.userModal && (
-          <Modal
+          <CloseModal
             isOpen={modals.userModal}
             onClose={() =>
               setModals((prevModals) => ({ ...prevModals, userModal: false }))
             }
-            onConfirm={() => {
-              setModals((prevModals) => ({ ...prevModals, userModal: false }));
-            }}
+            contentWidth="400px"
+            // contentHeight="500px"
+            minHeight="200px"
           >
             <div>
-              <h2>모달창입니댜</h2>
-              <p>임시로 만들어논거에요</p>
+              {plannerInfo.participants &&
+              plannerInfo.participants.length > 0 ? (
+                plannerInfo.participants.map((participant, index) => (
+                  <UserProfile
+                    key={index}
+                    id={participant.id}
+                    nickname={participant.nickname}
+                    profileImg={participant.profileImg}
+                    onClick={() =>
+                      setModals((prevModals) => ({
+                        ...prevModals,
+                        userModal: true,
+                      }))
+                    }
+                  >
+                    <img
+                      src={participant.profileImg}
+                      alt="프로필 이미지"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "50%",
+                      }}
+                    />
+                  </UserProfile>
+                ))
+              ) : (
+                <p>참여자가 없습니다.</p>
+              )}
             </div>
-          </Modal>
+          </CloseModal>
         )}
         {modals.addPlaceModal && (
           <CloseModal
@@ -585,7 +627,11 @@ export const Planning = () => {
               setModals((prev) => ({ ...prev, deletePlanning: false }));
             }}
           >
-            <p>플래닝을 삭제하시겠습니까?</p>
+            {plannerInfo.ownerNickname === user.nickname ? (
+              <p>플래닝을 삭제하시겠습니까?</p>
+            ) : (
+              <p>플래닝을 나가시겠습니까?</p>
+            )}
           </Modal>
         )}
         <Footer />
