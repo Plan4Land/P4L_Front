@@ -65,6 +65,7 @@ const UserInfoEdit = () => {
         setEmail(response.data.email);
         setNickName(response.data.nickname);
         setCurrentPic(response.data.imgPath);
+        console.log(response.data.imgPath);
       } catch (error) {
         console.error("Error during getUserInfo: ", error);
       }
@@ -163,8 +164,9 @@ const UserInfoEdit = () => {
           open={isPicsModalOpen}
           close={() => setIsPicsModalOpen(false)}
           onSelect={handlePicSelect}
-          type="edit"
+          state="edit"
           addPicture={handlePicAdd}
+          type="profile"
         />
       </Container>
     </Center>

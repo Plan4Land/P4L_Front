@@ -4,7 +4,7 @@ import { IoClose } from "react-icons/io5";
 
 // 프로필 사진 모달
 export const ProfilePicModal = (props) => {
-  const { open, close, onSelect, type, addPicture } = props;
+  const { open, close, onSelect, state, addPicture, type } = props;
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -23,13 +23,22 @@ export const ProfilePicModal = (props) => {
     close();
   };
 
-  const pictures = [
+  const profilePictures = [
     { name: "basic1.png", alt: "기본1" },
     { name: "basic3.png", alt: "기본3" },
     { name: "basic4.png", alt: "기본4" },
     { name: "basic5.png", alt: "기본5" },
     { name: "basic6.png", alt: "기본6" },
     { name: "basic7.png", alt: "기본7" },
+  ];
+
+  const planningPictures = [
+    { name: "planningth1.png", alt: "기본1" },
+    { name: "planningth2.png", alt: "기본2" },
+    { name: "planningth3.png", alt: "기본3" },
+    { name: "planningth4.png", alt: "기본4" },
+    { name: "planningth5.png", alt: "기본5" },
+    { name: "planningth6.png", alt: "기본6" },
   ];
 
   const handleFileChange = (e) => {
@@ -57,16 +66,27 @@ export const ProfilePicModal = (props) => {
                 type === "new" ? "picture-container-new" : "picture-container"
               }
             >
-              {pictures.map((picture, index) => (
-                <div className="picture-box" key={index}>
-                  <img
-                    src={`profile-pic/${picture.name}`}
-                    alt={picture.alt}
-                    onClick={() => selectPic(picture.name)}
-                  />
-                </div>
-              ))}
-              {type === "edit" && (
+              {type === "profile" 
+                ? profilePictures.map((picture, index) => (
+                    <div className="picture-box" key={index}>
+                      <img
+                        src={`profile-pic/${picture.name}`}
+                        alt={picture.alt}
+                        onClick={() => selectPic(picture.name)}
+                      />
+                    </div>
+                  ))
+                : planningPictures.map((picture, index) => (
+                    <div className="picture-box" key={index}>
+                      <img
+                        src={`planning-pic/${picture.name}`}
+                        alt={picture.alt}
+                        onClick={() => selectPic(picture.name)}
+                      />
+                    </div>
+                  ))
+              }
+              {state === "edit" && (
                 <>
                   <input
                     ref={fileInputRef}

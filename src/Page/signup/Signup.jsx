@@ -529,7 +529,8 @@ export const Signup = () => {
             open={isPicsModalOpen}
             close={() => setIsPicsModalOpen(false)}
             onSelect={handlePicSelect}
-            type="new"
+            state="new"
+            type="profile"
           />
 
           {/* 완료 모달 */}
