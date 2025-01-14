@@ -10,6 +10,8 @@ import {
   ItemList,
 } from "../../Style/ItemListStyled";
 import { FaSearch, FaUndo } from "react-icons/fa";
+import { PlannerItemApi } from "../../Api/ItemApi";
+import { PlanItem } from "../../Component/ItemListComponent";
 
 export const PlanningList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,6 +29,44 @@ export const PlanningList = () => {
   const handleToggleSubArea = () => setIsSubAreaOpen(!isSubAreaOpen);
   const handleToggleTheme = () => setIsThemeOpen(!isThemeOpen);
 
+  const [planners, setPlanners] = useState([]);
+  const [filters, setFilters] = useState({});
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchFilteredPlanners = async () => {
+      try {
+        setLoading(true);
+        setError(null); // 에러 초기화
+
+        // 유효한 필터만 추출
+        const validFilters = Object.entries(filters).reduce(
+          (acc, [key, value]) => {
+            if (value) acc[key] = value;
+            return acc;
+          },
+          {}
+        );
+
+        // API 호출
+        const data = await PlannerItemApi.getPlanners(
+          validFilters,
+          currentPage,
+          pageSize
+        );
+        setPlanners(data.content); // content: 플래너 리스트
+      } catch (error) {
+        setError("플래너 데이터를 가져오는 데 실패했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFilteredPlanners();
+  }, [filters, currentPage, pageSize]);
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     setSelectedAreaCode(areaCode || queryParams.get("area") || "");
@@ -155,6 +195,9 @@ export const PlanningList = () => {
 
   const selectedAreaData = areas.find((area) => area.code === selectedAreaCode);
 
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
   return (
     <>
       <Header />
@@ -248,7 +291,48 @@ export const PlanningList = () => {
             )}
           </div>
         </SelectTourItem>
-        <ItemList></ItemList>
+        <ItemList>
+          {loading && <p>로딩 중...</p>}
+          {error && <p style={{ color: "red" }}>{error}</p>}
+
+          <div className="plannerList">
+            {planners.map((planner) => {
+              // areaName 계산
+              const areaName =
+                areas.find((area) => area.code === planner.area)?.name ||
+                "알 수 없는 지역";
+
+              // subAreaName 계산
+              const subAreaName =
+                areas
+                  .find((area) => area.code === planner.area)
+                  ?.subAreas.find((subArea) => subArea.code === planner.subArea)
+                  ?.name || "알 수 없는 하위 지역";
+
+              return (
+                <PlanItem
+                  key={planner.id}
+                  id={planner.id}
+                  thumbnail={planner.thumbnail || "/default-thumbnail.png"}
+                  title={planner.title}
+                  address={`${areaName} - ${subAreaName}`} // 지역 이름과 하위 지역 이름으로 변환
+                  subCategory={planner.theme} // 테마
+                  type={planner.isPublic ? "공개" : "비공개"}
+                />
+              );
+            })}
+          </div>
+          <div>
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 0}
+            >
+              ◀
+            </button>
+            <span> {currentPage + 1} 페이지 </span>
+            <button onClick={() => handlePageChange(currentPage + 1)}>▶</button>
+          </div>
+        </ItemList>
       </List>
       <Footer />
     </>

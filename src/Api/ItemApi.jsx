@@ -8,10 +8,10 @@ export const TravelSpotApi = {
         ...filters,
         page,
         size,
-      }
+      };
 
-      console.log("******************************")
-      console.log(filters)
+      console.log("******************************");
+      console.log(filters);
 
       const response = await AxiosInstance.get("/api/travelspots", { params });
       console.log("API 응답 데이터:", response.data);
@@ -86,6 +86,26 @@ export const BookmarkedSpotsApi = {
       return response.data; // 응답 데이터에는 Page 객체가 포함됩니다.
     } catch (error) {
       console.error("북마크 여행지 조회 오류:", error);
+      throw error;
+    }
+  },
+};
+
+export const PlannerItemApi = {
+  // 플래너 리스트 조회
+  getPlanners: async (filters, page = 0, size = 10) => {
+    try {
+      const params = {
+        ...filters, // 필터 추가
+        page,
+        size,
+      };
+      // API 호출
+      const response = await AxiosInstance.get("/planner/planners", { params });
+      console.log("API 응답 데이터:", response.data);
+      return response.data || [];
+    } catch (error) {
+      console.error("플래너 데이터 조회 오류:", error);
       throw error;
     }
   },
