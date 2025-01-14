@@ -19,12 +19,10 @@ import { Modal, CloseModal } from "../../Util/Modal";
 import PlanningApi from "../../Api/PlanningApi";
 import { useParams } from "react-router-dom";
 import { areas } from "../../Util/Common";
-import LikePlanning from "../../Img/likePlanning.png";
-import UnlikePlanning from "../../Img/unlikePlanning.png";
 import { AiOutlineMessage } from "react-icons/ai";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
-import { BiLock, BiLockOpen } from "react-icons/bi";
-import { BiTrash } from "react-icons/bi"; // Boxicons Trash 아이콘
+import { LuUserRoundPlus } from "react-icons/lu";
+import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
 import { useAuth } from "../../Context/AuthContext";
 
 // const plannerInfo = {
@@ -164,6 +162,7 @@ export const Planning = () => {
     addPlaceModal: false, // 장소 추가 모달 open 여부
     public: false,
     deletePlanning: false,
+    addParticipant: false,
   });
   const [memoState, setMemoState] = useState({
     isClicked: [], // 메모마다 open 여부
@@ -376,30 +375,46 @@ export const Planning = () => {
               )}
               {isParticipant && (
                 <>
-                  {plannerInfo.ownerNickname === user.nickname &&
-                    (plannerInfo.public ? (
-                      <BiLockOpen
+                  {plannerInfo.ownerNickname === user.nickname && (
+                    <>
+                      {/* 사용자 추가 아이콘 */}
+                      <LuUserRoundPlus
                         className="menu-icon"
-                        title="공개/비공개"
+                        title="사용자 추가"
                         onClick={() =>
                           setModals((prevModals) => ({
                             ...prevModals,
-                            public: true,
+                            addParticipant: true,
                           }))
                         }
                       />
-                    ) : (
-                      <BiLock
-                        className="menu-icon"
-                        title="공개/비공개"
-                        onClick={() =>
-                          setModals((prevModals) => ({
-                            ...prevModals,
-                            public: true,
-                          }))
-                        }
-                      />
-                    ))}
+
+                      {/* 공개/비공개 설정 아이콘 */}
+                      {plannerInfo.public ? (
+                        <BiLockOpen
+                          className="menu-icon"
+                          title="공개/비공개"
+                          onClick={() =>
+                            setModals((prevModals) => ({
+                              ...prevModals,
+                              public: true,
+                            }))
+                          }
+                        />
+                      ) : (
+                        <BiLock
+                          className="menu-icon"
+                          title="공개/비공개"
+                          onClick={() =>
+                            setModals((prevModals) => ({
+                              ...prevModals,
+                              public: true,
+                            }))
+                          }
+                        />
+                      )}
+                    </>
+                  )}
                   <BiTrash
                     className="menu-icon"
                     title="플래닝 삭제"
@@ -437,7 +452,7 @@ export const Planning = () => {
               <ProfileImg file={plannerInfo.ownerProfileImg} />
             </UserProfile>
             <UserName>{plannerInfo.ownerNickname}</UserName>
-            {plannerInfo.participants && plannerInfo.participants.length > 0 ? (
+            {plannerInfo.participants &&
               plannerInfo.participants.map((participant, index) => (
                 <UserProfile
                   key={index}
@@ -462,20 +477,7 @@ export const Planning = () => {
                     }}
                   />
                 </UserProfile>
-              ))
-            ) : (
-              <button
-                className="no-participants"
-                onClick={() =>
-                  setModals((prevModals) => ({
-                    ...prevModals,
-                    userModal: true,
-                  }))
-                }
-              >
-                +
-              </button>
-            )}
+              ))}
             {isParticipant && (
               <Button
                 className="edit-button"
@@ -517,36 +519,31 @@ export const Planning = () => {
             minHeight="200px"
           >
             <div>
-              {plannerInfo.participants &&
-              plannerInfo.participants.length > 0 ? (
-                plannerInfo.participants.map((participant, index) => (
-                  <UserProfile
-                    key={index}
-                    id={participant.id}
-                    nickname={participant.nickname}
-                    profileImg={participant.profileImg}
-                    onClick={() =>
-                      setModals((prevModals) => ({
-                        ...prevModals,
-                        userModal: true,
-                      }))
-                    }
-                  >
-                    <img
-                      src={participant.profileImg}
-                      alt="프로필 이미지"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        borderRadius: "50%",
-                      }}
-                    />
-                  </UserProfile>
-                ))
-              ) : (
-                <p>참여자가 없습니다.</p>
-              )}
+              {plannerInfo.participants.map((participant, index) => (
+                <UserProfile
+                  key={index}
+                  id={participant.id}
+                  nickname={participant.nickname}
+                  profileImg={participant.profileImg}
+                  onClick={() =>
+                    setModals((prevModals) => ({
+                      ...prevModals,
+                      userModal: true,
+                    }))
+                  }
+                >
+                  <img
+                    src={participant.profileImg}
+                    alt="프로필 이미지"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </UserProfile>
+              ))}
             </div>
           </CloseModal>
         )}
@@ -597,6 +594,23 @@ export const Planning = () => {
               setCurrentAddedPlace={setCurrentAddedPlace}
               setPlans={setPlans}
             />
+          </CloseModal>
+        )}
+        {modals.addParticipant && (
+          <CloseModal
+            isOpen={modals.addParticipant}
+            onClose={() =>
+              setModals((prevModals) => ({
+                ...prevModals,
+                addParticipant: false,
+              }))
+            }
+            contentWidth="400px"
+            contentHeight="500px"
+          >
+            <div>
+              <p>사용자 초대하기</p>
+            </div>
           </CloseModal>
         )}
         {modals.public && (
