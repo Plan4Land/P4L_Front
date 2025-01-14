@@ -46,7 +46,9 @@ export const Header = () => {
         <p>|</p>
         <Link
           to="/tourlist"
-          className={`tag ${isActive("/tourlist") ? "active" : ""}`}
+          className={`tag ${
+            isActive("/tourlist") || isActive("/tourItemInfo") ? "active" : ""
+          }`}
         >
           관광지
         </Link>
