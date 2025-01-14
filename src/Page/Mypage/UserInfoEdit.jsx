@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditStyle";
-import { ProfilePicModal } from "../../Component/SignupModalComponent";
+import { ProfilePicModal } from "../../Component/SignupComponents/SignupModalComponent";
 import { useAuth } from "../../Context/AuthContext";
 import AxiosApi from "../../Api/AxiosApi";
 import { storage } from "../../Api/Firebase";

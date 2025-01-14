@@ -2,8 +2,8 @@ import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Header, Footer } from "../../Component/GlobalComponent";
-import { Center, SignupContainer, InputBox, Button } from "../../Component/SignupComponent";
-import { FindUserIdModal, ResultUserIdModal, FindPwModal, ResultPwModal } from "../../Component/SignupModalComponent"
+import { Center, SignupContainer, InputBox, Button } from "../../Component/SignupComponents/SignupComponent";
+import { FindUserIdModal, ResultUserIdModal, FindPwModal, ResultPwModal } from "../../Component/SignupComponents/SignupModalComponent";
 import AxiosApi from "../../Api/AxiosApi";
 import { useAuth } from "../../Context/AuthContext";
 import Common from "../../Util/Common";
