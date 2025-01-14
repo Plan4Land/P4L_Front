@@ -7,7 +7,7 @@ import emailjs from "emailjs-com";
 import { GoMail, GoPencil } from "react-icons/go";
 import { IoClose } from "react-icons/io5";
 import { VscAccount } from "react-icons/vsc";
-import AxiosApi from "../Api/AxiosApi";
+import AxiosApi from "../../Api/AxiosApi";
 
 export const InputBox = styled.div`
   display: flex;

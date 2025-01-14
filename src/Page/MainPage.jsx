@@ -96,7 +96,7 @@ export const Main = () => {
               <div className="RegionSearch">
                 <div className="area-list">
                   {areas.map((area) => (
-                    <Link key={area.code} to={`/tourlist?area=${area.code}`}>
+                    <Link key={area.code} to={`/tourlist?areaCode=${area.code}`}>
                       <Button
                         key={area.code}
                         onClick={() => handleAreaClick(area.name)}
