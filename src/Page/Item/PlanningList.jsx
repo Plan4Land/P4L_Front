@@ -14,50 +14,40 @@ import {PlannerItemApi} from "../../Api/ItemApi";
 import {PlanItem} from "../../Component/ItemListComponent";
 
 export const PlanningList = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate();
-  const {areaCode, subAreaCode} = useParams();
   const location = useLocation();
-  const [selectedAreaCode, setSelectedAreaCode] = useState("");
-  const [selectedSubAreaCode, setSelectedSubAreaCode] = useState("");
-  const [selectedTheme, setSelectedTheme] = useState("");
-  const [isAreaOpen, setIsAreaOpen] = useState(true); // 지역 선택 토글 상태
-  const [isSubAreaOpen, setIsSubAreaOpen] = useState(true); // 세부지역 선택 토글 상태
-  const [isThemeOpen, setIsThemeOpen] = useState(true);
+  const navigate = useNavigate();
 
-  const handleToggleArea = () => setIsAreaOpen(!isAreaOpen);
-  const handleToggleSubArea = () => setIsSubAreaOpen(!isSubAreaOpen);
-  const handleToggleTheme = () => setIsThemeOpen(!isThemeOpen);
+  const [filters, setFilters] = useState(() => {
+    const queryParams = new URLSearchParams(location.search);
+    return {
+      areaCode: queryParams.get("areaCode") || "",
+      subAreaCode: queryParams.get("subAreaCode") || "",
+      themeList: queryParams.get("themeList") ? decodeURIComponent(queryParams.get("themeList")) : "",
+      currentPage: parseInt(queryParams.get("currentPage")) || 0,
+      pageSize: parseInt(queryParams.get("pageSize")) || 10,
+      searchQuery: queryParams.get("searchQuery") ? decodeURIComponent(queryParams.get("searchQuery")) : "",
+    };
+  });
 
   const [planners, setPlanners] = useState([]);
-  const [filters, setFilters] = useState({});
-  const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
-  const [loading, setLoading] = useState(false);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isAreaOpen, setIsAreaOpen] = useState(true);
+  const [isSubAreaOpen, setIsSubAreaOpen] = useState(true);
+  const [isThemeOpen, setIsThemeOpen] = useState(true);
+  const [searchQuery, setSearchQuery] = useState(filters.searchQuery);
 
   useEffect(() => {
     const fetchFilteredPlanners = async () => {
       try {
         setLoading(true);
-        setError(null); // 에러 초기화
-
-        // 유효한 필터만 추출
-        const validFilters = Object.entries(filters).reduce(
-          (acc, [key, value]) => {
-            if (value) acc[key] = value;
-            return acc;
-          },
-          {}
-        );
-
-        // API 호출
-        const data = await PlannerItemApi.getPlanners(
-          validFilters,
-          currentPage,
-          pageSize
-        );
-        setPlanners(data.content); // content: 플래너 리스트
+        const validFilters = Object.fromEntries(Object.entries(filters).filter(([, value]) => value));
+        const data = await PlannerItemApi.getPlanners(validFilters);
+        setTotalItems(data.totalElements);
+        setTotalPages(data.totalPages);
+        setPlanners(data.content);
       } catch (error) {
         setError("플래너 데이터를 가져오는 데 실패했습니다.");
       } finally {
@@ -65,22 +55,30 @@ export const PlanningList = () => {
       }
     };
 
+    const queryParams = new URLSearchParams();
+    for (const [key, value] of Object.entries(filters)) {
+      if (value) {
+        queryParams.set(key, key === 'themeList' ? encodeURIComponent(value) : value);
+      }
+    }
+    navigate(`/planninglist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`, {replace: true});
     fetchFilteredPlanners();
-  }, [filters, currentPage, pageSize]);
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    setSelectedAreaCode(areaCode || queryParams.get("area") || "");
-    setSelectedSubAreaCode(queryParams.get("subarea") || "");
-    setSelectedTheme(queryParams.get("theme") || "");
-  }, [areaCode, location.search]); // URL이 변경될 때마다 실행
+  }, [filters, navigate]);
 
-  // 모든 선택 초기화
+  const updateFilters = (key, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+      currentPage: 0,
+    }));
+  };
+
   const handleResetSelections = () => {
-    setSelectedAreaCode("");
-    setSelectedSubAreaCode("");
-    setSelectedTheme("");
-    setSearchQuery(""); // 검색어도 초기화
-    navigate("/planninglist"); // URL 쿼리 파라미터 제거
+    setFilters({areaCode: "", subAreaCode: "", themeList: "", currentPage: 0, pageSize: 10, searchQuery: "",});
+  };
+
+  const handlePageChange = (newPage) => {
+    updateFilters("currentPage", newPage);
   };
 
   const handleSearch = () => {
@@ -88,15 +86,7 @@ export const PlanningList = () => {
       alert("검색어는 2자리 이상 입력해 주세요.");
       return;
     }
-
-    const queryParams = new URLSearchParams(location.search);
-    queryParams.set("search", searchQuery); // 검색어 추가
-
-    navigate(
-      `/planninglist${
-        queryParams.toString() ? `?${queryParams.toString()}` : ""
-      }`
-    );
+    updateFilters("searchQuery", searchQuery);
   };
 
   const handleKeyDown = (e) => {
@@ -106,98 +96,36 @@ export const PlanningList = () => {
   };
 
   const handleAreaChange = (areaCode) => {
-    const isSameArea = selectedAreaCode === areaCode;
+    const isSameArea = filters.areaCode === areaCode;
     const newAreaCode = isSameArea ? "" : areaCode;
-
-    // Query parameters 업데이트
-    let queryParams = new URLSearchParams(location.search);
-
-    if (newAreaCode) {
-      queryParams.set("area", newAreaCode); // 새로운 지역 코드 설정
-    } else {
-      queryParams.delete("area"); // 지역이 취소된 경우 area 파라미터 삭제
-    }
-
-    // 세부 지역 초기화
-    if (!newAreaCode) {
-      queryParams.delete("subarea");
-    }
-
-    // URL 변경
-    navigate(
-      `/planninglist${
-        queryParams.toString() ? `?${queryParams.toString()}` : ""
-      }`
-    );
-
-    // 상태 업데이트
-    setSelectedAreaCode(newAreaCode);
-    setSelectedSubAreaCode("");
+    updateFilters("areaCode", newAreaCode);
+    updateFilters("subAreaCode", "");
   };
 
   const handleSubAreaChange = (subAreaCode) => {
-    const queryParams = new URLSearchParams(location.search);
-
-    if (selectedSubAreaCode === subAreaCode) {
-      queryParams.delete("subarea"); // 세부지역 선택 취소
-      setSelectedSubAreaCode("");
-    } else {
-      queryParams.set("subarea", subAreaCode); // 새로운 세부지역 설정
-      setSelectedSubAreaCode(subAreaCode);
-    }
-
-    // 기존 검색어 유지
-    if (searchQuery) queryParams.set("search", searchQuery);
-
-    navigate(
-      `/planninglist${
-        queryParams.toString() ? `?${queryParams.toString()}` : ""
-      }`
-    );
+    const isSameSubArea = filters.subAreaCode === subAreaCode;
+    const newSubAreaCode = isSameSubArea ? "" : subAreaCode;
+    updateFilters("subAreaCode", newSubAreaCode);
   };
 
   const handleThemeChange = (theme) => {
-    const queryParams = new URLSearchParams(location.search);
-
-    // 현재 selectedTheme가 비어있지 않으면 split, 비어있으면 빈 배열로 초기화
-    const currentSelectedThemes = selectedTheme ? selectedTheme.split(",") : [];
-
-    if (currentSelectedThemes.includes(theme)) {
-      currentSelectedThemes.splice(currentSelectedThemes.indexOf(theme), 1);
-    } else {
-      if (currentSelectedThemes.length < 3) {
-        currentSelectedThemes.push(theme);
+    setFilters((prev) => {
+      let newSelectedThemes = prev.themeList ? prev.themeList.split(',') : [];
+      if (newSelectedThemes.includes(theme)) {
+        newSelectedThemes = newSelectedThemes.filter((item) => item !== theme);
       } else {
-        alert("최대 3개의 테마만 선택할 수 있습니다.");
-        return;
+        if (newSelectedThemes.length >= 3) {
+          alert("최대 3개의 테마만 선택할 수 있습니다.");
+          return prev;
+        }
+        newSelectedThemes.push(theme);
       }
-    }
-
-    // 선택된 테마가 없으면 theme 파라미터 삭제
-    if (currentSelectedThemes.length > 0) {
-      queryParams.set("theme", currentSelectedThemes.join(","));
-    } else {
-      queryParams.delete("theme");
-    }
-
-    // 상태 업데이트
-    setSelectedTheme(currentSelectedThemes.join(","));
-
-    // 검색어가 있을 경우, 쿼리 파라미터에 추가
-    if (searchQuery) queryParams.set("search", searchQuery);
-
-    navigate(
-      `/planninglist${
-        queryParams.toString() ? `?${queryParams.toString()}` : ""
-      }`
-    );
+      return {...prev, themeList: newSelectedThemes.join(','),};
+    });
   };
 
-  const selectedAreaData = areas.find((area) => area.code === selectedAreaCode);
+  const selectedAreaData = areas.find((area) => area.code === filters.areaCode);
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
   return (
     <>
       <Header/>
@@ -225,7 +153,7 @@ export const PlanningList = () => {
           <div className="mainarea">
             <h3>
               지역 선택
-              <ToggleButton isOpen={isAreaOpen} onToggle={handleToggleArea}/>
+              <ToggleButton isOpen={isAreaOpen} onToggle={() => setIsAreaOpen(!isAreaOpen)}/>
             </h3>
             {isAreaOpen && (
               <div>
@@ -234,7 +162,7 @@ export const PlanningList = () => {
                     key={area.code}
                     onClick={() => handleAreaChange(area.code)}
                     className={`area-button ${
-                      selectedAreaCode === area.code ? "selected" : ""
+                      filters.areaCode === area.code ? "selected" : ""
                     }`}
                   >
                     {area.name}
@@ -249,7 +177,7 @@ export const PlanningList = () => {
                 세부 지역 선택{" "}
                 <ToggleButton
                   isOpen={isSubAreaOpen}
-                  onToggle={handleToggleSubArea}
+                  onToggle={() => setIsSubAreaOpen(!isSubAreaOpen)}
                 />
               </h3>
               {isSubAreaOpen && (
@@ -259,7 +187,7 @@ export const PlanningList = () => {
                       key={subArea.code}
                       onClick={() => handleSubAreaChange(subArea.code)}
                       className={`subarea-button ${
-                        selectedSubAreaCode === subArea.code ? "selected" : ""
+                        filters.subAreaCode === subArea.code ? "selected" : ""
                       }`}
                     >
                       {subArea.name}
@@ -272,7 +200,7 @@ export const PlanningList = () => {
           <div className="theme">
             <h3>
               테마 선택
-              <ToggleButton isOpen={isThemeOpen} onToggle={handleToggleTheme}/>
+              <ToggleButton isOpen={isThemeOpen} onToggle={() => setIsThemeOpen(!isThemeOpen)}/>
             </h3>
             {isThemeOpen && (
               <div>
@@ -281,7 +209,7 @@ export const PlanningList = () => {
                     key={theme}
                     onClick={() => handleThemeChange(theme)}
                     className={`theme-button ${
-                      selectedTheme.split(",").includes(theme) ? "selected" : ""
+                      filters.themeList.split(",").includes(theme) ? "selected" : ""
                     }`}
                   >
                     {theme}
@@ -297,17 +225,8 @@ export const PlanningList = () => {
 
           <div className="plannerList">
             {planners.map((planner) => {
-              // areaName 계산
-              const areaName =
-                areas.find((area) => area.code === planner.area)?.name ||
-                "알 수 없는 지역";
-
-              // subAreaName 계산
-              const subAreaName =
-                areas
-                  .find((area) => area.code === planner.area)
-                  ?.subAreas.find((subArea) => subArea.code === planner.subArea)
-                  ?.name || "알 수 없는 하위 지역";
+              const areaName = areas.find((area) => area.code === planner.area)?.name || "알 수 없는 지역";
+              const subAreaName = areas.find((area) => area.code === planner.area)?.subAreas.find((subArea) => subArea.code === planner.subArea)?.name || "알 수 없는 하위 지역";
 
               return (
                 <PlanItem
@@ -315,26 +234,17 @@ export const PlanningList = () => {
                   id={planner.id}
                   thumbnail={planner.thumbnail || "/default-thumbnail.png"}
                   title={planner.title}
-                  address={`${areaName} - ${subAreaName}`} // 지역 이름과 하위 지역 이름으로 변환
-                  subCategory={planner.theme} // 테마
+                  address={`${areaName} - ${subAreaName}`}
+                  subCategory={planner.theme}
                   type={planner.isPublic ? "공개" : "비공개"}
                 />
               );
             })}
-          </div>
-          <div>
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 0}
-            >
-              ◀
-            </button>
-            <span> {currentPage + 1} 페이지 </span>
-            <button onClick={() => handlePageChange(currentPage + 1)}>▶</button>
           </div>
         </ItemList>
       </List>
       <Footer/>
     </>
   );
+
 };
