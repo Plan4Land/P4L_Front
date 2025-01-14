@@ -3,30 +3,35 @@ import styled from "styled-components";
 import React from "react";
 
 const StyledButton = styled.button`
-  ${(props) => props.$margin && `margin: ${props.$margin};`}
-  ${(props) => props.$width && `width: ${props.$width};`}
-  ${(props) => props.$height && `height: ${props.$height};`}
-  padding: ${(props) => props.padding || "10px 20px"};
-  font-size: ${(props) => props.fontSize || "16px"};
-  border: ${(props) => props.border || `1px solid ${colors.colorA}`};
-  border-radius: ${(props) => props.borderRadius || "8px"};
-  background-color: ${(props) => props.bgColor || colors.colorB};
-  color: ${(props) => props.color || "white"};
+    ${(props) => props.$margin && `margin: ${props.$margin};`}
+    ${(props) => props.$width && `width: ${props.$width};`}
+    ${(props) => props.$height && `height: ${props.$height};`}
+    padding: ${(props) => props.padding || "10px 20px"};
+    font-size: ${(props) => props.fontSize || "16px"};
+    border: ${(props) => props.border || `1px solid ${colors.colorA}`};
+    border-radius: ${(props) => props.borderRadius || "8px"};
+    background-color: ${(props) => props.bgColor || colors.colorB};
+    color: ${(props) => props.color || "white"};
 
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  &:hover {
-    opacity: 0.8;
-  }
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
 
-  &:disabled {
-    background-color: #ccc;
-    color: #666;
-    cursor: not-allowed;
-  }
+    &:hover {
+        opacity: 0.8;
+    }
+
+    &:disabled {
+        background-color: #ccc;
+        color: #666;
+        cursor: not-allowed;
+    }
+
+    &.active {
+        background-color: #c1b0b0
+    }
 `;
 
 export const Button = ({

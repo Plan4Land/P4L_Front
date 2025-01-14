@@ -1,22 +1,22 @@
-import { Header, Footer } from "../../Component/GlobalComponent";
-import { useState, useEffect } from "react";
-import { areas, themes } from "../../Util/Common";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { Button, ToggleButton } from "../../Component/ButtonComponent";
+import {Header, Footer} from "../../Component/GlobalComponent";
+import {useState, useEffect} from "react";
+import {areas, themes} from "../../Util/Common";
+import {useParams, useLocation, useNavigate} from "react-router-dom";
+import {Button, ToggleButton} from "../../Component/ButtonComponent";
 import {
   SelectTourItem,
   SearchSt,
   List,
   ItemList,
 } from "../../Style/ItemListStyled";
-import { FaSearch, FaUndo } from "react-icons/fa";
-import { PlannerItemApi } from "../../Api/ItemApi";
-import { PlanItem } from "../../Component/ItemListComponent";
+import {FaSearch, FaUndo} from "react-icons/fa";
+import {PlannerItemApi} from "../../Api/ItemApi";
+import {PlanItem} from "../../Component/ItemListComponent";
 
 export const PlanningList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const { areaCode, subAreaCode } = useParams();
+  const {areaCode, subAreaCode} = useParams();
   const location = useLocation();
   const [selectedAreaCode, setSelectedAreaCode] = useState("");
   const [selectedSubAreaCode, setSelectedSubAreaCode] = useState("");
@@ -200,12 +200,12 @@ export const PlanningList = () => {
   };
   return (
     <>
-      <Header />
+      <Header/>
       <List>
         <SelectTourItem>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
-            <FaUndo style={{ marginLeft: "6px" }} />
+            <FaUndo style={{marginLeft: "6px"}}/>
           </button>
           <SearchSt>
             <div className="search-wrapper">
@@ -218,14 +218,14 @@ export const PlanningList = () => {
                 onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
               />
               <button className="search-button" onClick={handleSearch}>
-                <FaSearch /> {/* 검색 아이콘 */}
+                <FaSearch/> {/* 검색 아이콘 */}
               </button>
             </div>
           </SearchSt>
           <div className="mainarea">
             <h3>
               지역 선택
-              <ToggleButton isOpen={isAreaOpen} onToggle={handleToggleArea} />
+              <ToggleButton isOpen={isAreaOpen} onToggle={handleToggleArea}/>
             </h3>
             {isAreaOpen && (
               <div>
@@ -272,7 +272,7 @@ export const PlanningList = () => {
           <div className="theme">
             <h3>
               테마 선택
-              <ToggleButton isOpen={isThemeOpen} onToggle={handleToggleTheme} />
+              <ToggleButton isOpen={isThemeOpen} onToggle={handleToggleTheme}/>
             </h3>
             {isThemeOpen && (
               <div>
@@ -293,7 +293,7 @@ export const PlanningList = () => {
         </SelectTourItem>
         <ItemList>
           {loading && <p>로딩 중...</p>}
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {error && <p style={{color: "red"}}>{error}</p>}
 
           <div className="plannerList">
             {planners.map((planner) => {
@@ -334,7 +334,7 @@ export const PlanningList = () => {
           </div>
         </ItemList>
       </List>
-      <Footer />
+      <Footer/>
     </>
   );
 };
