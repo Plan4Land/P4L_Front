@@ -18,7 +18,7 @@ export const HeaderSt = styled.div`
   .logo {
     display: inline-block;
     img {
-      height: 100px;
+      width: 200px;
       cursor: pointer;
     }
   }

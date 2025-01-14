@@ -1,6 +1,5 @@
 import { HeaderSt, NavSt, FooterSt } from "../Style/GlobalStyle";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "../Img/Plan4landLogo.png";
 import { useState } from "react";
 import { Modal } from "../Util/Modal";
 import { useAuth } from "../Context/AuthContext";
@@ -34,7 +33,7 @@ export const Header = () => {
   return (
     <HeaderSt>
       <Link to="/" className="logo">
-        <img src={logo} alt="Plan4land Logo" />
+        <img src="/img/plan4land.png" />
       </Link>
       <NavSt>
         <Link
