@@ -257,15 +257,6 @@ export const Planning = () => {
       };
     }
 
-    // ws.current.onclose = () => {
-    //   setSocketConnected(false);
-    //   console.log("소켓 연결 종료");
-    // };
-
-    // ws.current.onerror = (error) => {
-    //   console.error("소켓 오류:", error);
-    // };
-
     return () => {
       if (ws.current) {
         ws.current.close();
