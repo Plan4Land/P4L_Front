@@ -9,9 +9,10 @@ import {
   SignupContainer,
   InputBox,
   Button,
-} from "../../Component/SignupComponent";
-import { ProfilePicModal } from "../../Component/SignupModalComponent";
+} from "../../Component/SignupComponents/SignupComponent";
+import { ProfilePicModal } from "../../Component/SignupComponents/SignupModalComponent";
 import { CheckModal } from "../../Util/Modal";
+import { EditImg } from "../../Component/ProfileImg";
 
 // icon
 import { VscAccount } from "react-icons/vsc";
@@ -70,7 +71,7 @@ export const Signup = () => {
   // 아이디 유효성 검사
   const handleIdInput = (e) => {
     const input = e.target.value;
-    setInputUserId(e.target.value);
+    setInputUserId(input);
     if (!input.trim()) {
       setIdMsg("아이디를 입력해주세요.");
       userIdRef.current.focus();

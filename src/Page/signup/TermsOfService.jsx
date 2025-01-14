@@ -7,7 +7,7 @@ import {
   InputBox,
   Button,
   Terms
-} from "../../Component/SignupComponent";
+} from "../../Component/SignupComponents/SignupComponent";
 
 // icon
 import { GoCheckCircle } from "react-icons/go";
