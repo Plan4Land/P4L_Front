@@ -97,8 +97,6 @@ export const PlannerItemApi = {
     try {
       const params = {
         ...filters, // 필터 추가
-        page,
-        size,
       };
       // API 호출
       const response = await AxiosInstance.get("/planner/planners", { params });
