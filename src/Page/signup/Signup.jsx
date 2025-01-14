@@ -27,8 +27,7 @@ export const Signup = () => {
   const [inputPw2, setInputPw2] = useState("");
   const [inputName, setInputName] = useState("");
   const [inputNickName, setInputNickName] = useState("");
-  // const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
-  const [currentPic, setCurrentPic] = useState("");
+  const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
 
   // message
   const [idMsg, setIdMsg] = useState("");
@@ -533,11 +532,6 @@ export const Signup = () => {
             onSelect={handlePicSelect}
             type="new"
           />
-          <div className="profile-container">
-          <EditImg 
-            basic={"profile-pic/profile.png"}
-            setSelectedImage={setCurrentPic}/>
-            </div>
 
           {/* 완료 모달 */}
           <CheckModal isOpen={isCheckModalOpen} onClose={closeCheckModal}>
