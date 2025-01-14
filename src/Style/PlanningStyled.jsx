@@ -47,6 +47,20 @@ export const Users = styled.div`
   position: relative;
   /* background-color: bisque; */
 
+  .no-participants {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border: none;
+    font-size: 30px;
+    background-color: ${colors.colorB};
+    cursor: pointer;
+
+    &:hover {
+      scale: 1.1;
+    }
+  }
+
   .edit-button {
     display: flex;
     position: absolute;
