@@ -227,6 +227,19 @@ export const Planning = () => {
     setIsBookmarked(!isBookmarked);
   };
 
+  const handleChatOpen = () => {
+    setIsChatOpen(!isChatOpen);
+    // ws.current.send(
+    //   JSON.stringify({
+    //     type: "CLOSE",
+    //     plannerId: plannerId,
+    //     sender: sender,
+    //     message: inputMsg,
+    //   })
+    // );
+    // console.log("채팅 종료");
+  };
+
   // 웹 소켓 연결하기
   useEffect(() => {
     if (
@@ -243,7 +256,39 @@ export const Planning = () => {
         console.log("소켓 연결 완료");
       };
     }
-  }, [socketConnected, plannerInfo]);
+
+    // ws.current.onclose = () => {
+    //   setSocketConnected(false);
+    //   console.log("소켓 연결 종료");
+    // };
+
+    // ws.current.onerror = (error) => {
+    //   console.error("소켓 오류:", error);
+    // };
+
+    return () => {
+      if (ws.current) {
+        ws.current.close();
+        ws.current = null;
+        console.log("페이지 이동으로 인해 소켓 연결 종료");
+      }
+    };
+  }, [plannerInfo, user]);
+
+  useEffect(() => {
+    // 소켓이 연결된 상태에서 메시지 전송
+    if (socketConnected && sender) {
+      const message = {
+        type: "ENTER",
+        plannerId: plannerId,
+        sender: sender,
+        message: "입장합니다.",
+      };
+
+      ws.current.send(JSON.stringify(message));
+      console.log("입장 메시지 전송:", message);
+    }
+  }, [socketConnected, sender]);
 
   useEffect(() => {
     const fetchPlanner = async () => {
@@ -385,7 +430,7 @@ export const Planning = () => {
               <AiOutlineMessage
                 className="menu-icon"
                 title="채팅"
-                onClick={() => setIsChatOpen(!isChatOpen)}
+                onClick={() => handleChatOpen()}
               />
             </div>
             {isChatOpen && (
@@ -433,6 +478,7 @@ export const Planning = () => {
                   />
                 </UserProfile>
               ))}
+            <Button className="edit-button">편집</Button>
           </Users>
           <ContentContainer>
             <PlansComponent
