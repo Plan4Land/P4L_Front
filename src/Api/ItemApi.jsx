@@ -6,14 +6,14 @@ export const TravelSpotApi = {
     try {
       const params = {
         ...filters,
-      }
+      };
 
-      console.log("******************************")
-      console.log(filters)
+      console.log("******************************");
+      console.log(filters);
 
       const response = await AxiosInstance.get("/api/travelspots", { params });
       console.log("API 응답 데이터:", response.data);
-      console.log(response)
+      console.log(response);
       return response || [];
     } catch (error) {
       console.error("여행지 데이터 조회 오류:", error);
@@ -106,6 +106,20 @@ export const PlannerItemApi = {
       return response.data || [];
     } catch (error) {
       console.error("플래너 데이터 조회 오류:", error);
+      throw error;
+    }
+  },
+};
+
+export const BookmarkedPlanApi = {
+  getBookmarkedPlan: async (memberId, page = 0, size = 5) => {
+    try {
+      const response = await AxiosInstance.get(`/planner/myPlanners`, {
+        params: { memberId, page, size },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("북마크 플랜 조회 오류:", error);
       throw error;
     }
   },

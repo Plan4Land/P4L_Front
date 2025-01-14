@@ -15,6 +15,7 @@ import UserInfoValidate from "./UserInfoValidate";
 import { MyBookmarkTourItem } from "./MyBookmarkTourItem";
 import { CheckModal } from "../../Util/Modal";
 import { useAuth } from "../../Context/AuthContext";
+import { MyBookmarkPlanItem } from "./MyBookmarkPlanItem";
 
 export const MyPageMain = () => {
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
@@ -119,7 +120,7 @@ export const MyPageMain = () => {
             </UserMain>
           )}
           {selectedMenu === "좋아요 관광지" && <MyBookmarkTourItem />}
-          {selectedMenu === "좋아요 플래닝"}
+          {selectedMenu === "좋아요 플래닝" && <MyBookmarkPlanItem />}
           {selectedMenu === "내 정보 수정" && <UserInfoValidate />}
           {selectedMenu === "멤버십"}
         </div>
