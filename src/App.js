@@ -6,7 +6,7 @@ import { Main } from "./Page/MainPage";
 import { MakePlanning } from "./Page/Planning/MakePlanning";
 import { Login } from "./Page/signup/Login";
 import { Signup } from "./Page/signup/Signup";
-import MyPageMain from "./Page/Mypage/MyPageMain";
+import MyPageMain from "./Page/User/MyPageMain";
 import KtxInquiry from "./Page/Traffic/KtxInquiry";
 import { TourList } from "./Page/Item/TourList";
 import { PlanningList } from "./Page/Item/PlanningList";
@@ -17,6 +17,7 @@ import Test from "./Page/test";
 import ProtectedRoute from "./Util/ProtectedRoute";
 import { TourItemInfo } from "./Page/Item/TourItemInfo";
 import KakaoRedirect from "./Component/KakaoLoginRedirect";
+import { Otheruser } from "./Page/User/Otheruser";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
               <Route path="/planninglist" element={<PlanningList />} />
               <Route path="/signup/terms" element={<TermsOfService />} />
               <Route path="/payment" element={<RequestPayment />} />
+              <Route path="/otheruser" element={<Otheruser />} />
               <Route path="/test" element={<Test />} />
 
               {/* 로그인 필요한 페이지 */}
