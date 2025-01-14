@@ -1,179 +1,155 @@
-import React, { useState, useEffect } from "react";
-import StationComponent from "../../Component/StationComponent.jsx";
-import DateComponent from "../../Component/DateComponent.jsx";
-import { KtxContainer,
-  StationGroup,
-  StationField, 
-  DateField, 
-  StationButton, 
+import React, { useState } from "react";
+import StationComponent from "../../Component/KtxStationComponent";
+import DateComponent from "../../Component/KtxDateComponent";
+import PassengerComponent from "../../Component/PassengerComponent"; // 인원 선택 컴포넌트 import
+import { 
+  KtxInquiryWrapper, 
+  KtxInquiryBox, 
+  StationBox, 
+  DateBox, 
+  ModalContainer, 
+  SwapButton,
   DateModal, 
-  DateButton, 
-  PassengerSelectorBox, 
-  PassengerModal, 
-  ModalContent,
-  CloseButton } from "../../Style/TrafficStyle.jsx";
-import useCsvData from "../../Util/loadCsv.js";
-import SeatTypeSelector from "../../Component/SeatTypeSelector.jsx";
-import PassengerSelector from "../../Component/PassengerSelector.jsx";
+  SelectBoxWrapper, 
+  CheckBoxLabel, 
+  PassBox
+} from "../../Style/TrafficStyle"
 
 const KtxInquiry = () => {
-  const [isStationModalOpen, setStationModalOpen] = useState(false);
-  const [isDateModalOpen, setDateModalOpen] = useState(false);
-  const [modalType, setModalType] = useState(""); // 출발/도착 구분
-  const [departure, setDeparture] = useState("");
-  const [arrival, setArrival] = useState("");
-  const [dateInfo, setDateInfo] = useState("");
+  const [departureModal, setDepartureModal] = useState(false);
+  const [arrivalModal, setArrivalModal] = useState(false);
+  const [dateModal, setDateModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDeparture, setSelectedDeparture] = useState("");
+  const [selectedArrival, setSelectedArrival] = useState("");
+  const [isRoundTrip, setIsRoundTrip] = useState(false); // 왕복 체크 상태 추가
+  const [passengerModal, setPassengerModal] = useState(false); // 인원 선택 모달 상태
 
-  const [regions, setRegions] = useState([]);
-  const [stations, setStations] = useState([]);
-  const [allStations, setAllStations] = useState([]);
-  const [dateFieldPosition, setDateFieldPosition] = useState({ top: 0, left: 0 });
-  const [selectedLetter, setSelectedLetter] = useState(""); // 선택된 한글 자음
-  const [isPassengerModalOpen, setPassengerModalOpen] = useState(false); // 인원 선택 모달 열림 여부
-
-  // CSV 데이터 로드
-  const regionData = useCsvData("/KTX2.csv");
-  const stationData = useCsvData("/KTX3.csv");
-
-  useEffect(() => {
-    if (regionData.length > 0) {
-      const sortedRegions = regionData.map((row) => row.CityName).sort();
-      setRegions(sortedRegions);
-    }
-
-    if (stationData.length > 0) {
-      setStations(stationData);
-      setAllStations(stationData);
-    }
-  }, [regionData, stationData]);
-
-  useEffect(() => {
-    if (selectedLetter) {
-      const filteredStations = allStations.filter(station => station.StationName.startsWith(selectedLetter));
-      setStations(filteredStations);
-    } else {
-      setStations(allStations);
-    }
-  }, [selectedLetter, allStations]);
-
-  const handleStationSelect = (station) => {
-    if (modalType === "departure") setDeparture(station);
-    if (modalType === "arrival") setArrival(station);
-    setStationModalOpen(false);
+  const toggleModal = (type) => {
+    if (type === "departure") setDepartureModal(!departureModal);
+    if (type === "arrival") setArrivalModal(!arrivalModal);
+    if (type === "date") setDateModal(!dateModal);
+    if (type === "passenger") setPassengerModal(!passengerModal); // 인원 선택 모달 토글
   };
 
-  const handleDateApply = (date, time) => {
-    setDateInfo(`${date.toLocaleDateString()} · ${time}시 이후 출발`);
-    setDateModalOpen(false);
+  const handleSwap = () => {
+    setSelectedDeparture(selectedArrival); // 출발역에 도착역 값을 설정
+    setSelectedArrival(selectedDeparture); // 도착역에 출발역 값을 설정
   };
 
-  const handleDateClick = (e) => {
-    const rect = e.target.getBoundingClientRect();
-    setDateFieldPosition({ top: rect.top, left: rect.left });
-    setDateModalOpen(true);
-  };
-
-  const handleSeatTypeChange = (newSeatType) => {
-    console.log("좌석 유형 선택:", newSeatType);
-  };
-
-  const handlePassengerChange = (newAdult, newChild, newInfant, newElderly, newSevereDisability, newMildDisability) => {
-    console.log("어른:", newAdult, "어린이:", newChild, "유아:", newInfant, "경로:", newElderly, "중증장애인:", newSevereDisability, "경증장애인:", newMildDisability);
+  const handleRoundTripChange = () => {
+    setIsRoundTrip(!isRoundTrip); // 왕복 체크 상태 변경
   };
 
   return (
-    <KtxContainer>
-      <h1>KTX 조회</h1>
-      <StationGroup>
-        <StationField>
-          <input
-            placeholder="출발역"
-            value={departure}
-            onClick={() => {
-              setModalType("departure");
-              setStationModalOpen(true);
-            }}
-            readOnly
-          />
-          <StationButton
-            onClick={() => {
-              setModalType("departure");
-              setStationModalOpen(true);
-            }}
-          >
-            🔍
-          </StationButton>
-        </StationField>
-        <StationField>
-          <input
-            placeholder="도착역"
-            value={arrival}
-            onClick={() => {
-              setModalType("arrival");
-              setStationModalOpen(true);
-            }}
-            readOnly
-          />
-          <StationButton
-            onClick={() => {
-              setModalType("arrival");
-              setStationModalOpen(true);
-            }}
-          >
-            🔍
-          </StationButton>
-        </StationField>
-      </StationGroup>
+    <KtxInquiryWrapper>
+      <KtxInquiryBox>
+        {/* 출발역 */}
+        <StationBox align="flex-start">
+          <label>출발역</label>
+          <div className="input-with-icon">
+            <input
+              type="text"
+              placeholder="출발역 선택"
+              value={selectedDeparture}
+              onClick={() => toggleModal("departure")}
+              readOnly
+            />
+            <button className="search-btn" onClick={() => toggleModal("departure")}>
+              🔍
+            </button>
+          </div>
+          {departureModal && (
+            <ModalContainer>
+              <StationComponent
+                toggleModal={() => toggleModal("departure")}
+                type="departure"
+                setSelectedStation={setSelectedDeparture}
+              />
+            </ModalContainer>
+          )}
+        </StationBox>
 
-      <DateField>
+        {/* 스왑 버튼 */}
+        <SwapButton onClick={handleSwap}>↔️</SwapButton>
+
+        {/* 도착역 */}
+        <StationBox align="flex-end">
+          <label>도착역</label>
+          <div className="input-with-icon">
+            <input
+              type="text"
+              placeholder="도착역 선택"
+              value={selectedArrival}
+              onClick={() => toggleModal("arrival")}
+              readOnly
+            />
+            <button className="search-btn" onClick={() => toggleModal("arrival")}>
+              🔍
+            </button>
+          </div>
+          {arrivalModal && (
+            <ModalContainer>
+              <StationComponent
+                toggleModal={() => toggleModal("arrival")}
+                type="arrival"
+                setSelectedStation={setSelectedArrival}
+              />
+            </ModalContainer>
+          )}
+        </StationBox>
+      </KtxInquiryBox>
+
+      {/* 일정 · 인원 선택 | 왕복 (체크버튼) */}
+      <SelectBoxWrapper>
+        <span>일정 · 인원 선택 | </span>
+        <CheckBoxLabel>
+          <input
+            type="checkbox"
+            checked={isRoundTrip}
+            onChange={handleRoundTripChange}
+          />
+          왕복
+        </CheckBoxLabel>
+      </SelectBoxWrapper>
+
+      {/* 날짜 선택 */}
+      <DateBox>
+        <label>가는날</label>
         <input
-          placeholder="가는날"
-          value={dateInfo}
-          onClick={handleDateClick}
+          type="text"
+          placeholder="날짜 선택"
+          value={selectedDate || ""}
+          onClick={() => toggleModal("date")}
           readOnly
         />
-        <DateButton onClick={handleDateClick}>📅</DateButton>
-        {isDateModalOpen && (
-          <DateModal style={{ top: dateFieldPosition.top, left: dateFieldPosition.left }}>
-            <DateComponent
-              onClose={() => setDateModalOpen(false)}
-              onApply={handleDateApply}
-            />
-            <button style={{ position: "absolute", top: "10px", right: "10px" }} onClick={() => setDateModalOpen(false)}>X</button>
+        {dateModal && (
+          <DateModal>
+            <DateComponent toggleModal={() => toggleModal("date")} setSelectedDate={setSelectedDate} />
           </DateModal>
         )}
-      </DateField>
+      </DateBox>
 
-      <SeatTypeSelector onSeatTypeChange={handleSeatTypeChange} />
-
-      <PassengerSelectorBox onClick={() => setPassengerModalOpen(true)}>
-        인원 선택
-      </PassengerSelectorBox>
-
-      {isPassengerModalOpen && (
-        <PassengerModal>
-          <ModalContent>
-            <h3>인원 선택</h3>
-            <PassengerSelector onPassengerChange={handlePassengerChange} />
-            <CloseButton onClick={() => setPassengerModalOpen(false)}>
-              적용
-            </CloseButton>
-          </ModalContent>
-        </PassengerModal>
-      )}
-
-      {isStationModalOpen && (
-        <StationComponent
-          regions={regions}
-          stations={stations}
-          allStations={allStations}
-          selectedLetter={selectedLetter}
-          setSelectedLetter={setSelectedLetter}
-          onStationSelect={handleStationSelect}
-          onClose={() => setStationModalOpen(false)}
-        />
-      )}
-    </KtxContainer>
+      <PassBox align="flex-start">
+        <label>인원 선택</label>
+        <div className="input-with-icon">
+          <input
+            type="text"
+            placeholder="인원 선택"
+            onClick={() => toggleModal("passenger")}
+            readOnly
+          />
+          <button className="search-btn" onClick={() => toggleModal("passenger")}>
+            🔍
+          </button>
+        </div>
+        {passengerModal && (
+          <ModalContainer>
+            <PassengerComponent toggleModal={() => toggleModal("passenger")} />
+          </ModalContainer>
+        )}
+      </PassBox>
+    </KtxInquiryWrapper>
   );
 };
 
