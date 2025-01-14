@@ -8,6 +8,7 @@ import {ServiceCode} from "../../Util/Service_code_final";
 import {TourItem} from "../../Component/ItemListComponent";
 import {TravelSpotApi} from "../../Api/ItemApi";
 import {areas, types} from "../../Util/Common";
+import {Pagination} from "../../Component/Pagination";
 
 export const TourList = () => {
     const location = useLocation();
@@ -32,6 +33,7 @@ export const TourList = () => {
 
     const [travelSpots, setTravelSpots] = useState([]);
     const [totalItems, setTotalItems] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isAreaOpen, setIsAreaOpen] = useState(true);
@@ -50,9 +52,10 @@ export const TourList = () => {
           const validFilters = Object.fromEntries(
             Object.entries(filters).filter(([, value]) => value)
           );
-          const response = await TravelSpotApi.getTravelSpots(validFilters);
-          setTotalItems(response.totalElements);
-          setTravelSpots(response.data.content);
+          const data = await TravelSpotApi.getTravelSpots(validFilters);
+          setTotalItems(data.totalElements);
+          setTotalPages(data.totalPages);
+          setTravelSpots(data.content);
         } catch (error) {
           setError("여행지 데이터를 가져오는 데 실패했습니다.");
         } finally {
@@ -399,16 +402,21 @@ export const TourList = () => {
                 })}
               </div>
             }
-            <div>
-              <button
-                onClick={() => handlePageChange(filters.currentPage - 1)}
-                disabled={filters.currentPage === 0}
-              >
-                ◀
-              </button>
-              <span> {filters.currentPage + 1} 페이지 </span>
-              <button onClick={() => handlePageChange(filters.currentPage + 1)}>▶</button>
-            </div>
+            <Pagination
+            currentPage={filters.currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+            />
+            {/*<div>*/}
+            {/*  <button*/}
+            {/*    onClick={() => handlePageChange(filters.currentPage - 1)}*/}
+            {/*    disabled={filters.currentPage === 0}*/}
+            {/*  >*/}
+            {/*    ◀*/}
+            {/*  </button>*/}
+            {/*  <span> {filters.currentPage + 1} 페이지 </span>*/}
+            {/*  <button onClick={() => handlePageChange(filters.currentPage + 1)}>▶</button>*/}
+            {/*</div>*/}
           </ItemList>
         </List>
         <Footer/>
