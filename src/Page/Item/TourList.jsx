@@ -14,15 +14,20 @@ export const TourList = () => {
     const location = useLocation();
     // Location 훅 사용
     const navigate = useNavigate();
-    const [filters, setFilters] = useState({
-      areaCode: "",
-      subAreaCode: "",
-      topTheme: "",
-      middleTheme: "",
-      bottomTheme: "",
-      category: "",
-      searchQuery: "",
-    });
+    const [filters, setFilters] = useState(() => {
+        const queryParams = new URLSearchParams(location.search);
+        return {
+          areaCode: queryParams.get("areaCode") || "",
+          subAreaCode: queryParams.get("subAreaCode") || "",
+          topTheme: queryParams.get("cat1") || "",
+          middleTheme: queryParams.get("cat2") || "",
+          bottomTheme: queryParams.get("cat3") || "",
+          category: queryParams.get("category") || "",
+          searchQuery: queryParams.get("searchQuery") || "",
+        };
+      }
+    )
+
     const [travelSpots, setTravelSpots] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -55,32 +60,31 @@ export const TourList = () => {
       fetchFilteredTravelSpots();
     }, [filters, currentPage]);
 
-  const updateFilters = (key, value) => {
-    setFilters((prevState) => {
-      const newFilters = { ...prevState, [key]: value };
+    const updateFilters = (key, value) => {
+      setFilters((prevState) => {
+        const newFilters = {...prevState, [key]: value};
+        if (key === "bottomTheme" && Array.isArray(value)) {
+          newFilters[key] = value.join(','); // 배열일 때만 join 사용
+        }
+        return newFilters;
+      });
+
+      const queryParams = new URLSearchParams(location.search);
+      queryParams.delete(key);
+
       if (key === "bottomTheme" && Array.isArray(value)) {
-        newFilters[key] = value.join(','); // 배열일 때만 join 사용
+        queryParams.set(key, value.join(','));
+      } else if (Array.isArray(value)) {
+        value.forEach((v) => queryParams.append(key, encodeURIComponent(v)));
+      } else if (value) {
+        queryParams.set(key, encodeURIComponent(value));
       }
-      return newFilters;
-    });
 
-    const queryParams = new URLSearchParams(location.search);
-    queryParams.delete(key);
-
-    if (key === "bottomTheme" && Array.isArray(value)) {
-      queryParams.set(key, value.join(','));
-    } else if (Array.isArray(value)) {
-      value.forEach((v) => queryParams.append(key, encodeURIComponent(v)));
-    } else if (value) {
-      queryParams.set(key, encodeURIComponent(value));
-    }
-
-    navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`, { replace: true });
-  };
+      navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`, {replace: true});
+    };
 
 
-
-  const handlePageChange = (newPage) => {
+    const handlePageChange = (newPage) => {
       setCurrentPage(newPage);
     };
 
@@ -173,30 +177,30 @@ export const TourList = () => {
       navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
     };
 
-  const handleBottomThemeChange = (cat3) => {
-    let newSelectedBottomThemes = filters.bottomTheme ? filters.bottomTheme.split(',') : [];
-    console.log(newSelectedBottomThemes)
+    const handleBottomThemeChange = (cat3) => {
+      let newSelectedBottomThemes = filters.bottomTheme ? filters.bottomTheme.split(',') : [];
+      console.log(newSelectedBottomThemes)
 
-    if (newSelectedBottomThemes.includes(cat3)) {
-      // 이미 선택된 항목인 경우, 제거
-      newSelectedBottomThemes = newSelectedBottomThemes.filter((item) => item !== cat3);
-    } else {
-      // 아직 선택되지 않은 항목인 경우
-      if (newSelectedBottomThemes.length >= 3) {
-        alert("최대 3개의 소분류만 선택할 수 있습니다.");
-        return; // 더 이상 추가하지 않고 함수 종료
+      if (newSelectedBottomThemes.includes(cat3)) {
+        // 이미 선택된 항목인 경우, 제거
+        newSelectedBottomThemes = newSelectedBottomThemes.filter((item) => item !== cat3);
+      } else {
+        // 아직 선택되지 않은 항목인 경우
+        if (newSelectedBottomThemes.length >= 3) {
+          alert("최대 3개의 소분류만 선택할 수 있습니다.");
+          return; // 더 이상 추가하지 않고 함수 종료
+        }
+        newSelectedBottomThemes.push(cat3); // 배열에 추가
       }
-      newSelectedBottomThemes.push(cat3); // 배열에 추가
-    }
 
-    setFilters((prev) => ({
-      ...prev,
-      bottomTheme: newSelectedBottomThemes.join(','), // 상태 업데이트
-    }));
-    const queryParams = new URLSearchParams(location.search);
-    queryParams.set("cat3", newSelectedBottomThemes.join(','));
-    navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
-  };
+      setFilters((prev) => ({
+        ...prev,
+        bottomTheme: newSelectedBottomThemes.join(','), // 상태 업데이트
+      }));
+      const queryParams = new URLSearchParams(location.search);
+      queryParams.set("cat3", newSelectedBottomThemes.join(','));
+      navigate(`/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`);
+    };
 
 
     const handleCategoryChange = (category) => {
