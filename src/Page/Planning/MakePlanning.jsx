@@ -26,8 +26,8 @@ export const MakePlanning = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [title, setTitle] = useState("");
-  const [selectedImage, setSelectedImage] = useState("planning_thumbnail.jpg");
-  const [imagePreview, setImagePreview] = useState(null);
+  const [selectedImage, setSelectedImage] = useState("");
+  // const [imagePreview, setImagePreview] = useState(null);
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const memberId = JSON.parse(localStorage.getItem("user")).id;
@@ -61,13 +61,13 @@ export const MakePlanning = () => {
     }
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedImage(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
-  };
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setSelectedImage(file);
+  //     setImagePreview(URL.createObjectURL(file));
+  //   }
+  // };
 
   const handleSubmit = async () => {
     const areaCode = areas.find((area) => area.name === selectedArea)?.code;
@@ -216,9 +216,9 @@ export const MakePlanning = () => {
               <EditImg
                 basic={"/img/planning_thumbnail.jpg"}
                 setSelectedImage={setSelectedImage}
-                imagePreview={imagePreview}
-                setImagePreview={setImagePreview}
-                handleImageChange={handleImageChange}
+                // imagePreview={imagePreview}
+                // setImagePreview={setImagePreview}
+                // handleImageChange={handleImageChange}
               />
             </div>
             <h2 className="question-title">공개 여부</h2>

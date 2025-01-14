@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { colors } from "../Style/GlobalStyle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 
 export const ProfileImgContainer = styled.div`
   display: flex;
@@ -48,13 +49,16 @@ export const ProfileImg = ({ file, width, height }) => {
   );
 };
 
-export const EditImg = ({
-  basic,
-  setSelectedImage,
-  imagePreview,
-  setImagePreview,
-  handleImageChange,
-}) => {
+export const EditImg = ({ basic, setSelectedImage }) => {
+  const [imagePreview, setImagePreview] = useState(null);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
   return (
     <>
       <ProfileImgContainer>
