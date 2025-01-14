@@ -25,6 +25,7 @@ export const MyBookmarkPlanItem = () => {
       console.error("북마크된 플래닝 조회 오류:", err);
     }
   };
+
   useEffect(() => {
     if (!user?.id) return;
     fetchBookmarkedPlans();
@@ -33,32 +34,37 @@ export const MyBookmarkPlanItem = () => {
   return (
     <>
       <BookmarkItem>
-        <div className="vookmarkList">
-          {bookmarkedPlans.map((planner) => {
-            // areaName 계산
-            const areaName =
-              areas.find((area) => area.code === planner.area)?.name ||
-              "알 수 없는 지역";
+        <div className="bookmarkList">
+          {bookmarkedPlans.length > 0 ? (
+            bookmarkedPlans.map((plannerObj) => {
+              const planner = plannerObj.planner; // planner 객체를 추출
+              console.log(planner); // 각 planner 객체의 구조 확인
 
-            // subAreaName 계산
-            const subAreaName =
-              areas
-                .find((area) => area.code === planner.area)
-                ?.subAreas.find((subArea) => subArea.code === planner.subArea)
-                ?.name || "알 수 없는 하위 지역";
+              const areaName =
+                areas.find((area) => area.code === planner.area)?.name ||
+                "알 수 없는 지역";
 
-            return (
-              <PlanItem
-                key={planner.id}
-                id={planner.id}
-                thumbnail={planner.thumbnail || "/default-thumbnail.png"}
-                title={planner.title}
-                address={`${areaName} - ${subAreaName}`} // 지역 이름과 하위 지역 이름으로 변환
-                subCategory={planner.theme} // 테마
-                type={planner.isPublic ? "공개" : "비공개"}
-              />
-            );
-          })}
+              const subAreaName =
+                areas
+                  .find((area) => area.code === planner.area)
+                  ?.subAreas.find((subArea) => subArea.code === planner.subArea)
+                  ?.name || "알 수 없는 하위 지역";
+
+              return (
+                <PlanItem
+                  key={planner.id}
+                  id={planner.id}
+                  thumbnail={planner.thumbnail || "/default-thumbnail.png"}
+                  title={planner.title}
+                  address={`${areaName} - ${subAreaName}`}
+                  subCategory={planner.theme}
+                  type={planner.isPublic ? "공개" : "비공개"}
+                />
+              );
+            })
+          ) : (
+            <p>북마크된 플래너가 없습니다.</p>
+          )}
         </div>
         <div className="pagebutton">
           <button onClick={() => setPage((prev) => Math.max(prev - 1, 0))}>
