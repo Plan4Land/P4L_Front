@@ -20,30 +20,25 @@ import { Navigation, Pagination } from "swiper/modules"; // 추천 관광지 스
 import Calendar from "react-calendar"; // 축제 캘린더
 import "react-calendar/dist/Calendar.css"; // 축제 캘린더
 import axios from "axios";
+import { TopTourApi, TopPlanApi } from "../Api/ItemApi";
 
 export const Main = () => {
   const [selectedMenu, setSelectedMenu] = useState("지역"); // 미니검색창
   const [selectedArea, setSelectedArea] = useState("");
   const [value, onChange] = useState(new Date()); // 축제 캘린더
   const [holidays, setHolidays] = useState([]); // 공휴일 목록
-  const [currentYearMonth, setCurrentYearMonth] = useState({
-    year: new Date().getFullYear(),
-    month: new Date().getMonth() + 1, // 월은 0부터 시작하므로 1을 더함
-  });
+  const [currentMonth, setCurrentMonth] = useState({ year: new Date().getFullYear(), month: new Date().getMonth() });
+  const today = new Date();
+  const selectedMonth = value.getMonth(); 
+  const selectedYear = value.getFullYear();
 
   const handleAreaClick = (areaCode) => {
     setSelectedArea(areaCode);
   };
 
-  // 연도와 월이 변경될 때마다 공휴일 데이터를 요청
   useEffect(() => {
-    const { year, month } = currentYearMonth;
-
-    // 공휴일 데이터를 요청
     axios
-      .get("http://localhost:5000/api/holiday", {
-        params: { solYear: year, solMonth: month },
-      })
+      .get("http://localhost:5000/holiday")  
       .then((response) => {
         const holidaysData = Array.isArray(response.data) ? response.data : [];
         setHolidays(holidaysData);
@@ -51,7 +46,7 @@ export const Main = () => {
       .catch((error) => {
         console.error("공휴일 데이터를 불러오는 데 실패했습니다.", error);
       });
-  }, [currentYearMonth]);
+  }, []); 
 
   const holidayDates = holidays.map((holiday) => {
     const date = holiday.locdate.toString();
@@ -62,12 +57,21 @@ export const Main = () => {
     );
   });
 
-  // 월/연도가 변경될 때 currentYearMonth 업데이트
-  const handleMonthChange = (newDate) => {
-    const newYear = newDate.getFullYear();
-    const newMonth = newDate.getMonth() + 1;
-    setCurrentYearMonth({ year: newYear, month: newMonth });
-    onChange(newDate);
+  const filterHolidaysForMonth = (year, month) => {
+    return holidays.filter((holiday) => {
+      const holidayDate = new Date(
+        parseInt(holiday.locdate.toString().slice(0, 4)), // 연도
+        parseInt(holiday.locdate.toString().slice(4, 6)) - 1, // 월
+        parseInt(holiday.locdate.toString().slice(6, 8)) // 일
+      );
+      return holidayDate.getFullYear() === year && holidayDate.getMonth() === month;
+    });
+  };
+
+  const handleMonthChange = ({ activeStartDate }) => {
+    const newYear = activeStartDate.getFullYear();
+    const newMonth = activeStartDate.getMonth();
+    setCurrentMonth({ year: newYear, month: newMonth });
   };
 
   return (
@@ -152,23 +156,24 @@ export const Main = () => {
         <Festive className="GridItem">
           <Calendar
             calendarType="hebrew"
-            onChange={handleMonthChange}
+            onChange={onChange}
             value={value} // 선택된 날짜
-            onActiveStartDateChange={({ activeStartDate }) => {
-              const newMonth = activeStartDate.getMonth() + 1; // 월
-              const newYear = activeStartDate.getFullYear(); // 연도
-              setCurrentYearMonth({ year: newYear, month: newMonth });
-            }}
+            onActiveStartDateChange={handleMonthChange} // 월 변경 시 공휴일 목록 필터링
             tileClassName={({ date, view }) => {
               const today = new Date();
               if (date.toDateString() === today.toDateString()) {
                 return "react-calendar__tile--now";
               }
+            
+              // 현재 월을 벗어난 날짜는 반투명 처리
               if (view === "month") {
-                const activeMonth = currentYearMonth.month - 1; // 현재 월 (0부터 시작)
-                if (date.getMonth() !== activeMonth) {
+                const isSameMonth = date.getMonth() === selectedMonth; // 선택된 월과 비교
+                const isSameYear = date.getFullYear() === selectedYear; // 선택된 연도와 비교
+                if (!isSameMonth || !isSameYear) {
                   return "react-calendar__tile--inactive"; // 흐릿한 날짜
                 }
+            
+                // 토요일/일요일 스타일 추가
                 if (date.getDay() === 0) return "react-calendar-sunday";
                 if (date.getDay() === 6) return "react-calendar-saturday";
               }
@@ -190,7 +195,7 @@ export const Main = () => {
               {holidays.length === 0 ? (
                 <li>일정이 존재하지 않습니다..</li>
               ) : (
-                holidays.map((holiday) => (
+                filterHolidaysForMonth(currentMonth.year, currentMonth.month).map((holiday) => (
                   <li key={holiday.seq}>
                     {parseInt(holiday.locdate.toString().slice(4, 6))}월{" "}
                     {parseInt(holiday.locdate.toString().slice(6, 8))}일 -{" "}

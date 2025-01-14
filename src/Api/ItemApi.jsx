@@ -122,3 +122,27 @@ export const BookmarkedPlanApi = {
     }
   },
 };
+
+export const TopTourApi = {
+  getTop5Travelspots: async() => {
+    try{
+      const response = await AxiosInstance.get(`/api/travelspotTop5`);
+      return response.data;
+    } catch (error) {
+      console.error("상위 5개 관광지 조회 오류: ", error);
+      throw error;
+    }
+  }
+}
+
+export const TopPlanApi = {
+  getTop3Plans: async() => {
+    try{
+      const response = await AxiosInstance.get(`/plannersTop3`);
+      return response.data;
+    } catch (error) {
+      console.error("상위 3개 플래닝 조회 오류: ", error);
+      throw error;
+    }
+  }
+}
