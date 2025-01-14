@@ -118,6 +118,11 @@ export const SignupContainer = styled.div`
       cursor: default;
     }
   }
+
+  .profile-container{
+      width: 120px;
+      height: 120px;
+    }
 `;
 
 export const InputBox = styled.div`

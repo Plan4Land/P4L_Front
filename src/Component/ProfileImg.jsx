@@ -16,8 +16,8 @@ export const ProfileImgContainer = styled.div`
 
   .upload-label {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    bottom: 0.2rem;
+    right: 0.2rem;
     background-color: ${colors.colorA};
     color: white;
     border-radius: 50%;
