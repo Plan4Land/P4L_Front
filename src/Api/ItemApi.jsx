@@ -112,7 +112,7 @@ export const PlannerItemApi = {
 export const BookmarkedPlanApi = {
   getBookmarkedPlan: async (memberId, page = 0, size = 5) => {
     try {
-      const response = await AxiosInstance.get(`/planner/myPlanners`, {
+      const response = await AxiosInstance.get(`/planner/myBookmarkPlanners`, {
         params: { memberId, page, size },
       });
       return response.data;
@@ -142,6 +142,20 @@ export const TopPlanApi = {
       return response.data;
     } catch (error) {
       console.error("상위 3개 플래닝 조회 오류: ", error);
+      throw error;
+    }
+  },
+};
+
+export const MyPlannerApi = {
+  getPlannersByOwner: async (memberId, page = 0, size = 5) => {
+    try {
+      const response = await AxiosInstance.get(`/planner/myPlanners`, {
+        params: { memberId, page, size },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("플래너 조회 오류:", error);
       throw error;
     }
   },

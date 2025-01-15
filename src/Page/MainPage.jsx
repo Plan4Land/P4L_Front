@@ -221,8 +221,7 @@ export const Main = () => {
                     alt={plan.title}
                   />
                   <h3>{plan.title}</h3>
-                  <p>{`${areaName} - ${subAreaName}`}</p>{" "}
-                  {/* 지역과 하위 지역 이름 출력 */}
+                  <p>{`${areaName} - ${subAreaName}`}</p>
                 </div>
               );
             })}
@@ -237,15 +236,16 @@ export const Main = () => {
             value={value} // 선택된 날짜
             onActiveStartDateChange={handleMonthChange} // 월 변경 시 공휴일 목록 필터링
             tileClassName={({ date, view }) => {
-              const today = new Date();
+              const { year, month } = currentMonth; // 현재 선택된 연도/월을 가져옵니다.
+
               if (date.toDateString() === today.toDateString()) {
                 return "react-calendar__tile--now";
               }
 
               // 현재 월을 벗어난 날짜는 반투명 처리
               if (view === "month") {
-                const isSameMonth = date.getMonth() === selectedMonth; // 선택된 월과 비교
-                const isSameYear = date.getFullYear() === selectedYear; // 선택된 연도와 비교
+                const isSameMonth = date.getMonth() === month; // 현재 월과 비교
+                const isSameYear = date.getFullYear() === year; // 현재 연도와 비교
                 if (!isSameMonth || !isSameYear) {
                   return "react-calendar__tile--inactive"; // 흐릿한 날짜
                 }

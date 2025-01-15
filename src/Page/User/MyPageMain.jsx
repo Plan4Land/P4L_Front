@@ -1,7 +1,7 @@
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { UserMenu } from "../../Component/UserComponent";
-import { useState, useEffect } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate, Link, Navigate } from "react-router-dom";
 import { Button, CancelButton } from "../../Component/ButtonComponent";
 import {
   MyPageMainContainer,
@@ -17,11 +17,20 @@ import { CheckModal } from "../../Util/Modal";
 import { useAuth } from "../../Context/AuthContext";
 import { MyBookmarkPlanItem } from "./MyBookmarkPlanItem";
 import RequestPayment from "../Payment/RequestPayment";
+import { MyPlannerApi } from "../../Api/ItemApi";
+import { areas } from "../../Util/Common";
 
 export const MyPageMain = () => {
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState("followings");
+  const [planners, setPlanners] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [size] = useState(5);
+  const scrollContainerRef = useRef(null);
+  const navigate = useNavigate();
+
   const [followings, setFollowings] = useState(["사용자1", "사용자2"]);
   const [followers, setFollowers] = useState(["사용자4", "사용자5"]);
   const { user } = useAuth();
@@ -57,7 +66,6 @@ export const MyPageMain = () => {
   };
 
   const location = useLocation();
-  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
 
   // URL에서 menu 값을 가져옴
@@ -75,6 +83,40 @@ export const MyPageMain = () => {
       navigate("/mypage", { replace: true });
     }
   }, [selectedMenu, navigate]);
+
+  const fetchPlanners = async () => {
+    try {
+      if (loading) return; // 중복 호출 방지
+      setLoading(true);
+      const data = await MyPlannerApi.getPlannersByOwner(user.id, page, size);
+      setPlanners((prevPlanners) => [...prevPlanners, ...data.content]);
+      console.log(data);
+      setLoading(false);
+    } catch (error) {
+      console.error("플래너 조회 오류:", error);
+      setLoading(false);
+    }
+  };
+
+  const planHandleClick = (id) => {
+    navigate(`/planning/${id}`);
+  };
+
+  // 페이지가 변경될 때마다 플래너를 불러옴
+  useEffect(() => {
+    fetchPlanners();
+  }, [page]);
+
+  // 가로 스크롤 끝에 도달했을 때 페이지를 증가시키는 함수
+  const handleScroll = () => {
+    const container = scrollContainerRef.current;
+    if (
+      container.scrollLeft + container.offsetWidth >=
+      container.scrollWidth - 10
+    ) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
 
   return (
     <>
@@ -114,16 +156,50 @@ export const MyPageMain = () => {
                   <Button onClick={openInviteModal}>초대 확인</Button>
                 </div>
               </UserInfo>
-
               <UserPlanning>
-                <p>여기에 플래닝 리스트?</p>
+                <div
+                  ref={scrollContainerRef}
+                  className="scrollContainerRef"
+                  onScroll={handleScroll}
+                >
+                  {loading && <p>로딩 중...</p>}
+                  {planners.map((planner) => {
+                    const areaName =
+                      areas.find((area) => area.code === planner.area)?.name ||
+                      "알 수 없는 지역";
+                    const subAreaName =
+                      areas
+                        .find((area) => area.code === planner.area)
+                        ?.subAreas.find(
+                          (subArea) => subArea.code === planner.subArea
+                        )?.name || "알 수 없는 하위 지역";
+                    return (
+                      <div
+                        key={planner.id}
+                        className="myPlanning"
+                        onClick={() => planHandleClick(planner.id)}
+                      >
+                        <img
+                          src={
+                            planner.thumbnail || "/planning-pic/planningth1.jpg"
+                          }
+                          alt={planner.title}
+                        />
+                        <h3>{planner.title}</h3>
+                        <p>{planner.theme}</p>
+                        <p>{`${areaName} - ${subAreaName}`}</p>
+                      </div>
+                    );
+                  })}
+                </div>
               </UserPlanning>
             </UserMain>
           )}
-          {selectedMenu === "좋아요 관광지" && <MyBookmarkTourItem />}
-          {selectedMenu === "좋아요 플래닝" && <MyBookmarkPlanItem />}
+          {selectedMenu === "내 플래닝"}
+          {selectedMenu === "북마크 관광지" && <MyBookmarkTourItem />}
+          {selectedMenu === "북마크 플래닝" && <MyBookmarkPlanItem />}
           {selectedMenu === "내 정보 수정" && <UserInfoValidate />}
-          {selectedMenu === "멤버십" && <RequestPayment/>}
+          {selectedMenu === "멤버십" && <RequestPayment />}
         </div>
       </MyPageMainContainer>
 
