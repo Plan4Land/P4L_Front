@@ -8,12 +8,13 @@ import {
 import { useState, useEffect } from "react";
 import { CheckModal } from "../../Util/Modal";
 import { Button } from "../../Component/ButtonComponent";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { MyPlannerApi } from "../../Api/ItemApi";
 import { areas } from "../../Util/Common";
 import { PlanItem } from "../../Component/ItemListComponent";
 
 export const Otheruser = () => {
+  const { userId } = useParams();
   const [planners, setPlanners] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
