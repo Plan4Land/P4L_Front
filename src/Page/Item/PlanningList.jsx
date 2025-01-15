@@ -27,6 +27,7 @@ export const PlanningList = () => {
       currentPage: parseInt(queryParams.get("currentPage")) || 0,
       pageSize: parseInt(queryParams.get("pageSize")) || 10,
       searchQuery: queryParams.get("searchQuery") ? decodeURIComponent(queryParams.get("searchQuery")) : "",
+      sortBy: queryParams.get("sortBy") || "",
     };
   });
 
@@ -39,6 +40,29 @@ export const PlanningList = () => {
   const [isSubAreaOpen, setIsSubAreaOpen] = useState(true);
   const [isThemeOpen, setIsThemeOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState(filters.searchQuery);
+
+  const sortBy = [
+    {
+      name: "최신순",
+      value: "LatestDesc",
+    },
+    {
+      name: "오래된 순",
+      value: "LatestAsc",
+    },
+    {
+      name: "북마크 많은 순",
+      value: "BookmarkDesc"
+    },
+    {
+      name: "북마크 적은 순",
+      value: "BookmarkAsc",
+    },]
+
+  const handleSortChange = (e) => {
+    console.log("정렬 바뀜 : ",e.target.value);
+    updateFilters("sortBy", e.target.value);
+  }
 
   useEffect(() => {
     const fetchFilteredPlanners = async () => {
@@ -68,13 +92,13 @@ export const PlanningList = () => {
   }, [filters, navigate, filters.currentPage]);
 
   const updateFilters = (key, value) => {
-    if(key !== "currentPage"){
+    if (key !== "currentPage") {
       setFilters((prev) => ({
         ...prev,
         [key]: value,
         currentPage: 0,
       }));
-    }else{
+    } else {
       setFilters((prev) => ({
         ...prev,
         [key]: value,
@@ -83,7 +107,15 @@ export const PlanningList = () => {
   };
 
   const handleResetSelections = () => {
-    setFilters({areaCode: "", subAreaCode: "", themeList: "", currentPage: 0, pageSize: 10, searchQuery: "",});
+    setFilters({
+      areaCode: "",
+      subAreaCode: "",
+      themeList: "",
+      currentPage: 0,
+      pageSize: 10,
+      searchQuery: "",
+      sortBy: ""
+    });
   };
 
   const handlePageChange = (newPage) => {
@@ -231,7 +263,16 @@ export const PlanningList = () => {
         <ItemList>
           {loading && <p>로딩 중...</p>}
           {error && <p style={{color: "red"}}>{error}</p>}
-
+          <select
+            value={filters.sortBy}
+            onChange={handleSortChange}
+            className={"sort-select"}>
+            {sortBy.map((e) => (
+              <option key={e.name} value={e.value}>
+                {e.name}
+              </option>
+            ))}
+          </select>
           <div className="plannerList">
             {planners.map((planner) => {
               const areaName = areas.find((area) => area.code === planner.area)?.name || "알 수 없는 지역";
@@ -245,7 +286,7 @@ export const PlanningList = () => {
                   title={planner.title}
                   address={`${areaName} - ${subAreaName}`}
                   subCategory={planner.theme}
-                  type={planner.isPublic ? "공개" : "비공개"}
+                  type={planner.public ? "공개" : "비공개"}
                 />
               );
             })}
