@@ -38,7 +38,6 @@ function App() {
               <Route path="/tourItemInfo/:id" element={<TourItemInfo />} />
               <Route path="/planninglist" element={<PlanningList />} />
               <Route path="/signup/terms" element={<TermsOfService />} />
-              <Route path="/payment" element={<RequestPayment />} />
               <Route path="/otheruser" element={<Otheruser />} />
               <Route path="/test" element={<Test />} />
 

@@ -1,9 +1,34 @@
 import * as PortOne from "@portone/browser-sdk/v2";
 import {Button} from "../../Component/ButtonComponent";
 import {useEffect, useState} from "react";
-import {useAuth} from "../../Context/AuthContext";
 import {InputBox} from "../../Style/UserInfoEditStyle";
-//yarn add @portone/browser-sdk
+import styled from "styled-components";
+
+export const BoxContainer = styled.div`
+    display: grid;
+    grid-template-rows: auto 1fr; /* 2개의 열을 생성: 1:1 비율 */
+    grid-template-columns: 1fr;
+    grid-gap: 20px; /* 각 그리드 요소 사이의 간격 */
+    justify-items: center; /* 그리드 요소들을 가운데 정렬 */
+    align-items: center; /* 그리드 요소들을 수직 가운데 정렬 */
+    margin-top: 40px;
+    padding: 10px;
+    border: black solid 1px;
+
+    &.button-box {
+        grid-row: 1;
+        justify-self: center;
+        align-self: start;
+    }
+
+    &.input-container {
+        grid-row: 2;
+        justify-self: center;
+        align-self: center;
+
+    }
+`;
+
 
 const RequestPayment = () => {
   const [userEmail, setUserEmail] = useState("");
@@ -36,7 +61,7 @@ const RequestPayment = () => {
     displayAmount: 1,
     currency: "KRW",
     customer: {
-      customerId: userInfo.id,
+      customerId: userInfo?.id || "",
       email: userEmail,
       phoneNumber: userPhone,
       fullName: userName,
@@ -99,7 +124,6 @@ const RequestPayment = () => {
     }
 
 
-
     const newMembershipRsp = await fetch('http://localhost:5000/pay/new-membership',
       {
         method: "POST",
@@ -122,60 +146,52 @@ const RequestPayment = () => {
 
 
   return (
-    <>
-      <Button onClick={() => setPaySelect('kakao')}>
-        카카오페이
-      </Button>
-      <Button onClick={() => setPaySelect('card')}>
-        신용카드
-      </Button>
-      {paySelect === "kakao" ?
-        <Button onClick={() => onClickPay(kakaoBillingReq)}>
-          결제
+    <BoxContainer>
+      <div className="button-box">
+        <Button onClick={() => setPaySelect('kakao')}>
+          카카오페이 </Button>
+        <Button
+          onClick={() => setPaySelect('card')}>
+          신용카드
         </Button>
-        :
-        <>
-          <InputBox>
-            <div className="inputBox">
-              <input
-                type="text"
-                placeholder="이메일을 입력 해 주세요"
-                value={userEmail}
-                onChange={(e) => handleInputChange(e, setUserEmail)}
-              />
-            </div>
-          </InputBox>
-
-          <InputBox>
-            <div className="inputBox">
-              <input
-                type="text"
-                placeholder="이름 입력 해 주세요"
-                value={userName}
-                onChange={(e) => handleInputChange(e, setUserName)}
-              />
-            </div>
-          </InputBox>
-
-          <InputBox>
-            <div className="inputBox">
-              <input
-                type="text"
-                placeholder="전화번호를 입력 해 주세요"
-                value={userPhone}
-                onChange={(e) => handleInputChange(e, setUserPhone)}
-              />
-            </div>
-          </InputBox>
-
-          <Button onClick={() => onClickPay(kgCardBillingReq)}>
+      </div>
+      <div id={"input-container"}>
+        {paySelect === "kakao" ?
+          <Button onClick={() => onClickPay(kakaoBillingReq)}>
             결제
-          </Button>
-        </>
-      }
-
-
-    </>
+          </Button> :
+          <>
+            <InputBox>
+              <div className="inputBox">
+                <input type="text"
+                       placeholder="이메일을 입력 해 주세요"
+                       value={userEmail}
+                       onChange={(e) => handleInputChange(e, setUserEmail)}/>
+              </div>
+            </InputBox>
+            <InputBox>
+              <div className="inputBox">
+                <input type="text"
+                       placeholder="이름 입력 해 주세요"
+                       value={userName}
+                       onChange={(e) => handleInputChange(e, setUserName)}/>
+              </div>
+            </InputBox>
+            <InputBox>
+              <div className="inputBox">
+                <input type="text"
+                       placeholder="전화번호를 입력 해 주세요"
+                       value={userPhone}
+                       onChange={(e) => handleInputChange(e, setUserPhone)}/>
+              </div>
+            </InputBox>
+            <Button onClick={() => onClickPay(kgCardBillingReq)}>
+              결제
+            </Button>
+          </>
+        }
+      </div>
+    </BoxContainer>
   )
     ;
 }
