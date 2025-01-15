@@ -21,7 +21,7 @@ const AxiosApi = {
     return await AxiosInstance.post("/auth/logout", member);
   },
   // 회원가입
-  signup: async (id, password, name, nickname, email, profileImg) => {
+  signup: async (id, password, name, nickname, email, profileImg, kakaoId, sso) => {
     try {
       const member = {
         id: id,
@@ -30,6 +30,8 @@ const AxiosApi = {
         email: email,
         nickname: nickname,
         profileImg: profileImg,
+        kakaoId: kakaoId,
+        sso: sso,
       };
       const response = await AxiosInstance.post(`/auth/signup`, member);
       return response;
