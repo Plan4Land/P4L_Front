@@ -56,12 +56,14 @@ const PlanningApi = {
   //   return (await AxiosInstance.get(`/chat/room/${plannerId}`)).data;
   // },
   inviteMember: async (memberId, plannerId) => {
-    console.log(memberId, plannerId);
     const params = {
       memberId,
       plannerId,
     };
     return await AxiosInstance.post(`/planner/invite`, null, { params });
+  },
+  findInvitedPlanners: async (memberId) => {
+    return (await AxiosInstance.get(`/planner/invite/${memberId}`)).data;
   },
 };
 

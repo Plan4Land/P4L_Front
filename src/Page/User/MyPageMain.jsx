@@ -18,6 +18,7 @@ import { useAuth } from "../../Context/AuthContext";
 import { MyBookmarkPlanItem } from "./MyBookmarkPlanItem";
 import RequestPayment from "../Payment/RequestPayment";
 import { MyPlannerApi } from "../../Api/ItemApi";
+import PlanningApi from "../../Api/PlanningApi";
 import { areas } from "../../Util/Common";
 import { PlanItem } from "../../Component/ItemListComponent";
 
@@ -84,6 +85,13 @@ export const MyPageMain = () => {
     } else {
       navigate("/mypage", { replace: true });
     }
+
+    const fetchInvites = async () => {
+      const response = await PlanningApi.findInvitedPlanners(user.id);
+      console.log(response);
+    };
+
+    fetchInvites();
   }, [selectedMenu, navigate]);
 
   const fetchPlanners = async (reset = false) => {

@@ -507,31 +507,34 @@ export const Planning = () => {
             </UserProfile>
             <UserName>{plannerInfo.ownerNickname}</UserName>
             {plannerInfo.participants &&
-              plannerInfo.participants.map((participant, index) => (
-                <UserProfile
-                  key={index}
-                  id={participant.id}
-                  nickname={participant.nickname}
-                  profileImg={participant.profileImg}
-                  onClick={() =>
-                    setModals((prevModals) => ({
-                      ...prevModals,
-                      userModal: true,
-                    }))
-                  }
-                >
-                  <img
-                    src={participant.profileImg}
-                    alt="프로필 이미지"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </UserProfile>
-              ))}
+              plannerInfo.participants.map(
+                (participant, index) =>
+                  participant.state === "ACCEPT" && (
+                    <UserProfile
+                      key={index}
+                      id={participant.id}
+                      nickname={participant.nickname}
+                      profileImg={participant.profileImg}
+                      onClick={() =>
+                        setModals((prevModals) => ({
+                          ...prevModals,
+                          userModal: true,
+                        }))
+                      }
+                    >
+                      <img
+                        src={participant.profileImg}
+                        alt="프로필 이미지"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </UserProfile>
+                  )
+              )}
             {isParticipant && (
               <Button
                 className="edit-button"
