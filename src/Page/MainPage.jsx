@@ -9,7 +9,7 @@ import {
   HolidayList,
 } from "../Style/MainStyled"; // 스타일
 import { Button } from "../Component/ButtonComponent";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { areas, types } from "../Util/Common";
 import { Swiper, SwiperSlide } from "swiper/react"; // 추천 관광지 스와이퍼
@@ -27,10 +27,49 @@ export const Main = () => {
   const [selectedArea, setSelectedArea] = useState("");
   const [value, onChange] = useState(new Date()); // 축제 캘린더
   const [holidays, setHolidays] = useState([]); // 공휴일 목록
-  const [currentMonth, setCurrentMonth] = useState({ year: new Date().getFullYear(), month: new Date().getMonth() });
+  const [currentMonth, setCurrentMonth] = useState({
+    year: new Date().getFullYear(),
+    month: new Date().getMonth(),
+  });
   const today = new Date();
-  const selectedMonth = value.getMonth(); 
+  const selectedMonth = value.getMonth();
   const selectedYear = value.getFullYear();
+  const [topTourList, setTopTourList] = useState([]);
+  const [topPlans, setTopPlans] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchTopPlans = async () => {
+      try {
+        const response = await TopPlanApi.getTop3Plans();
+
+        setTopPlans(response);
+      } catch (error) {
+        console.error("상위 3개 플래닝 데이터를 가져오는 데 실패:", error);
+      }
+    };
+    fetchTopPlans();
+  }, []);
+
+  const planHandleClick = (id) => {
+    navigate(`/planning/${id}`);
+  };
+
+  useEffect(() => {
+    const fetchTopTourList = async () => {
+      try {
+        const response = await TopTourApi.getTop5Travelspots();
+        setTopTourList(response);
+      } catch (error) {
+        console.error("상위 관광지 데이터를 가져오는 데 실패:", error);
+      }
+    };
+    fetchTopTourList();
+  }, []);
+
+  const tourHandleClick = (id) => {
+    navigate(`/tourItemInfo/${id}`);
+  };
 
   const handleAreaClick = (areaCode) => {
     setSelectedArea(areaCode);
@@ -38,15 +77,15 @@ export const Main = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/holiday")  
+      .get("http://localhost:5000/holiday")
       .then((response) => {
         const holidaysData = Array.isArray(response.data) ? response.data : [];
         setHolidays(holidaysData);
       })
       .catch((error) => {
-        console.error("공휴일 데이터를 불러오는 데 실패했습니다.", error);
+        // console.error("공휴일 데이터를 불러오는 데 실패했습니다.", error);
       });
-  }, []); 
+  }, []);
 
   const holidayDates = holidays.map((holiday) => {
     const date = holiday.locdate.toString();
@@ -64,7 +103,9 @@ export const Main = () => {
         parseInt(holiday.locdate.toString().slice(4, 6)) - 1, // 월
         parseInt(holiday.locdate.toString().slice(6, 8)) // 일
       );
-      return holidayDate.getFullYear() === year && holidayDate.getMonth() === month;
+      return (
+        holidayDate.getFullYear() === year && holidayDate.getMonth() === month
+      );
     });
   };
 
@@ -100,7 +141,10 @@ export const Main = () => {
               <div className="RegionSearch">
                 <div className="area-list">
                   {areas.map((area) => (
-                    <Link key={area.code} to={`/tourlist?areaCode=${area.code}`}>
+                    <Link
+                      key={area.code}
+                      to={`/tourlist?areaCode=${area.code}`}
+                    >
                       <Button
                         key={area.code}
                         onClick={() => handleAreaClick(area.name)}
@@ -135,20 +179,53 @@ export const Main = () => {
             pagination={{ clickable: true }}
             scrollbar={{ draggable: true }}
           >
-            <SwiperSlide>Slide 1</SwiperSlide>
-            <SwiperSlide>Slide 2</SwiperSlide>
-            <SwiperSlide>Slide 3</SwiperSlide>
-            <SwiperSlide>Slide 4</SwiperSlide>
-            <SwiperSlide>Slide 5</SwiperSlide>
+            {topTourList.map((tour, index) => (
+              <SwiperSlide key={index}>
+                <div
+                  className="topTourItem"
+                  onClick={() => tourHandleClick(tour.id)}
+                >
+                  <img
+                    src={tour.thumbnail || `/profile-pic/basic1.png`}
+                    alt={tour.title}
+                  />
+                  <h3>{tour.title}</h3>
+                  <p>{tour.addr1}</p>
+                </div>
+              </SwiperSlide>
+            ))}
           </Swiper>
         </RecommItem>
 
         {/* 상위 플래닝 3개 */}
         <RecommPlan className="GridItem">
           <PlanBox>
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
+            {topPlans.map((plan, index) => {
+              const areaName =
+                areas.find((area) => area.code === plan.area)?.name ||
+                "알 수 없는 지역";
+              const subAreaName =
+                areas
+                  .find((area) => area.code === plan.area)
+                  ?.subAreas.find((subArea) => subArea.code === plan.subArea)
+                  ?.name || "알 수 없는 하위 지역";
+
+              return (
+                <div
+                  key={index}
+                  className="planitem"
+                  onClick={() => planHandleClick(plan.id)}
+                >
+                  <img
+                    src={plan.thumbnail || `/planning-pic/planningth1.jpg`}
+                    alt={plan.title}
+                  />
+                  <h3>{plan.title}</h3>
+                  <p>{`${areaName} - ${subAreaName}`}</p>{" "}
+                  {/* 지역과 하위 지역 이름 출력 */}
+                </div>
+              );
+            })}
           </PlanBox>
         </RecommPlan>
 
@@ -164,7 +241,7 @@ export const Main = () => {
               if (date.toDateString() === today.toDateString()) {
                 return "react-calendar__tile--now";
               }
-            
+
               // 현재 월을 벗어난 날짜는 반투명 처리
               if (view === "month") {
                 const isSameMonth = date.getMonth() === selectedMonth; // 선택된 월과 비교
@@ -172,7 +249,7 @@ export const Main = () => {
                 if (!isSameMonth || !isSameYear) {
                   return "react-calendar__tile--inactive"; // 흐릿한 날짜
                 }
-            
+
                 // 토요일/일요일 스타일 추가
                 if (date.getDay() === 0) return "react-calendar-sunday";
                 if (date.getDay() === 6) return "react-calendar-saturday";
@@ -195,7 +272,10 @@ export const Main = () => {
               {holidays.length === 0 ? (
                 <li>일정이 존재하지 않습니다..</li>
               ) : (
-                filterHolidaysForMonth(currentMonth.year, currentMonth.month).map((holiday) => (
+                filterHolidaysForMonth(
+                  currentMonth.year,
+                  currentMonth.month
+                ).map((holiday) => (
                   <li key={holiday.seq}>
                     {parseInt(holiday.locdate.toString().slice(4, 6))}월{" "}
                     {parseInt(holiday.locdate.toString().slice(6, 8))}일 -{" "}

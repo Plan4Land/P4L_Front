@@ -85,6 +85,33 @@ export const QuickSearch = styled(GridItem)`
 export const RecommItem = styled(GridItem)`
   grid-column: span 2;
   border: 1px solid black;
+  height: 500px;
+  .topTourItem {
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .topTourItem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .topTourItem h3 {
+    position: absolute;
+    z-index: 10;
+    bottom: 50px;
+    right: 10px;
+  }
+  .topTourItem p {
+    position: absolute;
+    z-index: 10;
+    bottom: 10px;
+    right: 10px;
+  }
 `;
 //         {/* 상위 플래닝 3개!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const RecommPlan = styled(GridItem)`
@@ -96,9 +123,10 @@ export const PlanBox = styled.div`
   width: 100%;
   height: 100%;
 
-  .item {
+  .planitem {
     border: 1px solid black;
     margin: 10px;
+    cursor: pointer;
   }
 `;
 //         {/* 축제 미니 캘린더!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
