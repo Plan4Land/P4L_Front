@@ -8,10 +8,11 @@ import {
 import { useState, useEffect } from "react";
 import { CheckModal } from "../../Util/Modal";
 import { Button } from "../../Component/ButtonComponent";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { MyPlannerApi } from "../../Api/ItemApi";
 import { areas } from "../../Util/Common";
 import { PlanItem } from "../../Component/ItemListComponent";
+import AxiosApi from "../../Api/AxiosApi";
 
 export const Otheruser = () => {
   const { userId } = useParams();
@@ -19,9 +20,8 @@ export const Otheruser = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [size] = useState(10);
-  const navigate = useNavigate();
   const [totalPages, setTotalPages] = useState(0);
-
+  const [userInfo, setUserInfo] = useState(null);
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState("followings");
   const [followings, setFollowings] = useState(["사용자1", "사용자2"]);
@@ -41,7 +41,7 @@ export const Otheruser = () => {
     try {
       if (loading) return;
       setLoading(true);
-      const data = await MyPlannerApi.getPlannersByOwner(page, size);
+      const data = await MyPlannerApi.getPlannersByOwner(userId, page, size);
       setPlanners((prevPlanners) =>
         reset ? data.content : [...prevPlanners, ...data.content]
       );
@@ -57,6 +57,22 @@ export const Otheruser = () => {
     fetchPlanners(true);
   }, [page]);
 
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await AxiosApi.memberInfo(userId);
+        console.log(response);
+        setUserInfo(response.data);
+      } catch (error) {
+        console.error("유저 정보를 불러오는 데 오류가 발생했습니다:", error);
+      }
+    };
+
+    if (userId) {
+      fetchUserInfo(); // 유저 정보 호출
+    }
+  }, [userId]);
+
   return (
     <>
       <Header />
@@ -67,14 +83,24 @@ export const Otheruser = () => {
               <div
                 className="ProfileImg"
                 style={{
-                  backgroundImage: `url($)`,
+                  backgroundImage:
+                    userInfo && userInfo.imgPath
+                      ? `url(/${userInfo.imgPath})`
+                      : undefined,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
               />
+
               <div className="UserExplain">
-                <p>닉네임: {}</p>
-                <p>아이디: {}</p>
+                {userInfo ? (
+                  <>
+                    <p>닉네임: {userInfo.nickname}</p>
+                    <p>아이디: {userInfo.id}</p>
+                  </>
+                ) : (
+                  <p>유저 정보를 불러오지 못했습니다.</p>
+                )}
                 <div className="follow" onClick={openFollowModal}>
                   <p>팔로잉: 숫자 팔로워: 숫자</p>
                 </div>
@@ -111,6 +137,20 @@ export const Otheruser = () => {
               })}
             </div>
           </UserPlanning>
+          <div className="pagebutton">
+            <button
+              onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+              disabled={page === 0}
+            >
+              이전
+            </button>
+            <button
+              onClick={() => setPage((prev) => prev + 1)}
+              disabled={page + 1 >= totalPages}
+            >
+              다음
+            </button>
+          </div>
         </UserMain>
       </div>
       <CheckModal isOpen={isFollowModalOpen} onClose={closeFollowModal}>
