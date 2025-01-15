@@ -38,7 +38,7 @@ function App() {
               <Route path="/tourItemInfo/:id" element={<TourItemInfo />} />
               <Route path="/planninglist" element={<PlanningList />} />
               <Route path="/signup/terms" element={<TermsOfService />} />
-              <Route path="/otheruser" element={<Otheruser />} />
+              <Route path="/otheruser/:userId" element={<Otheruser />} />
               <Route path="/test" element={<Test />} />
 
               {/* 로그인 필요한 페이지 */}

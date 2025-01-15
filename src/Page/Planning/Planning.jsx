@@ -20,7 +20,7 @@ import { Button } from "../../Component/ButtonComponent";
 import { Modal, CloseModal } from "../../Util/Modal";
 import PlanningApi from "../../Api/PlanningApi";
 import AxiosApi from "../../Api/AxiosApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { areas } from "../../Util/Common";
 import { AiOutlineMessage } from "react-icons/ai";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
@@ -153,6 +153,7 @@ const plansEx = [
 ];
 
 export const Planning = () => {
+  const navigate = useNavigate();
   const { plannerId } = useParams();
   const { user } = useAuth();
   const [plannerInfo, setPlannerInfo] = useState();
@@ -499,7 +500,9 @@ export const Planning = () => {
             )}
           </Info>
           <Users>
-            <UserProfile>
+            <UserProfile
+              onClick={() => navigate(`/otheruser/${plannerInfo.ownerId}`)}
+            >
               <ProfileImg file={plannerInfo.ownerProfileImg} />
             </UserProfile>
             <UserName>{plannerInfo.ownerNickname}</UserName>
