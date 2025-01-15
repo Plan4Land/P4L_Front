@@ -12,6 +12,7 @@ import {
 import {FaSearch, FaUndo} from "react-icons/fa";
 import {PlannerItemApi} from "../../Api/ItemApi";
 import {PlanItem} from "../../Component/ItemListComponent";
+import {Pagination} from "../../Component/Pagination";
 
 export const PlanningList = () => {
   const location = useLocation();
@@ -241,6 +242,11 @@ export const PlanningList = () => {
               );
             })}
           </div>
+          <Pagination
+            currentPage={filters.currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
         </ItemList>
       </List>
       <Footer/>
