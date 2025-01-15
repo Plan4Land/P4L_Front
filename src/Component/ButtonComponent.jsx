@@ -26,7 +26,10 @@ const StyledButton = styled.button`
   &:disabled {
     background-color: #ccc;
     color: #666;
-    cursor: not-allowed;
+    cursor: default;
+    &:hover {
+      opacity: 1;
+    }
   }
 
   &.active {
@@ -37,14 +40,14 @@ const StyledButton = styled.button`
 export const Button = ({
   children,
   onClick,
-  bgColor,
+  bgcolor,
   hoverBgColor,
   border,
   ...props
 }) => (
   <StyledButton
     onClick={onClick}
-    bgColor={bgColor}
+    bgColor={bgcolor}
     hoverBgColor={hoverBgColor}
     border={border}
     {...props}

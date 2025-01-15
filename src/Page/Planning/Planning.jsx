@@ -214,9 +214,10 @@ export const Planning = () => {
       submitUserKeyword: searchState.userKeyword,
     });
   };
-  // const handleInviteUser = async() => {
-  //   const inviteRst =
-  // }
+  const handleInviteUser = async (memberId) => {
+    await PlanningApi.inviteMember(memberId, plannerId);
+    await fetchMember();
+  };
 
   const closeMemo = () => {
     if (selectedPlan.date !== undefined) {
@@ -326,27 +327,26 @@ export const Planning = () => {
     setSender(user.nickname);
   }, [plannerId]);
 
-  useEffect(() => {
-    const fetchMember = async () => {
-      try {
-        const searchMemberRst = await AxiosApi.searchMember(
-          searchState.submitUserKeyword,
-          plannerId
-        );
-        setSearchState((prevState) => ({
-          ...prevState,
-          searchUsersRst: searchMemberRst,
-        }));
-        console.log("멤버 검색 결과 : ", searchMemberRst);
-      } catch (error) {
-        console.error("멤버 검색 중 오류 발생: ", error);
-      }
-    };
+  const fetchMember = async () => {
+    try {
+      const searchMemberRst = await AxiosApi.searchMember(
+        searchState.submitUserKeyword,
+        plannerId
+      );
+      setSearchState((prevState) => ({
+        ...prevState,
+        searchUsersRst: searchMemberRst,
+      }));
+      console.log("멤버 검색 결과 : ", searchMemberRst);
+    } catch (error) {
+      console.error("멤버 검색 중 오류 발생: ", error);
+    }
+  };
 
+  useEffect(() => {
     if (searchState.submitUserKeyword) {
       fetchMember();
     }
-    setSearchState({ userKeyword: "", submitUserKeyword: "" });
   }, [searchState.submitUserKeyword]);
 
   useEffect(() => {
@@ -692,35 +692,38 @@ export const Planning = () => {
               </SearchInputContainer>
               {searchState.searchUsersRst &&
               searchState.searchUsersRst.length > 0 ? (
-                searchState.searchUsersRst.map((member) => (
-                  <>
-                    <SearchedUserContainer key={member.id}>
-                      <ProfileImg
-                        file={member.imgPath}
-                        width={"50px"}
-                        height={"50px"}
-                      />
-                      <div className="searched-user-info">
-                        <p className="searched-nickname">{member.nickname}</p>
-                        <p className="searched-id">{member.id}</p>
-                      </div>
-                      <Button
-                        className="searched-user-invite"
-                        $width={"52px"}
-                        $height={"30px"}
-                        fontSize={"12px"}
-                        padding={"7px 10px"}
-                        bgColor={colors.colorC}
-                        color={"black"}
-                        border={"none"}
-                        onClick={handleKeywordSearch}
-                      >
-                        초대
-                      </Button>
-                    </SearchedUserContainer>
-                    <SearchedUserHr />
-                  </>
-                ))
+                searchState.searchUsersRst
+                  .filter((member) => member.id !== user.id)
+                  .map((member) => (
+                    <div key={member.id}>
+                      <SearchedUserContainer>
+                        <ProfileImg
+                          file={member.imgPath}
+                          width={"50px"}
+                          height={"50px"}
+                        />
+                        <div className="searched-user-info">
+                          <p className="searched-nickname">{member.nickname}</p>
+                          <p className="searched-id">{member.id}</p>
+                        </div>
+                        <Button
+                          className="searched-user-invite"
+                          $width={"90px"}
+                          $height={"35px"}
+                          fontSize={"13px"}
+                          padding={"7px 10px"}
+                          bgcolor={colors.colorC}
+                          color={"black"}
+                          border={"none"}
+                          onClick={() => handleInviteUser(member.id)}
+                          disabled={member.state === "WAIT"}
+                        >
+                          {member.state === "WAIT" ? "수락 대기" : "초대 하기"}
+                        </Button>
+                      </SearchedUserContainer>
+                      <SearchedUserHr />
+                    </div>
+                  ))
               ) : (
                 <p>검색된 회원이 없습니다.</p>
               )}
