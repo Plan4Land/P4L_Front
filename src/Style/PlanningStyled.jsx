@@ -85,6 +85,45 @@ export const UserProfile = styled.div`
   }
 `;
 
+export const SearchedUserContainer = styled.div`
+  display: flex;
+  position: relative;
+  align-items: center;
+  width: 90%;
+  margin: 4% auto;
+
+  .searched-user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-left: 5%;
+
+    p {
+      margin: 0;
+    }
+
+    .searched-id {
+      font-size: 12px;
+      color: #555;
+      margin-top: 3%;
+    }
+  }
+
+  .searched-user-invite {
+    display: flex;
+    position: absolute;
+    right: 0;
+    margin: auto 0;
+  }
+`;
+
+export const SearchedUserHr = styled.hr`
+  width: 97%;
+  border: 0;
+  border-top: 1px solid #ccc;
+`;
+
 export const UserName = styled.div`
   width: 120px;
   height: 30px;
