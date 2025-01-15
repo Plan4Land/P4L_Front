@@ -58,7 +58,7 @@ export const MyBookmarkPlanItem = () => {
                   title={planner.title}
                   address={`${areaName} - ${subAreaName}`}
                   subCategory={planner.theme}
-                  type={planner.isPublic ? "공개" : "비공개"}
+                  type={planner.public ? "공개" : "비공개"}
                 />
               );
             })

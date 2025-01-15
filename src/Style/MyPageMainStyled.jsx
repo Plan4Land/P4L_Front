@@ -65,7 +65,27 @@ export const UserInfo = styled.div`
 export const UserPlanning = styled.div`
   width: 90%;
   height: 100%;
-  border: 1px solid black;
+  display: flex;
+
+  .scrollContainerRef {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 10px;
+  }
+  .myPlanning {
+    border: 1px solid black;
+    width: 300px;
+    min-width: 300px;
+    height: 95%;
+    cursor: pointer;
+  }
+  img {
+    width: 100%;
+    height: 300px;
+    min-height: 300px;
+    object-fit: cover;
+  }
 `;
 
 export const FollowList = styled.div`
