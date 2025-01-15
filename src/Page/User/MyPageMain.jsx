@@ -37,10 +37,11 @@ export const MyPageMain = () => {
   const [followings, setFollowings] = useState(["사용자1", "사용자2"]);
   const [followers, setFollowers] = useState(["사용자4", "사용자5"]);
   const { user } = useAuth();
-  const [invitedPlannings, setInvitedPlannings] = useState([
-    { title: "전주 여행", owner: "aaa" },
-    { title: "대전 여행", owner: "bbb" },
-  ]);
+  const [invitedPlannings, setInvitedPlannings] = useState([]);
+  // const [invitedPlannings, setInvitedPlannings] = useState([
+  //   { title: "전주 여행", owner: "aaa" },
+  //   { title: "대전 여행", owner: "bbb" },
+  // ]);
 
   const openFollowModal = () => {
     setIsFollowModalOpen(true);
@@ -88,7 +89,7 @@ export const MyPageMain = () => {
 
     const fetchInvites = async () => {
       const response = await PlanningApi.findInvitedPlanners(user.id);
-      console.log(response);
+      setInvitedPlannings(response);
     };
 
     fetchInvites();
@@ -270,11 +271,10 @@ export const MyPageMain = () => {
               {invitedPlannings.map((planning, index) => (
                 <div key={index} className="invited-planning-item">
                   <div className="planning-details">
-                    <span className="label">플래닝: {planning.title}</span>{" "}
-                    <br />
-                    <span className="owner">
-                      {planning.owner} 님이 초대하였습니다.
-                    </span>
+                    <p className="label">플래닝 : {planning.title}</p>
+                    <p className="owner">
+                      <span>{planning.ownerNickname}</span> 님이 초대하였습니다.
+                    </p>
                   </div>
                   <div className="buttons">
                     <Button

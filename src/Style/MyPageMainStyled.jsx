@@ -127,12 +127,26 @@ export const InvitePlanning = styled.div`
   }
 
   .planning-details {
+    text-align: left;
     margin: 10px;
   }
 
   .label {
+    margin: 0;
+    margin-bottom: 5px;
+    font-size: 17px;
     font-weight: bold;
   }
+
+  .owner {
+    margin: 0;
+    font-size: 15px;
+    span {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+
   .buttons {
     display: flex;
     align-items: center;
