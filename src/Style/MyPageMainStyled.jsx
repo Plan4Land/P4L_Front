@@ -4,14 +4,25 @@ import { colors } from "./GlobalStyle";
 export const MyPageMainContainer = styled.div`
   display: flex;
   flex-direction: row;
-  height: 100%;
+
+  min-height: 1000px;
   justify-content: center;
   margin: 20px 0 20px 0;
+  margin-bottom: 150px;
 
   .menu {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
+    position: fixed;
+    top: 200px;
+    left: 150px;
+    width: 150px;
+    z-index: 1;
+
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   }
   .MyPageMenu {
     margin-left: 20px;
@@ -21,7 +32,6 @@ export const MyPageMainContainer = styled.div`
 export const UserMain = styled.div`
   margin: 50px auto;
   width: 100%;
-  height: 600px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -63,28 +73,16 @@ export const UserInfo = styled.div`
 `;
 
 export const UserPlanning = styled.div`
-  width: 90%;
   height: 100%;
-  display: flex;
-
-  .scrollContainerRef {
+  width: 100%;
+  .myPlanList {
     display: flex;
-    overflow-x: auto;
-    white-space: nowrap;
-    gap: 10px;
+    flex-direction: column;
+    align-items: center;
   }
-  .myPlanning {
-    border: 1px solid black;
-    width: 300px;
-    min-width: 300px;
-    height: 95%;
-    cursor: pointer;
-  }
-  img {
-    width: 100%;
-    height: 300px;
-    min-height: 300px;
-    object-fit: cover;
+  .pagebutton {
+    display: flex;
+    justify-content: center;
   }
 `;
 

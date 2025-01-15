@@ -9,7 +9,7 @@ export const MyBookmarkPlanItem = () => {
   const { user } = useAuth();
   const [bookmarkedPlans, setBookmarkedPlans] = useState([]);
   const [page, setPage] = useState(0);
-  const [size] = useState(5);
+  const [size] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
 
   const fetchBookmarkedPlans = async () => {
@@ -67,7 +67,10 @@ export const MyBookmarkPlanItem = () => {
           )}
         </div>
         <div className="pagebutton">
-          <button onClick={() => setPage((prev) => Math.max(prev - 1, 0))}>
+          <button
+            onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+            disabled={page === 0}
+          >
             이전
           </button>
           <button

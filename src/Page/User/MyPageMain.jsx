@@ -1,6 +1,6 @@
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { UserMenu } from "../../Component/UserComponent";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link, Navigate } from "react-router-dom";
 import { Button, CancelButton } from "../../Component/ButtonComponent";
 import {
@@ -19,6 +19,7 @@ import { MyBookmarkPlanItem } from "./MyBookmarkPlanItem";
 import RequestPayment from "../Payment/RequestPayment";
 import { MyPlannerApi } from "../../Api/ItemApi";
 import { areas } from "../../Util/Common";
+import { PlanItem } from "../../Component/ItemListComponent";
 
 export const MyPageMain = () => {
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
@@ -27,9 +28,10 @@ export const MyPageMain = () => {
   const [planners, setPlanners] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
-  const [size] = useState(5);
-  const scrollContainerRef = useRef(null);
+  const [size] = useState(10);
+  // const scrollContainerRef = useRef(null);
   const navigate = useNavigate();
+  const [totalPages, setTotalPages] = useState(0);
 
   const [followings, setFollowings] = useState(["사용자1", "사용자2"]);
   const [followers, setFollowers] = useState(["사용자4", "사용자5"]);
@@ -84,13 +86,17 @@ export const MyPageMain = () => {
     }
   }, [selectedMenu, navigate]);
 
-  const fetchPlanners = async () => {
+  const fetchPlanners = async (reset = false) => {
     try {
       if (loading) return; // 중복 호출 방지
       setLoading(true);
       const data = await MyPlannerApi.getPlannersByOwner(user.id, page, size);
-      setPlanners((prevPlanners) => [...prevPlanners, ...data.content]);
-      console.log(data);
+
+      // reset이 true면 새 리스트로 교체, false면 기존 리스트에 추가
+      setPlanners((prevPlanners) =>
+        reset ? data.content : [...prevPlanners, ...data.content]
+      );
+      setTotalPages(data.totalPages);
       setLoading(false);
     } catch (error) {
       console.error("플래너 조회 오류:", error);
@@ -98,25 +104,20 @@ export const MyPageMain = () => {
     }
   };
 
-  const planHandleClick = (id) => {
-    navigate(`/planning/${id}`);
-  };
-
-  // 페이지가 변경될 때마다 플래너를 불러옴
   useEffect(() => {
-    fetchPlanners();
+    fetchPlanners(true);
   }, [page]);
 
   // 가로 스크롤 끝에 도달했을 때 페이지를 증가시키는 함수
-  const handleScroll = () => {
-    const container = scrollContainerRef.current;
-    if (
-      container.scrollLeft + container.offsetWidth >=
-      container.scrollWidth - 10
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  // const handleScroll = () => {
+  //   const container = scrollContainerRef.current;
+  //   if (
+  //     container.scrollLeft + container.offsetWidth >=
+  //     container.scrollWidth - 10
+  //   ) {
+  //     setPage((prevPage) => prevPage + 1);
+  //   }
+  // };
 
   return (
     <>
@@ -158,9 +159,9 @@ export const MyPageMain = () => {
               </UserInfo>
               <UserPlanning>
                 <div
-                  ref={scrollContainerRef}
-                  className="scrollContainerRef"
-                  onScroll={handleScroll}
+                  // ref={scrollContainerRef}
+                  className="myPlanList"
+                  // onScroll={handleScroll}
                 >
                   {loading && <p>로딩 중...</p>}
                   {planners.map((planner) => {
@@ -174,23 +175,33 @@ export const MyPageMain = () => {
                           (subArea) => subArea.code === planner.subArea
                         )?.name || "알 수 없는 하위 지역";
                     return (
-                      <div
+                      <PlanItem
                         key={planner.id}
-                        className="myPlanning"
-                        onClick={() => planHandleClick(planner.id)}
-                      >
-                        <img
-                          src={
-                            planner.thumbnail || "/planning-pic/planningth1.jpg"
-                          }
-                          alt={planner.title}
-                        />
-                        <h3>{planner.title}</h3>
-                        <p>{planner.theme}</p>
-                        <p>{`${areaName} - ${subAreaName}`}</p>
-                      </div>
+                        id={planner.id}
+                        thumbnail={
+                          planner.thumbnail || "/default-thumbnail.png"
+                        }
+                        title={planner.title}
+                        address={`${areaName} - ${subAreaName}`}
+                        subCategory={planner.theme}
+                        type={planner.public ? "공개" : "비공개"}
+                      />
                     );
                   })}
+                </div>
+                <div className="pagebutton">
+                  <button
+                    onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+                    disabled={page === 0}
+                  >
+                    이전
+                  </button>
+                  <button
+                    onClick={() => setPage((prev) => prev + 1)}
+                    disabled={page + 1 >= totalPages}
+                  >
+                    다음
+                  </button>
                 </div>
               </UserPlanning>
             </UserMain>

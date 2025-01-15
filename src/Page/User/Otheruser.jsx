@@ -5,11 +5,22 @@ import {
   UserPlanning,
   FollowList,
 } from "../../Style/MyPageMainStyled";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CheckModal } from "../../Util/Modal";
 import { Button } from "../../Component/ButtonComponent";
+import { useNavigate } from "react-router-dom";
+import { MyPlannerApi } from "../../Api/ItemApi";
+import { areas } from "../../Util/Common";
+import { PlanItem } from "../../Component/ItemListComponent";
 
 export const Otheruser = () => {
+  const [planners, setPlanners] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [size] = useState(10);
+  const navigate = useNavigate();
+  const [totalPages, setTotalPages] = useState(0);
+
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState("followings");
   const [followings, setFollowings] = useState(["사용자1", "사용자2"]);
@@ -24,6 +35,27 @@ export const Otheruser = () => {
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
   };
+
+  const fetchPlanners = async (reset = false) => {
+    try {
+      if (loading) return;
+      setLoading(true);
+      const data = await MyPlannerApi.getPlannersByOwner(page, size);
+      setPlanners((prevPlanners) =>
+        reset ? data.content : [...prevPlanners, ...data.content]
+      );
+      setTotalPages(data.totalPages);
+      setLoading(false);
+    } catch (error) {
+      console.error("플래너 조회 오류:", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlanners(true);
+  }, [page]);
+
   return (
     <>
       <Header />
@@ -52,7 +84,31 @@ export const Otheruser = () => {
             </div>
           </UserInfo>
           <UserPlanning>
-            <p>여기에 플래닝 리스트</p>
+            <div className="myPlanList">
+              {loading && <p>로딩 중...</p>}
+              {planners.map((planner) => {
+                const areaName =
+                  areas.find((area) => area.code === planner.area)?.name ||
+                  "알 수 없는 지역";
+                const subAreaName =
+                  areas
+                    .find((area) => area.code === planner.area)
+                    ?.subAreas.find(
+                      (subArea) => subArea.code === planner.subArea
+                    )?.name || "알 수 없는 하위 지역";
+                return (
+                  <PlanItem
+                    key={planner.id}
+                    id={planner.id}
+                    thumbnail={planner.thumbnail || "/default-thumbnail.png"}
+                    title={planner.title}
+                    address={`${areaName} - ${subAreaName}`}
+                    subCategory={planner.theme}
+                    type={planner.public ? "공개" : "비공개"}
+                  />
+                );
+              })}
+            </div>
           </UserPlanning>
         </UserMain>
       </div>
