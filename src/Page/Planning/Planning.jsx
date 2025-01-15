@@ -3,31 +3,30 @@ import {
   Info,
   Users,
   UserProfile,
-  SearchedUserContainer,
-  SearchedUserHr,
   UserName,
   ContentContainer,
   KakaoMapContainer,
-  SearchInputContainer,
 } from "../../Style/PlanningStyled";
-import { KakaoMap, SearchKakaoMap } from "../../Component/KakaoMapComponent";
+import { KakaoMap } from "../../Component/KakaoMapComponent";
 import { PlansComponent } from "../../Component/PlanningComponents/PlansComponent";
 import { ChatComponent } from "../../Component/PlanningComponents/ChatComponent";
 import { useEffect, useRef, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { ProfileImg } from "../../Component/ProfileImg";
 import { Button } from "../../Component/ButtonComponent";
-import { Modal, CloseModal } from "../../Util/Modal";
 import PlanningApi from "../../Api/PlanningApi";
 import AxiosApi from "../../Api/AxiosApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { areas } from "../../Util/Common";
-import { AiOutlineMessage } from "react-icons/ai";
-import { FaBookmark, FaRegBookmark } from "react-icons/fa";
-import { LuUserRoundPlus } from "react-icons/lu";
-import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
 import { useAuth } from "../../Context/AuthContext";
-import { colors } from "../../Style/GlobalStyle";
+import { MenuIcons } from "../../Component/PlanningComponents/PlanningMenuIcons";
+import {
+  UserModal,
+  AddPlaceModal,
+  SearchUser,
+  SetPublicModal,
+  DeletePlanning,
+} from "../../Component/PlanningComponents/PlanningModals";
 
 // const plannerInfo = {
 //   title: "떠나요~ 두리서~",
@@ -199,26 +198,6 @@ export const Planning = () => {
   const [sender, setSender] = useState(""); // 메시지를 보낸 사람
   const ws = useRef(null); // 웹소켓 객체 생성, 소켓 연결 정보를 유지해야 하지만, 렌더링과는 무관
   const [isParticipant, setIsParticipant] = useState(false);
-  const handleKeywordInputChange = (e) =>
-    setSearchState({ ...searchState, keyword: e.target.value });
-  const handleUserKeywordInputChange = (e) =>
-    setSearchState({
-      ...searchState,
-      userKeyword: e.target.value.replace(/^\s+/, ""),
-    });
-
-  const handleKeywordSearch = () =>
-    setSearchState({ ...searchState, submittedKeyword: searchState.keyword });
-  const handleUserSearch = () => {
-    setSearchState({
-      ...searchState,
-      submitUserKeyword: searchState.userKeyword,
-    });
-  };
-  const handleInviteUser = async (memberId) => {
-    await PlanningApi.inviteMember(memberId, plannerId);
-    await fetchMember();
-  };
 
   const closeMemo = () => {
     if (selectedPlan.date !== undefined) {
@@ -239,23 +218,15 @@ export const Planning = () => {
     setSelectedPlan({});
   };
 
-  const handleBookmarked = async () => {
-    console.log("북마크 상태 : ", isBookmarked);
-    if (isBookmarked) {
-      await PlanningApi.deleteBookmarked(user.id, plannerId);
-    } else {
-      await PlanningApi.putBookmarked(user.id, plannerId);
-    }
-    setIsBookmarked(!isBookmarked);
-  };
-
   // 웹 소켓 연결하기
   useEffect(() => {
     if (plannerInfo) {
       const participant =
         plannerInfo.ownerNickname === user.nickname ||
         plannerInfo.participants.some(
-          (participant) => participant.nickname === user.nickname
+          (participant) =>
+            participant.memberNickname === user.nickname &&
+            participant.state === "ACCEPT"
         );
 
       setIsParticipant(participant);
@@ -307,7 +278,6 @@ export const Planning = () => {
       try {
         const response = await PlanningApi.getIsBookmarked(user.id, plannerId);
         setIsBookmarked(response);
-        console.log("isBookmarked : ", response);
       } catch (e) {
         console.log("북마크 여부 조회 중 에러", e);
       }
@@ -338,7 +308,6 @@ export const Planning = () => {
         ...prevState,
         searchUsersRst: searchMemberRst,
       }));
-      console.log("멤버 검색 결과 : ", searchMemberRst);
     } catch (error) {
       console.error("멤버 검색 중 오류 발생: ", error);
     }
@@ -394,12 +363,14 @@ export const Planning = () => {
         <Header />
         <MainContainer onClick={() => closeMemo()}>
           <Info>
-            <ProfileImg
-              // file={plannerInfo.thumbnail}
-              file={`/img/${plannerInfo.thumbnail}`}
-              width={"250px"}
-              height={"250px"}
-            ></ProfileImg>
+            <div className="planner-thumbnail">
+              <ProfileImg
+                // file={plannerInfo.thumbnail}
+                file={`/img/${plannerInfo.thumbnail}`}
+                // width={"250px"}
+                // height={"250px"}
+              />
+            </div>
             <div>
               <h1>{plannerInfo.title}</h1>
               <h3>
@@ -411,80 +382,16 @@ export const Planning = () => {
                 {new Date(plannerInfo.endDate).toLocaleDateString()}
               </h3>
             </div>
-            <div className="menu-icons">
-              {isBookmarked ? (
-                <FaBookmark
-                  className="menu-icon"
-                  title="북마크"
-                  onClick={() => handleBookmarked()}
-                />
-              ) : (
-                <FaRegBookmark
-                  className="menu-icon"
-                  title="북마크"
-                  onClick={() => handleBookmarked()}
-                />
-              )}
-              {isParticipant && (
-                <>
-                  {plannerInfo.ownerNickname === user.nickname && (
-                    <>
-                      {/* 사용자 추가 아이콘 */}
-                      <LuUserRoundPlus
-                        className="menu-icon"
-                        title="사용자 추가"
-                        onClick={() =>
-                          setModals((prevModals) => ({
-                            ...prevModals,
-                            searchUser: true,
-                          }))
-                        }
-                      />
-
-                      {/* 공개/비공개 설정 아이콘 */}
-                      {plannerInfo.public ? (
-                        <BiLockOpen
-                          className="menu-icon"
-                          title="공개/비공개"
-                          onClick={() =>
-                            setModals((prevModals) => ({
-                              ...prevModals,
-                              public: true,
-                            }))
-                          }
-                        />
-                      ) : (
-                        <BiLock
-                          className="menu-icon"
-                          title="공개/비공개"
-                          onClick={() =>
-                            setModals((prevModals) => ({
-                              ...prevModals,
-                              public: true,
-                            }))
-                          }
-                        />
-                      )}
-                    </>
-                  )}
-                  <BiTrash
-                    className="menu-icon"
-                    title="플래닝 삭제"
-                    onClick={() =>
-                      setModals((prev) => ({
-                        ...prev,
-                        deletePlanning: true,
-                      }))
-                    }
-                  />
-                  <AiOutlineMessage
-                    className="menu-icon"
-                    title="채팅"
-                    onClick={() => setIsChatOpen(!isChatOpen)}
-                  />
-                </>
-              )}
-            </div>
+            <MenuIcons
+              plannerId={plannerId}
+              plannerInfo={plannerInfo}
+              isBookmarked={isBookmarked}
+              setIsBookmarked={setIsBookmarked}
+              isParticipant={isParticipant}
+              setModals={setModals}
+              isChatOpen={isChatOpen}
+              setIsChatOpen={setIsChatOpen}
+            />
             {isChatOpen && (
               <ChatComponent
                 inputMsg={inputMsg}
@@ -566,210 +473,46 @@ export const Planning = () => {
           </ContentContainer>
         </MainContainer>
         {modals.userModal && (
-          <CloseModal
-            isOpen={modals.userModal}
-            onClose={() =>
-              setModals((prevModals) => ({ ...prevModals, userModal: false }))
-            }
-            contentWidth="400px"
-            // contentHeight="500px"
-            minHeight="200px"
-          >
-            <div>
-              {plannerInfo.participants.map((participant, index) => (
-                <UserProfile
-                  key={index}
-                  id={participant.id}
-                  nickname={participant.nickname}
-                  profileImg={participant.profileImg}
-                  onClick={() =>
-                    setModals((prevModals) => ({
-                      ...prevModals,
-                      userModal: true,
-                    }))
-                  }
-                >
-                  <img
-                    src={participant.profileImg}
-                    alt="프로필 이미지"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </UserProfile>
-              ))}
-            </div>
-          </CloseModal>
+          <UserModal
+            plannerInfo={plannerInfo}
+            modals={modals}
+            setModals={setModals}
+          />
         )}
         {modals.addPlaceModal && (
-          <CloseModal
-            isOpen={modals.addPlaceModal}
-            onClose={() =>
-              setModals((prevModals) => ({
-                ...prevModals,
-                addPlaceModal: false,
-              }))
-            }
-            contentWidth="400px"
-            contentHeight="500px"
-          >
-            <SearchInputContainer>
-              <input
-                type="text"
-                placeholder="검색어를 입력하세요"
-                value={searchState.keyword}
-                onChange={handleKeywordInputChange}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleKeywordSearch();
-                  }
-                }}
-                style={{
-                  width: "80%",
-                  height: "25px",
-                  fontSize: "14px",
-                  padding: "3px",
-                }}
-              />
-              <Button
-                $width={"60px"}
-                $height={"35px"}
-                fontSize={"14px"}
-                padding={"10px 15px"}
-                onClick={handleKeywordSearch}
-              >
-                검색
-              </Button>
-            </SearchInputContainer>
-            <SearchKakaoMap
-              searchKeyword={searchState.submittedKeyword}
-              setModals={setModals}
-              setCurrentAddedPlace={setCurrentAddedPlace}
-              setPlans={setPlans}
-            />
-          </CloseModal>
+          <AddPlaceModal
+            modals={modals}
+            setModals={setModals}
+            searchState={searchState}
+            setSearchState={setSearchState}
+            setCurrentAddedPlace={setCurrentAddedPlace}
+            setPlans={setPlans}
+          />
         )}
         {modals.searchUser && (
-          <CloseModal
-            isOpen={modals.searchUser}
-            onClose={() =>
-              setModals((prevModals) => ({
-                ...prevModals,
-                searchUser: false,
-              }))
-            }
-            contentWidth="400px"
-            contentHeight="500px"
-          >
-            <div>
-              <SearchInputContainer>
-                <input
-                  type="text"
-                  placeholder="아이디/닉네임 입력"
-                  value={searchState.userKeyword}
-                  onChange={handleUserKeywordInputChange}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      handleUserSearch();
-                    }
-                  }}
-                  style={{
-                    width: "80%",
-                    height: "35px",
-                    fontSize: "14px",
-                    padding: "3px 8px",
-                    boxSizing: "border-box",
-                  }}
-                />
-                <Button
-                  $width={"60px"}
-                  $height={"35px"}
-                  fontSize={"14px"}
-                  padding={"10px 15px"}
-                  onClick={handleUserSearch}
-                >
-                  검색
-                </Button>
-              </SearchInputContainer>
-              {searchState.searchUsersRst &&
-              searchState.searchUsersRst.length > 0 ? (
-                searchState.searchUsersRst
-                  .filter((member) => member.id !== user.id)
-                  .map((member) => (
-                    <div key={member.id}>
-                      <SearchedUserContainer>
-                        <ProfileImg
-                          file={member.imgPath}
-                          width={"50px"}
-                          height={"50px"}
-                        />
-                        <div className="searched-user-info">
-                          <p className="searched-nickname">{member.nickname}</p>
-                          <p className="searched-id">{member.id}</p>
-                        </div>
-                        <Button
-                          className="searched-user-invite"
-                          $width={"90px"}
-                          $height={"35px"}
-                          fontSize={"13px"}
-                          padding={"7px 10px"}
-                          bgcolor={colors.colorC}
-                          color={"black"}
-                          border={"none"}
-                          onClick={() => handleInviteUser(member.id)}
-                          disabled={member.state === "WAIT"}
-                        >
-                          {member.state === "WAIT" ? "수락 대기" : "초대 하기"}
-                        </Button>
-                      </SearchedUserContainer>
-                      <SearchedUserHr />
-                    </div>
-                  ))
-              ) : (
-                <p>검색된 회원이 없습니다.</p>
-              )}
-            </div>
-          </CloseModal>
+          <SearchUser
+            modals={modals}
+            setModals={setModals}
+            searchState={searchState}
+            setSearchState={setSearchState}
+            plannerId={plannerId}
+            fetchMember={fetchMember}
+          />
         )}
         {modals.public && (
-          <Modal
-            isOpen={modals.public}
-            onClose={() => setModals((prev) => ({ ...prev, public: false }))}
-            onConfirm={() => {
-              setPlannerInfo((prevInfo) => ({
-                ...prevInfo,
-                public: !prevInfo.public,
-              }));
-              setModals((prev) => ({ ...prev, public: false }));
-            }}
-          >
-            <p>
-              {plannerInfo.public === true ? "비공개" : "공개"}로
-              전환하시겠습니까?
-            </p>
-          </Modal>
+          <SetPublicModal
+            modals={modals}
+            setModals={setModals}
+            plannerInfo={plannerInfo}
+            setPlannerInfo={setPlannerInfo}
+          />
         )}
         {modals.deletePlanning && (
-          <Modal
-            isOpen={modals.deletePlanning}
-            onClose={() =>
-              setModals((prev) => ({ ...prev, deletePlanning: false }))
-            }
-            onConfirm={() => {
-              setModals((prev) => ({ ...prev, deletePlanning: false }));
-            }}
-          >
-            {plannerInfo.ownerNickname === user.nickname ? (
-              <p>플래닝을 삭제하시겠습니까?</p>
-            ) : (
-              <p>플래닝을 나가시겠습니까?</p>
-            )}
-          </Modal>
+          <DeletePlanning
+            modals={modals}
+            setModals={setModals}
+            plannerInfo={plannerInfo}
+          />
         )}
         <Footer />
       </div>

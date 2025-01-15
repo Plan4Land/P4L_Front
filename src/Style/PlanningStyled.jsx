@@ -14,13 +14,33 @@ export const Info = styled.div`
   display: flex;
   box-sizing: border-box;
   position: relative;
-  /* background-color: azure; */
+
   div {
     margin: auto 0 auto 2%;
   }
   h1,
   h3 {
     margin: 3px;
+  }
+
+  .planner-thumbnail {
+    width: 250px;
+    height: 250px;
+    flex-shrink: 0;
+    @media (max-width: 1370px) {
+      width: 200px; /* 화면 너비가 1024px 이하일 때 크기 조정 */
+      height: 200px;
+    }
+
+    @media (max-width: 1160px) {
+      width: 150px; /* 화면 너비가 768px 이하일 때 크기 조정 */
+      height: 150px;
+    }
+
+    @media (max-width: 1060) {
+      width: 100px; /* 화면 너비가 480px 이하일 때 크기 조정 */
+      height: 100px;
+    }
   }
 
   .menu-icons {
