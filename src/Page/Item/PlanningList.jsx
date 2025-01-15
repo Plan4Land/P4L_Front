@@ -47,7 +47,7 @@ export const PlanningList = () => {
       value: "LatestDesc",
     },
     {
-      name:"오래된 순",
+      name: "오래된 순",
       value: "LatestAsc",
     },
     {
@@ -59,8 +59,9 @@ export const PlanningList = () => {
       value: "BookmarkAsc",
     },]
 
-  const handleSortChange = (newSort) => {
-    updateFilters("sortBy", newSort.value);
+  const handleSortChange = (e) => {
+    console.log("정렬 바뀜 : ",e.target.value);
+    updateFilters("sortBy", e.target.value);
   }
 
   useEffect(() => {
@@ -106,7 +107,15 @@ export const PlanningList = () => {
   };
 
   const handleResetSelections = () => {
-    setFilters({areaCode: "", subAreaCode: "", themeList: "", currentPage: 0, pageSize: 10, searchQuery: "",});
+    setFilters({
+      areaCode: "",
+      subAreaCode: "",
+      themeList: "",
+      currentPage: 0,
+      pageSize: 10,
+      searchQuery: "",
+      sortBy: ""
+    });
   };
 
   const handlePageChange = (newPage) => {
@@ -255,9 +264,9 @@ export const PlanningList = () => {
           {loading && <p>로딩 중...</p>}
           {error && <p style={{color: "red"}}>{error}</p>}
           <select
-          value={filters.sortBy}
-          onChange={handleSortChange}
-          className={"sort-select"}>
+            value={filters.sortBy}
+            onChange={handleSortChange}
+            className={"sort-select"}>
             {sortBy.map((e) => (
               <option key={e.name} value={e.value}>
                 {e.name}
