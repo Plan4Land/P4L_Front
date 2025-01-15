@@ -13,7 +13,7 @@ import {
 } from "../../Style/MyPageMainStyled";
 import UserInfoValidate from "./UserInfoValidate";
 import { MyBookmarkTourItem } from "./MyBookmarkTourItem";
-import { CheckModal } from "../../Util/Modal";
+import { CheckModal, CloseModal } from "../../Util/Modal";
 import { useAuth } from "../../Context/AuthContext";
 import { MyBookmarkPlanItem } from "./MyBookmarkPlanItem";
 import RequestPayment from "../Payment/RequestPayment";
@@ -59,13 +59,17 @@ export const MyPageMain = () => {
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
   };
-  const handleApproval = (title, owner) => {
-    console.log(`플래닝 "${title}"을(를) 승인했습니다.`);
+  const handleApproval = async (memberId, plannerId) => {
+    console.log(`플래닝 "${plannerId}"을(를) 승인했습니다.`);
+    await PlanningApi.acceptInvitation(memberId, plannerId);
+    fetchInvites();
     // 플래닝 승인
   };
 
-  const handleRejection = (title, owner) => {
-    console.log(`플래닝 "${title}"을(를) 거절했습니다.`);
+  const handleRejection = async (memberId, plannerId) => {
+    console.log(`플래닝 "${plannerId}"을(를) 거절했습니다.`);
+    await PlanningApi.rejectInvitation(memberId, plannerId);
+    fetchInvites();
     // 플래닝 거절
   };
 
@@ -80,17 +84,17 @@ export const MyPageMain = () => {
     setSelectedMenu(menuFromUrl || "");
   }, [menuFromUrl]);
 
+  const fetchInvites = async () => {
+    const response = await PlanningApi.findInvitedPlanners(user.id);
+    setInvitedPlannings(response);
+  };
+
   useEffect(() => {
     if (selectedMenu) {
       navigate(`?menu=${selectedMenu}`, { replace: true });
     } else {
       navigate("/mypage", { replace: true });
     }
-
-    const fetchInvites = async () => {
-      const response = await PlanningApi.findInvitedPlanners(user.id);
-      setInvitedPlannings(response);
-    };
 
     fetchInvites();
   }, [selectedMenu, navigate]);
@@ -163,7 +167,17 @@ export const MyPageMain = () => {
                   <Link to={"/makeplanning"}>
                     <Button>플래닝 만들기</Button>
                   </Link>
-                  <Button onClick={openInviteModal}>초대 확인</Button>
+                  <Button
+                    onClick={openInviteModal}
+                    className="check-invitation"
+                  >
+                    초대 확인
+                    {invitedPlannings?.length > 0 && (
+                      <div className="invite-alarm">
+                        {invitedPlannings.length}
+                      </div>
+                    )}
+                  </Button>
                 </div>
               </UserInfo>
               <UserPlanning>
@@ -263,7 +277,11 @@ export const MyPageMain = () => {
         </FollowList>
       </CheckModal>
 
-      <CheckModal isOpen={isInviteModalOpen} onClose={closeInviteModal}>
+      <CloseModal
+        isOpen={isInviteModalOpen}
+        onClose={closeInviteModal}
+        contentWidth={"500px"}
+      >
         <InvitePlanning>
           <h2>플래닝 초대</h2>
           {invitedPlannings.length > 0 ? (
@@ -278,16 +296,18 @@ export const MyPageMain = () => {
                   </div>
                   <div className="buttons">
                     <Button
-                      onClick={() =>
-                        handleApproval(planning.title, planning.owner)
-                      }
+                      onClick={() => handleApproval(user.id, planning.id)}
+                      $width={"60px"}
+                      fontSize={"15px"}
+                      padding={"9px 10px"}
                     >
                       승인
                     </Button>
                     <CancelButton
-                      onClick={() =>
-                        handleRejection(planning.title, planning.owner)
-                      }
+                      onClick={() => handleRejection(user.id, planning.id)}
+                      $width={"60px"}
+                      fontSize={"15px"}
+                      padding={"9px 10px"}
                     >
                       거절
                     </CancelButton>
@@ -299,7 +319,7 @@ export const MyPageMain = () => {
             <p>초대된 플래닝이 없습니다.</p>
           )}
         </InvitePlanning>
-      </CheckModal>
+      </CloseModal>
       <Footer />
     </>
   );

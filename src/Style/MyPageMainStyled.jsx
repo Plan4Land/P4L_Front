@@ -62,6 +62,22 @@ export const UserInfo = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    .check-invitation {
+      display: flex;
+      position: relative;
+      .invite-alarm {
+        background-color: red;
+        display: flex;
+        position: absolute;
+        left: -0.3rem;
+        top: -0.3rem;
+        justify-content: center;
+        align-items: center;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+      }
+    }
   }
   .user {
     display: flex;
@@ -127,6 +143,7 @@ export const InvitePlanning = styled.div`
   }
 
   .planning-details {
+    width: 19rem;
     text-align: left;
     margin: 10px;
   }

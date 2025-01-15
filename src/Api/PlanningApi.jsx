@@ -65,6 +65,21 @@ const PlanningApi = {
   findInvitedPlanners: async (memberId) => {
     return (await AxiosInstance.get(`/planner/invite/${memberId}`)).data;
   },
+  acceptInvitation: async (memberId, plannerId) => {
+    const params = {
+      memberId,
+      plannerId,
+    };
+    return await AxiosInstance.post(`/planner/invite/accept`, null, { params });
+  },
+  rejectInvitation: async (memberId, plannerId) => {
+    console.log(memberId, plannerId);
+    const params = {
+      memberId,
+      plannerId,
+    };
+    return await AxiosInstance.delete(`/planner/invite/reject`, { params });
+  },
 };
 
 export default PlanningApi;

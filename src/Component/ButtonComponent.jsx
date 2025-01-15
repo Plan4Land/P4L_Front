@@ -56,9 +56,10 @@ export const Button = ({
   </StyledButton>
 );
 
-export const CancelButton = ({ onClick, children }) => (
+export const CancelButton = ({ onClick, children, ...props }) => (
   <Button
     onClick={onClick}
+    {...props}
     bgColor="#c4c4c4"
     color="black"
     border="1px solid #6d6d6d"

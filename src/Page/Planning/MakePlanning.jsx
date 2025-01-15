@@ -84,7 +84,7 @@ export const MakePlanning = () => {
         endDate,
         areaCode,
         subAreaCode,
-        selectedImage,
+        selectedImage.name,
         isPublic
       );
       if (response.status === 200) {

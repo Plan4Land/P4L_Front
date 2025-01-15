@@ -47,8 +47,8 @@ const CloseButton = styled.div`
   padding: 5px;
   cursor: pointer;
   svg {
-    width: 1em;
-    height: 1em;
+    width: 1.2em;
+    height: 1.2em;
   }
 `;
 
