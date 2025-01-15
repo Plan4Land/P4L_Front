@@ -4,6 +4,15 @@ import {useEffect, useState} from "react";
 import {InputBox} from "../../Style/UserInfoEditStyle";
 import styled from "styled-components";
 
+export const AnimatedInput = styled.div`
+    max-height: ${({visible}) => (visible ? "500px" : "0")}; /* 처음 높이를 두 배 높이로 설정 */
+    overflow: hidden; /* 내용이 넘치지 않도록 숨기기 */
+    transition: max-height 0.5s ease-in-out; /* 부드럽게 접히고 펴지는 트랜지션 */
+    opacity: ${({visible}) => (visible ? 1 : 0)};
+    transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
+`;
+
+
 export const BoxContainer = styled.div`
     display: grid;
     grid-template-rows: auto 1fr; /* 2개의 열을 생성: 1:1 비율 */
@@ -156,10 +165,7 @@ const RequestPayment = () => {
         </Button>
       </div>
       <div id={"input-container"}>
-        {paySelect === "kakao" ?
-          <Button onClick={() => onClickPay(kakaoBillingReq)}>
-            결제
-          </Button> :
+        <AnimatedInput visible={paySelect === "card"}>
           <>
             <InputBox>
               <div className="inputBox">
@@ -172,7 +178,7 @@ const RequestPayment = () => {
             <InputBox>
               <div className="inputBox">
                 <input type="text"
-                       placeholder="이름 입력 해 주세요"
+                       placeholder="이름을 입력 해 주세요"
                        value={userName}
                        onChange={(e) => handleInputChange(e, setUserName)}/>
               </div>
@@ -185,11 +191,11 @@ const RequestPayment = () => {
                        onChange={(e) => handleInputChange(e, setUserPhone)}/>
               </div>
             </InputBox>
-            <Button onClick={() => onClickPay(kgCardBillingReq)}>
-              결제
-            </Button>
           </>
-        }
+        </AnimatedInput>
+        <Button onClick={() => onClickPay(paySelect)}>
+          결제
+        </Button>
       </div>
     </BoxContainer>
   )
