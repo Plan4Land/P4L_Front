@@ -56,6 +56,7 @@ export const PlanningList = () => {
       }
     };
 
+
     const queryParams = new URLSearchParams();
     for (const [key, value] of Object.entries(filters)) {
       if (value) {
@@ -64,14 +65,21 @@ export const PlanningList = () => {
     }
     navigate(`/planninglist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`, {replace: true});
     fetchFilteredPlanners();
-  }, [filters, navigate]);
+  }, [filters, navigate, filters.currentPage]);
 
   const updateFilters = (key, value) => {
-    setFilters((prev) => ({
-      ...prev,
-      [key]: value,
-      currentPage: 0,
-    }));
+    if(key !== "currentPage"){
+      setFilters((prev) => ({
+        ...prev,
+        [key]: value,
+        currentPage: 0,
+      }));
+    }else{
+      setFilters((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+    }
   };
 
   const handleResetSelections = () => {
