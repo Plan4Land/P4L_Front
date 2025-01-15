@@ -4,14 +4,25 @@ import { colors } from "./GlobalStyle";
 export const MyPageMainContainer = styled.div`
   display: flex;
   flex-direction: row;
-  height: 100%;
+
+  min-height: 1000px;
   justify-content: center;
   margin: 20px 0 20px 0;
+  margin-bottom: 150px;
 
   .menu {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
+    position: fixed;
+    top: 200px;
+    left: 150px;
+    width: 150px;
+    z-index: 1;
+
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   }
   .MyPageMenu {
     margin-left: 20px;
@@ -21,7 +32,6 @@ export const MyPageMainContainer = styled.div`
 export const UserMain = styled.div`
   margin: 50px auto;
   width: 100%;
-  height: 600px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -63,9 +73,17 @@ export const UserInfo = styled.div`
 `;
 
 export const UserPlanning = styled.div`
-  width: 90%;
   height: 100%;
-  border: 1px solid black;
+  width: 100%;
+  .myPlanList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .pagebutton {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 export const FollowList = styled.div`
@@ -109,12 +127,26 @@ export const InvitePlanning = styled.div`
   }
 
   .planning-details {
+    text-align: left;
     margin: 10px;
   }
 
   .label {
+    margin: 0;
+    margin-bottom: 5px;
+    font-size: 17px;
     font-weight: bold;
   }
+
+  .owner {
+    margin: 0;
+    font-size: 15px;
+    span {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+
   .buttons {
     display: flex;
     align-items: center;

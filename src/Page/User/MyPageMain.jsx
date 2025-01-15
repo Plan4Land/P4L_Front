@@ -1,7 +1,7 @@
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { UserMenu } from "../../Component/UserComponent";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link, Navigate } from "react-router-dom";
 import { Button, CancelButton } from "../../Component/ButtonComponent";
 import {
   MyPageMainContainer,
@@ -16,18 +16,32 @@ import { MyBookmarkTourItem } from "./MyBookmarkTourItem";
 import { CheckModal } from "../../Util/Modal";
 import { useAuth } from "../../Context/AuthContext";
 import { MyBookmarkPlanItem } from "./MyBookmarkPlanItem";
+import RequestPayment from "../Payment/RequestPayment";
+import { MyPlannerApi } from "../../Api/ItemApi";
+import PlanningApi from "../../Api/PlanningApi";
+import { areas } from "../../Util/Common";
+import { PlanItem } from "../../Component/ItemListComponent";
 
 export const MyPageMain = () => {
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState("followings");
+  const [planners, setPlanners] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [size] = useState(10);
+  // const scrollContainerRef = useRef(null);
+  const navigate = useNavigate();
+  const [totalPages, setTotalPages] = useState(0);
+
   const [followings, setFollowings] = useState(["사용자1", "사용자2"]);
   const [followers, setFollowers] = useState(["사용자4", "사용자5"]);
   const { user } = useAuth();
-  const [invitedPlannings, setInvitedPlannings] = useState([
-    { title: "전주 여행", owner: "aaa" },
-    { title: "대전 여행", owner: "bbb" },
-  ]);
+  const [invitedPlannings, setInvitedPlannings] = useState([]);
+  // const [invitedPlannings, setInvitedPlannings] = useState([
+  //   { title: "전주 여행", owner: "aaa" },
+  //   { title: "대전 여행", owner: "bbb" },
+  // ]);
 
   const openFollowModal = () => {
     setIsFollowModalOpen(true);
@@ -56,7 +70,6 @@ export const MyPageMain = () => {
   };
 
   const location = useLocation();
-  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
 
   // URL에서 menu 값을 가져옴
@@ -73,7 +86,47 @@ export const MyPageMain = () => {
     } else {
       navigate("/mypage", { replace: true });
     }
+
+    const fetchInvites = async () => {
+      const response = await PlanningApi.findInvitedPlanners(user.id);
+      setInvitedPlannings(response);
+    };
+
+    fetchInvites();
   }, [selectedMenu, navigate]);
+
+  const fetchPlanners = async (reset = false) => {
+    try {
+      if (loading) return; // 중복 호출 방지
+      setLoading(true);
+      const data = await MyPlannerApi.getPlannersByOwner(user.id, page, size);
+
+      // reset이 true면 새 리스트로 교체, false면 기존 리스트에 추가
+      setPlanners((prevPlanners) =>
+        reset ? data.content : [...prevPlanners, ...data.content]
+      );
+      setTotalPages(data.totalPages);
+      setLoading(false);
+    } catch (error) {
+      console.error("플래너 조회 오류:", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlanners(true);
+  }, [page]);
+
+  // 가로 스크롤 끝에 도달했을 때 페이지를 증가시키는 함수
+  // const handleScroll = () => {
+  //   const container = scrollContainerRef.current;
+  //   if (
+  //     container.scrollLeft + container.offsetWidth >=
+  //     container.scrollWidth - 10
+  //   ) {
+  //     setPage((prevPage) => prevPage + 1);
+  //   }
+  // };
 
   return (
     <>
@@ -113,16 +166,60 @@ export const MyPageMain = () => {
                   <Button onClick={openInviteModal}>초대 확인</Button>
                 </div>
               </UserInfo>
-
               <UserPlanning>
-                <p>여기에 플래닝 리스트?</p>
+                <div
+                  // ref={scrollContainerRef}
+                  className="myPlanList"
+                  // onScroll={handleScroll}
+                >
+                  {loading && <p>로딩 중...</p>}
+                  {planners.map((planner) => {
+                    const areaName =
+                      areas.find((area) => area.code === planner.area)?.name ||
+                      "알 수 없는 지역";
+                    const subAreaName =
+                      areas
+                        .find((area) => area.code === planner.area)
+                        ?.subAreas.find(
+                          (subArea) => subArea.code === planner.subArea
+                        )?.name || "알 수 없는 하위 지역";
+                    return (
+                      <PlanItem
+                        key={planner.id}
+                        id={planner.id}
+                        thumbnail={
+                          planner.thumbnail || "/default-thumbnail.png"
+                        }
+                        title={planner.title}
+                        address={`${areaName} - ${subAreaName}`}
+                        subCategory={planner.theme}
+                        type={planner.public ? "공개" : "비공개"}
+                      />
+                    );
+                  })}
+                </div>
+                <div className="pagebutton">
+                  <button
+                    onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+                    disabled={page === 0}
+                  >
+                    이전
+                  </button>
+                  <button
+                    onClick={() => setPage((prev) => prev + 1)}
+                    disabled={page + 1 >= totalPages}
+                  >
+                    다음
+                  </button>
+                </div>
               </UserPlanning>
             </UserMain>
           )}
-          {selectedMenu === "좋아요 관광지" && <MyBookmarkTourItem />}
-          {selectedMenu === "좋아요 플래닝" && <MyBookmarkPlanItem />}
+          {selectedMenu === "내 플래닝"}
+          {selectedMenu === "북마크 관광지" && <MyBookmarkTourItem />}
+          {selectedMenu === "북마크 플래닝" && <MyBookmarkPlanItem />}
           {selectedMenu === "내 정보 수정" && <UserInfoValidate />}
-          {selectedMenu === "멤버십"}
+          {selectedMenu === "멤버십" && <RequestPayment />}
         </div>
       </MyPageMainContainer>
 
@@ -174,11 +271,10 @@ export const MyPageMain = () => {
               {invitedPlannings.map((planning, index) => (
                 <div key={index} className="invited-planning-item">
                   <div className="planning-details">
-                    <span className="label">플래닝: {planning.title}</span>{" "}
-                    <br />
-                    <span className="owner">
-                      {planning.owner} 님이 초대하였습니다.
-                    </span>
+                    <p className="label">플래닝 : {planning.title}</p>
+                    <p className="owner">
+                      <span>{planning.ownerNickname}</span> 님이 초대하였습니다.
+                    </p>
                   </div>
                   <div className="buttons">
                     <Button

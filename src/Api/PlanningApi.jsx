@@ -52,8 +52,18 @@ const PlanningApi = {
   getChatMsgs: async (plannerId) => {
     return (await AxiosInstance.get(`/chat/msg/${plannerId}`)).data;
   },
-  chatDetail: async (plannerId) => {
-    return (await AxiosInstance.get(`/chat/room/${plannerId}`)).data;
+  // chatDetail: async (plannerId) => {
+  //   return (await AxiosInstance.get(`/chat/room/${plannerId}`)).data;
+  // },
+  inviteMember: async (memberId, plannerId) => {
+    const params = {
+      memberId,
+      plannerId,
+    };
+    return await AxiosInstance.post(`/planner/invite`, null, { params });
+  },
+  findInvitedPlanners: async (memberId) => {
+    return (await AxiosInstance.get(`/planner/invite/${memberId}`)).data;
   },
 };
 

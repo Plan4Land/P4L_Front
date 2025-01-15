@@ -48,6 +48,17 @@ const AxiosApi = {
   memberInfo: async (userId) => {
     return await AxiosInstance.get(`/member/${userId}`);
   },
+  // 멤버 검색
+  searchMember: async (userKeyword, plannerId) => {
+    const params = {
+      id: userKeyword,
+      nickname: userKeyword,
+      plannerId: plannerId,
+    };
+    console.log("plannerId type:", typeof plannerId);
+    console.log(params);
+    return (await AxiosInstance.get(`/member/search`, { params })).data;
+  },
   // 회원 정보 수정
   memberUpdate: async (id, name, nickname, email, profileImg) => {
     const member = {
@@ -120,7 +131,10 @@ const AxiosApi = {
       id: id,
       email: email,
     };
-    return await AxiosInstance.post("/auth/isActivate/byIdAndEmail", memberInfo);
+    return await AxiosInstance.post(
+      "/auth/isActivate/byIdAndEmail",
+      memberInfo
+    );
   },
 };
 export default AxiosApi;

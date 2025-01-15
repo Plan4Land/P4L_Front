@@ -3,6 +3,8 @@ import {
   Info,
   Users,
   UserProfile,
+  SearchedUserContainer,
+  SearchedUserHr,
   UserName,
   ContentContainer,
   KakaoMapContainer,
@@ -17,13 +19,15 @@ import { ProfileImg } from "../../Component/ProfileImg";
 import { Button } from "../../Component/ButtonComponent";
 import { Modal, CloseModal } from "../../Util/Modal";
 import PlanningApi from "../../Api/PlanningApi";
-import { useParams } from "react-router-dom";
+import AxiosApi from "../../Api/AxiosApi";
+import { useNavigate, useParams } from "react-router-dom";
 import { areas } from "../../Util/Common";
 import { AiOutlineMessage } from "react-icons/ai";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { LuUserRoundPlus } from "react-icons/lu";
 import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
 import { useAuth } from "../../Context/AuthContext";
+import { colors } from "../../Style/GlobalStyle";
 
 // const plannerInfo = {
 //   title: "떠나요~ 두리서~",
@@ -149,6 +153,7 @@ const plansEx = [
 ];
 
 export const Planning = () => {
+  const navigate = useNavigate();
   const { plannerId } = useParams();
   const { user } = useAuth();
   const [plannerInfo, setPlannerInfo] = useState();
@@ -162,7 +167,7 @@ export const Planning = () => {
     addPlaceModal: false, // 장소 추가 모달 open 여부
     public: false,
     deletePlanning: false,
-    addParticipant: false,
+    searchUser: false,
   });
   const [memoState, setMemoState] = useState({
     isClicked: [], // 메모마다 open 여부
@@ -173,6 +178,9 @@ export const Planning = () => {
   const [searchState, setSearchState] = useState({
     keyword: "", // 실시간 입력한 키워드
     submittedKeyword: "", // 검색에 보낼 키워드
+    userKeyword: "",
+    submitUserKeyword: "",
+    searchUsersRst: [],
   });
   const [travelInfo, setTravelInfo] = useState({
     days: 0, // 여행 기간
@@ -191,11 +199,26 @@ export const Planning = () => {
   const [sender, setSender] = useState(""); // 메시지를 보낸 사람
   const ws = useRef(null); // 웹소켓 객체 생성, 소켓 연결 정보를 유지해야 하지만, 렌더링과는 무관
   const [isParticipant, setIsParticipant] = useState(false);
-  const handleInputChange = (e) =>
+  const handleKeywordInputChange = (e) =>
     setSearchState({ ...searchState, keyword: e.target.value });
+  const handleUserKeywordInputChange = (e) =>
+    setSearchState({
+      ...searchState,
+      userKeyword: e.target.value.replace(/^\s+/, ""),
+    });
 
-  const handleSearch = () =>
+  const handleKeywordSearch = () =>
     setSearchState({ ...searchState, submittedKeyword: searchState.keyword });
+  const handleUserSearch = () => {
+    setSearchState({
+      ...searchState,
+      submitUserKeyword: searchState.userKeyword,
+    });
+  };
+  const handleInviteUser = async (memberId) => {
+    await PlanningApi.inviteMember(memberId, plannerId);
+    await fetchMember();
+  };
 
   const closeMemo = () => {
     if (selectedPlan.date !== undefined) {
@@ -305,6 +328,28 @@ export const Planning = () => {
     setSender(user.nickname);
   }, [plannerId]);
 
+  const fetchMember = async () => {
+    try {
+      const searchMemberRst = await AxiosApi.searchMember(
+        searchState.submitUserKeyword,
+        plannerId
+      );
+      setSearchState((prevState) => ({
+        ...prevState,
+        searchUsersRst: searchMemberRst,
+      }));
+      console.log("멤버 검색 결과 : ", searchMemberRst);
+    } catch (error) {
+      console.error("멤버 검색 중 오류 발생: ", error);
+    }
+  };
+
+  useEffect(() => {
+    if (searchState.submitUserKeyword) {
+      fetchMember();
+    }
+  }, [searchState.submitUserKeyword]);
+
   useEffect(() => {
     if (plannerInfo) {
       const areaName = areas.find(
@@ -335,6 +380,13 @@ export const Planning = () => {
   useEffect(() => {
     setSearchState({ keyword: "", submittedKeyword: "" });
   }, [modals.addPlaceModal]);
+  useEffect(() => {
+    setSearchState({
+      userKeyword: "",
+      submitUserKeyword: "",
+      searchUsersRst: [],
+    });
+  }, [modals.searchUser]);
 
   if (plannerInfo) {
     return (
@@ -384,7 +436,7 @@ export const Planning = () => {
                         onClick={() =>
                           setModals((prevModals) => ({
                             ...prevModals,
-                            addParticipant: true,
+                            searchUser: true,
                           }))
                         }
                       />
@@ -448,36 +500,41 @@ export const Planning = () => {
             )}
           </Info>
           <Users>
-            <UserProfile>
+            <UserProfile
+              onClick={() => navigate(`/otheruser/${plannerInfo.ownerId}`)}
+            >
               <ProfileImg file={plannerInfo.ownerProfileImg} />
             </UserProfile>
             <UserName>{plannerInfo.ownerNickname}</UserName>
             {plannerInfo.participants &&
-              plannerInfo.participants.map((participant, index) => (
-                <UserProfile
-                  key={index}
-                  id={participant.id}
-                  nickname={participant.nickname}
-                  profileImg={participant.profileImg}
-                  onClick={() =>
-                    setModals((prevModals) => ({
-                      ...prevModals,
-                      userModal: true,
-                    }))
-                  }
-                >
-                  <img
-                    src={participant.profileImg}
-                    alt="프로필 이미지"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </UserProfile>
-              ))}
+              plannerInfo.participants.map(
+                (participant, index) =>
+                  participant.state === "ACCEPT" && (
+                    <UserProfile
+                      key={index}
+                      id={participant.id}
+                      nickname={participant.nickname}
+                      profileImg={participant.profileImg}
+                      onClick={() =>
+                        setModals((prevModals) => ({
+                          ...prevModals,
+                          userModal: true,
+                        }))
+                      }
+                    >
+                      <img
+                        src={participant.profileImg}
+                        alt="프로필 이미지"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </UserProfile>
+                  )
+              )}
             {isParticipant && (
               <Button
                 className="edit-button"
@@ -564,11 +621,11 @@ export const Planning = () => {
                 type="text"
                 placeholder="검색어를 입력하세요"
                 value={searchState.keyword}
-                onChange={handleInputChange}
+                onChange={handleKeywordInputChange}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
-                    handleSearch();
+                    handleKeywordSearch();
                   }
                 }}
                 style={{
@@ -583,7 +640,7 @@ export const Planning = () => {
                 $height={"35px"}
                 fontSize={"14px"}
                 padding={"10px 15px"}
-                onClick={handleSearch}
+                onClick={handleKeywordSearch}
               >
                 검색
               </Button>
@@ -596,20 +653,86 @@ export const Planning = () => {
             />
           </CloseModal>
         )}
-        {modals.addParticipant && (
+        {modals.searchUser && (
           <CloseModal
-            isOpen={modals.addParticipant}
+            isOpen={modals.searchUser}
             onClose={() =>
               setModals((prevModals) => ({
                 ...prevModals,
-                addParticipant: false,
+                searchUser: false,
               }))
             }
             contentWidth="400px"
             contentHeight="500px"
           >
             <div>
-              <p>사용자 초대하기</p>
+              <SearchInputContainer>
+                <input
+                  type="text"
+                  placeholder="아이디/닉네임 입력"
+                  value={searchState.userKeyword}
+                  onChange={handleUserKeywordInputChange}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleUserSearch();
+                    }
+                  }}
+                  style={{
+                    width: "80%",
+                    height: "35px",
+                    fontSize: "14px",
+                    padding: "3px 8px",
+                    boxSizing: "border-box",
+                  }}
+                />
+                <Button
+                  $width={"60px"}
+                  $height={"35px"}
+                  fontSize={"14px"}
+                  padding={"10px 15px"}
+                  onClick={handleUserSearch}
+                >
+                  검색
+                </Button>
+              </SearchInputContainer>
+              {searchState.searchUsersRst &&
+              searchState.searchUsersRst.length > 0 ? (
+                searchState.searchUsersRst
+                  .filter((member) => member.id !== user.id)
+                  .map((member) => (
+                    <div key={member.id}>
+                      <SearchedUserContainer>
+                        <ProfileImg
+                          file={member.imgPath}
+                          width={"50px"}
+                          height={"50px"}
+                        />
+                        <div className="searched-user-info">
+                          <p className="searched-nickname">{member.nickname}</p>
+                          <p className="searched-id">{member.id}</p>
+                        </div>
+                        <Button
+                          className="searched-user-invite"
+                          $width={"90px"}
+                          $height={"35px"}
+                          fontSize={"13px"}
+                          padding={"7px 10px"}
+                          bgcolor={colors.colorC}
+                          color={"black"}
+                          border={"none"}
+                          onClick={() => handleInviteUser(member.id)}
+                          disabled={member.state === "WAIT"}
+                        >
+                          {member.state === "WAIT" ? "수락 대기" : "초대 하기"}
+                        </Button>
+                      </SearchedUserContainer>
+                      <SearchedUserHr />
+                    </div>
+                  ))
+              ) : (
+                <p>검색된 회원이 없습니다.</p>
+              )}
             </div>
           </CloseModal>
         )}
