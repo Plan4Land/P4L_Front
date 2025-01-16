@@ -1,24 +1,27 @@
-import { Header, Footer } from "../../Component/GlobalComponent";
+import {Header, Footer} from "../../Component/GlobalComponent";
 import {
   UserMain,
   UserInfo,
   UserPlanning,
   FollowList,
 } from "../../Style/MyPageMainStyled";
-import { useState, useEffect } from "react";
-import { CheckModal } from "../../Util/Modal";
-import { Button } from "../../Component/ButtonComponent";
-import { useParams } from "react-router-dom";
-import { MyPlannerApi } from "../../Api/ItemApi";
-import { areas } from "../../Util/Common";
-import { PlanItem } from "../../Component/ItemListComponent";
+import {useState, useEffect} from "react";
+import {CheckModal} from "../../Util/Modal";
+import {Button} from "../../Component/ButtonComponent";
+import {useParams} from "react-router-dom";
+import {UserPlannerApi} from "../../Api/ItemApi";
+import {areas} from "../../Util/Common";
+import {PlanItem} from "../../Component/ItemListComponent";
 import AxiosApi from "../../Api/AxiosApi";
+import {Pagination} from "../../Component/Pagination";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useMediaQuery } from "react-responsive";
+import {useMediaQuery} from "react-responsive";
+import {useAuth} from "../../Context/AuthContext";
 
 export const Otheruser = () => {
-  const { userId } = useParams();
+  const {userId} = useParams();
+  const {user} = useAuth()
   const [planners, setPlanners] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -27,11 +30,14 @@ export const Otheruser = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState("followings");
-  const [followings, setFollowings] = useState(["사용자1", "사용자2"]);
-  const [followers, setFollowers] = useState(["사용자4", "사용자5"]);
+  const [followings, setFollowings] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [isFollowed, setIsFollowed] = useState(false);
 
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-
+  const isMobile = useMediaQuery({query: "(max-width: 454px)"});
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
   const openFollowModal = () => {
     setIsFollowModalOpen(true);
   };
@@ -42,6 +48,11 @@ export const Otheruser = () => {
     setSelectedTab(tab);
   };
 
+  const handleFollow = async (follower, followed, isFollow) => {
+    const data = await AxiosApi.follow(follower, followed, isFollow);
+    setIsFollowed(!isFollowed)
+  }
+
   const fetchPlanners = async () => {
     try {
       if (loading) return;
@@ -49,11 +60,12 @@ export const Otheruser = () => {
 
       const currentPage = page;
 
-      const data = await MyPlannerApi.getPlannersByOwner(
+      const data = await UserPlannerApi.getuserPlannersByOwner(
         userId,
         currentPage,
         size
       );
+      console.log(data.content);
 
       // 모바일에서 이전 데이터와 새 데이터의 중복을 피하도록 처리
       if (isMobile) {
@@ -105,11 +117,24 @@ export const Otheruser = () => {
         console.error("유저 정보를 불러오는 데 오류가 발생했습니다:", error);
       }
     };
+    const fetchFollowInfo = async () => {
+      try {
+        const data = await AxiosApi.loadFollow(userId);
+        setFollowings(data.followingInfo);
+        setFollowers(data.followerInfo)
+        if (data.followerInfo.some(member => member.id === user.id)) {
+          setIsFollowed(true);
+        }
+      } catch (error) {
+        console.error("팔로워 정보를 불러오는데 오류가 발생했습니다.", error);
+      }
+    }
 
     if (userId) {
       fetchUserInfo();
+      fetchFollowInfo();
     }
-  }, [userId]);
+  }, [userId, isFollowed]);
 
   const loadMorePlanners = () => {
     if (page + 1 < totalPages) {
@@ -119,7 +144,7 @@ export const Otheruser = () => {
 
   return (
     <>
-      <Header />
+      <Header/>
       <div className="otheruser">
         <UserMain>
           <UserInfo>
@@ -146,12 +171,20 @@ export const Otheruser = () => {
                   <p>유저 정보를 불러오지 못했습니다.</p>
                 )}
                 <div className="follow" onClick={openFollowModal}>
-                  <p>팔로잉: 숫자 팔로워: 숫자</p>
+                  <p>팔로잉: {followings.length} 팔로워: {followers.length}</p>
                 </div>
               </div>
             </div>
             <div className="Button">
-              <Button>팔로우</Button>
+              {isFollowed ? (
+                <Button
+                onClick={() => handleFollow(user.id, userInfo.id, false)}
+              >팔로우 해제</Button>
+              ) : (
+                <Button
+                onClick={() => handleFollow(user.id, userInfo.id, true)}
+              >팔로우</Button>)}
+
             </div>
           </UserInfo>
           <UserPlanning>
@@ -172,8 +205,8 @@ export const Otheruser = () => {
                       areas
                         .find((area) => area.code === planner.area)
                         ?.subAreas.find(
-                          (subArea) => subArea.code === planner.subArea
-                        )?.name || "알 수 없는 하위 지역";
+                        (subArea) => subArea.code === planner.subArea
+                      )?.name || "알 수 없는 하위 지역";
                     return (
                       <PlanItem
                         key={planner.id}
@@ -185,6 +218,8 @@ export const Otheruser = () => {
                         address={`${areaName} - ${subAreaName}`}
                         subCategory={planner.theme}
                         type={planner.public ? "공개" : "비공개"}
+                        ownerprofile={planner.ownerProfileImg}
+                        ownernick={planner.ownerNickname}
                       />
                     );
                   })}
@@ -201,8 +236,8 @@ export const Otheruser = () => {
                     areas
                       .find((area) => area.code === planner.area)
                       ?.subAreas.find(
-                        (subArea) => subArea.code === planner.subArea
-                      )?.name || "알 수 없는 하위 지역";
+                      (subArea) => subArea.code === planner.subArea
+                    )?.name || "알 수 없는 하위 지역";
                   return (
                     <PlanItem
                       key={planner.id}
@@ -212,6 +247,8 @@ export const Otheruser = () => {
                       address={`${areaName} - ${subAreaName}`}
                       subCategory={planner.theme}
                       type={planner.public ? "공개" : "비공개"}
+                      ownerprofile={`/${planner.ownerProfileImg}`}
+                      ownernick={planner.ownerNickname}
                     />
                   );
                 })}
@@ -219,20 +256,11 @@ export const Otheruser = () => {
             )}
           </UserPlanning>
           {!isMobile && (
-            <div className="pagebutton">
-              <button
-                onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
-                disabled={page === 0}
-              >
-                이전
-              </button>
-              <button
-                onClick={() => setPage((prev) => prev + 1)}
-                disabled={page + 1 >= totalPages}
-              >
-                다음
-              </button>
-            </div>
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              handlePageChange={handlePageChange}
+            />
           )}
         </UserMain>
       </div>
@@ -255,9 +283,9 @@ export const Otheruser = () => {
           <div className="tab-content">
             {selectedTab === "followings" && (
               <div className="list">
-                {followings.map((following, index) => (
+                {followings && followings.map((following, index) => (
                   <div key={index} className="list-item">
-                    {following}
+                    {following.id}
                   </div>
                 ))}
               </div>
@@ -265,9 +293,9 @@ export const Otheruser = () => {
 
             {selectedTab === "followers" && (
               <div className="list">
-                {followers.map((follower, index) => (
+                {followers && followers.map((follower, index) => (
                   <div key={index} className="list-item">
-                    {follower}
+                    {follower.id}
                   </div>
                 ))}
               </div>
@@ -275,7 +303,7 @@ export const Otheruser = () => {
           </div>
         </FollowList>
       </CheckModal>
-      <Footer />
+      <Footer/>
     </>
   );
 };

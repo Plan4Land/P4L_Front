@@ -22,6 +22,7 @@ import PlanningApi from "../../Api/PlanningApi";
 import { areas } from "../../Util/Common";
 import { PlanItem } from "../../Component/ItemListComponent";
 import { MyIncludePlans } from "./MyIncludePlans";
+import { Pagination } from "../../Component/Pagination";
 
 export const MyPageMain = () => {
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
@@ -43,7 +44,9 @@ export const MyPageMain = () => {
   //   { title: "전주 여행", owner: "aaa" },
   //   { title: "대전 여행", owner: "bbb" },
   // ]);
-
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
   const openFollowModal = () => {
     setIsFollowModalOpen(true);
   };
@@ -215,20 +218,11 @@ export const MyPageMain = () => {
                     );
                   })}
                 </div>
-                <div className="pagebutton">
-                  <button
-                    onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
-                    disabled={page === 0}
-                  >
-                    이전
-                  </button>
-                  <button
-                    onClick={() => setPage((prev) => prev + 1)}
-                    disabled={page + 1 >= totalPages}
-                  >
-                    다음
-                  </button>
-                </div>
+                <Pagination
+                  currentPage={page}
+                  totalPages={totalPages}
+                  handlePageChange={handlePageChange}
+                />
               </UserPlanning>
             </UserMain>
           )}

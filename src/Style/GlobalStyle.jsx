@@ -113,8 +113,8 @@ export const HeaderSt = styled.div`
     background-color: #f0f0f0;
   }
   .recomm {
-    cursor: pointer;
     position: relative;
+    cursor: pointer;
   }
 
   .recomm:hover .dropdown-list {
@@ -123,28 +123,40 @@ export const HeaderSt = styled.div`
   .dropdown-list {
     display: none;
     position: absolute;
-    top: 100%;
-    left: 0;
-    width: 200px;
+    right: 0;
+    width: 500px;
     background-color: white;
     border: 1px solid #ddd;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 10;
+    padding-left: 20px;
+    border-radius: 10px;
   }
+  .topItem {
+    margin-bottom: 20px;
 
-  .dropdown-list ul {
-    margin: 0;
-    padding: 10px;
-    list-style: none;
-  }
+    h3 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: ${colors.colorA};
+      cursor: default;
+    }
+    span {
+      padding: 0 5px 0 5px;
+    }
+    p {
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
 
-  .dropdown-list li {
-    padding: 8px 12px;
-    cursor: pointer;
-  }
-
-  .dropdown-list li:hover {
-    background-color: #f0f0f0;
+      &:hover {
+        color: ${colors.colorA};
+        background-color: #ececec;
+      }
+    }
   }
 `;
 

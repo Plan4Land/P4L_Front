@@ -45,6 +45,8 @@ export const PlanningList = () => {
   const [isThemeOpen, setIsThemeOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState(filters.searchQuery);
 
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+
   const sortBy = [
     {
       name: "최신순",
@@ -178,14 +180,18 @@ export const PlanningList = () => {
       return { ...prev, themeList: newSelectedThemes.join(",") };
     });
   };
+  const handleToggleSelect = () => {
+    setIsSelectOpen(!isSelectOpen);
+  };
 
   const selectedAreaData = areas.find((area) => area.code === filters.areaCode);
 
   return (
     <>
       <Header />
+      <button onClick={handleToggleSelect}>필터 열기</button>
       <List>
-        <SelectTourItem>
+        <SelectTourItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
             <FaUndo style={{ marginLeft: "6px" }} />

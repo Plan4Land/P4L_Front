@@ -8,6 +8,11 @@ export const MainBox = styled.div`
   gap: 20px; // 상자 간 간격
   margin: 20px;
   height: 1000px;
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    height: 100%;
+  }
 `;
 
 export const GridItem = styled.div`
@@ -84,8 +89,8 @@ export const QuickSearch = styled(GridItem)`
 //         {/* 상위 관광지 n개 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const RecommItem = styled(GridItem)`
   grid-column: span 2;
-  border: 1px solid black;
   height: 500px;
+
   .topTourItem {
     overflow: hidden;
     text-align: center;
@@ -93,29 +98,80 @@ export const RecommItem = styled(GridItem)`
     height: 100%;
     position: relative;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .topTourItem img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 20px;
+    transition: transform 0.3s ease;
   }
-  .topTourItem h3 {
-    position: absolute;
-    z-index: 10;
-    bottom: 50px;
-    right: 10px;
-  }
+
+  .topTourItem h3,
   .topTourItem p {
     position: absolute;
     z-index: 10;
-    bottom: 10px;
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 10px;
+    transition: opacity 0.5s ease;
+    opacity: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+
+  .topTourItem h3 {
+    bottom: 50px;
     right: 10px;
+    font-size: 30px;
+    transition: bottom 1.5s ease, opacity 1.5s ease;
+  }
+
+  .topTourItem p {
+    bottom: 20px;
+    right: 10px;
+    font-size: 18px;
+    transition: bottom 3s ease, opacity 3s ease;
+  }
+
+  /* 슬라이드가 변경될 때 글자가 나타나는 애니메이션 */
+  .swiper-slide-active .topTourItem h3,
+  .swiper-slide-active .topTourItem p {
+    opacity: 1;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: white !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+
+  .swiper-button-next:after,
+  .swiper-button-prev:after {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: #0d5231; /* 활성화된 페이지 점 색상 (빨간색) */
   }
 `;
+
 //         {/* 상위 플래닝 3개!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const RecommPlan = styled(GridItem)`
   grid-column: span 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h3 {
+    margin: 0;
+    color: ${colors.colorA};
+  }
 `;
 export const PlanBox = styled.div`
   display: grid;
@@ -125,15 +181,16 @@ export const PlanBox = styled.div`
 
   .planitem {
     border: 1px solid black;
+    border-radius: 20px;
     margin: 10px;
+    overflow: hidden;
     cursor: pointer;
     img {
-      /* height: 300px; */
       min-height: 75%;
     }
   }
 `;
-//         {/* 축제 미니 캘린더!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
+//         {/* 미니 캘린더!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const Festive = styled(GridItem)`
   grid-column: span 1;
   display: flex;

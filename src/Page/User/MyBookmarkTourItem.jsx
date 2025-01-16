@@ -5,6 +5,7 @@ import { useAuth } from "../../Context/AuthContext";
 import { ServiceCode } from "../../Util/Service_code_final";
 import { types } from "../../Util/Common";
 import { BookmarkItem } from "../../Style/BookmarkItemStyled";
+import { Pagination } from "../../Component/Pagination";
 
 export const MyBookmarkTourItem = () => {
   const { user } = useAuth();
@@ -12,7 +13,9 @@ export const MyBookmarkTourItem = () => {
   const [page, setPage] = useState(0);
   const [size] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
   // 북마크된 여행지 불러오기 함수
   const fetchBookmarkedSpots = async () => {
     try {
@@ -65,20 +68,11 @@ export const MyBookmarkTourItem = () => {
             <p>북마크된 여행지가 없습니다.</p>
           )}
         </div>
-        <div className="pagebutton">
-          <button
-            onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
-            disabled={page === 0}
-          >
-            이전
-          </button>
-          <button
-            onClick={() => setPage((prev) => prev + 1)}
-            disabled={page + 1 >= totalPages}
-          >
-            다음
-          </button>
-        </div>
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          handlePageChange={handlePageChange}
+        />
       </BookmarkItem>
     </>
   );
