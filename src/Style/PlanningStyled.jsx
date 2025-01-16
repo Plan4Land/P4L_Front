@@ -28,19 +28,19 @@ export const Info = styled.div`
     height: 250px;
     flex-shrink: 0;
     @media (max-width: 1370px) {
-      width: 200px; /* 화면 너비가 1024px 이하일 때 크기 조정 */
+      width: 200px;
       height: 200px;
     }
 
     @media (max-width: 1160px) {
-      width: 150px; /* 화면 너비가 768px 이하일 때 크기 조정 */
+      width: 150px;
       height: 150px;
     }
 
-    @media (max-width: 1060) {
-      width: 100px; /* 화면 너비가 480px 이하일 때 크기 조정 */
+    /* @media (max-width: 1060px) {
+      width: 100px;
       height: 100px;
-    }
+    } */
   }
 
   .menu-icons {

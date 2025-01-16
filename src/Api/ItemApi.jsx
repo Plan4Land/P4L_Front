@@ -112,9 +112,12 @@ export const PlannerItemApi = {
 export const BookmarkedPlanApi = {
   getBookmarkedPlan: async (memberId, page = 0, size = 5) => {
     try {
-      const response = await AxiosInstance.get(`/planner/myBookmarkPlanners`, {
-        params: { memberId, page, size },
-      });
+      const response = await AxiosInstance.get(
+        `/bookmarkPlanner/myBookmarkPlanners`,
+        {
+          params: { memberId, page, size },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("북마크 플랜 조회 오류:", error);
@@ -138,7 +141,7 @@ export const TopTourApi = {
 export const TopPlanApi = {
   getTop3Plans: async () => {
     try {
-      const response = await AxiosInstance.get(`/planner/plannersTop3`);
+      const response = await AxiosInstance.get(`/bookmarkPlanner/plannersTop3`);
       return response.data;
     } catch (error) {
       console.error("상위 3개 플래닝 조회 오류: ", error);
