@@ -56,6 +56,8 @@ export const MyIncludePlans = () => {
                   address={`${areaName} - ${subAreaName}`}
                   subCategory={planner.theme}
                   type={planner.public ? "공개" : "비공개"}
+                  ownerprofile={planner.ownerProfileImg}
+                  ownernick={planner.ownerNickname}
                 />
               );
             })

@@ -79,7 +79,7 @@ export const Header = () => {
               <div
                 className="profile-img"
                 style={{
-                  backgroundImage: `url(${user.imgPath})`,
+                  backgroundImage: `url(/${user.imgPath})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
