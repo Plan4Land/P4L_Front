@@ -16,7 +16,7 @@ export const MyIncludePlans = () => {
     try {
       const data = await InPlannerApi.getIncludePlan(user.id, page, size);
       console.log(">>>", data.content);
-
+      console.log("*******", data);
       setIncludePlans(data.content);
       setTotalPages(data.totalPages);
     } catch (err) {
