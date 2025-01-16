@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditStyle";
-import { ProfilePicModal } from "../../Component/PictureModalComponent";
-import { useAuth } from "../../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import AxiosApi from "../../Api/AxiosApi";
+// component
+import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditStyle";
+import { useAuth } from "../../Context/AuthContext";
 import { storage } from "../../Api/Firebase";
+import { ProfilePicModal } from "../../Component/PictureModalComponent";
+import { CheckModal } from "../../Util/Modal";
 // icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
@@ -20,6 +23,10 @@ const UserInfoEdit = () => {
   const [email, setEmail] = useState("hong@example.com");
   const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
   const [isPicsModalOpen, setIsPicsModalOpen] = useState("");
+  const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
+  const [checkModalMessage, setCheckModalMessage] = useState("");
+
+  const navigate = useNavigate();
 
   const handlePicSelect = (picName) => {
     setCurrentPic(`profile-pic/${picName}`);
@@ -27,34 +34,6 @@ const UserInfoEdit = () => {
   const handlePicAdd = (picture) => {
     // 사진 추가하는 기능 구현하기.
     setCurrentPic(URL.createObjectURL(picture));
-
-    // Firebase Storage 참조
-    const storageRef = storage.ref(`/UserProfilePic/${user.id}/`); 
-    const fileRef = storageRef.child(picture.name);
-
-    // 폴더 비우기
-    storageRef.listAll()
-      .then((result) => {
-        // 폴더 내 모든 파일 삭제
-        const deletePromises = result.items.map((item) => item.delete());
-        return Promise.all(deletePromises);
-      })
-      .then(() => {
-        console.log("폴더 비우기 완료.");
-        // 새 파일 업로드
-        return fileRef.put(picture);
-      })
-      .then(() => {
-        console.log("새 파일 업로드 성공.");
-        return fileRef.getDownloadURL(); // 업로드된 파일의 URL 가져오기
-      })
-      .then((downloadUrl) => {
-        console.log("저장된 경로:", downloadUrl);
-        setCurrentPic(downloadUrl); // 이미지 URL 상태 업데이트
-      })
-      .catch((error) => {
-        console.error("업로드 중 에러 발생:", error);
-      });
   };
 
   // 정보 가져오기
@@ -81,7 +60,22 @@ const UserInfoEdit = () => {
       const rsp = await AxiosApi.memberUpdate(userId, name, nickName, email, currentPic);
       console.log(rsp);
       if (rsp.data) {
-        alert("회원정보가 수정되었습니다.");
+        // 프로필 사진이 새로 추가된 경우 Firebase에 업로드
+        let updatedPic  = currentPic;
+        if (currentPic && currentPic.startsWith("blob:")) {
+          // Firebase Storage 참조
+          const storageRef = storage.ref(`/UserProfilePic/${user.id}/`);
+          const fileRef = storageRef.child("profile");
+          // 새로운 파일 업로드
+          await fileRef.put(currentPic);
+          // 업로드된 파일 URL 가져오기
+          updatedPic = await fileRef.getDownloadURL();
+          console.log("새 파일 업로드 성공:", updatedPic);
+        }
+
+        setCheckModalMessage("회원정보가 수정되었습니다.");
+        setIsCheckModalOpen(true);
+
         updateUser({
           nickName: nickName,
           email,
@@ -90,13 +84,19 @@ const UserInfoEdit = () => {
       }
     } catch (e) {
       console.error("Error during userUpdate: ", e);
-      alert("회원정보 수정중 오류가 발생했습니다. 다시 시도해주세요.");
+      setCheckModalMessage("회원정보 수정중 오류가 발생했습니다. 다시 시도해주세요.");
+      setIsCheckModalOpen(true);
     }
   };
 
   const handleBack = () => {
     window.location.reload();
   }
+
+  const closeCheckModal = () => {
+    setIsCheckModalOpen(false);
+    navigate("/mypage");
+  };
 
   return (
     <Center>
@@ -181,6 +181,11 @@ const UserInfoEdit = () => {
         >
           <IoIosArrowBack />
         </button>
+
+        {/* 완료 모달 */}
+        <CheckModal isOpen={isCheckModalOpen} onClose={closeCheckModal}>
+          {checkModalMessage}
+        </CheckModal>
       </Container>
     </Center>
   );

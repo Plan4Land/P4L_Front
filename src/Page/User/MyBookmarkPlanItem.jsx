@@ -59,6 +59,8 @@ export const MyBookmarkPlanItem = () => {
                   address={`${areaName} - ${subAreaName}`}
                   subCategory={planner.theme}
                   type={planner.public ? "공개" : "비공개"}
+                  ownerprofile={planner.owner.profileImg}
+                  ownernick={planner.owner.nickname}
                 />
               );
             })
