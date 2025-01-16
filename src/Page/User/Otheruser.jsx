@@ -1,19 +1,19 @@
-import { Header, Footer } from "../../Component/GlobalComponent";
+import {Header, Footer} from "../../Component/GlobalComponent";
 import {
   UserMain,
   UserInfo,
   UserPlanning,
   FollowList,
 } from "../../Style/MyPageMainStyled";
-import { useState, useEffect } from "react";
-import { CheckModal } from "../../Util/Modal";
-import { Button } from "../../Component/ButtonComponent";
-import { useParams } from "react-router-dom";
-import { UserPlannerApi } from "../../Api/ItemApi";
-import { areas } from "../../Util/Common";
-import { PlanItem } from "../../Component/ItemListComponent";
+import {useState, useEffect} from "react";
+import {CheckModal} from "../../Util/Modal";
+import {Button} from "../../Component/ButtonComponent";
+import {useParams} from "react-router-dom";
+import {UserPlannerApi} from "../../Api/ItemApi";
+import {areas} from "../../Util/Common";
+import {PlanItem} from "../../Component/ItemListComponent";
 import AxiosApi from "../../Api/AxiosApi";
-import { Pagination } from "../../Component/Pagination";
+import {Pagination} from "../../Component/Pagination";
 
 import InfiniteScroll from "react-infinite-scroll-component";
 import {useMediaQuery} from "react-responsive";
@@ -32,8 +32,9 @@ export const Otheruser = () => {
   const [selectedTab, setSelectedTab] = useState("followings");
   const [followings, setFollowings] = useState([]);
   const [followers, setFollowers] = useState([]);
+  const [isFollowed, setIsFollowed] = useState(false);
 
-  const isMobile = useMediaQuery({ query: "(max-width: 454px)" });
+  const isMobile = useMediaQuery({query: "(max-width: 454px)"});
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
@@ -49,7 +50,7 @@ export const Otheruser = () => {
 
   const handleFollow = async (follower, followed, isFollow) => {
     const data = await AxiosApi.follow(follower, followed, isFollow);
-    console.log(data);
+    setIsFollowed(!isFollowed)
   }
 
   const fetchPlanners = async () => {
@@ -121,8 +122,11 @@ export const Otheruser = () => {
         const data = await AxiosApi.loadFollow(userId);
         setFollowings(data.followingInfo);
         setFollowers(data.followerInfo)
-      }catch(error) {
-        console.error("팔로워 정보를 불러오는데 오류가 발생했습니다.",error);
+        if (data.followerInfo.some(member => member.id === user.id)) {
+          setIsFollowed(true);
+        }
+      } catch (error) {
+        console.error("팔로워 정보를 불러오는데 오류가 발생했습니다.", error);
       }
     }
 
@@ -130,7 +134,7 @@ export const Otheruser = () => {
       fetchUserInfo();
       fetchFollowInfo();
     }
-  }, [userId]);
+  }, [userId, isFollowed]);
 
   const loadMorePlanners = () => {
     if (page + 1 < totalPages) {
@@ -172,9 +176,15 @@ export const Otheruser = () => {
               </div>
             </div>
             <div className="Button">
-              <Button
-              onClick={() => handleFollow(user.id, userInfo.id, true)}
-              >팔로우</Button>
+              {isFollowed ? (
+                <Button
+                onClick={() => handleFollow(user.id, userInfo.id, false)}
+              >팔로우 해제</Button>
+              ) : (
+                <Button
+                onClick={() => handleFollow(user.id, userInfo.id, true)}
+              >팔로우</Button>)}
+
             </div>
           </UserInfo>
           <UserPlanning>
