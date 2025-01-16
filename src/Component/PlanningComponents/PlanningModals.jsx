@@ -1,9 +1,11 @@
 import { useAuth } from "../../Context/AuthContext";
 import {
   UserProfile,
+  ParticipantsContainer,
   SearchedUserContainer,
   SearchedUserHr,
   SearchSelectMenuContainer,
+  SearchMemberContainer,
   SearchInputContainer,
   SearchBookmarkContainer,
 } from "../../Style/PlanningStyled";
@@ -16,48 +18,40 @@ import { ProfileImg } from "../ProfileImg";
 import PlanningApi from "../../Api/PlanningApi";
 import { BookmarkedSpotsApi } from "../../Api/ItemApi";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // 플래닝에 초대 수락한 회원들 모달창
 export const UserModal = ({ plannerInfo, modals, setModals }) => {
+  const navigate = useNavigate();
   return (
     <CloseModal
       isOpen={modals.userModal}
       onClose={() =>
         setModals((prevModals) => ({ ...prevModals, userModal: false }))
       }
-      contentWidth="400px"
-      // contentHeight="500px"
-      minHeight="200px"
+      contentWidth="300px"
+      contentHeight="400px"
     >
-      <div>
+      <ParticipantsContainer>
         {plannerInfo.participants
           .filter((participant) => participant.state === "ACCEPT")
           .map((participant, index) => (
-            <UserProfile
+            <div
+              className="participants-profile"
               key={index}
               id={participant.id}
-              nickname={participant.nickname}
-              profileImg={participant.profileImg}
-              onClick={() =>
-                setModals((prevModals) => ({
-                  ...prevModals,
-                  userModal: true,
-                }))
-              }
+              // nickname={participant.nickname}
+              // profileImg={`/${participant.memberProfileImg}`}
+              onClick={() => navigate(`/otheruser/${participant.id}`)}
             >
-              <img
-                src={participant.profileImg}
-                alt="프로필 이미지"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "50%",
-                }}
+              <ProfileImg
+                file={`/${participant.memberProfileImg}`}
+                width={"100%"}
               />
-            </UserProfile>
+              <span>{participant.memberNickname}</span>
+            </div>
           ))}
-      </div>
+      </ParticipantsContainer>
     </CloseModal>
   );
 };
@@ -90,7 +84,11 @@ export const AddPlaceModal = ({
 
     if (selectedMenu === "북마크 관광지") {
       const getBookmaredTourList = async () => {
-        const response = await BookmarkedSpotsApi.getBookmarkedSpots(user.id);
+        const response = await BookmarkedSpotsApi.getBookmarkedSpots(
+          user.id,
+          0,
+          100
+        );
         setBookmarkedPlaces((prevPlaces) => [
           ...prevPlaces,
           ...response.content, // response가 배열일 경우
@@ -176,16 +174,23 @@ export const AddPlaceModal = ({
         <div>
           <SearchBookmarkContainer>
             {bookmarkedPlaces.length > 0 ? (
-              bookmarkedPlaces.map((place, index) => (
-                <SearchTourItem
-                  key={index}
-                  data={place}
-                  width={"93%"}
-                  height={"70px"}
-                  setCurrentAddedPlace={setCurrentAddedPlace}
-                  setModals={setModals}
-                />
-              ))
+              bookmarkedPlaces
+                .filter(
+                  (place) =>
+                    place.title.includes(searchState.submittedKeyword) || // 이름으로 검색
+                    place.addr1.includes(searchState.submittedKeyword) // 주소로 검색
+                )
+                .map((place, index) => (
+                  <SearchTourItem
+                    key={index}
+                    data={place}
+                    width={"98%"}
+                    height={"70px"}
+                    margin={"10px 0"}
+                    setCurrentAddedPlace={setCurrentAddedPlace}
+                    setModals={setModals}
+                  />
+                ))
             ) : (
               <p>북마크된 장소가 없습니다.</p> // 북마크된 장소가 없을 때 표시할 메시지
             )}
@@ -237,7 +242,7 @@ export const SearchUser = ({
       contentWidth="400px"
       contentHeight="500px"
     >
-      <div>
+      <SearchMemberContainer>
         <SearchInputContainer>
           <input
             type="text"
@@ -268,49 +273,52 @@ export const SearchUser = ({
             검색
           </Button>
         </SearchInputContainer>
-        {searchState.searchUsersRst && searchState.searchUsersRst.length > 0 ? (
-          searchState.searchUsersRst
-            .filter((member) => member.id !== user.id)
-            .map((member) => (
-              <div key={member.id}>
-                <SearchedUserContainer>
-                  <ProfileImg
-                    file={member.imgPath}
-                    width={"50px"}
-                    height={"50px"}
-                  />
-                  <div className="searched-user-info">
-                    <p className="searched-nickname">{member.nickname}</p>
-                    <p className="searched-id">{member.id}</p>
-                  </div>
-                  <Button
-                    className="searched-user-invite"
-                    $width={"90px"}
-                    $height={"35px"}
-                    fontSize={"13px"}
-                    padding={"7px 10px"}
-                    bgcolor={colors.colorC}
-                    color={"black"}
-                    border={"none"}
-                    onClick={() => handleInviteUser(member.id)}
-                    disabled={
-                      member.state === "WAIT" || member.state === "ACCEPT"
-                    }
-                  >
-                    {member.state === "WAIT"
-                      ? "수락 대기"
-                      : member.state === "ACCEPT"
-                      ? "수락 완료"
-                      : "초대 하기"}
-                  </Button>
-                </SearchedUserContainer>
-                <SearchedUserHr />
-              </div>
-            ))
-        ) : (
-          <p>검색된 회원이 없습니다.</p>
-        )}
-      </div>
+        <div className="searched-users-container">
+          {searchState.searchUsersRst &&
+          searchState.searchUsersRst.length > 0 ? (
+            searchState.searchUsersRst
+              .filter((member) => member.id !== user.id)
+              .map((member) => (
+                <div key={member.id}>
+                  <SearchedUserContainer>
+                    <ProfileImg
+                      file={member.imgPath}
+                      width={"50px"}
+                      height={"50px"}
+                    />
+                    <div className="searched-user-info">
+                      <p className="searched-nickname">{member.nickname}</p>
+                      <p className="searched-id">{member.id}</p>
+                    </div>
+                    <Button
+                      className="searched-user-invite"
+                      $width={"90px"}
+                      $height={"35px"}
+                      fontSize={"13px"}
+                      padding={"7px 10px"}
+                      bgcolor={colors.colorC}
+                      color={"black"}
+                      border={"none"}
+                      onClick={() => handleInviteUser(member.id)}
+                      disabled={
+                        member.state === "WAIT" || member.state === "ACCEPT"
+                      }
+                    >
+                      {member.state === "WAIT"
+                        ? "수락 대기"
+                        : member.state === "ACCEPT"
+                        ? "수락 완료"
+                        : "초대 하기"}
+                    </Button>
+                  </SearchedUserContainer>
+                  <SearchedUserHr />
+                </div>
+              ))
+          ) : (
+            <p>검색된 회원이 없습니다.</p>
+          )}
+        </div>
+      </SearchMemberContainer>
     </CloseModal>
   );
 };

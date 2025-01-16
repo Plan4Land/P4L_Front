@@ -90,18 +90,35 @@ export const Users = styled.div`
 `;
 
 export const UserProfile = styled.div`
+  display: flex;
   position: relative;
   width: 60px;
   height: 60px;
   border-radius: 50%;
   margin-left: -35px;
   cursor: pointer;
-  background-color: red;
+  /* background-color: red; */
   &:first-of-type {
     margin-left: 0; /* 첫 번째 프로필은 이동하지 않도록 설정 */
   }
   &:hover {
     scale: 1.1;
+  }
+`;
+
+export const ParticipantsContainer = styled.div`
+  width: 70%;
+  height: 100%;
+  overflow-y: auto;
+  margin: 15px auto 20px;
+  padding: 5% 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .participants-profile {
+    width: 70px;
+    height: 70px;
   }
 `;
 
@@ -425,6 +442,15 @@ export const SearchSelectMenuContainer = styled.div`
   .bar {
     width: auto; /* 구분자 크기 조정 */
     padding: 0 5px; /* 좌우 간격 추가 */
+  }
+`;
+
+export const SearchMemberContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  .searched-users-container {
+    height: 88%;
+    overflow-y: auto;
   }
 `;
 

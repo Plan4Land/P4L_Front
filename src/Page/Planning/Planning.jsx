@@ -160,15 +160,16 @@ export const Planning = () => {
     area: "",
     subArea: "",
   });
-  const [plans, setPlans] = useState([]);
+  const [plans, setPlans] = useState([]); ///////////////////////////////////////////
   const [modals, setModals] = useState({
     userModal: false, // 초대된 users 모달 open 여부
     addPlaceModal: false, // 장소 추가 모달 open 여부
     public: false,
     deletePlanning: false,
-    searchUser: false,
+    searchUser: false, // 멤버 초대 모달 open 여부
   });
   const [memoState, setMemoState] = useState({
+    ///////////////////////////////////////////////
     isClicked: [], // 메모마다 open 여부
     isOpened: false, // 현재 열린 메모가 있는지 여부
     updatedMemo: "", // 작성한 메모 내용
@@ -177,9 +178,9 @@ export const Planning = () => {
   const [searchState, setSearchState] = useState({
     keyword: "", // 실시간 입력한 키워드
     submittedKeyword: "", // 검색에 보낼 키워드
-    userKeyword: "",
-    submitUserKeyword: "",
-    searchUsersRst: [],
+    userKeyword: "", // 멤버 초대할때 멤버 검색 키워드
+    submitUserKeyword: "", // 검색에 보낼 멤버 키워드
+    searchUsersRst: [], // 검색한 멤버 정보
   });
   const [travelInfo, setTravelInfo] = useState({
     days: 0, // 여행 기간
@@ -187,9 +188,9 @@ export const Planning = () => {
     arrowDirections: [], // 토글 화살표 클릭 여부
     dayToggle: [], // 토글 열림 여부
   });
-  const [groupPlans, setGroupPlans] = useState({}); // 계획 정렬
+  const [groupPlans, setGroupPlans] = useState({}); // 계획 정렬    /////////////////////////////////////////////////////
   const [selectedPlan, setSelectedPlan] = useState({}); // date, planIndex, plan
-  const [isEditting, setIsEditting] = useState(true);
+  const [isEditting, setIsEditting] = useState(true); //////////////////////////////////////////////////////
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(null);
   const [inputMsg, setInputMsg] = useState(""); // 입력 메시지
@@ -366,7 +367,8 @@ export const Planning = () => {
             <div className="planner-thumbnail">
               <ProfileImg
                 // file={plannerInfo.thumbnail}
-                file={`/img/${plannerInfo.thumbnail}`}
+                // file={`/img/${plannerInfo.thumbnail}`}
+                file={"/img/planning-pic/planningth1.jpg"}
                 // width={"250px"}
                 // height={"250px"}
               />
@@ -420,8 +422,8 @@ export const Planning = () => {
                     <UserProfile
                       key={index}
                       id={participant.id}
-                      nickname={participant.nickname}
-                      profileImg={participant.profileImg}
+                      // nickname={participant.nickname}
+                      // profileImg={participant.profileImg}
                       onClick={() =>
                         setModals((prevModals) => ({
                           ...prevModals,
@@ -430,8 +432,8 @@ export const Planning = () => {
                       }
                     >
                       <img
-                        src={participant.profileImg}
-                        alt="프로필 이미지"
+                        src={`/${participant.memberProfileImg}`}
+                        alt={`/${participant.memberProfileImg}`}
                         style={{
                           width: "100%",
                           height: "100%",

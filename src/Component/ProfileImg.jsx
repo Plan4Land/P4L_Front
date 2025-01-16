@@ -12,7 +12,7 @@ export const ProfileImgContainer = styled.div`
   border-radius: 50%;
   width: ${(props) => props.width || "100%"}; // 기본값 100px
   height: ${(props) => props.height || "100%"}; // 기본값 100px
-  background-color: ${colors.colorB};
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
 
   .upload-label {
     position: absolute;

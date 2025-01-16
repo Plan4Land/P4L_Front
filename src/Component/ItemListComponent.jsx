@@ -23,8 +23,8 @@ const TourItemStyled = styled.div`
     justify-content: center;
   }
   .imgSearch {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -36,8 +36,8 @@ const TourItemStyled = styled.div`
     object-fit: cover;
   }
   .thumbnailSearch {
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    height: 100%;
   }
 
   .infoWrapper {
