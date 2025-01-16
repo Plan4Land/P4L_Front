@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { ServiceCode } from "../Util/Service_code_final";
 
 const TourItemStyled = styled.div`
   width: ${(props) => props.width || "90%"};
@@ -21,11 +22,22 @@ const TourItemStyled = styled.div`
     align-items: center;
     justify-content: center;
   }
+  .imgSearch {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   .thumbnail {
     width: 95%;
     height: 95%;
     object-fit: cover;
+  }
+  .thumbnailSearch {
+    width: 100px;
+    height: 100px;
   }
 
   .infoWrapper {
@@ -34,14 +46,38 @@ const TourItemStyled = styled.div`
     flex-direction: column;
     border-left: 1px solid #ccc;
   }
+  .infoWrapperSearch {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    h3,
+    p {
+      margin: 0;
+    }
+    .titleSearch {
+      font-size: 15px;
+    }
+    .addressSearch {
+      font-size: 12px;
+    }
+  }
 
   .title {
     font-size: 20px;
     font-weight: bold;
   }
+  .titleSearch {
+    font-size: 14px;
+    font-weight: bold;
+  }
 
   .address {
     font-size: 15px;
+    color: #333;
+  }
+  .addressSearch {
+    font-size: 12px;
     color: #333;
   }
 
@@ -165,41 +201,54 @@ export const PlanItem = ({
 };
 
 export const SearchTourItem = ({
-  thumbnail,
-  title,
-  address,
-  subCategory,
-  type,
-  id,
+  data,
   width,
   height,
   margin,
-  onclick,
+  setCurrentAddedPlace,
+  setModals,
 }) => {
-  // const navigate = useNavigate();
-  // const handleOnClick = () => {
-  //   navigate(`/tourItemInfo/${id}`, {
-  //     state: { title, address, subCategory, type, thumbnail },
-  //   });
-  // };
-
   const defaultImage = "/profile-pic/basic7.png";
-  const imageUrl = thumbnail ? thumbnail : defaultImage;
+  const imageUrl = data.thumbnail ? data.thumbnail : defaultImage;
+  const getCategoryPath = () => {
+    const cat1Item = ServiceCode.find((item) => item.cat1 === data.cat1);
+    const cat2Item = cat1Item?.cat2List.find((item) => item.cat2 === data.cat2);
+    const cat3Item = cat2Item?.cat3List.find((item) => item.cat3 === data.cat3);
+
+    return [cat1Item?.cat1Name, cat2Item?.cat2Name, cat3Item?.cat3Name]
+      .filter(Boolean)
+      .join(" > ");
+  };
+  const marker = {
+    position: {
+      lat: data.mapY,
+      lng: data.mapX,
+    },
+    content: data.title,
+    address: data.addr1 || "정보 없음",
+    category: getCategoryPath() || "정보 없음",
+  };
+
+  const handleTourItemClick = () => {
+    setCurrentAddedPlace((prev) => ({
+      ...prev,
+      ...marker,
+    }));
+    setModals((prevModals) => ({ ...prevModals, addPlaceModal: false }));
+  };
   return (
     <TourItemStyled
       width={width}
       height={height}
       margin={margin}
-      onClick={onclick}
+      onClick={() => handleTourItemClick()}
     >
-      <div className="img">
-        <img className="thumbnail" src={imageUrl} alt={title} />
+      <div className="imgSearch">
+        <img className="thumbnailSearch" src={imageUrl} alt={data.title} />
       </div>
-      <div className="infoWrapper">
-        <h3 className="title">{title}</h3>
-        <p className="address">{address}</p>
-        <p className="subCategory">{subCategory}</p>
-        <p className="type">{type}</p>
+      <div className="infoWrapperSearch">
+        <h3 className="titleSearch">{data.title}</h3>
+        <p className="addressSearch">{data.addr1 || "정보 없음"}</p>
       </div>
     </TourItemStyled>
   );

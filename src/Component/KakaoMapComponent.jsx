@@ -343,6 +343,7 @@ export const SearchKakaoMap = ({
     );
     map.setCenter(position);
     setInfo(marker);
+    console.log(marker);
 
     setCurrentAddedPlace((prev) => ({
       ...prev,

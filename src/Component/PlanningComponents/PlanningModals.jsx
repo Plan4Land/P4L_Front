@@ -73,6 +73,7 @@ export const AddPlaceModal = ({
 }) => {
   const { user } = useAuth();
   const [selectedMenu, setSelectedMenu] = useState("장소 검색");
+  const [bookmarkedPlaces, setBookmarkedPlaces] = useState([]);
 
   const handleKeywordInputChange = (e) =>
     setSearchState({ ...searchState, keyword: e.target.value });
@@ -90,10 +91,16 @@ export const AddPlaceModal = ({
     if (selectedMenu === "북마크 관광지") {
       const getBookmaredTourList = async () => {
         const response = await BookmarkedSpotsApi.getBookmarkedSpots(user.id);
-        console.log(response);
+        setBookmarkedPlaces((prevPlaces) => [
+          ...prevPlaces,
+          ...response.content, // response가 배열일 경우
+        ]);
+        console.log(response.content);
       };
 
       getBookmaredTourList();
+    } else {
+      setBookmarkedPlaces([]);
     }
   }, [selectedMenu]);
   return (
@@ -162,13 +169,26 @@ export const AddPlaceModal = ({
             searchKeyword={searchState.submittedKeyword}
             setModals={setModals}
             setCurrentAddedPlace={setCurrentAddedPlace}
-            setPlans={setPlans}
+            // setPlans={setPlans}
           />
         </>
       ) : (
         <div>
           <SearchBookmarkContainer>
-            <SearchTourItem />
+            {bookmarkedPlaces.length > 0 ? (
+              bookmarkedPlaces.map((place, index) => (
+                <SearchTourItem
+                  key={index}
+                  data={place}
+                  width={"93%"}
+                  height={"70px"}
+                  setCurrentAddedPlace={setCurrentAddedPlace}
+                  setModals={setModals}
+                />
+              ))
+            ) : (
+              <p>북마크된 장소가 없습니다.</p> // 북마크된 장소가 없을 때 표시할 메시지
+            )}
           </SearchBookmarkContainer>
         </div>
       )}
