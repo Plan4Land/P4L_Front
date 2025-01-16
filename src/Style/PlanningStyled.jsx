@@ -437,8 +437,8 @@ export const SearchInputContainer = styled.div`
 
 export const SearchBookmarkContainer = styled.div`
   width: 90%;
-  height: 430px;
-  margin: 20px auto 0;
+  height: 385px;
+  margin: 0 auto;
   overflow-y: auto;
   border: 1px solid #ddd;
   padding: 10px;

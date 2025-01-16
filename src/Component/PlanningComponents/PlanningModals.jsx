@@ -14,6 +14,7 @@ import { SearchKakaoMap } from "../KakaoMapComponent";
 import { SearchTourItem } from "../ItemListComponent";
 import { ProfileImg } from "../ProfileImg";
 import PlanningApi from "../../Api/PlanningApi";
+import { BookmarkedSpotsApi } from "../../Api/ItemApi";
 import { useEffect, useState } from "react";
 
 // 플래닝에 초대 수락한 회원들 모달창
@@ -70,6 +71,7 @@ export const AddPlaceModal = ({
   setCurrentAddedPlace,
   setPlans,
 }) => {
+  const { user } = useAuth();
   const [selectedMenu, setSelectedMenu] = useState("장소 검색");
 
   const handleKeywordInputChange = (e) =>
@@ -84,6 +86,15 @@ export const AddPlaceModal = ({
       keyword: "",
       submittedKeyword: "",
     });
+
+    if (selectedMenu === "북마크 관광지") {
+      const getBookmaredTourList = async () => {
+        const response = await BookmarkedSpotsApi.getBookmarkedSpots(user.id);
+        console.log(response);
+      };
+
+      getBookmaredTourList();
+    }
   }, [selectedMenu]);
   return (
     <CloseModal
@@ -116,37 +127,37 @@ export const AddPlaceModal = ({
           북마크 관광지
         </span>
       </SearchSelectMenuContainer>
+      <SearchInputContainer>
+        <input
+          type="text"
+          placeholder="검색어를 입력하세요"
+          value={searchState.keyword}
+          onChange={handleKeywordInputChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleKeywordSearch();
+            }
+          }}
+          style={{
+            width: "80%",
+            height: "25px",
+            fontSize: "14px",
+            padding: "3px",
+          }}
+        />
+        <Button
+          $width={"60px"}
+          $height={"35px"}
+          fontSize={"14px"}
+          padding={"10px 15px"}
+          onClick={handleKeywordSearch}
+        >
+          검색
+        </Button>
+      </SearchInputContainer>
       {selectedMenu === "장소 검색" ? (
         <>
-          <SearchInputContainer>
-            <input
-              type="text"
-              placeholder="검색어를 입력하세요"
-              value={searchState.keyword}
-              onChange={handleKeywordInputChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleKeywordSearch();
-                }
-              }}
-              style={{
-                width: "80%",
-                height: "25px",
-                fontSize: "14px",
-                padding: "3px",
-              }}
-            />
-            <Button
-              $width={"60px"}
-              $height={"35px"}
-              fontSize={"14px"}
-              padding={"10px 15px"}
-              onClick={handleKeywordSearch}
-            >
-              검색
-            </Button>
-          </SearchInputContainer>
           <SearchKakaoMap
             searchKeyword={searchState.submittedKeyword}
             setModals={setModals}
