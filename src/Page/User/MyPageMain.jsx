@@ -21,6 +21,7 @@ import { MyPlannerApi } from "../../Api/ItemApi";
 import PlanningApi from "../../Api/PlanningApi";
 import { areas } from "../../Util/Common";
 import { PlanItem } from "../../Component/ItemListComponent";
+import { MyIncludePlans } from "./MyIncludePlans";
 
 export const MyPageMain = () => {
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
@@ -229,7 +230,7 @@ export const MyPageMain = () => {
               </UserPlanning>
             </UserMain>
           )}
-          {selectedMenu === "내 플래닝"}
+          {selectedMenu === "내 플래닝" && <MyIncludePlans />}
           {selectedMenu === "북마크 관광지" && <MyBookmarkTourItem />}
           {selectedMenu === "북마크 플래닝" && <MyBookmarkPlanItem />}
           {selectedMenu === "내 정보 수정" && <UserInfoValidate />}

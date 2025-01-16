@@ -1,7 +1,7 @@
 import AxiosInstance from "./AxiosInstance";
 
+// 여행지 목록 조회
 export const TravelSpotApi = {
-  // 여행지 리스트 조회
   getTravelSpots: async (filters) => {
     try {
       const params = {
@@ -22,8 +22,8 @@ export const TravelSpotApi = {
   },
 };
 
+// 여행지 상세 정보 조회
 export const TourItemApi = {
-  // 여행지 상세 정보 조회
   getSpotDetails: async (spotId) => {
     try {
       console.log("여기 : ", spotId);
@@ -37,6 +37,7 @@ export const TourItemApi = {
   },
 };
 
+// 관광지 북마크 추가, 삭제, 상태확인
 export const BookmarkApi = {
   addBookmark: async (memberId, spotId) => {
     try {
@@ -50,7 +51,6 @@ export const BookmarkApi = {
     }
   },
 
-  // 북마크 삭제
   removeBookmark: async (memberId, spotId) => {
     try {
       const response = await AxiosInstance.delete("/api/bookmarks/remove", {
@@ -63,7 +63,6 @@ export const BookmarkApi = {
     }
   },
 
-  // 북마크 상태 확인
   getBookmarkStatus: async (memberId, spotId) => {
     try {
       const response = await AxiosInstance.get("/api/bookmarks/status", {
@@ -77,6 +76,7 @@ export const BookmarkApi = {
   },
 };
 
+// 내가 북마크한 관광지 목록 조회
 export const BookmarkedSpotsApi = {
   getBookmarkedSpots: async (memberId, page = 0, size = 3) => {
     try {
@@ -91,14 +91,13 @@ export const BookmarkedSpotsApi = {
   },
 };
 
+// 플래너 목록 조회
 export const PlannerItemApi = {
-  // 플래너 리스트 조회
   getPlanners: async (filters, page = 0, size = 10) => {
     try {
       const params = {
         ...filters, // 필터 추가
       };
-      // API 호출
       const response = await AxiosInstance.get("/planner/planners", { params });
       console.log("API 응답 데이터:", response.data);
       return response.data || [];
@@ -109,6 +108,7 @@ export const PlannerItemApi = {
   },
 };
 
+// 내가 북마크한 플래너 목록 조회
 export const BookmarkedPlanApi = {
   getBookmarkedPlan: async (memberId, page = 0, size = 5) => {
     try {
@@ -126,6 +126,7 @@ export const BookmarkedPlanApi = {
   },
 };
 
+// 상위 5개 관광지 목록
 export const TopTourApi = {
   getTop5Travelspots: async () => {
     try {
@@ -138,6 +139,7 @@ export const TopTourApi = {
   },
 };
 
+// 상위 3개 플래닝 목록
 export const TopPlanApi = {
   getTop3Plans: async () => {
     try {
@@ -150,10 +152,26 @@ export const TopPlanApi = {
   },
 };
 
+// 내가 작성한 플래닝 목록 조회
 export const MyPlannerApi = {
   getPlannersByOwner: async (memberId, page = 0, size = 5) => {
     try {
       const response = await AxiosInstance.get(`/planner/myPlanners`, {
+        params: { memberId, page, size },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("플래너 조회 오류:", error);
+      throw error;
+    }
+  },
+};
+
+// 내가 작성, 포함된 플래닝 목록 조회
+export const InPlannerApi = {
+  getIncludePlan: async (memberId, page = 0, size = 5) => {
+    try {
+      const response = await AxiosInstance.get(`/planner/inPlanners`, {
         params: { memberId, page, size },
       });
       return response.data;
