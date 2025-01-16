@@ -8,6 +8,28 @@ export const List = styled.div`
   margin-bottom: 50px;
 `;
 
+export const Table = styled.table`
+  width: 90vh;
+  border-collapse: collapse;
+  text-align: center;
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+`;
+
+export const TrafficBox = styled.div`
+  display: flex;
+  width: 100%;
+  margin: 20px;
+  margin-bottom: 50px;
+`;
+
 export const SelectTourItem = styled.div`
   width: 450px;
   padding-top: 60px;
