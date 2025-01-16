@@ -132,3 +132,44 @@ export const PlanItem = ({
     </TourItemStyled>
   );
 };
+
+export const SearchTourItem = ({
+  thumbnail,
+  title,
+  address,
+  subCategory,
+  type,
+  id,
+  width,
+  height,
+  margin,
+  onclick,
+}) => {
+  // const navigate = useNavigate();
+  // const handleOnClick = () => {
+  //   navigate(`/tourItemInfo/${id}`, {
+  //     state: { title, address, subCategory, type, thumbnail },
+  //   });
+  // };
+
+  const defaultImage = "/profile-pic/basic7.png";
+  const imageUrl = thumbnail ? thumbnail : defaultImage;
+  return (
+    <TourItemStyled
+      width={width}
+      height={height}
+      margin={margin}
+      onClick={onclick}
+    >
+      <div className="img">
+        <img className="thumbnail" src={imageUrl} alt={title} />
+      </div>
+      <div className="infoWrapper">
+        <h3 className="title">{title}</h3>
+        <p className="address">{address}</p>
+        <p className="subCategory">{subCategory}</p>
+        <p className="type">{type}</p>
+      </div>
+    </TourItemStyled>
+  );
+};

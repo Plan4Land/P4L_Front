@@ -375,14 +375,14 @@ export const SearchKakaoMap = ({
       <div
         style={{
           width: "90%",
-          height: "400px",
+          height: "385px",
           margin: "0 auto",
           overflowY: "auto",
           border: "1px solid #ddd",
           padding: "10px",
         }}
       >
-        <h3 style={{ margin: "10px auto" }}>검색 결과</h3>
+        <h4 style={{ margin: "3px auto" }}>검색 결과</h4>
         <hr />
         <ul style={{ listStyleType: "none", padding: 0 }}>
           {markers.map((marker, index) => (

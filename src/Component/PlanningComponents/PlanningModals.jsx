@@ -3,14 +3,18 @@ import {
   UserProfile,
   SearchedUserContainer,
   SearchedUserHr,
+  SearchSelectMenuContainer,
   SearchInputContainer,
+  SearchBookmarkContainer,
 } from "../../Style/PlanningStyled";
 import { CloseModal, Modal } from "../../Util/Modal";
 import { Button } from "../ButtonComponent";
 import { colors } from "../../Style/GlobalStyle";
 import { SearchKakaoMap } from "../KakaoMapComponent";
+import { SearchTourItem } from "../ItemListComponent";
 import { ProfileImg } from "../ProfileImg";
 import PlanningApi from "../../Api/PlanningApi";
+import { useEffect, useState } from "react";
 
 // 플래닝에 초대 수락한 회원들 모달창
 export const UserModal = ({ plannerInfo, modals, setModals }) => {
@@ -66,12 +70,21 @@ export const AddPlaceModal = ({
   setCurrentAddedPlace,
   setPlans,
 }) => {
+  const [selectedMenu, setSelectedMenu] = useState("장소 검색");
+
   const handleKeywordInputChange = (e) =>
     setSearchState({ ...searchState, keyword: e.target.value });
 
   const handleKeywordSearch = () =>
     setSearchState({ ...searchState, submittedKeyword: searchState.keyword });
 
+  useEffect(() => {
+    setSearchState({
+      ...searchState,
+      keyword: "",
+      submittedKeyword: "",
+    });
+  }, [selectedMenu]);
   return (
     <CloseModal
       isOpen={modals.addPlaceModal}
@@ -84,41 +97,70 @@ export const AddPlaceModal = ({
       contentWidth="400px"
       contentHeight="500px"
     >
-      <SearchInputContainer>
-        <input
-          type="text"
-          placeholder="검색어를 입력하세요"
-          value={searchState.keyword}
-          onChange={handleKeywordInputChange}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              handleKeywordSearch();
-            }
-          }}
-          style={{
-            width: "80%",
-            height: "25px",
-            fontSize: "14px",
-            padding: "3px",
-          }}
-        />
-        <Button
-          $width={"60px"}
-          $height={"35px"}
-          fontSize={"14px"}
-          padding={"10px 15px"}
-          onClick={handleKeywordSearch}
+      <SearchSelectMenuContainer>
+        <span
+          className={`menu-item ${
+            selectedMenu === "장소 검색" ? "selected-menu" : ""
+          }`}
+          onClick={() => setSelectedMenu("장소 검색")}
         >
-          검색
-        </Button>
-      </SearchInputContainer>
-      <SearchKakaoMap
-        searchKeyword={searchState.submittedKeyword}
-        setModals={setModals}
-        setCurrentAddedPlace={setCurrentAddedPlace}
-        setPlans={setPlans}
-      />
+          장소 검색
+        </span>
+        <span className="bar">|</span>
+        <span
+          className={`menu-item ${
+            selectedMenu === "북마크 관광지" ? "selected-menu" : ""
+          }`}
+          onClick={() => setSelectedMenu("북마크 관광지")}
+        >
+          북마크 관광지
+        </span>
+      </SearchSelectMenuContainer>
+      {selectedMenu === "장소 검색" ? (
+        <>
+          <SearchInputContainer>
+            <input
+              type="text"
+              placeholder="검색어를 입력하세요"
+              value={searchState.keyword}
+              onChange={handleKeywordInputChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleKeywordSearch();
+                }
+              }}
+              style={{
+                width: "80%",
+                height: "25px",
+                fontSize: "14px",
+                padding: "3px",
+              }}
+            />
+            <Button
+              $width={"60px"}
+              $height={"35px"}
+              fontSize={"14px"}
+              padding={"10px 15px"}
+              onClick={handleKeywordSearch}
+            >
+              검색
+            </Button>
+          </SearchInputContainer>
+          <SearchKakaoMap
+            searchKeyword={searchState.submittedKeyword}
+            setModals={setModals}
+            setCurrentAddedPlace={setCurrentAddedPlace}
+            setPlans={setPlans}
+          />
+        </>
+      ) : (
+        <div>
+          <SearchBookmarkContainer>
+            <SearchTourItem />
+          </SearchBookmarkContainer>
+        </div>
+      )}
     </CloseModal>
   );
 };

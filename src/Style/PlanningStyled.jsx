@@ -396,11 +396,52 @@ export const DatePickerContainer = styled.div`
   }
 `;
 
+export const SearchSelectMenuContainer = styled.div`
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15%;
+  box-sizing: border-box;
+  margin: 3% 5% 0;
+
+  span {
+    display: inline-block; /* 텍스트 길이에 맞게 크기 조정 */
+    cursor: pointer; /* 클릭 가능 표시 */
+    padding-bottom: 4px; /* 텍스트와 밑줄 간격 */
+  }
+
+  .menu-item {
+    /* 일반 메뉴 스타일 */
+    display: inline-block; /* 텍스트 길이에 맞게 크기 조정 */
+    min-width: 30%;
+    border-bottom: 1px solid transparent;
+  }
+
+  .selected-menu {
+    border-bottom: 1px solid black; /* 선택된 메뉴 밑줄 */
+  }
+
+  .bar {
+    width: auto; /* 구분자 크기 조정 */
+    padding: 0 5px; /* 좌우 간격 추가 */
+  }
+`;
+
 export const SearchInputContainer = styled.div`
   width: 95%;
-  margin: 25px auto 10px;
+  margin: 20px auto 10px;
   display: flex;
   justify-content: space-between;
+`;
+
+export const SearchBookmarkContainer = styled.div`
+  width: 90%;
+  height: 430px;
+  margin: 20px auto 0;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 10px;
 `;
 
 export const DayToggleContainer = styled.div`
