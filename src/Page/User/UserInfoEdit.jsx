@@ -23,6 +23,7 @@ const UserInfoEdit = () => {
   const [nickName, setNickName] = useState("길동이");
   const [email, setEmail] = useState("hong@example.com");
   const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
+  const [userRole, setUserRole] = useState("");
   const [isPicsModalOpen, setIsPicsModalOpen] = useState("");
   const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
   const [checkModalMessage, setCheckModalMessage] = useState("");
@@ -47,6 +48,7 @@ const UserInfoEdit = () => {
         setEmail(response.data.email);
         setNickName(response.data.nickname);
         setCurrentPic(response.data.imgPath);
+        setUserRole(response.data.role);
         console.log(response.data.imgPath);
       } catch (error) {
         console.error("Error during getUserInfo: ", error);
@@ -64,11 +66,15 @@ const UserInfoEdit = () => {
         // 프로필 사진이 새로 추가된 경우 Firebase에 업로드
         let updatedPic  = currentPic;
         if (currentPic && currentPic.startsWith("blob:")) {
+          // Blob URL을 파일로 변환
+          const response = await fetch(currentPic);
+          const blob = await response.blob();
+
           // Firebase Storage 참조
           const storageRef = storage.ref(`/UserProfilePic/${user.id}/`);
-          const fileRef = storageRef.child("profile");
+          const fileRef = storageRef.child("profile.png");
           // 새로운 파일 업로드
-          await fileRef.put(currentPic);
+          await fileRef.put(blob);
           // 업로드된 파일 URL 가져오기
           updatedPic = await fileRef.getDownloadURL();
           console.log("새 파일 업로드 성공:", updatedPic);
@@ -171,7 +177,7 @@ const UserInfoEdit = () => {
           open={isPicsModalOpen}
           close={() => setIsPicsModalOpen(false)}
           onSelect={handlePicSelect}
-          state="edit"
+          state={userRole === "ROLE_MEMBERSHIP" ? "edit" : "new"}
           addPicture={handlePicAdd}
           type="profile"
         />

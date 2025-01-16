@@ -24,12 +24,12 @@ export const ProfilePicModal = (props) => {
   };
 
   const profilePictures = [
-    { name: "basic1.png", alt: "기본1" },
-    { name: "basic3.png", alt: "기본3" },
-    { name: "basic4.png", alt: "기본4" },
-    { name: "basic5.png", alt: "기본5" },
-    { name: "basic6.png", alt: "기본6" },
     { name: "basic7.png", alt: "기본7" },
+    { name: "basic8.png", alt: "기본8" },
+    { name: "basic9.png", alt: "기본9" },
+    { name: "basic10.png", alt: "기본10" },
+    { name: "basic11.png", alt: "기본11" },
+    { name: "basic12.png", alt: "기본12" },
   ];
 
   const planningPictures = [
@@ -63,7 +63,7 @@ export const ProfilePicModal = (props) => {
             <h1 className="title">프로필 선택</h1>
             <div
               className={
-                type === "new" ? "picture-container-new" : "picture-container"
+                state === "new" ? "picture-container-new" : "picture-container"
               }
             >
               {type === "profile" 
