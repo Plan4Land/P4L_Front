@@ -3,7 +3,13 @@ import { UserMenuContainer } from "../Style/UserComponentStyled";
 
 export const UserMenu = ({ setSelectedMenu, selectedMenu }) => {
   const navigate = useNavigate();
-  const links = ["좋아요 관광지", "좋아요 플래닝", "내 정보 수정", "멤버십"];
+  const links = [
+    "내 플래닝",
+    "북마크 관광지",
+    "북마크 플래닝",
+    "내 정보 수정",
+    "멤버십",
+  ];
 
   return (
     <UserMenuContainer>

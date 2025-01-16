@@ -16,7 +16,7 @@ import RequestPayment from "./Page/Payment/RequestPayment";
 import Test from "./Page/test";
 import ProtectedRoute from "./Util/ProtectedRoute";
 import { TourItemInfo } from "./Page/Item/TourItemInfo";
-import KakaoRedirect from "./Component/KakaoLoginRedirect";
+import { KakaoRedirect } from "./Component/KakaoLoginRedirect";
 import { Otheruser } from "./Page/User/Otheruser";
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
               <Route path="/" element={<Main />} />
               <Route path="/planning/:plannerId" element={<Planning />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/login/auth/kakao" element={<KakaoRedirect />} />
+              <Route path="/login/oauth/kakao" element={<KakaoRedirect />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/ktxInquiry" element={<KtxInquiry />} />
               <Route path="/tourlist" element={<TourList />} />
@@ -38,8 +38,7 @@ function App() {
               <Route path="/tourItemInfo/:id" element={<TourItemInfo />} />
               <Route path="/planninglist" element={<PlanningList />} />
               <Route path="/signup/terms" element={<TermsOfService />} />
-              <Route path="/payment" element={<RequestPayment />} />
-              <Route path="/otheruser" element={<Otheruser />} />
+              <Route path="/otheruser/:userId" element={<Otheruser />} />
               <Route path="/test" element={<Test />} />
 
               {/* 로그인 필요한 페이지 */}

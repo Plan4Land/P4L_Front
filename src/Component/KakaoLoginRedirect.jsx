@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export function KakaoRedirect() {
@@ -7,7 +7,11 @@ export function KakaoRedirect() {
   const code = new URL(window.location.href).searchParams.get("code");
 
   useEffect(() => {
-    if (!code) return;
+    if (!code) {
+      console.log("code가 존재하지 않습니다.");
+      return;
+    }
+    console.log("code 파라미터:", code);
     
     // 1. 카카오 토큰 발급
     axios
@@ -40,25 +44,38 @@ export function KakaoRedirect() {
           .then((userResponse) => {
             const kakaoUser = userResponse.data;
             console.log("카카오 사용자 정보:", kakaoUser);
-
             // 3. 백엔드로 사용자 정보 전송
             axios
-              .post("/auth/kakao", {
-                kakao_id: kakaoUser.id,
-              })
+              .post("http://localhost:8111/auth/kakao", 
+                {
+                  kakaoId: kakaoUser.id
+                },
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                  }
+                })
               .then((backendResponse) => {
-                console.log("백엔드 응답:", backendResponse.data);
+                console.log("백엔드 응답:", backendResponse);
 
                 if (backendResponse.data.success) {
                   // 4. 로그인 성공 -> 페이지 이동
-                  navigate("/");
-                } else {
-                  // 4. 로그인 실패 -> 회원가입
-                  navigate("/signup");
+                  setTimeout(() => {
+                    navigate("/");
+                  }, 1000);
                 }
               })
               .catch((error) => {
-                console.error("백엔드 통신 오류:", error);
+                if (error.response && error.response.status === 404 && error.response.data === "회원가입이 필요합니다.") {
+                  console.log("회원가입이 필요합니다. 404 에러 발생");
+          
+                  // 404 에러 시 회원가입 페이지로 이동
+                  setTimeout(() => {
+                    navigate("/signup", { state: { kakao_id: kakaoUser.id, sso: "kakao" } });
+                  }, 1000);
+                } else {
+                  console.error("백엔드 통신 오류:", error);
+                }
               });
           })
           .catch((error) => {
@@ -75,6 +92,6 @@ export function KakaoRedirect() {
       <h1>로그인 중입니다...</h1>
     </div>
   );
-}
+};
 
 export default KakaoRedirect;

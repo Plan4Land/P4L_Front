@@ -10,7 +10,7 @@ export const MyBookmarkTourItem = () => {
   const { user } = useAuth();
   const [bookmarkedSpots, setBookmarkedSpots] = useState([]);
   const [page, setPage] = useState(0);
-  const [size] = useState(5);
+  const [size] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
 
   // 북마크된 여행지 불러오기 함수
@@ -66,7 +66,10 @@ export const MyBookmarkTourItem = () => {
           )}
         </div>
         <div className="pagebutton">
-          <button onClick={() => setPage((prev) => Math.max(prev - 1, 0))}>
+          <button
+            onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+            disabled={page === 0}
+          >
             이전
           </button>
           <button

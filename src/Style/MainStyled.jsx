@@ -127,6 +127,10 @@ export const PlanBox = styled.div`
     border: 1px solid black;
     margin: 10px;
     cursor: pointer;
+    img {
+      /* height: 300px; */
+      min-height: 75%;
+    }
   }
 `;
 //         {/* 축제 미니 캘린더!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}

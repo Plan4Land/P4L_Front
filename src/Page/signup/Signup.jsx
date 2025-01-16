@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import AxiosApi from "../../Api/AxiosApi";
 import emailjs from "emailjs-com";
 
@@ -30,6 +30,8 @@ export const Signup = () => {
   const [inputName, setInputName] = useState("");
   const [inputNickName, setInputNickName] = useState("");
   const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
+
+  
 
   // message
   const [idMsg, setIdMsg] = useState("");
@@ -69,6 +71,17 @@ export const Signup = () => {
   const [allSuccess, setAllSuccess] = useState(false);
 
   const navigate = useNavigate();
+
+  // kakao
+  const location = useLocation();
+  const { kakao_id, sso } = location.state || {};
+  const [kakaoId, setKakaoId] = useState(kakao_id || null);
+  const [ssoState, setSsoState] = useState(sso || null);
+
+  useEffect(() => {
+    setKakaoId(kakao_id || null);
+    setSsoState(sso || null);
+  }, [kakao_id, sso]);
 
   // 아이디 유효성 검사
   const handleIdInput = (e) => {
@@ -311,7 +324,9 @@ export const Signup = () => {
         inputName,
         inputNickName,
         inputEmail,
-        currentPic
+        currentPic,
+        kakao_id || null,
+        ssoState || null,
       );
       if (response.status === 201 || response.status === 200) {
         setCheckModalMessage("회원가입이 완료되었습니다.");
@@ -520,6 +535,9 @@ export const Signup = () => {
               </label>
             </div>
           </div>
+
+          {kakao_id && <input type="hidden" name="kakao_id" value={kakaoId} />}
+          {sso && <input type="hidden" name="sso" value={ssoState} />}
 
           <Button onClick={onClickSignup}>회원가입</Button>
           <Button onClick={() => navigate("/login")}>취소</Button>

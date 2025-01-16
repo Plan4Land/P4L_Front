@@ -6,24 +6,27 @@ import {
   UserName,
   ContentContainer,
   KakaoMapContainer,
-  SearchInputContainer,
 } from "../../Style/PlanningStyled";
-import { KakaoMap, SearchKakaoMap } from "../../Component/KakaoMapComponent";
+import { KakaoMap } from "../../Component/KakaoMapComponent";
 import { PlansComponent } from "../../Component/PlanningComponents/PlansComponent";
 import { ChatComponent } from "../../Component/PlanningComponents/ChatComponent";
 import { useEffect, useRef, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { ProfileImg } from "../../Component/ProfileImg";
 import { Button } from "../../Component/ButtonComponent";
-import { Modal, CloseModal } from "../../Util/Modal";
 import PlanningApi from "../../Api/PlanningApi";
-import { useParams } from "react-router-dom";
+import AxiosApi from "../../Api/AxiosApi";
+import { useNavigate, useParams } from "react-router-dom";
 import { areas } from "../../Util/Common";
-import { AiOutlineMessage } from "react-icons/ai";
-import { FaBookmark, FaRegBookmark } from "react-icons/fa";
-import { LuUserRoundPlus } from "react-icons/lu";
-import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
 import { useAuth } from "../../Context/AuthContext";
+import { MenuIcons } from "../../Component/PlanningComponents/PlanningMenuIcons";
+import {
+  UserModal,
+  AddPlaceModal,
+  SearchUser,
+  SetPublicModal,
+  DeletePlanning,
+} from "../../Component/PlanningComponents/PlanningModals";
 
 // const plannerInfo = {
 //   title: "떠나요~ 두리서~",
@@ -149,6 +152,7 @@ const plansEx = [
 ];
 
 export const Planning = () => {
+  const navigate = useNavigate();
   const { plannerId } = useParams();
   const { user } = useAuth();
   const [plannerInfo, setPlannerInfo] = useState();
@@ -162,7 +166,7 @@ export const Planning = () => {
     addPlaceModal: false, // 장소 추가 모달 open 여부
     public: false,
     deletePlanning: false,
-    addParticipant: false,
+    searchUser: false,
   });
   const [memoState, setMemoState] = useState({
     isClicked: [], // 메모마다 open 여부
@@ -173,6 +177,9 @@ export const Planning = () => {
   const [searchState, setSearchState] = useState({
     keyword: "", // 실시간 입력한 키워드
     submittedKeyword: "", // 검색에 보낼 키워드
+    userKeyword: "",
+    submitUserKeyword: "",
+    searchUsersRst: [],
   });
   const [travelInfo, setTravelInfo] = useState({
     days: 0, // 여행 기간
@@ -191,11 +198,6 @@ export const Planning = () => {
   const [sender, setSender] = useState(""); // 메시지를 보낸 사람
   const ws = useRef(null); // 웹소켓 객체 생성, 소켓 연결 정보를 유지해야 하지만, 렌더링과는 무관
   const [isParticipant, setIsParticipant] = useState(false);
-  const handleInputChange = (e) =>
-    setSearchState({ ...searchState, keyword: e.target.value });
-
-  const handleSearch = () =>
-    setSearchState({ ...searchState, submittedKeyword: searchState.keyword });
 
   const closeMemo = () => {
     if (selectedPlan.date !== undefined) {
@@ -216,23 +218,15 @@ export const Planning = () => {
     setSelectedPlan({});
   };
 
-  const handleBookmarked = async () => {
-    console.log("북마크 상태 : ", isBookmarked);
-    if (isBookmarked) {
-      await PlanningApi.deleteBookmarked(user.id, plannerId);
-    } else {
-      await PlanningApi.putBookmarked(user.id, plannerId);
-    }
-    setIsBookmarked(!isBookmarked);
-  };
-
   // 웹 소켓 연결하기
   useEffect(() => {
     if (plannerInfo) {
       const participant =
         plannerInfo.ownerNickname === user.nickname ||
         plannerInfo.participants.some(
-          (participant) => participant.nickname === user.nickname
+          (participant) =>
+            participant.memberNickname === user.nickname &&
+            participant.state === "ACCEPT"
         );
 
       setIsParticipant(participant);
@@ -284,7 +278,6 @@ export const Planning = () => {
       try {
         const response = await PlanningApi.getIsBookmarked(user.id, plannerId);
         setIsBookmarked(response);
-        console.log("isBookmarked : ", response);
       } catch (e) {
         console.log("북마크 여부 조회 중 에러", e);
       }
@@ -304,6 +297,27 @@ export const Planning = () => {
     setPlans(plansEx);
     setSender(user.nickname);
   }, [plannerId]);
+
+  const fetchMember = async () => {
+    try {
+      const searchMemberRst = await AxiosApi.searchMember(
+        searchState.submitUserKeyword,
+        plannerId
+      );
+      setSearchState((prevState) => ({
+        ...prevState,
+        searchUsersRst: searchMemberRst,
+      }));
+    } catch (error) {
+      console.error("멤버 검색 중 오류 발생: ", error);
+    }
+  };
+
+  useEffect(() => {
+    if (searchState.submitUserKeyword) {
+      fetchMember();
+    }
+  }, [searchState.submitUserKeyword]);
 
   useEffect(() => {
     if (plannerInfo) {
@@ -335,6 +349,13 @@ export const Planning = () => {
   useEffect(() => {
     setSearchState({ keyword: "", submittedKeyword: "" });
   }, [modals.addPlaceModal]);
+  useEffect(() => {
+    setSearchState({
+      userKeyword: "",
+      submitUserKeyword: "",
+      searchUsersRst: [],
+    });
+  }, [modals.searchUser]);
 
   if (plannerInfo) {
     return (
@@ -342,12 +363,14 @@ export const Planning = () => {
         <Header />
         <MainContainer onClick={() => closeMemo()}>
           <Info>
-            <ProfileImg
-              // file={plannerInfo.thumbnail}
-              file={`/img/${plannerInfo.thumbnail}`}
-              width={"250px"}
-              height={"250px"}
-            ></ProfileImg>
+            <div className="planner-thumbnail">
+              <ProfileImg
+                // file={plannerInfo.thumbnail}
+                file={`/img/${plannerInfo.thumbnail}`}
+                // width={"250px"}
+                // height={"250px"}
+              />
+            </div>
             <div>
               <h1>{plannerInfo.title}</h1>
               <h3>
@@ -359,80 +382,16 @@ export const Planning = () => {
                 {new Date(plannerInfo.endDate).toLocaleDateString()}
               </h3>
             </div>
-            <div className="menu-icons">
-              {isBookmarked ? (
-                <FaBookmark
-                  className="menu-icon"
-                  title="북마크"
-                  onClick={() => handleBookmarked()}
-                />
-              ) : (
-                <FaRegBookmark
-                  className="menu-icon"
-                  title="북마크"
-                  onClick={() => handleBookmarked()}
-                />
-              )}
-              {isParticipant && (
-                <>
-                  {plannerInfo.ownerNickname === user.nickname && (
-                    <>
-                      {/* 사용자 추가 아이콘 */}
-                      <LuUserRoundPlus
-                        className="menu-icon"
-                        title="사용자 추가"
-                        onClick={() =>
-                          setModals((prevModals) => ({
-                            ...prevModals,
-                            addParticipant: true,
-                          }))
-                        }
-                      />
-
-                      {/* 공개/비공개 설정 아이콘 */}
-                      {plannerInfo.public ? (
-                        <BiLockOpen
-                          className="menu-icon"
-                          title="공개/비공개"
-                          onClick={() =>
-                            setModals((prevModals) => ({
-                              ...prevModals,
-                              public: true,
-                            }))
-                          }
-                        />
-                      ) : (
-                        <BiLock
-                          className="menu-icon"
-                          title="공개/비공개"
-                          onClick={() =>
-                            setModals((prevModals) => ({
-                              ...prevModals,
-                              public: true,
-                            }))
-                          }
-                        />
-                      )}
-                    </>
-                  )}
-                  <BiTrash
-                    className="menu-icon"
-                    title="플래닝 삭제"
-                    onClick={() =>
-                      setModals((prev) => ({
-                        ...prev,
-                        deletePlanning: true,
-                      }))
-                    }
-                  />
-                  <AiOutlineMessage
-                    className="menu-icon"
-                    title="채팅"
-                    onClick={() => setIsChatOpen(!isChatOpen)}
-                  />
-                </>
-              )}
-            </div>
+            <MenuIcons
+              plannerId={plannerId}
+              plannerInfo={plannerInfo}
+              isBookmarked={isBookmarked}
+              setIsBookmarked={setIsBookmarked}
+              isParticipant={isParticipant}
+              setModals={setModals}
+              isChatOpen={isChatOpen}
+              setIsChatOpen={setIsChatOpen}
+            />
             {isChatOpen && (
               <ChatComponent
                 inputMsg={inputMsg}
@@ -448,36 +407,41 @@ export const Planning = () => {
             )}
           </Info>
           <Users>
-            <UserProfile>
+            <UserProfile
+              onClick={() => navigate(`/otheruser/${plannerInfo.ownerId}`)}
+            >
               <ProfileImg file={plannerInfo.ownerProfileImg} />
             </UserProfile>
             <UserName>{plannerInfo.ownerNickname}</UserName>
             {plannerInfo.participants &&
-              plannerInfo.participants.map((participant, index) => (
-                <UserProfile
-                  key={index}
-                  id={participant.id}
-                  nickname={participant.nickname}
-                  profileImg={participant.profileImg}
-                  onClick={() =>
-                    setModals((prevModals) => ({
-                      ...prevModals,
-                      userModal: true,
-                    }))
-                  }
-                >
-                  <img
-                    src={participant.profileImg}
-                    alt="프로필 이미지"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </UserProfile>
-              ))}
+              plannerInfo.participants.map(
+                (participant, index) =>
+                  participant.state === "ACCEPT" && (
+                    <UserProfile
+                      key={index}
+                      id={participant.id}
+                      nickname={participant.nickname}
+                      profileImg={participant.profileImg}
+                      onClick={() =>
+                        setModals((prevModals) => ({
+                          ...prevModals,
+                          userModal: true,
+                        }))
+                      }
+                    >
+                      <img
+                        src={participant.profileImg}
+                        alt="프로필 이미지"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </UserProfile>
+                  )
+              )}
             {isParticipant && (
               <Button
                 className="edit-button"
@@ -509,144 +473,46 @@ export const Planning = () => {
           </ContentContainer>
         </MainContainer>
         {modals.userModal && (
-          <CloseModal
-            isOpen={modals.userModal}
-            onClose={() =>
-              setModals((prevModals) => ({ ...prevModals, userModal: false }))
-            }
-            contentWidth="400px"
-            // contentHeight="500px"
-            minHeight="200px"
-          >
-            <div>
-              {plannerInfo.participants.map((participant, index) => (
-                <UserProfile
-                  key={index}
-                  id={participant.id}
-                  nickname={participant.nickname}
-                  profileImg={participant.profileImg}
-                  onClick={() =>
-                    setModals((prevModals) => ({
-                      ...prevModals,
-                      userModal: true,
-                    }))
-                  }
-                >
-                  <img
-                    src={participant.profileImg}
-                    alt="프로필 이미지"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: "50%",
-                    }}
-                  />
-                </UserProfile>
-              ))}
-            </div>
-          </CloseModal>
+          <UserModal
+            plannerInfo={plannerInfo}
+            modals={modals}
+            setModals={setModals}
+          />
         )}
         {modals.addPlaceModal && (
-          <CloseModal
-            isOpen={modals.addPlaceModal}
-            onClose={() =>
-              setModals((prevModals) => ({
-                ...prevModals,
-                addPlaceModal: false,
-              }))
-            }
-            contentWidth="400px"
-            contentHeight="500px"
-          >
-            <SearchInputContainer>
-              <input
-                type="text"
-                placeholder="검색어를 입력하세요"
-                value={searchState.keyword}
-                onChange={handleInputChange}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleSearch();
-                  }
-                }}
-                style={{
-                  width: "80%",
-                  height: "25px",
-                  fontSize: "14px",
-                  padding: "3px",
-                }}
-              />
-              <Button
-                $width={"60px"}
-                $height={"35px"}
-                fontSize={"14px"}
-                padding={"10px 15px"}
-                onClick={handleSearch}
-              >
-                검색
-              </Button>
-            </SearchInputContainer>
-            <SearchKakaoMap
-              searchKeyword={searchState.submittedKeyword}
-              setModals={setModals}
-              setCurrentAddedPlace={setCurrentAddedPlace}
-              setPlans={setPlans}
-            />
-          </CloseModal>
+          <AddPlaceModal
+            modals={modals}
+            setModals={setModals}
+            searchState={searchState}
+            setSearchState={setSearchState}
+            setCurrentAddedPlace={setCurrentAddedPlace}
+            setPlans={setPlans}
+          />
         )}
-        {modals.addParticipant && (
-          <CloseModal
-            isOpen={modals.addParticipant}
-            onClose={() =>
-              setModals((prevModals) => ({
-                ...prevModals,
-                addParticipant: false,
-              }))
-            }
-            contentWidth="400px"
-            contentHeight="500px"
-          >
-            <div>
-              <p>사용자 초대하기</p>
-            </div>
-          </CloseModal>
+        {modals.searchUser && (
+          <SearchUser
+            modals={modals}
+            setModals={setModals}
+            searchState={searchState}
+            setSearchState={setSearchState}
+            plannerId={plannerId}
+            fetchMember={fetchMember}
+          />
         )}
         {modals.public && (
-          <Modal
-            isOpen={modals.public}
-            onClose={() => setModals((prev) => ({ ...prev, public: false }))}
-            onConfirm={() => {
-              setPlannerInfo((prevInfo) => ({
-                ...prevInfo,
-                public: !prevInfo.public,
-              }));
-              setModals((prev) => ({ ...prev, public: false }));
-            }}
-          >
-            <p>
-              {plannerInfo.public === true ? "비공개" : "공개"}로
-              전환하시겠습니까?
-            </p>
-          </Modal>
+          <SetPublicModal
+            modals={modals}
+            setModals={setModals}
+            plannerInfo={plannerInfo}
+            setPlannerInfo={setPlannerInfo}
+          />
         )}
         {modals.deletePlanning && (
-          <Modal
-            isOpen={modals.deletePlanning}
-            onClose={() =>
-              setModals((prev) => ({ ...prev, deletePlanning: false }))
-            }
-            onConfirm={() => {
-              setModals((prev) => ({ ...prev, deletePlanning: false }));
-            }}
-          >
-            {plannerInfo.ownerNickname === user.nickname ? (
-              <p>플래닝을 삭제하시겠습니까?</p>
-            ) : (
-              <p>플래닝을 나가시겠습니까?</p>
-            )}
-          </Modal>
+          <DeletePlanning
+            modals={modals}
+            setModals={setModals}
+            plannerInfo={plannerInfo}
+          />
         )}
         <Footer />
       </div>

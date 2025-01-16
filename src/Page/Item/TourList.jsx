@@ -25,6 +25,7 @@ export const TourList = () => {
           bottomTheme: queryParams.get("cat3") || "",
           category: queryParams.get("category") || "",
           searchQuery: queryParams.get("searchQuery") ? decodeURIComponent(queryParams.get("searchQuery")) : "",
+          sortBy: queryParams.get("sort") || "",
           currentPage: parseInt(queryParams.get("currentPage")) || 0,
           pageSize: parseInt(queryParams.get("pageSize")) || 10,
         };
@@ -99,6 +100,7 @@ export const TourList = () => {
             ...prev,
             [key]: value,
             currentPage: 0,
+            sortBy: "",
           };
           if (key === "topTheme") {
             newFilters.middleTheme = "";
@@ -113,6 +115,7 @@ export const TourList = () => {
           const newFilters = {
             ...prev,
             [key]: value,
+            sortBy: "",
           };
           if (key === "topTheme") {
             newFilters.middleTheme = "";
@@ -135,6 +138,7 @@ export const TourList = () => {
         bottomTheme: "",
         category: "",
         searchQuery: "",
+        sortBy: "",
         currentPage: 0,
         pageSize: 10,
       });
@@ -145,6 +149,9 @@ export const TourList = () => {
       updateFilters("currentPage", newPage);
     };
 
+    const handleSortChange = (newSort) => {
+      updateFilters("sortBy", newSort);
+    }
 
     // 검색어
     const handleSearch = () => {

@@ -52,8 +52,33 @@ const PlanningApi = {
   getChatMsgs: async (plannerId) => {
     return (await AxiosInstance.get(`/chat/msg/${plannerId}`)).data;
   },
-  chatDetail: async (plannerId) => {
-    return (await AxiosInstance.get(`/chat/room/${plannerId}`)).data;
+  // chatDetail: async (plannerId) => {
+  //   return (await AxiosInstance.get(`/chat/room/${plannerId}`)).data;
+  // },
+  inviteMember: async (memberId, plannerId) => {
+    const params = {
+      memberId,
+      plannerId,
+    };
+    return await AxiosInstance.post(`/planner/invite`, null, { params });
+  },
+  findInvitedPlanners: async (memberId) => {
+    return (await AxiosInstance.get(`/planner/invite/${memberId}`)).data;
+  },
+  acceptInvitation: async (memberId, plannerId) => {
+    const params = {
+      memberId,
+      plannerId,
+    };
+    return await AxiosInstance.post(`/planner/invite/accept`, null, { params });
+  },
+  rejectInvitation: async (memberId, plannerId) => {
+    console.log(memberId, plannerId);
+    const params = {
+      memberId,
+      plannerId,
+    };
+    return await AxiosInstance.delete(`/planner/invite/reject`, { params });
   },
 };
 

@@ -14,13 +14,33 @@ export const Info = styled.div`
   display: flex;
   box-sizing: border-box;
   position: relative;
-  /* background-color: azure; */
+
   div {
     margin: auto 0 auto 2%;
   }
   h1,
   h3 {
     margin: 3px;
+  }
+
+  .planner-thumbnail {
+    width: 250px;
+    height: 250px;
+    flex-shrink: 0;
+    @media (max-width: 1370px) {
+      width: 200px;
+      height: 200px;
+    }
+
+    @media (max-width: 1160px) {
+      width: 150px;
+      height: 150px;
+    }
+
+    /* @media (max-width: 1060px) {
+      width: 100px;
+      height: 100px;
+    } */
   }
 
   .menu-icons {
@@ -83,6 +103,45 @@ export const UserProfile = styled.div`
   &:hover {
     scale: 1.1;
   }
+`;
+
+export const SearchedUserContainer = styled.div`
+  display: flex;
+  position: relative;
+  align-items: center;
+  width: 90%;
+  margin: 4% auto;
+
+  .searched-user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-left: 5%;
+
+    p {
+      margin: 0;
+    }
+
+    .searched-id {
+      font-size: 12px;
+      color: #555;
+      margin-top: 3%;
+    }
+  }
+
+  .searched-user-invite {
+    display: flex;
+    position: absolute;
+    right: 0;
+    margin: auto 0;
+  }
+`;
+
+export const SearchedUserHr = styled.hr`
+  width: 97%;
+  border: 0;
+  border-top: 1px solid #ccc;
 `;
 
 export const UserName = styled.div`
