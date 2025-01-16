@@ -89,8 +89,8 @@ const UserInfoEdit = () => {
         });
       }
     } catch (e) {
-      console.error("Error during signup: ", e);
-      alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+      console.error("Error during userUpdate: ", e);
+      alert("회원정보 수정중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
