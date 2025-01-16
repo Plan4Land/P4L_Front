@@ -12,12 +12,13 @@ export const Table = styled.table`
   width: 90vh;
   border-collapse: collapse;
   text-align: center;
-  
-  th, td {
+
+  th,
+  td {
     padding: 10px;
     border: 1px solid #ddd;
   }
-  
+
   th {
     background-color: #f4f4f4;
   }
@@ -32,7 +33,7 @@ export const TrafficBox = styled.div`
 
 export const SelectTourItem = styled.div`
   width: 450px;
-  padding-top: 60px;
+  padding-top: 40px;
   left: 20px;
   position: relative;
   button {
@@ -62,7 +63,7 @@ export const SelectTourItem = styled.div`
     color: gray;
     position: absolute;
     top: 10px;
-    right: 60px;
+    right: 30px;
 
     &:hover {
       cursor: pointer;
@@ -81,6 +82,26 @@ export const SelectTourItem = styled.div`
 
   .toggle-button:hover {
     color: ${colors.colorB};
+  }
+  /* SelectTourItem 기본 상태 숨기기 (모바일 화면) */
+  @media (max-width: 768px) {
+    display: none; /* 기본적으로 숨기기 */
+    &.open {
+      display: block; /* .open 클래스가 추가되면 보이게 설정 */
+    }
+    position: absolute;
+    z-index: 10;
+    background-color: white;
+    top: 100px;
+    button {
+      font-size: 10px;
+      width: 80px;
+      height: 30px;
+      padding: 0;
+    }
+    h3 {
+      font-size: 18px;
+    }
   }
 `;
 
