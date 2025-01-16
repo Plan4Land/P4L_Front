@@ -8,6 +8,11 @@ export const MainBox = styled.div`
   gap: 20px; // 상자 간 간격
   margin: 20px;
   height: 1000px;
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    height: 100%;
+  }
 `;
 
 export const GridItem = styled.div`
@@ -185,7 +190,7 @@ export const PlanBox = styled.div`
     }
   }
 `;
-//         {/* 축제 미니 캘린더!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
+//         {/* 미니 캘린더!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const Festive = styled(GridItem)`
   grid-column: span 1;
   display: flex;
