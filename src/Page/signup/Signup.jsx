@@ -8,8 +8,8 @@ import {
   Center,
   SignupContainer,
   InputBox,
-  Button,
 } from "../../Component/SignupComponents/SignupComponent";
+import { Button } from "../../Component/ButtonComponent";
 import { ProfilePicModal } from "../../Component/PictureModalComponent";
 import { CheckModal } from "../../Util/Modal";
 import { EditImg } from "../../Component/ProfileImg";
@@ -30,8 +30,6 @@ export const Signup = () => {
   const [inputName, setInputName] = useState("");
   const [inputNickName, setInputNickName] = useState("");
   const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
-
-  
 
   // message
   const [idMsg, setIdMsg] = useState("");
@@ -540,6 +538,7 @@ export const Signup = () => {
           {sso && <input type="hidden" name="sso" value={ssoState} />}
 
           <Button onClick={onClickSignup}>회원가입</Button>
+          <div style={{margin: "15px"}} />
           <Button onClick={() => navigate("/login")}>취소</Button>
 
           {/* 프로필 사진 모달 */}

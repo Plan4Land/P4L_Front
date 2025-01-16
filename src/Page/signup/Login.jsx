@@ -1,12 +1,17 @@
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Header, Footer } from "../../Component/GlobalComponent";
-import { Center, SignupContainer, InputBox, Button } from "../../Component/SignupComponents/SignupComponent";
-import { FindUserIdModal, ResultUserIdModal, FindPwModal, ResultPwModal } from "../../Component/SignupComponents/SignupModalComponent";
 import AxiosApi from "../../Api/AxiosApi";
+
+// context
 import { useAuth } from "../../Context/AuthContext";
+
+// component
 import Common from "../../Util/Common";
+import { Header, Footer } from "../../Component/GlobalComponent";
+import { Center, SignupContainer, InputBox } from "../../Component/SignupComponents/SignupComponent";
+import { Button } from "../../Component/ButtonComponent";
+import { FindUserIdModal, ResultUserIdModal, FindPwModal, ResultPwModal } from "../../Component/SignupComponents/SignupModalComponent";
 
 // icon
 import { GoLock, GoEye, GoEyeClosed } from "react-icons/go";
@@ -169,13 +174,15 @@ export const Login = () => {
           <Button onClick={onClickLogin}>
             로그인
           </Button>
-
-          <button 
-            className="kakaoBtn"
+          <div style={{margin: "15px"}} />
+          <Button 
             onClick={kakaoLogin}
+            bgcolor={"rgb(255, 255, 0)"}
+            hoverBgColor={"rgb(240, 240, 0)"}
+            border={"1px solid rgb(240, 240, 0)"}
           >
-            카카오 로그인
-          </button>
+            <span style={{color: "rgb(0,0,0)"}}>카카오 로그인</span>
+          </Button>
 
           {/* 아이디 찾기 모달 */}
           <FindUserIdModal

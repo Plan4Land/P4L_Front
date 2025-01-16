@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditStyle";
+import { Center, Container, InputBox } from "../../Style/UserInfoEditStyle";
+import { Button } from "../../Component/ButtonComponent";
 import { useAuth } from "../../Context/AuthContext";
 import AxiosApi from "../../Api/AxiosApi";
 import { CheckModal } from "../../Util/Modal";
@@ -42,7 +43,9 @@ const UserDelete = () => {
         내용보류
 
         <Button 
-          className="red" 
+          bgcolor={"rgb(255, 0, 0)"}
+          hoverBgColor={"rgb(220, 0, 0)"}
+          border={"1px solid rgb(220, 0, 0)"}
           onClick={handleSubmit}
         >
           회원탈퇴

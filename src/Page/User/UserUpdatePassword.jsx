@@ -3,13 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { useAuth } from "../../Context/AuthContext";
 import AxiosApi from "../../Api/AxiosApi";
+// component
 import {
   Center,
   Container,
   InputBox,
-  Button,
 } from "../../Style/UserInfoEditStyle";
+import { Button } from "../../Component/ButtonComponent";
 import { CheckModal } from "../../Util/Modal";
+// icon
 import { IoIosArrowBack } from "react-icons/io";
 
 const UserUpdatePassword = () => {

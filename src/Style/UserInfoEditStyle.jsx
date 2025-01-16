@@ -40,7 +40,7 @@ export const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px 0;
+    margin-bottom: 30px;
 
     .current-pic {
       display: flex;
@@ -110,7 +110,7 @@ export const InputBox = styled.div`
   width: calc(100% - 34px);
   border: 1px solid #ddd;
   padding: 1em;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   &:focus-within {
     border: 1px solid #bbb;
   }

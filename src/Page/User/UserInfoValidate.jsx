@@ -3,7 +3,8 @@ import { useLocation } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import AxiosApi from "../../Api/AxiosApi";
 
-import { Center, Container, InputBox, Button, EditBox } from "../../Style/UserInfoEditStyle";
+import { Center, Container, InputBox, EditBox } from "../../Style/UserInfoEditStyle";
+import { Button } from "../../Component/ButtonComponent";
 
 import UserInfoEdit from "./UserInfoEdit";
 import UserUpdatePassword from "./UserUpdatePassword";

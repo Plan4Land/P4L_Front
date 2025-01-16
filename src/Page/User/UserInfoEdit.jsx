@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AxiosApi from "../../Api/AxiosApi";
 // component
-import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditStyle";
+import { Center, Container, InputBox } from "../../Style/UserInfoEditStyle";
+import { Button } from "../../Component/ButtonComponent";
 import { useAuth } from "../../Context/AuthContext";
 import { storage } from "../../Api/Firebase";
 import { ProfilePicModal } from "../../Component/PictureModalComponent";

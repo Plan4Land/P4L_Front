@@ -21,6 +21,7 @@ const StyledButton = styled.button`
 
   &:hover {
     opacity: 0.8;
+    background-color: ${(props) => props.hoverBgColor};
   }
 
   &:disabled {

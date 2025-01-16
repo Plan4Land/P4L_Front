@@ -2,6 +2,8 @@ import styled, { css } from "styled-components";
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import emailjs from "emailjs-com";
+import { InputBox } from "../../Style/UserInfoEditStyle";
+import { Button } from "../ButtonComponent";
 
 // icon
 import { GoMail, GoPencil } from "react-icons/go";
@@ -9,71 +11,7 @@ import { IoClose } from "react-icons/io5";
 import { VscAccount } from "react-icons/vsc";
 import AxiosApi from "../../Api/AxiosApi";
 
-export const InputBox = styled.div`
-  display: flex;
-  height: 30px;
-  width: calc(100% - 34px);
-  border: 1px solid #ddd;
-  padding: 1em;
-  margin-bottom: 10px;
-  &:focus-within {
-    border: 1px solid #bbb;
-  }
 
-  .inputBox {
-    display: flex;
-    width: 100%;
-
-    &:focus {
-      outline: none;
-      border: none;
-    }
-
-    input {
-      width: 100%;
-      background-color: transparent;
-      outline: none;
-      border: none;
-      font-size: 1em;
-    }
-  }
-
-  .iconBox-left {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    svg {
-      width: 20px;
-      height: 20px;
-    }
-  }
-  .iconBox-right {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 10px;
-    cursor: pointer;
-    svg {
-      width: 20px;
-      height: 20px;
-    }
-  }
-`;
-
-export const Button = styled.button`
-  width: 100%;
-  height: 4em;
-  margin: 10px 0;
-  font-size: 14px;
-  font-weight: 600;
-  background-color: rgb(0, 180, 0);
-  border: none;
-  cursor: pointer;
-  &:hover {
-    background-color: rgb(0, 160, 0);
-  }
-`;
 
 export const ModalStyle = styled.div`
   .modal {
@@ -94,6 +32,8 @@ export const ModalStyle = styled.div`
   }
 
   .modal-container {
+    display: flex;
+    flex-direction: column;
     width: 500px;
     margin: 0 auto;
     padding: 30px;
@@ -253,7 +193,12 @@ export const FindUserIdModal = (props) => {
               </InputBox>
             </div>
             <div className="margin-top50" />
-            <Button onClick={onClickFindUserId}>아이디 찾기</Button>
+            <Button 
+              onClick={onClickFindUserId}
+            >
+              아이디 찾기
+            </Button>
+            
 
             <div className="closeBtn" onClick={handleCloseModal}>
               <IoClose />
@@ -458,20 +403,16 @@ export const FindPwModal = (props) => {
             </div>
             <div className="margin-top50" />
             <Button onClick={onClickFindPw}>비밀번호 찾기</Button>
-            <div style={{ position: "relative", paddingTop: "10px" }}>
-              <p
-                style={{
-                  fontSize: "12px",
-                  color: "red",
-                  margin: 0,
-                  position: "absolute",
-                  top: 0,
-                }}
-              >
-                아이디를 잊어버리셨나요?
-              </p>
-              <Button onClick={onClickFindUserId}>아이디 찾기</Button>
-            </div>
+            <p
+              style={{
+                fontSize: "12px",
+                color: "red",
+                margin: "20px 0 0 0",
+              }}
+            >
+              아이디를 잊어버리셨나요?
+            </p>
+            <Button onClick={onClickFindUserId}>아이디 찾기</Button>
             <div className="closeBtn" onClick={handleCloseModal}>
               <IoClose />
             </div>

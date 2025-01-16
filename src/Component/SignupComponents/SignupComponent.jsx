@@ -57,19 +57,6 @@ export const SignupContainer = styled.div`
     display: flex;
   }
 
-  .kakaoBtn {
-    height: 4em;
-    margin: 10px 0;
-    font-size: 14px;
-    font-weight: 600;
-    background-color: rgb(255, 255, 0);
-    border: none;
-    cursor: pointer;
-    &:hover {
-      background-color: rgb(240, 240, 0);
-    }
-  }
-
   .picture-box {
     display: flex;
     justify-content: center;
