@@ -17,7 +17,7 @@ const AxiosApi = {
   },
   // 로그아웃
   logout: async (userId) => {
-    const member = { id: userId };
+    const member = {id: userId};
     return await AxiosInstance.post("/auth/logout", member);
   },
   // 회원가입
@@ -60,7 +60,7 @@ const AxiosApi = {
     };
     console.log("plannerId type:", typeof plannerId);
     console.log(params);
-    return (await AxiosInstance.get(`/member/search`, { params })).data;
+    return (await AxiosInstance.get(`/member/search`, {params})).data;
   },
   // 회원 정보 수정
   memberUpdate: async (id, name, nickname, email, profileImg) => {
@@ -139,5 +139,31 @@ const AxiosApi = {
       memberInfo
     );
   },
+  // 팔로우 정보 로드
+  loadFollow: async (userId) => {
+    try{
+      const response = await AxiosInstance.get(`/member/follow-info/${userId}`);
+      return response.data;
+    }catch(error){
+      console.log(error);
+      return null;
+    }
+  },
+  // 팔로우/해제
+  follow: async (followerId, followedId, isFollow) => {
+    try {
+      const response = await AxiosInstance.post(`/member/follow/`, null, {
+        params: {
+          followerId: followerId,
+          followedId: followedId,
+          isFollow: isFollow,
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error("팔로우 요청 실패 : ", error);
+      throw error;
+    }
+  }
 };
 export default AxiosApi;
