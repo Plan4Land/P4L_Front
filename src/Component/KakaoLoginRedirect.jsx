@@ -1,10 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import AxiosApi from "../Api/AxiosApi";
+import { useAuth } from "../Context/AuthContext";
 
 export function KakaoRedirect() {
   const navigate = useNavigate();
   const code = new URL(window.location.href).searchParams.get("code");
+  const { login } = useAuth();
 
   useEffect(() => {
     if (!code) {
@@ -57,22 +60,19 @@ export function KakaoRedirect() {
                 })
               .then((backendResponse) => {
                 console.log("백엔드 응답:", backendResponse);
-
-                if (backendResponse.data.success) {
+                
+                if (backendResponse.status === 200) {
                   // 4. 로그인 성공 -> 페이지 이동
-                  setTimeout(() => {
-                    navigate("/");
-                  }, 1000);
+                  loginFront(kakaoUser.id);
+                  navigate("/");
                 }
               })
               .catch((error) => {
-                if (error.response && error.response.status === 404 && error.response.data === "회원가입이 필요합니다.") {
+                if (error.response.status === 404 && error.response.data.message === "회원가입이 필요합니다.") {
                   console.log("회원가입이 필요합니다. 404 에러 발생");
           
                   // 404 에러 시 회원가입 페이지로 이동
-                  setTimeout(() => {
-                    navigate("/signup", { state: { kakao_id: kakaoUser.id, sso: "kakao" } });
-                  }, 1000);
+                  navigate("/signup", { state: { kakao_id: kakaoUser.id, sso: "kakao" } });
                 } else {
                   console.error("백엔드 통신 오류:", error);
                 }
@@ -86,6 +86,11 @@ export function KakaoRedirect() {
         console.error("토큰 발급 실패:", error);
       });
   }, [code, navigate]);
+
+  const loginFront = async (kakaoId) => {
+    const userData = await AxiosApi.memberInfoByKakaoId(kakaoId);
+    login(userData);
+  }
 
   return (
     <div>

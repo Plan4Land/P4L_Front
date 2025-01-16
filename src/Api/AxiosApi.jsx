@@ -48,6 +48,9 @@ const AxiosApi = {
   memberInfo: async (userId) => {
     return await AxiosInstance.get(`/member/${userId}`);
   },
+  memberInfoByKakaoId: async (kakaoId) => {
+    return await AxiosInstance.get(`/member/kakao/${kakaoId}`);
+  },
   // 멤버 검색
   searchMember: async (userKeyword, plannerId) => {
     const params = {
