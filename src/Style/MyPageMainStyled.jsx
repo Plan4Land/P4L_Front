@@ -20,7 +20,7 @@ export const MyPageMainContainer = styled.div`
     left: 150px;
     width: 150px;
     z-index: 1;
-
+    background-color: white;
     border-radius: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   }

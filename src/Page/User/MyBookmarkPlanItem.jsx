@@ -4,6 +4,7 @@ import { BookmarkedPlanApi } from "../../Api/ItemApi";
 import { useAuth } from "../../Context/AuthContext";
 import { areas } from "../../Util/Common";
 import { BookmarkItem } from "../../Style/BookmarkItemStyled";
+import { Pagination } from "../../Component/Pagination";
 
 export const MyBookmarkPlanItem = () => {
   const { user } = useAuth();
@@ -11,7 +12,9 @@ export const MyBookmarkPlanItem = () => {
   const [page, setPage] = useState(0);
   const [size] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
   const fetchBookmarkedPlans = async () => {
     try {
       const data = await BookmarkedPlanApi.getBookmarkedPlan(
@@ -68,20 +71,11 @@ export const MyBookmarkPlanItem = () => {
             <p>북마크된 플래너가 없습니다.</p>
           )}
         </div>
-        <div className="pagebutton">
-          <button
-            onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
-            disabled={page === 0}
-          >
-            이전
-          </button>
-          <button
-            onClick={() => setPage((prev) => prev + 1)}
-            disabled={page + 1 >= totalPages}
-          >
-            다음
-          </button>
-        </div>
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          handlePageChange={handlePageChange}
+        />
       </BookmarkItem>
     </>
   );

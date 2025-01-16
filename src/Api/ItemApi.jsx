@@ -167,6 +167,21 @@ export const MyPlannerApi = {
   },
 };
 
+// 다른 사람이 작성한 플래닝 목록 조회
+export const UserPlannerApi = {
+  getuserPlannersByOwner: async (memberId, page = 0, size = 5) => {
+    try {
+      const response = await AxiosInstance.get(`/planner/userPlanners`, {
+        params: { memberId, page, size },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("플래너 조회 오류:", error);
+      throw error;
+    }
+  },
+};
+
 // 내가 작성, 포함된 플래닝 목록 조회
 export const InPlannerApi = {
   getIncludePlan: async (memberId, page = 0, size = 5) => {

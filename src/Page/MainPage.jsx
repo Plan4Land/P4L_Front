@@ -199,6 +199,7 @@ export const Main = () => {
 
         {/* 상위 플래닝 3개 */}
         <RecommPlan className="GridItem">
+          <h3>----------인기 플래닝----------</h3>
           <PlanBox>
             {topPlans.map((plan, index) => {
               const areaName =

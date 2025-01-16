@@ -9,10 +9,11 @@ import { useState, useEffect } from "react";
 import { CheckModal } from "../../Util/Modal";
 import { Button } from "../../Component/ButtonComponent";
 import { useParams } from "react-router-dom";
-import { MyPlannerApi } from "../../Api/ItemApi";
+import { UserPlannerApi } from "../../Api/ItemApi";
 import { areas } from "../../Util/Common";
 import { PlanItem } from "../../Component/ItemListComponent";
 import AxiosApi from "../../Api/AxiosApi";
+import { Pagination } from "../../Component/Pagination";
 
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useMediaQuery } from "react-responsive";
@@ -30,8 +31,10 @@ export const Otheruser = () => {
   const [followings, setFollowings] = useState(["사용자1", "사용자2"]);
   const [followers, setFollowers] = useState(["사용자4", "사용자5"]);
 
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-
+  const isMobile = useMediaQuery({ query: "(max-width: 454px)" });
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
   const openFollowModal = () => {
     setIsFollowModalOpen(true);
   };
@@ -49,11 +52,12 @@ export const Otheruser = () => {
 
       const currentPage = page;
 
-      const data = await MyPlannerApi.getPlannersByOwner(
+      const data = await UserPlannerApi.getuserPlannersByOwner(
         userId,
         currentPage,
         size
       );
+      console.log(data.content);
 
       // 모바일에서 이전 데이터와 새 데이터의 중복을 피하도록 처리
       if (isMobile) {
@@ -100,6 +104,7 @@ export const Otheruser = () => {
     const fetchUserInfo = async () => {
       try {
         const response = await AxiosApi.memberInfo(userId);
+
         setUserInfo(response.data);
       } catch (error) {
         console.error("유저 정보를 불러오는 데 오류가 발생했습니다:", error);
@@ -185,6 +190,8 @@ export const Otheruser = () => {
                         address={`${areaName} - ${subAreaName}`}
                         subCategory={planner.theme}
                         type={planner.public ? "공개" : "비공개"}
+                        ownerprofile={planner.ownerProfileImg}
+                        ownernick={planner.ownerNickname}
                       />
                     );
                   })}
@@ -212,6 +219,8 @@ export const Otheruser = () => {
                       address={`${areaName} - ${subAreaName}`}
                       subCategory={planner.theme}
                       type={planner.public ? "공개" : "비공개"}
+                      ownerprofile={`/${planner.ownerProfileImg}`}
+                      ownernick={planner.ownerNickname}
                     />
                   );
                 })}
@@ -219,20 +228,11 @@ export const Otheruser = () => {
             )}
           </UserPlanning>
           {!isMobile && (
-            <div className="pagebutton">
-              <button
-                onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
-                disabled={page === 0}
-              >
-                이전
-              </button>
-              <button
-                onClick={() => setPage((prev) => prev + 1)}
-                disabled={page + 1 >= totalPages}
-              >
-                다음
-              </button>
-            </div>
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              handlePageChange={handlePageChange}
+            />
           )}
         </UserMain>
       </div>

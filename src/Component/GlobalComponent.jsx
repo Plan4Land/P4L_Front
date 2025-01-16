@@ -1,15 +1,27 @@
 import { HeaderSt, NavSt, FooterSt } from "../Style/GlobalStyle";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal } from "../Util/Modal";
 import { useAuth } from "../Context/AuthContext";
 import AxiosApi from "../Api/AxiosApi";
+import { TopTourApi, TopPlanApi } from "../Api/ItemApi";
+import { areas } from "../Util/Common";
 
 export const Header = () => {
+  const [topSpots, setTopSpots] = useState([]);
+  const [topPlans, setTopPlans] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const topPlanClick = (id) => {
+    navigate(`/planning/${id}`);
+  };
+  const topTourClick = (id) => {
+    navigate(`/tourItemInfo/${id}`);
+  };
+
   const handleLogout = async () => {
     try {
       const response = await AxiosApi.logout(user.id);
@@ -29,6 +41,23 @@ export const Header = () => {
     const queryMatches = query ? location.search.includes(query) : true;
     return pathnameMatches && queryMatches;
   };
+
+  useEffect(() => {
+    const fetchTopData = async () => {
+      try {
+        const topSpotsData = await TopTourApi.getTop5Travelspots();
+        const topPlansData = await TopPlanApi.getTop3Plans();
+        setTopSpots(topSpotsData.slice(0, 3));
+        setTopPlans(topPlansData.slice(0, 3));
+        console.log("Top 3 Spots Data:", topSpotsData);
+        console.log("Top 3 Plans Data:", topPlansData);
+      } catch (error) {
+        console.error("데이터 가져오기 실패: ", error);
+      }
+    };
+
+    fetchTopData();
+  }, []);
 
   return (
     <HeaderSt>
@@ -60,16 +89,43 @@ export const Header = () => {
         </Link>
       </NavSt>
       <div className="recomm">
-        인기뭐시기
+        인기탭
         <div className="dropdown-list">
-          <ul>
-            <li>인기 관광지 1</li>
-            <li>인기 관광지 2</li>
-            <li>인기 관광지 3</li>
-            <li>인기 플래닝 1</li>
-            <li>인기 플래닝 2</li>
-            <li>인기 플래닝 3</li>
-          </ul>
+          <div className="topList">
+            <div className="topItem">
+              <h3>인기 관광지</h3>
+              {topSpots.map((spot, index) => (
+                <p key={`spot-${index}`} onClick={() => topTourClick(spot.id)}>
+                  <strong>{spot.title}</strong> - {spot.addr1}
+                </p>
+              ))}
+            </div>
+            <div className="topItem">
+              <h3>인기 플래닝</h3>
+              {topPlans.map((plan, index) => {
+                const areaName =
+                  areas.find((area) => area.code === plan.area)?.name ||
+                  "알 수 없는 지역";
+
+                const subAreaName =
+                  areas
+                    .find((area) => area.code === plan.area)
+                    ?.subAreas.find((subArea) => subArea.code === plan.subArea)
+                    ?.name || "알 수 없는 하위 지역";
+
+                return (
+                  <p
+                    key={`plan-${index}`}
+                    onClick={() => topPlanClick(plan.id)}
+                  >
+                    <strong>{plan.title}</strong> - {areaName} {subAreaName}{" "}
+                    <span>||</span>
+                    {plan.theme}
+                  </p>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
       <div className={`profile-link ${user ? "logged-in" : "logged-out"}`}>
