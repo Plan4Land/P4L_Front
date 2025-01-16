@@ -2,6 +2,7 @@ import { MainPlanning, DayToggleContainer } from "../../Style/PlanningStyled";
 import { Button } from "../ButtonComponent";
 import MemoIcon from "../../Img/memo-icon.png";
 import { useEffect } from "react";
+import { useAuth } from "../../Context/AuthContext";
 
 export const PlansComponent = ({
   travelInfo,
@@ -17,7 +18,9 @@ export const PlansComponent = ({
   plannerInfo,
   setModals,
   isEditting,
+  editor,
 }) => {
+  const { user } = useAuth();
   const toggleDay = (index) => {
     setTravelInfo((prev) => ({
       ...prev,
@@ -153,56 +156,59 @@ export const PlansComponent = ({
           </div>
           {travelInfo.dayToggle[index] && (
             <DayToggleContainer>
-              {groupPlans[date]?.map((plan, planIndex) => (
-                <div
-                  key={`${date}-${planIndex}`}
-                  className="plan-place-container"
-                >
-                  <div className="plan-place">
-                    <p className="place-name">
-                      {plan.spotName || plan.content}
-                    </p>
-                    <p className="place-category">{plan.category}</p>
-                  </div>
-                  <div className="memo-container">
-                    <img
-                      className="memo-icon"
-                      src={MemoIcon}
-                      alt="메모"
-                      style={{
-                        cursor: memoState.isOpened ? "default" : "pointer",
-                      }}
-                      onClick={(e) => {
-                        if (memoState.isOpened) {
-                          // e.stopPropagation();
-                          return;
-                        }
-                        setSelectedPlan({ date, planIndex, plan });
-                        handleMemoClick(e, date, planIndex, plan);
-                        e.stopPropagation();
-                      }}
-                    />
-                    {memoState.isClicked[date]?.[planIndex] && (
-                      <div className="memo-input">
-                        <textarea
-                          id="memo"
-                          value={memoState.updatedMemo}
-                          onChange={(e) =>
-                            insertText(e.target.value, date, planIndex)
+              {groupPlans[date] && groupPlans[date].length > 0 ? (
+                groupPlans[date].map((plan, planIndex) => (
+                  <div
+                    key={`${date}-${planIndex}`}
+                    className="plan-place-container"
+                  >
+                    <div className="plan-place">
+                      <p className="place-name">
+                        {plan.spotName || plan.content}
+                      </p>
+                      <p className="place-category">{plan.category}</p>
+                    </div>
+                    <div className="memo-container">
+                      <img
+                        className="memo-icon"
+                        src={MemoIcon}
+                        alt="메모"
+                        style={{
+                          cursor: memoState.isOpened ? "default" : "pointer",
+                        }}
+                        onClick={(e) => {
+                          if (memoState.isOpened) {
+                            return;
                           }
-                          onClick={(e) => {
-                            if (memoState.isOpened) {
-                              e.stopPropagation();
-                              return;
+                          setSelectedPlan({ date, planIndex, plan });
+                          handleMemoClick(e, date, planIndex, plan);
+                          e.stopPropagation();
+                        }}
+                      />
+                      {memoState.isClicked[date]?.[planIndex] && (
+                        <div className="memo-input">
+                          <textarea
+                            id="memo"
+                            value={memoState.updatedMemo}
+                            onChange={(e) =>
+                              insertText(e.target.value, date, planIndex)
                             }
-                          }}
-                        />
-                      </div>
-                    )}
+                            onClick={(e) => {
+                              if (memoState.isOpened) {
+                                e.stopPropagation();
+                                return;
+                              }
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-              {isEditting && (
+                ))
+              ) : (
+                <p className="no-plans">일정이 없습니다.</p>
+              )}
+              {isEditting && editor === user.nickname && (
                 <Button
                   className="add-place-button"
                   $margin="1.5% 0"

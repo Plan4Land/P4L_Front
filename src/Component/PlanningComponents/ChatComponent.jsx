@@ -17,6 +17,9 @@ export const ChatComponent = ({
   setSocketConnected,
   chatList,
   setChatList,
+  setPlans,
+  setIsEditting,
+  setEditor,
 }) => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey && !event.ctrlKey) {
@@ -35,7 +38,7 @@ export const ChatComponent = ({
     // 메시지 전송
     ws.current.send(
       JSON.stringify({
-        type: "TALK",
+        type: "CHAT",
         plannerId: plannerId,
         sender: sender,
         message: inputMsg,
@@ -76,7 +79,7 @@ export const ChatComponent = ({
   // 웹 소켓 연결하기
   useEffect(() => {
     // if (!ws.current) {
-    //   ws.current = new WebSocket("ws://localhost:8111/ws/chat");
+    //   ws.current = new WebSocket("ws://localhost:8111/ws/planner");
     //   ws.current.onopen = () => {
     //     setSocketConnected(true);
     //     console.log("소켓 연결 완료");
@@ -94,7 +97,15 @@ export const ChatComponent = ({
     // }
     ws.current.onmessage = (msg) => {
       const data = JSON.parse(msg.data);
-      setChatList((prev) => [...prev, data]); // 기존의 채팅 리스트에 새로운 메시지 추가
+      console.log("data ::::: ", data);
+      if (data.type === "CHAT") {
+        setChatList((prev) => [...prev, data]); // 기존의 채팅 리스트에 새로운 메시지 추가
+      }
+      // if (data.type === "PLANNER") {
+      //   setPlans(data.data.plans);
+      //   setIsEditting(data.data.isEditting);
+      //   setEditor(data.sender);
+      // }
     };
   }, [socketConnected, sender]);
 

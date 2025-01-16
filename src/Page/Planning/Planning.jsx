@@ -190,7 +190,8 @@ export const Planning = () => {
   });
   const [groupPlans, setGroupPlans] = useState({}); // 계획 정렬    /////////////////////////////////////////////////////
   const [selectedPlan, setSelectedPlan] = useState({}); // date, planIndex, plan
-  const [isEditting, setIsEditting] = useState(true); //////////////////////////////////////////////////////
+  const [isEditting, setIsEditting] = useState(false); //////////////////////////////////////////////////////
+  const [editor, setEditor] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(null);
   const [inputMsg, setInputMsg] = useState(""); // 입력 메시지
@@ -219,6 +220,29 @@ export const Planning = () => {
     setSelectedPlan({});
   };
 
+  const handleOnClickEdit = () => {
+    setIsEditting(!isEditting);
+    if (!isEditting) {
+      // 편집 완료하면
+      setEditor("");
+    }
+
+    const message = {
+      type: "PLANNER",
+      plannerId: plannerId,
+      sender: sender,
+      data: {
+        plans: plans,
+        isEditting: !isEditting,
+      },
+    };
+
+    // 웹소켓 메시지 전송
+    if (ws.current) {
+      ws.current.send(JSON.stringify(message));
+    }
+  };
+
   // 웹 소켓 연결하기
   useEffect(() => {
     if (plannerInfo) {
@@ -233,10 +257,24 @@ export const Planning = () => {
       setIsParticipant(participant);
 
       if (participant && !ws.current) {
-        ws.current = new WebSocket("ws://localhost:8111/ws/chat");
+        ws.current = new WebSocket("ws://localhost:8111/ws/planner");
         ws.current.onopen = () => {
           setSocketConnected(true);
           console.log("소켓 연결 완료");
+        };
+        ws.current.onmessage = (msg) => {
+          const data = JSON.parse(msg.data);
+          console.log("받은 데이터:", data);
+
+          // PLANNER 메시지 타입에 대한 처리
+          if (data.type === "PLANNER") {
+            // 상태 업데이트
+            setPlans(data.data.plans);
+            setIsEditting(data.data.isEditting);
+            setEditor(data.sender);
+          } else if (data.type === "ENTER") {
+            console.log(`${data.sender} 님이 입장했습니다.`);
+          }
         };
       }
     }
@@ -248,7 +286,24 @@ export const Planning = () => {
         console.log("페이지 이동으로 인해 소켓 연결 종료");
       }
     };
-  }, [plannerInfo, user]);
+  }, [plannerInfo, user.nickname]);
+
+  // useEffect(() => {
+  //   console.log("이게 꼐속 실행되는거임????");
+  //   console.log(isEditting, editor);
+  //   if (socketConnected && sender) {
+  //     const message = {
+  //       type: "PLANNER",
+  //       plannerId: plannerId,
+  //       sender: sender,
+  //       data: {
+  //         plans: plans,
+  //         isEditting: isEditting,
+  //       },
+  //     };
+  //     ws.current.send(JSON.stringify(message));
+  //   }
+  // }, [isEditting, plans]);
 
   useEffect(() => {
     // 소켓이 연결된 상태에서 메시지 전송
@@ -393,6 +448,8 @@ export const Planning = () => {
               setModals={setModals}
               isChatOpen={isChatOpen}
               setIsChatOpen={setIsChatOpen}
+              setPlans={setPlans}
+              setIsEditting={setIsEditting}
             />
             {isChatOpen && (
               <ChatComponent
@@ -445,12 +502,28 @@ export const Planning = () => {
                   )
               )}
             {isParticipant && (
-              <Button
-                className="edit-button"
-                onClick={() => setIsEditting(true)}
-              >
-                편집
-              </Button>
+              <>
+                {isEditting && editor === user.nickname ? (
+                  // 수정 완료 버튼
+                  <Button
+                    className="edit-button"
+                    onClick={() => handleOnClickEdit()}
+                  >
+                    수정 완료
+                  </Button>
+                ) : isEditting && editor !== user.nickname ? (
+                  // 다른 사용자가 수정 중이라는 문구
+                  <p className="editing-info">{editor} 님이 수정 중입니다.</p>
+                ) : (
+                  // 기본 편집 버튼
+                  <Button
+                    className="edit-button"
+                    onClick={() => handleOnClickEdit()}
+                  >
+                    편집
+                  </Button>
+                )}
+              </>
             )}
           </Users>
           <ContentContainer>
@@ -468,6 +541,8 @@ export const Planning = () => {
               plannerInfo={plannerInfo}
               setModals={setModals}
               isEditting={isEditting}
+              setEditor={setEditor}
+              editor={editor}
             />
             <KakaoMapContainer>
               <KakaoMap />
