@@ -85,6 +85,23 @@ export const Container = styled.div`
     margin-top: 4px;
     cursor: pointer;
   }
+
+  .back-button {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    position: absolute;
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
 `;
 
 export const InputBox = styled.div`

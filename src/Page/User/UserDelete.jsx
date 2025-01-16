@@ -4,7 +4,7 @@ import { Center, Container, InputBox, Button } from "../../Style/UserInfoEditSty
 import { useAuth } from "../../Context/AuthContext";
 import AxiosApi from "../../Api/AxiosApi";
 import { CheckModal } from "../../Util/Modal";
-
+import { IoIosArrowBack } from "react-icons/io";
 
 const UserDelete = () => {
   const { user, logout } = useAuth();
@@ -30,6 +30,10 @@ const UserDelete = () => {
     navigate("/login");
   };
 
+  const handleBack = () => {
+    window.location.reload();
+  }
+
   return (
     <Center>
       <Container>
@@ -51,6 +55,13 @@ const UserDelete = () => {
           <p>회원 탈퇴가 완료되었습니다.</p>
           <p>이용해주셔서 감사합니다.</p>
         </CheckModal>
+
+        <button 
+          className="back-button"
+          onClick={handleBack}
+        >
+          <IoIosArrowBack />
+        </button>
       </Container>
     </Center>
   );

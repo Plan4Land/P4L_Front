@@ -10,6 +10,7 @@ import {
   Button,
 } from "../../Style/UserInfoEditStyle";
 import { CheckModal } from "../../Util/Modal";
+import { IoIosArrowBack } from "react-icons/io";
 
 const UserUpdatePassword = () => {
   const { user } = useAuth();
@@ -59,6 +60,10 @@ const UserUpdatePassword = () => {
     setIsModalOpen(false);
     navigate("/mypage");
   };
+
+  const handleBack = () => {
+    window.location.reload();
+  }
 
   return (
     <Center>
@@ -110,7 +115,13 @@ const UserUpdatePassword = () => {
         >
           <p>비밀번호가 변경되었습니다.</p>
         </CheckModal>
-
+        
+        <button 
+          className="back-button"
+          onClick={handleBack}
+        >
+          <IoIosArrowBack />
+        </button>
       </Container>
     </Center>
   );

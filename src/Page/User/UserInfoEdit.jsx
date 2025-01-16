@@ -4,8 +4,10 @@ import { ProfilePicModal } from "../../Component/PictureModalComponent";
 import { useAuth } from "../../Context/AuthContext";
 import AxiosApi from "../../Api/AxiosApi";
 import { storage } from "../../Api/Firebase";
+// icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
+import { IoIosArrowBack } from "react-icons/io";
 
 const UserInfoEdit = () => {
   const { user, updateUser } = useAuth();
@@ -92,6 +94,10 @@ const UserInfoEdit = () => {
     }
   };
 
+  const handleBack = () => {
+    window.location.reload();
+  }
+
   return (
     <Center>
       <Container>
@@ -168,6 +174,13 @@ const UserInfoEdit = () => {
           addPicture={handlePicAdd}
           type="profile"
         />
+
+        <button 
+          className="back-button"
+          onClick={handleBack}
+        >
+          <IoIosArrowBack />
+        </button>
       </Container>
     </Center>
   );

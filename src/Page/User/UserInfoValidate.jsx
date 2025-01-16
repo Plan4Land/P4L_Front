@@ -23,6 +23,11 @@ const UserInfoValidate = () => {
   const { user } = useAuth();
   const [userPw, setUserPw] = useState("");
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    setPassValidate(false); // 비밀번호 검증 상태 초기화
+    setSelectedMenu(""); // URL에서 menu 값을 가져와 설정
+  }, []);
   
 
   // 엔터키로 다음
