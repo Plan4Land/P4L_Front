@@ -18,7 +18,7 @@ const UserDelete = () => {
     const response = await AxiosApi.memberDelete(user.id);
     if(response.data) {
       const logout = await AxiosApi.logout(user.id);
-      if(logout.data) {
+      if(logout) {
         setIsModalOpen(true);
       }
     }

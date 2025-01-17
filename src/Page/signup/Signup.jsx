@@ -30,7 +30,7 @@ export const Signup = () => {
   const [inputPw, setInputPw] = useState("");
   const [inputPw2, setInputPw2] = useState("");
   const [inputName, setInputName] = useState("");
-  const [inputNickName, setInputNickName] = useState("");
+  const [inputNickname, setInputNickname] = useState("");
   const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
 
   // message
@@ -40,7 +40,7 @@ export const Signup = () => {
   const [pwMsg, setPwMsg] = useState("");
   const [pw2Msg, setPw2Msg] = useState("");
   const [nameMsg, setNameMsg] = useState("");
-  const [nickNameMsg, setNickNameMsg] = useState("");
+  const [nicknameMsg, setNicknameMsg] = useState("");
 
   // input ref
   const userIdRef = useRef(null);
@@ -49,7 +49,7 @@ export const Signup = () => {
   const pwRef = useRef(null);
   const pw2Ref = useRef(null);
   const nameRef = useRef(null);
-  const nickNameRef = useRef(null);
+  const nicknameRef = useRef(null);
 
   // check
   const [idCheck, setIdCheck] = useState(false);
@@ -248,6 +248,10 @@ export const Signup = () => {
       setNameMsg("이름을 입력해주세요.");
       nameRef.current.focus();
       return false;
+    } else if (input.length < 3) {
+      setNameMsg("이름은 3글자 이상이어야 합니다.");
+      nameRef.current.focus();
+      return false;
     } else {
       setNameMsg("");
       return true;
@@ -257,31 +261,35 @@ export const Signup = () => {
   // 닉네임 유효성 검사
   const handleNicknameInput = (e) => {
     const input = e.target.value;
-    setInputNickName(input);
+    setInputNickname(input);
     if (!input.trim()) {
-      setNickNameMsg("닉네임을 입력해주세요.");
-      nickNameRef.current.focus();
+      setNicknameMsg("닉네임을 입력해주세요.");
+      nicknameRef.current.focus();
+      return false;
+    } else if (input.length < 3) {
+      setNicknameMsg("닉네임은 3글자 이상이어야 합니다.");
+      nicknameRef.current.focus();
       return false;
     } else {
-      setNickNameMsg("");
+      setNicknameMsg("");
       return true;
     }
   };
   useEffect(() => {
     setNicknameCheck(false);
-  }, [inputNickName]);
+  }, [inputNickname]);
   // 닉네임 체크
   const handleNicknameCheck = async () => {
     // 유효성 검사 먼저 수행
-    if (!handleNicknameInput({ target: { value: inputNickName } })) return;
+    if (!handleNicknameInput({ target: { value: inputNickname } })) return;
 
     // 유효성 통과하면 중복 검사 수행
-    const response = await AxiosApi.memberNicknameExists(inputNickName);
+    const response = await AxiosApi.memberNicknameExists(inputNickname);
     if (response.data) {
-      setNickNameMsg("중복된 이메일입니다.");
+      setNicknameMsg("중복된 닉네임입니다.");
       setNicknameCheck(false);
     } else {
-      setNickNameMsg("사용가능한 이메일입니다.");
+      setNicknameMsg("사용가능한 닉네임입니다.");
       setNicknameCheck(true);
     }
   };
@@ -295,7 +303,7 @@ export const Signup = () => {
     const isPw2Valid = handlePw2Input({ target: { value: inputPw2 } });
     const isNameValid = handleNameInput({ target: { value: inputName } });
     const isNicknameValid = handleNicknameInput({
-      target: { value: inputNickName },
+      target: { value: inputNickname },
     });
 
     // 유효성 검사 중 하나라도 실패하면 종료
@@ -322,7 +330,7 @@ export const Signup = () => {
         inputUserId,
         inputPw,
         inputName,
-        inputNickName,
+        inputNickname,
         inputEmail,
         currentPic,
         kakao_id || null,
@@ -358,7 +366,12 @@ export const Signup = () => {
           <h1 className="title">회원가입</h1>
 
           <div className="input-container">
-            <div className="textMessage">{idMsg}</div>
+            <div 
+              className={idCheck 
+                ? "textMessage-true" 
+                : "textMessage"}>
+              {idMsg}
+            </div>
             <div className="inputWrapper">
               <InputBox style={{ width: "360px" }}>
                 <div className="iconBox-left">
@@ -385,7 +398,12 @@ export const Signup = () => {
           </div>
 
           <div className="input-container">
-            <div className="textMessage">{emailMsg}</div>
+            <div 
+              className={emailCheck 
+                ? "textMessage-true" 
+                : "textMessage"}>
+              {emailMsg}
+            </div>
             <div className="inputWrapper">
               <InputBox style={{ width: "360px" }}>
                 <div className="iconBox-left">
@@ -413,7 +431,12 @@ export const Signup = () => {
 
           {isEmail2Show && (
             <div className="input-container">
-              <div className="textMessage">{email2Msg}</div>
+              <div 
+                className={email2Check 
+                  ? "textMessage-true" 
+                  : "textMessage"}>
+                {email2Msg}
+              </div>
               <div className="inputWrapper">
                 <InputBox style={{ width: "360px" }}>
                   <div className="iconBox-left">
@@ -498,7 +521,12 @@ export const Signup = () => {
           </div>
 
           <div className="input-container">
-            <div className="textMessage">{nickNameMsg}</div>
+            <div 
+              className={nicknameCheck 
+                ? "textMessage-true" 
+                : "textMessage"}>
+              {nicknameMsg}
+            </div>
             <div className="inputWrapper">
               <InputBox style={{ width: "360px" }}>
                 <div className="iconBox-left">
@@ -506,10 +534,10 @@ export const Signup = () => {
                 </div>
                 <div className="inputBox">
                   <input
-                    ref={nickNameRef}
+                    ref={nicknameRef}
                     type="text"
                     placeholder="닉네임 입력"
-                    value={inputNickName}
+                    value={inputNickname}
                     onChange={(e) => handleNicknameInput(e)}
                   />
                 </div>

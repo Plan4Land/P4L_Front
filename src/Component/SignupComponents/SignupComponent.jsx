@@ -31,6 +31,12 @@ export const SignupContainer = styled.div`
     color: red;
     font-size: 12px;
   }
+  .textMessage-true {
+    position: absolute;
+    top: 0;
+    color: green;
+    font-size: 12px;
+  }
 
   .inputWrapper {
     display: flex;
