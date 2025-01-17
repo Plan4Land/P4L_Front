@@ -18,6 +18,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import {useMediaQuery} from "react-responsive";
 import {useAuth} from "../../Context/AuthContext";
 import FollowLoad from "../../Component/UserPageComponent/FollowLoad";
+import ReportModal from "../../Component/UserPageComponent/ReportModalComponent";
 
 export const Otheruser = () => {
   const {userId} = useParams();
@@ -33,6 +34,7 @@ export const Otheruser = () => {
   const [followings, setFollowings] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [isFollowed, setIsFollowed] = useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const isMobile = useMediaQuery({query: "(max-width: 454px)"});
@@ -48,6 +50,13 @@ export const Otheruser = () => {
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
   };
+
+  const openReportModal = () => {
+    setIsReportModalOpen(true);
+  }
+  const closeReportModal = () => {
+    setIsReportModalOpen(false);
+  }
 
   const handleFollow = async (follower, followed, isFollow) => {
     const data = await AxiosApi.follow(follower, followed, isFollow);
@@ -101,10 +110,6 @@ export const Otheruser = () => {
     }
   }, [page, isMobile, userId]);
 
-  //
-  // useEffect(() => {
-  //   fetchPlanners();
-  // }, [userId]); // userId가 변경될 때마다 실행
 
 
   useEffect(() => {
@@ -276,6 +281,11 @@ export const Otheruser = () => {
           loginUser={user.id}
         >
         </FollowLoad>
+      </CheckModal>
+
+      <CheckModal isOpen={isReportModalOpen} onClose={closeReportModal}>
+        <ReportModal reporter={user.id} reported={userId}>
+        </ReportModal>
       </CheckModal>
       <Footer/>
     </>
