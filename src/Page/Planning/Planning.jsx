@@ -17,7 +17,7 @@ import { Button } from "../../Component/ButtonComponent";
 import PlanningApi from "../../Api/PlanningApi";
 import AxiosApi from "../../Api/AxiosApi";
 import { useNavigate, useParams } from "react-router-dom";
-import { areas } from "../../Util/Common";
+import { areas, themes } from "../../Util/Common";
 import { useAuth } from "../../Context/AuthContext";
 import { MenuIcons } from "../../Component/PlanningComponents/PlanningMenuIcons";
 import {
@@ -155,7 +155,8 @@ export const Planning = () => {
   const navigate = useNavigate();
   const { plannerId } = useParams();
   const { user } = useAuth();
-  const [plannerInfo, setPlannerInfo] = useState();
+  const [plannerInfo, setPlannerInfo] = useState(null);
+  const [selectedThemes, setSelectedThemes] = useState([]);
   const [areaState, setAreaState] = useState({
     area: "",
     subArea: "",
@@ -220,6 +221,33 @@ export const Planning = () => {
     setSelectedPlan({});
   };
 
+  const handleInfoInputChange = (e) => {
+    const { name, value } = e.target;
+    setPlannerInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const handleThemeClick = (theme) => {
+    if (selectedThemes.includes(theme)) {
+      // Remove theme from selection
+      const updatedThemes = selectedThemes.filter((t) => t !== theme);
+      setSelectedThemes(updatedThemes);
+      setPlannerInfo((prev) => ({
+        ...prev,
+        theme: updatedThemes.join(", "),
+      }));
+    } else if (selectedThemes.length < 3) {
+      // Add theme to selection
+      const updatedThemes = [...selectedThemes, theme];
+      setSelectedThemes(updatedThemes);
+      setPlannerInfo((prev) => ({
+        ...prev,
+        theme: updatedThemes.join(", "),
+      }));
+    }
+  };
+
   const handleOnClickEdit = () => {
     setIsEditting(!isEditting);
     if (!isEditting) {
@@ -241,6 +269,8 @@ export const Planning = () => {
     if (ws.current) {
       ws.current.send(JSON.stringify(message));
     }
+
+    console.log("plannerInfo : ", plannerInfo);
   };
 
   // 웹 소켓 연결하기
@@ -325,6 +355,7 @@ export const Planning = () => {
       try {
         const response = await PlanningApi.getPlanning(plannerId);
         setPlannerInfo(response); // 데이터를 상태에 저장
+        setSelectedThemes(response.theme ? response.theme.split(",") : []);
         console.log("fetchPlanner : ", response);
       } catch (e) {
         console.log("플래너 불러오는 중 에러", e);
@@ -418,53 +449,145 @@ export const Planning = () => {
       <div>
         <Header />
         <MainContainer onClick={() => closeMemo()}>
-          <Info>
-            <div className="planner-thumbnail">
-              <ProfileImg
-                // file={plannerInfo.thumbnail}
-                // file={`/img/${plannerInfo.thumbnail}`}
-                file={"/img/planning-pic/planningth1.jpg"}
-                // width={"250px"}
-                // height={"250px"}
-              />
-            </div>
-            <div>
-              <h1>{plannerInfo.title}</h1>
-              <h3>
-                {areaState.area} {areaState.subArea} / {plannerInfo.theme}
-              </h3>
-              <h3>
-                {new Date(plannerInfo.startDate).toLocaleDateString()}
-                &nbsp;&nbsp;~&nbsp;&nbsp;
-                {new Date(plannerInfo.endDate).toLocaleDateString()}
-              </h3>
-            </div>
-            <MenuIcons
-              plannerId={plannerId}
-              plannerInfo={plannerInfo}
-              isBookmarked={isBookmarked}
-              setIsBookmarked={setIsBookmarked}
-              isParticipant={isParticipant}
-              setModals={setModals}
-              isChatOpen={isChatOpen}
-              setIsChatOpen={setIsChatOpen}
-              setPlans={setPlans}
-              setIsEditting={setIsEditting}
-            />
-            {isChatOpen && (
-              <ChatComponent
-                inputMsg={inputMsg}
-                setInputMsg={setInputMsg}
-                ws={ws}
+          {isEditting && editor === user.nickname ? (
+            <Info>
+              <div className="planner-thumbnail">
+                <ProfileImg
+                  // file={`/img/${plannerInfo.thumbnail}`}
+                  file={"/img/planning-pic/planningth1.jpg"}
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  // name="title"
+                  className="planner-edit-title"
+                  value={plannerInfo.title}
+                  onChange={handleInfoInputChange}
+                />
+                <div className="theme-buttons">
+                  {themes.map((theme) => (
+                    <button
+                      key={theme}
+                      onClick={() => handleThemeClick(theme)}
+                      className={`theme-button ${
+                        selectedThemes.includes(theme) ? "selected" : ""
+                      }`}
+                      disabled={
+                        selectedThemes.length >= 3 &&
+                        !selectedThemes.includes(theme)
+                      }
+                    >
+                      {theme}
+                    </button>
+                  ))}
+                </div>
+                <input
+                  type="text"
+                  name="theme"
+                  value={plannerInfo.theme}
+                  onChange={handleInfoInputChange}
+                />
+                <input
+                  type="date"
+                  name="startDate"
+                  value={plannerInfo.startDate.split("T")[0]}
+                  onChange={(e) =>
+                    handleInfoInputChange({
+                      target: {
+                        name: "startDate",
+                        value: `${e.target.value}T00:00:00`,
+                      },
+                    })
+                  }
+                />
+                <input
+                  type="date"
+                  name="endDate"
+                  value={plannerInfo.endDate.split("T")[0]}
+                  onChange={(e) =>
+                    handleInfoInputChange({
+                      target: {
+                        name: "endDate",
+                        value: `${e.target.value}T00:00:00`,
+                      },
+                    })
+                  }
+                />
+              </div>
+              <MenuIcons
                 plannerId={plannerId}
-                sender={sender}
-                socketConnected={socketConnected}
-                setSocketConnected={setSocketConnected}
-                chatList={chatList}
-                setChatList={setChatList}
+                plannerInfo={plannerInfo}
+                isBookmarked={isBookmarked}
+                setIsBookmarked={setIsBookmarked}
+                isParticipant={isParticipant}
+                setModals={setModals}
+                isChatOpen={isChatOpen}
+                setIsChatOpen={setIsChatOpen}
+                setPlans={setPlans}
+                setIsEditting={setIsEditting}
               />
-            )}
-          </Info>
+              {isChatOpen && (
+                <ChatComponent
+                  inputMsg={inputMsg}
+                  setInputMsg={setInputMsg}
+                  ws={ws}
+                  plannerId={plannerId}
+                  sender={sender}
+                  socketConnected={socketConnected}
+                  setSocketConnected={setSocketConnected}
+                  chatList={chatList}
+                  setChatList={setChatList}
+                />
+              )}
+            </Info>
+          ) : (
+            <Info>
+              <div className="planner-thumbnail">
+                <ProfileImg
+                  // file={`/img/${plannerInfo.thumbnail}`}
+                  file={"/img/planning-pic/planningth1.jpg"}
+                />
+              </div>
+              <div>
+                <h1>{plannerInfo.title}</h1>
+                <h3>
+                  {areaState.area} {areaState.subArea} / {plannerInfo.theme}
+                </h3>
+                <h3>
+                  {new Date(plannerInfo.startDate).toLocaleDateString()}
+                  &nbsp;&nbsp;~&nbsp;&nbsp;
+                  {new Date(plannerInfo.endDate).toLocaleDateString()}
+                </h3>
+              </div>
+              <MenuIcons
+                plannerId={plannerId}
+                plannerInfo={plannerInfo}
+                isBookmarked={isBookmarked}
+                setIsBookmarked={setIsBookmarked}
+                isParticipant={isParticipant}
+                setModals={setModals}
+                isChatOpen={isChatOpen}
+                setIsChatOpen={setIsChatOpen}
+                setPlans={setPlans}
+                setIsEditting={setIsEditting}
+              />
+              {isChatOpen && (
+                <ChatComponent
+                  inputMsg={inputMsg}
+                  setInputMsg={setInputMsg}
+                  ws={ws}
+                  plannerId={plannerId}
+                  sender={sender}
+                  socketConnected={socketConnected}
+                  setSocketConnected={setSocketConnected}
+                  chatList={chatList}
+                  setChatList={setChatList}
+                />
+              )}
+            </Info>
+          )}
+
           <Users>
             <UserProfile
               onClick={() => navigate(`/otheruser/${plannerInfo.ownerId}`)}

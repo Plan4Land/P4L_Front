@@ -36,11 +36,13 @@ export const Info = styled.div`
       width: 150px;
       height: 150px;
     }
-
-    /* @media (max-width: 1060px) {
-      width: 100px;
-      height: 100px;
-    } */
+  }
+  .planner-edit-title {
+    width: 400px;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 1px solid #ccc;
   }
 
   .menu-icons {
