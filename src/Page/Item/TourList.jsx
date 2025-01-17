@@ -7,6 +7,7 @@ import {
   List,
   SearchSt,
   SelectTourItem,
+  FilterButton,
 } from "../../Style/ItemListStyled";
 import { FaSearch, FaUndo } from "react-icons/fa";
 import { ServiceCode } from "../../Util/Service_code_final";
@@ -14,6 +15,7 @@ import { TourItem } from "../../Component/ItemListComponent";
 import { TravelSpotApi } from "../../Api/ItemApi";
 import { areas, types } from "../../Util/Common";
 import { Pagination } from "../../Component/Pagination";
+import { FaBars } from "react-icons/fa";
 
 export const TourList = () => {
   const location = useLocation();
@@ -245,7 +247,9 @@ export const TourList = () => {
   return (
     <>
       <Header />
-      <button onClick={handleToggleSelect}>필터 열기</button>
+      <FilterButton onClick={handleToggleSelect}>
+        <FaBars />
+      </FilterButton>
       <List>
         <SelectTourItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>

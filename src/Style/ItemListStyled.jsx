@@ -92,7 +92,11 @@ export const SelectTourItem = styled.div`
     position: absolute;
     z-index: 10;
     background-color: white;
-    top: 100px;
+    top: 110px;
+    left: 40px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     button {
       font-size: 10px;
       width: 80px;
@@ -104,7 +108,24 @@ export const SelectTourItem = styled.div`
     }
   }
 `;
+export const FilterButton = styled.div`
+  display: none;
 
+  @media (max-width: 768px) {
+    display: block;
+    text-align: center;
+    width: 20px;
+    padding: 10px 0 0 20px;
+    background-color: transparent;
+    color: gray;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+`;
 export const SearchSt = styled.div`
   position: relative;
   flex-grow: 1;

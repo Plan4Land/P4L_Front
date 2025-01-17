@@ -8,11 +8,13 @@ import {
   SearchSt,
   List,
   ItemList,
+  FilterButton,
 } from "../../Style/ItemListStyled";
 import { FaSearch, FaUndo } from "react-icons/fa";
 import { PlannerItemApi } from "../../Api/ItemApi";
 import { PlanItem } from "../../Component/ItemListComponent";
 import { Pagination } from "../../Component/Pagination";
+import { FaBars } from "react-icons/fa";
 
 export const PlanningList = () => {
   const location = useLocation();
@@ -189,7 +191,9 @@ export const PlanningList = () => {
   return (
     <>
       <Header />
-      <button onClick={handleToggleSelect}>필터 열기</button>
+      <FilterButton onClick={handleToggleSelect}>
+        <FaBars />
+      </FilterButton>
       <List>
         <SelectTourItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>
