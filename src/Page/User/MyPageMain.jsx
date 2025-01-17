@@ -261,7 +261,13 @@ export const MyPageMain = () => {
       </MyPageMainContainer>
 
       <CheckModal isOpen={isFollowModalOpen} onClose={closeFollowModal}>
-        <FollowLoad followers={followers} followings={followings}></FollowLoad>
+        <FollowLoad
+          followers={followers}
+          followings={followings}
+          isMyPage={true}
+          loginUser={user.id}
+        >
+        </FollowLoad>
       </CheckModal>
 
       <CloseModal

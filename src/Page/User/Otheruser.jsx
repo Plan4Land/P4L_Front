@@ -92,22 +92,20 @@ export const Otheruser = () => {
   };
 
   useEffect(() => {
-    if (isMobile) {
-      // 모바일에서는 page가 변경될 때만 데이터를 추가
-      fetchPlanners();
-    }
-  }, [page, isMobile]); // page가 변경될 때마다 실행
-
-  useEffect(() => {
     if (!isMobile) {
       // PC에서는 page가 변경될 때마다 데이터를 새로 고침
       fetchPlanners();
+    } else{
+      // 모바일에서는 page가 변경될 때만 데이터를 추가
+      fetchPlanners();
     }
-  }, [page, isMobile]);
+  }, [page, isMobile, userId]);
 
-  useEffect(() => {
-    fetchPlanners();
-  }, [userId]); // userId가 변경될 때마다 실행
+  //
+  // useEffect(() => {
+  //   fetchPlanners();
+  // }, [userId]); // userId가 변경될 때마다 실행
+
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -135,6 +133,10 @@ export const Otheruser = () => {
       fetchUserInfo();
       fetchFollowInfo();
     }
+
+    console.log(user.id ," : ", userId)
+
+    closeFollowModal();
   }, [userId, isFollowed]);
 
   const loadMorePlanners = () => {
@@ -176,17 +178,18 @@ export const Otheruser = () => {
                 </div>
               </div>
             </div>
-            <div className="Button">
-              {isFollowed ? (
-                <Button
-                onClick={() => handleFollow(user.id, userInfo.id, false)}
-              >팔로우 해제</Button>
-              ) : (
-                <Button
-                onClick={() => handleFollow(user.id, userInfo.id, true)}
-              >팔로우</Button>)}
-
-            </div>
+            {(user.id !== userId) && (
+              <div className="Button">
+                {isFollowed ? (
+                  <Button
+                    onClick={() => handleFollow(user.id, userInfo.id, false)}
+                  >팔로우 해제</Button>
+                ) : (
+                  <Button
+                    onClick={() => handleFollow(user.id, userInfo.id, true)}
+                  >팔로우</Button>)}
+              </div>
+            )}
           </UserInfo>
           <UserPlanning>
             {isMobile ? (
@@ -268,7 +271,10 @@ export const Otheruser = () => {
       <CheckModal isOpen={isFollowModalOpen} onClose={closeFollowModal}>
         <FollowLoad
           followers={followers}
-          followings={followings}>
+          followings={followings}
+          isMyPage={false}
+          loginUser={user.id}
+        >
         </FollowLoad>
       </CheckModal>
       <Footer/>
