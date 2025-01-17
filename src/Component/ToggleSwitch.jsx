@@ -1,15 +1,15 @@
 import styled from "styled-components";
+import { colors } from "../Style/GlobalStyle";
 
 const ToggleContainer = styled.div`
   position: relative;
   width: 300px;
   cursor: pointer;
-
   > .toggle-container {
     width: 65px;
     height: 30px;
     border-radius: 30px;
-    background-color: #8b8b8b;
+    background-color: #9e9e9e;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -17,10 +17,10 @@ const ToggleContainer = styled.div`
     /* color: white; */
     font-size: 12px;
     font-weight: bold;
-    transition: 0.2s;
+    transition: 0.5s;
 
     &.toggle--checked {
-      background-color: #98ffaa;
+      background-color: ${colors.colorC};
     }
   }
 

@@ -217,13 +217,26 @@ export const KakaoMapContainer = styled.div`
   background-color: antiquewhite;
 `;
 
+// 플래닝 생성 페이지!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 export const MakePlanningContainer = styled.div`
+  /* width: 50%; */
   min-height: 75vh;
   padding: 0 30vw;
   margin-bottom: 10vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
 
+  .select-option {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s ease;
+  }
+
+  .select-option.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
   .question-title {
     margin-top: 6vh;
     span {
@@ -240,7 +253,7 @@ export const MakePlanningContainer = styled.div`
     border-radius: 5px;
     outline: none;
     transition: border-color 0.3s ease;
-    width: 300px;
+    width: 400px;
     background-color: #f9f9f9;
     cursor: pointer;
   }
@@ -252,19 +265,33 @@ export const MakePlanningContainer = styled.div`
     padding: 10px;
   }
 
+  .theme-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px; /* 버튼 사이 간격 */
+  }
+
   .theme-button {
     padding: 10px 20px;
-    width: 100px;
-    margin: 5px 16px;
+    width: 100%;
+    max-width: 150px;
+    margin: 5px;
     border-radius: 10px;
-    background-color: #fffffa;
+    background-color: white;
     border: 1px solid ${colors.colorB};
     cursor: pointer;
-    transition: background-color 0.08s ease;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: ${colors.colorB};
+      color: white;
+      opacity: 0.7;
+    }
   }
 
   .theme-button.selected {
-    background-color: ${colors.colorD};
+    background-color: ${colors.colorB};
+    color: white;
   }
 
   .theme-button:disabled {
@@ -324,12 +351,12 @@ export const DatePickerContainer = styled.div`
 
   .react-datepicker-popper[data-placement^="bottom"]
     .react-datepicker__triangle {
-    fill: #e1ffb0;
-    color: #e1ffb0;
+    fill: ${colors.colorC};
+    color: ${colors.colorC};
   }
 
   .react-datepicker__header {
-    background-color: #e1ffb0;
+    background-color: ${colors.colorC};
   }
 
   .react-datepicker__navigation-icon::before {
@@ -349,7 +376,7 @@ export const DatePickerContainer = styled.div`
   .react-datepicker__quarter-text--keyboard-selected,
   .react-datepicker__year-text--keyboard-selected {
     border-radius: 0.3rem;
-    background-color: #d5f0a9;
+    background-color: ${colors.colorC};
     color: rgb(0, 0, 0);
   }
 
@@ -377,7 +404,7 @@ export const DatePickerContainer = styled.div`
       .react-datepicker__quarter-text--in-range,
       .react-datepicker__year-text--in-range
     ) {
-    background-color: #d5f0a9;
+    background-color: ${colors.colorC};
   }
   .react-datepicker__day--selected,
   .react-datepicker__day--in-selecting-range,
@@ -392,7 +419,7 @@ export const DatePickerContainer = styled.div`
   .react-datepicker__year-text--in-selecting-range,
   .react-datepicker__year-text--in-range {
     border-radius: 0.3rem;
-    background-color: #d5f0a9;
+    background-color: ${colors.colorC};
     /* color: #fff; */
     color: black;
   }
@@ -400,7 +427,7 @@ export const DatePickerContainer = styled.div`
   .react-datepicker__month-text:not([aria-disabled="true"]):hover,
   .react-datepicker__quater-text:not([aria-disabled="true"]):hover,
   .react-datepicker__year-text:not([aria-disabled="true"]):hover {
-    background-color: #d5f0a9;
+    background-color: ${colors.colorC};
   }
 
   .react-datepicker__day--in-range:not(
@@ -409,7 +436,7 @@ export const DatePickerContainer = styled.div`
       .react-datepicker__quarter-text--in-selecting-range,
       .react-datepicker____year-text--in-selecting-range
     ) {
-    background-color: #d5f0a9;
+    background-color: ${colors.colorC};
   }
 `;
 
