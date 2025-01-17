@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import {
   MakePlanningContainer,
@@ -16,10 +16,6 @@ import PlanningApi from "../../Api/PlanningApi";
 import { useNavigate } from "react-router-dom";
 
 export const MakePlanning = () => {
-  // const [searchKeyword, setSearchKeyword] = useState("");
-  // const handleInputChange = (e) => {
-  //   setSearchKeyword(e.target.value);
-  // };
   const [selectedArea, setSelectedArea] = useState("");
   const [selectedSubArea, setSelectedSubArea] = useState("");
   const [selectedThemes, setSelectedThemes] = useState([]);
@@ -27,13 +23,41 @@ export const MakePlanning = () => {
   const [endDate, setEndDate] = useState(null);
   const [title, setTitle] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
-  // const [imagePreview, setImagePreview] = useState(null);
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [isAreaVisible, setIsAreaVisible] = useState(false);
+  const [isSubAreaVisible, setIsSubAreaVisible] = useState(false);
+  const [isThemeVisible, setIsThemeVisible] = useState(false);
+  const [isDateVisible, setIsDateVisible] = useState(false);
+  const [isTitleVisible, setIsTitleVisible] = useState(false);
+  const [isImageVisible, setIsImageVisible] = useState(false);
   const memberId = JSON.parse(localStorage.getItem("user")).id;
   const navigate = useNavigate();
-  const isStepComplete =
-    selectedSubArea && selectedThemes.length > 0 && endDate && title.trim();
+
+  // 각 상태가 변경될 때마다 해당 컴포넌트를 보이게 함
+  useEffect(() => {
+    if (selectedArea) setIsAreaVisible(true);
+  }, [selectedArea]);
+
+  useEffect(() => {
+    if (selectedSubArea) setIsSubAreaVisible(true);
+  }, [selectedSubArea]);
+
+  useEffect(() => {
+    if (selectedThemes.length > 0) setIsThemeVisible(true);
+  }, [selectedThemes]);
+
+  useEffect(() => {
+    if (startDate && endDate) setIsDateVisible(true);
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    if (title.trim()) setIsTitleVisible(true);
+  }, [title]);
+
+  useEffect(() => {
+    if (selectedImage) setIsImageVisible(true);
+  }, [selectedImage]);
 
   const handleAreaChange = (e) => {
     setSelectedArea(e.target.value);
@@ -45,10 +69,8 @@ export const MakePlanning = () => {
   const handleThemeClick = (theme) => {
     setSelectedThemes((prev) => {
       if (prev.includes(theme)) {
-        // 이미 선택된 테마를 클릭하면 취소
         return prev.filter((t) => t !== theme);
       } else {
-        // 새로운 테마를 선택하고, 최대 3개까지 선택
         return [...prev, theme].slice(0, 3);
       }
     });
@@ -57,18 +79,11 @@ export const MakePlanning = () => {
   const handleStartDateChange = (date) => {
     setStartDate(date);
     if (endDate && date > endDate) {
-      setEndDate(null); // 종료일을 초기화
+      setEndDate(null);
     }
   };
-
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setSelectedImage(file);
-  //     setImagePreview(URL.createObjectURL(file));
-  //   }
-  // };
-
+  const isStepComplete =
+    selectedSubArea && selectedThemes.length > 0 && endDate && title.trim();
   const handleSubmit = async () => {
     const areaCode = areas.find((area) => area.name === selectedArea)?.code;
     const subAreaCode = areas
@@ -100,6 +115,7 @@ export const MakePlanning = () => {
     <>
       <Header />
       <MakePlanningContainer>
+        {/* 지역 선택 */}
         <h2 className="question-title">어디로 가시나요?</h2>
         <select
           value={selectedArea}
@@ -113,127 +129,148 @@ export const MakePlanning = () => {
             </option>
           ))}
         </select>
-        {selectedAreaData && (
-          <select
-            value={selectedSubArea}
-            onChange={(e) => setSelectedSubArea(e.target.value)}
-            className="location-select"
-          >
-            <option value="">세부 지역을 선택하세요</option>
-            {selectedArea &&
-              selectedAreaData.subAreas.map((subArea) => (
-                <option key={subArea.code} value={subArea.name}>
-                  {subArea.name}
-                </option>
-              ))}
-          </select>
-        )}
-        {selectedSubArea && (
-          <>
-            <h2 className="question-title">
-              여행 테마 선택<span>(최대 3개)</span>
-            </h2>
-            <div className="theme-buttons">
-              {themes.map((theme) => (
-                <button
-                  key={theme}
-                  onClick={() => handleThemeClick(theme)}
-                  className={`theme-button ${
-                    selectedThemes.includes(theme) ? "selected" : ""
-                  }`}
-                  disabled={
-                    selectedThemes.length >= 3 &&
-                    !selectedThemes.includes(theme)
-                  }
-                >
-                  {theme}
-                </button>
-              ))}
-            </div>
-          </>
-        )}
-        {selectedSubArea && selectedThemes.length > 0 && (
-          <>
-            <h2 className="question-title">언제 가시나요?</h2>
-            <DatePickerContainer>
-              <DatePicker
-                className="input-date-picker"
-                locale={ko}
-                dateFormat="yyyy-MM-dd"
-                dateFormatCalendar="yyyy년 MM월"
-                timeCaption="시간"
-                selected={startDate}
-                onChange={handleStartDateChange}
-                selectsStart
-                startDate={startDate}
-                endDate={endDate}
-                minDate={new Date()}
-                placeholderText="시작일 선택"
-              />
-              <span>~</span>
-              {startDate ? (
+
+        {/* 세부 지역 선택 */}
+        <div className={`select-option ${isAreaVisible ? "visible" : ""}`}>
+          {selectedAreaData && (
+            <select
+              value={selectedSubArea}
+              onChange={(e) => setSelectedSubArea(e.target.value)}
+              className="location-select"
+            >
+              <option value="">세부 지역을 선택하세요</option>
+              {selectedArea &&
+                selectedAreaData.subAreas.map((subArea) => (
+                  <option key={subArea.code} value={subArea.name}>
+                    {subArea.name}
+                  </option>
+                ))}
+            </select>
+          )}
+        </div>
+
+        {/* 테마 선택 */}
+        <div className={`select-option ${isSubAreaVisible ? "visible" : ""}`}>
+          {selectedSubArea && (
+            <>
+              <h2 className="question-title">
+                여행 테마 선택<span>(최대 3개)</span>
+              </h2>
+
+              <div className="theme-buttons">
+                {themes.map((theme) => (
+                  <button
+                    key={theme}
+                    onClick={() => handleThemeClick(theme)}
+                    className={`theme-button ${
+                      selectedThemes.includes(theme) ? "selected" : ""
+                    }`}
+                    disabled={
+                      selectedThemes.length >= 3 &&
+                      !selectedThemes.includes(theme)
+                    }
+                  >
+                    {theme}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* 날짜 선택 */}
+        <div className={`select-option ${isThemeVisible ? "visible" : ""}`}>
+          {selectedSubArea && selectedThemes.length > 0 && (
+            <>
+              <h2 className="question-title">언제 가시나요?</h2>
+              <DatePickerContainer>
                 <DatePicker
                   className="input-date-picker"
                   locale={ko}
                   dateFormat="yyyy-MM-dd"
                   dateFormatCalendar="yyyy년 MM월"
                   timeCaption="시간"
-                  selected={endDate}
-                  onChange={(date) => setEndDate(date)}
-                  selectsEnd
+                  selected={startDate}
+                  onChange={handleStartDateChange}
+                  selectsStart
                   startDate={startDate}
                   endDate={endDate}
-                  minDate={startDate}
-                  placeholderText="종료일 선택"
+                  minDate={new Date()}
+                  placeholderText="시작일 선택"
                 />
-              ) : (
-                <input
-                  className="input-date-picker"
-                  placeholder="종료일 선택"
-                  onClick={() => setOpenModal(true)}
-                />
-              )}
-            </DatePickerContainer>
-          </>
-        )}
-        {selectedSubArea && selectedThemes.length > 0 && endDate && (
-          <>
-            <h2 className="question-title">플래닝 제목 입력</h2>
-            <input
-              type="text"
-              placeholder="플래닝 제목을 입력하세요"
-              className="title-input"
-              value={title}
-              onChange={(e) => setTitle(e.target.value.replace(/^\s+/, ""))}
-            />
-          </>
-        )}
+                <span>~</span>
+                {startDate ? (
+                  <DatePicker
+                    className="input-date-picker"
+                    locale={ko}
+                    dateFormat="yyyy-MM-dd"
+                    dateFormatCalendar="yyyy년 MM월"
+                    timeCaption="시간"
+                    selected={endDate}
+                    onChange={(date) => setEndDate(date)}
+                    selectsEnd
+                    startDate={startDate}
+                    endDate={endDate}
+                    minDate={startDate}
+                    placeholderText="종료일 선택"
+                  />
+                ) : (
+                  <input
+                    className="input-date-picker"
+                    placeholder="종료일 선택"
+                    onClick={() => setOpenModal(true)}
+                  />
+                )}
+              </DatePickerContainer>
+            </>
+          )}
+        </div>
 
-        {isStepComplete && (
-          <>
-            <h2 className="question-title">플래닝 사진</h2>
-            <div className="profile-container">
-              <EditImg
-                basic={"/img/planning_thumbnail.jpg"}
-                setSelectedImage={setSelectedImage}
-                // imagePreview={imagePreview}
-                // setImagePreview={setImagePreview}
-                // handleImageChange={handleImageChange}
+        {/* 제목 입력 */}
+        <div className={`select-option ${isDateVisible ? "visible" : ""}`}>
+          {selectedSubArea && selectedThemes.length > 0 && endDate && (
+            <>
+              <h2 className="question-title">플래닝 제목 입력</h2>
+              <input
+                type="text"
+                placeholder="플래닝 제목을 입력하세요"
+                className="title-input"
+                value={title}
+                onChange={(e) => setTitle(e.target.value.replace(/^\s+/, ""))}
               />
-            </div>
-            <h2 className="question-title">공개 여부</h2>
-            <ToggleSwitch setIsOn={setIsPublic} isOn={isPublic} />
-          </>
-        )}
-        {isStepComplete && (
-          <Button
-            onClick={() => handleSubmit()}
-            $margin={"40px auto 0"}
-            $width={"150px"}
-          >
-            생성하기
-          </Button>
-        )}
+            </>
+          )}
+        </div>
+
+        {/* 이미지 선택 */}
+        <div className={`select-option ${isTitleVisible ? "visible" : ""}`}>
+          {isStepComplete && (
+            <>
+              <h2 className="question-title">플래닝 사진</h2>
+              <div className="profile-container">
+                <EditImg
+                  basic={"/img/planning_thumbnail.jpg"}
+                  setSelectedImage={setSelectedImage}
+                />
+              </div>
+              <h2 className="question-title">공개 여부</h2>
+              <ToggleSwitch setIsOn={setIsPublic} isOn={isPublic} />
+            </>
+          )}
+        </div>
+
+        {/* 생성하기 버튼 */}
+        <div className={`select-option ${isStepComplete ? "visible" : ""}`}>
+          {isStepComplete && (
+            <Button
+              onClick={() => handleSubmit()}
+              $margin={"40px auto 0"}
+              $width={"150px"}
+            >
+              생성하기
+            </Button>
+          )}
+        </div>
       </MakePlanningContainer>
       {openModal && (
         <CheckModal

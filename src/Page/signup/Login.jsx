@@ -167,7 +167,7 @@ export const Login = () => {
               <p onClick={()=>openModal(setPwModalOpen, true)}>비밀번호 찾기</p>
             </div>
             <div className="linkBox-right">
-              <p onClick={()=>navigate("/signup")}>회원가입</p>
+              <p onClick={()=>navigate("/signup/terms")}>회원가입</p>
             </div>
           </div>
 

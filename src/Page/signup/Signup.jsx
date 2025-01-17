@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import AxiosApi from "../../Api/AxiosApi";
 import emailjs from "emailjs-com";
 
+// component
 import { Header, Footer } from "../../Component/GlobalComponent";
 import {
   Center,
@@ -13,6 +14,7 @@ import { Button } from "../../Component/ButtonComponent";
 import { ProfilePicModal } from "../../Component/PictureModalComponent";
 import { CheckModal } from "../../Util/Modal";
 import { EditImg } from "../../Component/ProfileImg";
+import { PictureComponent } from "../../Component/PictureCommponent";
 
 // icon
 import { VscAccount } from "react-icons/vsc";
@@ -522,17 +524,11 @@ export const Signup = () => {
             </div>
           </div>
 
-          <div className="picture-box">
-            <div
-              className="current-pic"
-              onClick={() => setIsPicsModalOpen(true)}
-            >
-              <img src={currentPic} alt="프로필 이미지" />
-              <label htmlFor="profile-upload" className="upload-label">
-                <FontAwesomeIcon icon={faCamera} />
-              </label>
-            </div>
-          </div>
+          {/* 프로필 사진 */}
+          <PictureComponent 
+            currentPic={currentPic}
+            setCurrentPic={setCurrentPic}
+          />
 
           {kakao_id && <input type="hidden" name="kakao_id" value={kakaoId} />}
           {sso && <input type="hidden" name="sso" value={ssoState} />}
@@ -540,15 +536,6 @@ export const Signup = () => {
           <Button onClick={onClickSignup}>회원가입</Button>
           <div style={{margin: "15px"}} />
           <Button onClick={() => navigate("/login")}>취소</Button>
-
-          {/* 프로필 사진 모달 */}
-          <ProfilePicModal
-            open={isPicsModalOpen}
-            close={() => setIsPicsModalOpen(false)}
-            onSelect={handlePicSelect}
-            state="new"
-            type="profile"
-          />
 
           {/* 완료 모달 */}
           <CheckModal isOpen={isCheckModalOpen} onClose={closeCheckModal}>
