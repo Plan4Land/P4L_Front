@@ -8,7 +8,6 @@ import {
   UserMain,
   UserInfo,
   UserPlanning,
-  FollowList,
   InvitePlanning,
 } from "../../Style/MyPageMainStyled";
 import UserInfoValidate from "./UserInfoValidate";
@@ -23,6 +22,8 @@ import { areas } from "../../Util/Common";
 import { PlanItem } from "../../Component/ItemListComponent";
 import { MyIncludePlans } from "./MyIncludePlans";
 import { Pagination } from "../../Component/Pagination";
+import AxiosApi from "../../Api/AxiosApi";
+import FollowLoad from "../../Component/UserPageComponent/FollowLoad";
 
 export const MyPageMain = () => {
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
@@ -36,14 +37,16 @@ export const MyPageMain = () => {
   const navigate = useNavigate();
   const [totalPages, setTotalPages] = useState(0);
 
-  const [followings, setFollowings] = useState(["사용자1", "사용자2"]);
-  const [followers, setFollowers] = useState(["사용자4", "사용자5"]);
+  const [followings, setFollowings] = useState([]);
+  const [followers, setFollowers] = useState([]);
   const { user } = useAuth();
   const [invitedPlannings, setInvitedPlannings] = useState([]);
-  // const [invitedPlannings, setInvitedPlannings] = useState([
-  //   { title: "전주 여행", owner: "aaa" },
-  //   { title: "대전 여행", owner: "bbb" },
-  // ]);
+
+
+  const handleFollow = async (follower, followed, isFollow) => {
+    const data = await AxiosApi.follow(follower, followed, isFollow);
+  }
+
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
@@ -100,7 +103,19 @@ export const MyPageMain = () => {
       navigate("/mypage", { replace: true });
     }
 
+    const fetchFollowInfo = async () => {
+      try {
+        const data = await AxiosApi.loadFollow(user.id);
+        setFollowings(data.followingInfo);
+        setFollowers(data.followerInfo)
+        console.log(data.followerInfo)
+      } catch (error) {
+        console.error("팔로워 정보를 불러오는데 오류가 발생했습니다.", error);
+      }
+    }
+
     fetchInvites();
+    fetchFollowInfo();
   }, [selectedMenu, navigate]);
 
   const fetchPlanners = async (reset = false) => {
@@ -163,7 +178,7 @@ export const MyPageMain = () => {
                     <p>닉네임: {user.nickname}</p>
                     <p>아이디: {user.id}</p>
                     <div className="follow" onClick={openFollowModal}>
-                      <p>팔로잉: 숫자 팔로워: 숫자</p>
+                      <p>팔로잉: {followings.length} 팔로워: {followers.length}</p>
                     </div>
                   </div>
                 </div>
@@ -235,43 +250,10 @@ export const MyPageMain = () => {
       </MyPageMainContainer>
 
       <CheckModal isOpen={isFollowModalOpen} onClose={closeFollowModal}>
-        <FollowList>
-          <div className="tabs">
-            <button
-              onClick={() => handleTabClick("followings")}
-              className={selectedTab === "followings" ? "active" : ""}
-            >
-              팔로잉
-            </button>
-            <button
-              onClick={() => handleTabClick("followers")}
-              className={selectedTab === "followers" ? "active" : ""}
-            >
-              팔로워
-            </button>
-          </div>
-          <div className="tab-content">
-            {selectedTab === "followings" && (
-              <div className="list">
-                {followings.map((following, index) => (
-                  <div key={index} className="list-item">
-                    {following}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {selectedTab === "followers" && (
-              <div className="list">
-                {followers.map((follower, index) => (
-                  <div key={index} className="list-item">
-                    {follower}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </FollowList>
+        <FollowLoad
+          followers={followers}
+          followings={followings}>
+        </FollowLoad>
       </CheckModal>
 
       <CloseModal
