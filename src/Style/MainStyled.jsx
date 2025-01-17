@@ -16,7 +16,6 @@ export const MainBox = styled.div`
 
 export const GridItem = styled.div`
   display: flex;
-  /* border: 1px solid black; */
   height: 100%;
 `;
 //         {/* 미니 검색창!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
@@ -39,7 +38,7 @@ export const QuickSearch = styled(GridItem)`
       margin: 0 20px 20px;
       transition: all 0.3s ease;
       font-size: 16px;
-      color: #17520b;
+      color: ${colors.colorA};
       &:hover {
         opacity: 0.7;
       }
@@ -165,6 +164,9 @@ export const RecommItem = styled(GridItem)`
   .swiper-pagination-bullet-active {
     background-color: #0d5231; /* 활성화된 페이지 점 색상 (빨간색) */
   }
+  @media (max-width: 768px) {
+    height: 350px;
+  }
 `;
 
 //         {/* 상위 플래닝 3개!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
@@ -195,6 +197,9 @@ export const PlanBox = styled.div`
       min-height: 75%;
     }
   }
+  @media (max-width: 768px) {
+    height: 300px;
+  }
 `;
 //         {/* 미니 캘린더!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const Festive = styled(GridItem)`
@@ -223,10 +228,6 @@ export const Festive = styled(GridItem)`
 
   .react-calendar__tile--now {
     background: ${colors.colorD} !important;
-    border-radius: 50% !important;
-    color: white;
-    font-weight: bold;
-    padding: 0;
   }
 
   .red-dot {

@@ -15,7 +15,6 @@ export const TourItemInfoBox = styled.div`
     margin: auto;
     border-radius: 10px;
   }
-
   .tour-details {
     padding: 30px;
     position: relative;
@@ -40,5 +39,7 @@ export const TourItemInfoBox = styled.div`
     width: 100%;
     height: 500px;
     border: 1px solid black;
+  }
+  @media (max-width: 768px) {
   }
 `;
