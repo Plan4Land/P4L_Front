@@ -187,6 +187,15 @@ export const NavSt = styled.div`
     color: ${colors.colorA};
     margin: -10px;
   }
+  @media (max-width: 768px) {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    font-size: 12px;
+    z-index: 10;
+  }
 `;
 
 export const FooterSt = styled.div`

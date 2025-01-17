@@ -40,11 +40,11 @@ const PaginationContainer = styled.div`
 export const Pagination = ({ currentPage, totalPages, handlePageChange }) => {
   const pageNumbers = [];
 
-  const firstPage = currentPage - 1;
-  const lastPage = Math.min(currentPage + 3, totalPages);
+  const firstPage = Math.max(currentPage - 2, 0);
+  const lastPage = Math.min(currentPage + 2, totalPages - 1);
 
   for (let i = firstPage; i <= lastPage; i++) {
-    pageNumbers.push(i);
+    pageNumbers.push(i + 1);
   }
 
   return (
