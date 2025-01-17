@@ -234,6 +234,7 @@ export const Planning = () => {
       // Remove theme from selection
       const updatedThemes = selectedThemes.filter((t) => t !== theme);
       setSelectedThemes(updatedThemes);
+      console.log("여기서 출력한거임 : ", editPlannerInfo);
       setEditPlannerInfo((prev) => ({
         ...prev,
         theme: updatedThemes.join(", "),
@@ -259,7 +260,7 @@ export const Planning = () => {
       setPlannerInfo(editPlannerInfo);
     } else {
       // 편집 시작하면
-      console.log("편집 시작");
+      console.log("편집 시작", plannerInfo);
       setEditPlannerInfo(plannerInfo);
     }
 
@@ -268,7 +269,7 @@ export const Planning = () => {
       plannerId: plannerId,
       sender: sender,
       data: {
-        plannerInfo: plannerInfo,
+        plannerInfo: editPlannerInfo,
         plans: plans,
         isEditting: !isEditting,
       },
@@ -304,8 +305,23 @@ export const Planning = () => {
           console.log("받은 데이터:", data);
           console.log("editPlannerInfo : ", editPlannerInfo);
 
-          if (data.type === "PLANNER" && data.data.plannerInfo !== null) {
-            // setEditPlannerInfo(data.data.plannerInfo);
+          if (
+            data.type === "PLANNER" &&
+            editPlannerInfo !== null &&
+            data.data.plannerInfo !== null &&
+            JSON.stringify(data.data.plannerInfo[0]) !==
+              JSON.stringify(editPlannerInfo)
+          ) {
+            console.log(
+              "이건 0번째 배열이구여 : ",
+              JSON.stringify(data.data.plannerInfo[0])
+            );
+            console.log(
+              "이건 기존의 플래너에여 : ",
+              JSON.stringify(editPlannerInfo)
+            );
+            setEditPlannerInfo(data.data.plannerInfo[0]);
+          } else if (data.type === "PLANNER") {
             setPlans(data.data.plans);
             setIsEditting(data.data.isEditting);
             setEditor(data.sender);
@@ -342,18 +358,18 @@ export const Planning = () => {
 
   useEffect(() => {
     if (socketConnected && editPlannerInfo) {
-      console.log("여기서 보냄");
       const message = {
         type: "PLANNER",
         plannerId: plannerId,
         sender: sender,
         data: {
-          plannerInfo: plannerInfo,
+          plannerInfo: [editPlannerInfo],
           plans: plans,
           isEditting: isEditting,
         },
       };
       ws.current.send(JSON.stringify(message));
+      console.log("여기서 보냄", message);
     }
   }, [editPlannerInfo]);
 
