@@ -260,6 +260,7 @@ export const Planning = () => {
       plannerId: plannerId,
       sender: sender,
       data: {
+        // plannerInfo: plannerInfo,
         plans: plans,
         isEditting: !isEditting,
       },
@@ -270,7 +271,7 @@ export const Planning = () => {
       ws.current.send(JSON.stringify(message));
     }
 
-    console.log("plannerInfo : ", plannerInfo);
+    // console.log("plannerInfo : ", plannerInfo);
   };
 
   // 웹 소켓 연결하기
@@ -296,12 +297,14 @@ export const Planning = () => {
           const data = JSON.parse(msg.data);
           console.log("받은 데이터:", data);
 
-          // PLANNER 메시지 타입에 대한 처리
           if (data.type === "PLANNER") {
             // 상태 업데이트
+            // if (data.data.plannerInfo != null) {
+            // setPlannerInfo(data.data.plannerInfo);
             setPlans(data.data.plans);
             setIsEditting(data.data.isEditting);
             setEditor(data.sender);
+            // }
           } else if (data.type === "ENTER") {
             console.log(`${data.sender} 님이 입장했습니다.`);
           }

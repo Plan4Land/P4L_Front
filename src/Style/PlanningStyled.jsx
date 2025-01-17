@@ -45,6 +45,40 @@ export const Info = styled.div`
     border-bottom: 1px solid #ccc;
   }
 
+  .theme-buttons {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 10px; /* 버튼 사이 간격 */
+  }
+
+  .theme-button {
+    padding: 3px 5px;
+    width: 100%;
+    max-width: 150px;
+    margin: 5px;
+    border-radius: 10px;
+    background-color: white;
+    border: 1px solid ${colors.colorB};
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: ${colors.colorB};
+      color: white;
+      opacity: 0.7;
+    }
+  }
+
+  .theme-button.selected {
+    background-color: ${colors.colorB};
+    color: white;
+  }
+
+  .theme-button:disabled {
+    background-color: #f0f1f0;
+    cursor: default;
+  }
+
   .menu-icons {
     display: flex;
     position: absolute;
