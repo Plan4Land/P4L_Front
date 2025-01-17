@@ -17,6 +17,7 @@ export const Container = styled.div`
   box-sizing: border-box;
 
   .title {
+    margin: 0 0 50px 0;
     display: flex;
     justify-content: center;
   }
@@ -168,9 +169,10 @@ export const Container = styled.div`
   }
   .delete-content {
     font-size: small;
+    margin-bottom: 30px;
     .span1 {
       font-weight: 500;
-      color: ${colors.colorA};
+      color: ${colors.colorC};
     }
     .span2 {
       color: ${colors.colorE};
@@ -189,6 +191,38 @@ export const Container = styled.div`
     .agreeBox {
       font-weight: 700;
       color: ${colors.colorE};
+      margin-bottom: 30px;
+    }
+
+    .agreeBtn {
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+      cursor: pointer;
+      align-items: center;
+    }
+
+    .iconBox-left {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2px;
+      svg {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+      }
+    }
+    .checked {
+      svg {
+        background-color: ${colors.colorC};
+        path:nth-child(1) {
+          color: white;
+        }
+        path:nth-child(2) {
+          color: ${colors.colorC};
+        }
+      }
     }
   }
 `;

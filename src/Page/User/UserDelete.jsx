@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import AxiosApi from "../../Api/AxiosApi";
+// component
+import { useAuth } from "../../Context/AuthContext";
 import { Center, Container, InputBox } from "../../Style/UserInfoEditStyle";
 import { Button } from "../../Component/ButtonComponent";
-import { useAuth } from "../../Context/AuthContext";
-import AxiosApi from "../../Api/AxiosApi";
 import { CheckModal } from "../../Util/Modal";
+// icon
 import { IoIosArrowBack } from "react-icons/io";
+
+import { GoCheckCircle } from "react-icons/go";
 
 const UserDelete = () => {
   const { user, logout } = useAuth();
   const [userId, setUserId] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -34,24 +39,36 @@ const UserDelete = () => {
 
   // 탈퇴 기능 구현
   const handleSubmit = async () => {
-    const response = await AxiosApi.memberDelete(user.id);
-    if(response.data) {
-      const logout = await AxiosApi.logout(user.id);
-      if(logout) {
-        setIsModalOpen(true);
+    if (!isChecked) {
+      setIsModalOpen(true);
+      return;
+    } else {
+      const response = await AxiosApi.memberDelete(user.id);
+      if(response.data) {
+        const logout = await AxiosApi.logout(user.id);
+        if(logout) {
+          setIsModalOpen(true);
+        }
       }
     }
+    
   }
 
   // 모달 닫기
   const closeModal = () => {
     setIsModalOpen(false);
-    logout();
-    navigate("/login");
+    if (isChecked) {
+      logout();
+      navigate("/login");
+    }
   };
 
   const handleBack = () => {
     window.location.reload();
+  }
+
+  const handleAgree = () => {
+    setIsChecked((prev) => !prev);
   }
 
   return (
@@ -93,6 +110,22 @@ const UserDelete = () => {
             게시판형 서비스에 남아 있는 게시글은 탈퇴 후 삭제할 수 없습니다.<br />
             또한, 이용중인 멤버십은 자동으로 만료됩니다.
           </div>
+          <div 
+            className="agreeBtn"
+            onClick={handleAgree}
+          >
+            <div 
+              className={
+                isChecked 
+                ? "iconBox-left checked" 
+                : "iconBox-left"}
+            >
+              <GoCheckCircle />
+            </div>
+            <strong>
+              안내 사항을 모두 확인하였으며, 이에 동의합니다.
+            </strong>
+          </div>
         </div>
 
         <Button 
@@ -108,8 +141,13 @@ const UserDelete = () => {
           isOpen={isModalOpen} 
           onClose={closeModal}
         >
-          <p>회원 탈퇴가 완료되었습니다.</p>
-          <p>이용해주셔서 감사합니다.</p>
+          {isChecked 
+            ? <>
+              <p>회원 탈퇴가 완료되었습니다.</p>
+              <p>이용해주셔서 감사합니다.</p>
+            </>
+            : <p>약관에 동의해주세요.</p>
+          }
         </CheckModal>
 
         <button 

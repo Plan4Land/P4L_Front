@@ -16,6 +16,7 @@ export const SignupContainer = styled.div`
   box-sizing: border-box;
 
   .title {
+    margin: 0 0 50px 0;
     text-align: center;
     margin-bottom: 30px;
   }
