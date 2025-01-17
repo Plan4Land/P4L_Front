@@ -27,6 +27,26 @@ export const Container = styled.div`
     margin-bottom: 5px;
   }
 
+  .input-container {
+    position: relative;
+    padding-top: 20px;
+  }
+
+  .textMessage {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: red;
+    font-size: 12px;
+  }
+  .textMessage-true {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: green;
+    font-size: 12px;
+  }
+
   .message {
     display: flex;
     align-items: end;
