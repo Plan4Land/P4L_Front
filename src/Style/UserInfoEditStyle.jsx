@@ -10,6 +10,9 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 500px;
+  @media (max-width: 768px) {
+    width: 300px;
+  }
   padding: 30px;
   box-sizing: border-box;
 
@@ -231,21 +234,14 @@ export const EditBox = styled.div`
   border: 1px solid #ddd;
   border-radius: 20px;
   display: flex;
-  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   .iconBox {
     display: flex;
     flex-direction: column;
-    width: 50%;
-    height: 200px;
     cursor: pointer;
   }
-  .iconBox:nth-child(1) {
-    border-right: 1px solid #ddd;
-    padding-right: 30px;
-  }
-  .iconBox:nth-child(2) {
-    padding-left: 30px;
-  }
+  
   .name {
     margin: 0;
     text-align: center;
@@ -256,10 +252,37 @@ export const EditBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    
     svg {
-      width: 100%;
-      height: 100%;
+      width: 150px;
+      height: 180px;
     }
+  }
+  @media (max-width: 768px) {
+    flex-direction: column;
+    max-width: 250px;
+    .iconBox {
+      width: 80%;
+    }
+    .iconBox:nth-child(1) {
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 30px;
+    }
+    .iconBox:nth-child(2) {
+      padding-top: 30px;
+    }
+  }
+  @media (min-width: 769px) {
+    flex-direction: row;
+    .iconBox {
+      width: 50%;
+      height: 200px;
+    }
+    .iconBox:nth-child(1) {
+      border-right: 1px solid #ddd;
+      padding-right: 30px;
+    }
+    .iconBox:nth-child(2) {
+      padding-left: 30px;
+  }
   }
 `
