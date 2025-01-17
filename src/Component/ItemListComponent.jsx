@@ -4,19 +4,23 @@ import styled from "styled-components";
 import { ServiceCode } from "../Util/Service_code_final";
 
 const TourItemStyled = styled.div`
-  width: ${(props) => props.width || "90%"};
+  width: ${(props) => props.width || "70vw"};
   height: ${(props) => props.height || "230px"};
   margin: ${(props) => props.margin || "10px"};
   display: flex;
-  border: 1px solid grey;
+
   cursor: pointer;
   background-color: #fff;
   align-items: center;
   overflow: hidden;
   position: relative;
+  border-radius: 10px;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
 
   .img {
-    width: 400px;
+    min-width: 400px;
+    max-width: 400px;
     height: 230px;
     display: flex;
     align-items: center;
@@ -31,8 +35,8 @@ const TourItemStyled = styled.div`
   }
 
   .thumbnail {
-    width: 95%;
-    height: 95%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
   }
   .thumbnailSearch {
@@ -94,7 +98,6 @@ const TourItemStyled = styled.div`
     position: absolute;
     bottom: 15px;
     right: 0px;
-    /* border: 1px solid black; */
     display: flex;
     justify-content: left;
     align-items: center;
@@ -103,6 +106,34 @@ const TourItemStyled = styled.div`
       width: 80px;
       height: 80px;
       border-radius: 50%;
+    }
+  }
+  @media (max-width: 768px) {
+    height: 150px;
+    width: 80vw;
+    .img {
+      max-width: 300px;
+      min-width: 300px;
+    }
+    .thumbnail {
+    }
+    .title {
+      font-size: 15px;
+    }
+    .address,
+    .subCategory,
+    .type {
+      font-size: 10px;
+      margin: 5px;
+    }
+  }
+  .owner {
+    width: 150px;
+    font-size: 10px;
+    right: -20px;
+    img {
+      width: 50px;
+      height: 50px;
     }
   }
 `;

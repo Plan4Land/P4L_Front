@@ -258,30 +258,23 @@ export const MakePlanningContainer = styled.div`
   /* width: 50%; */
   min-height: 75vh;
   padding: 0 30vw;
-  margin-bottom: 10vh;
+  margin: 3vh 0 10vh 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 
+  h2 {
+    margin: 30px 0 20px 0;
+  }
   .select-option {
-    /* opacity: 0; */
     transform: translateY(10px);
     transition: all 0.5s ease;
-    /* z-index: -1; */
   }
 
   .select-option.visible {
-    opacity: 1;
+    /* opacity: 1; */
     transform: translateY(0);
-  }
-  .question-title {
-    margin-top: 6vh;
-    span {
-      margin-left: 5px;
-      font-size: 17px;
-      font-weight: normal;
-    }
   }
 
   .location-select {
@@ -312,7 +305,7 @@ export const MakePlanningContainer = styled.div`
   .theme-button {
     padding: 10px 20px;
     width: 100%;
-    max-width: 150px;
+    max-width: 200px;
     margin: 5px;
     border-radius: 10px;
     background-color: white;
@@ -349,9 +342,45 @@ export const MakePlanningContainer = styled.div`
     width: 200px;
     height: 200px;
   }
+
   @media (max-width: 768px) {
     h2 {
-      font-size: 20px;
+      font-size: 18px;
+    }
+    .theme-buttons {
+      gap: 5px;
+    }
+    .theme-button {
+      font-size: 10px;
+      width: 100%;
+      min-width: 100px;
+      padding: 10px;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    .location-select {
+      width: 70vw;
+      font-size: 10px;
+      padding: 5px;
+    }
+    .planningTitle {
+      input {
+        width: 70vw;
+      }
+    }
+    .profile-container {
+      width: 100px;
+      height: 100px;
+    }
+    .public {
+      scale: 0.8;
+    }
+    .select-option {
+      button {
+        font-size: 12px;
+        padding: 10px 20px 10px 20px;
+        width: 100%;
+      }
     }
   }
 `;
@@ -364,7 +393,9 @@ export const DatePickerContainer = styled.div`
   align-items: center;
   border: 1px solid #aaa;
   border-radius: 20px;
-
+  @media (max-width: 768px) {
+    scale: 0.7;
+  }
   span {
     margin: 0 5px;
   }

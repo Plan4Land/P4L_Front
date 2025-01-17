@@ -229,7 +229,7 @@ export const MakePlanning = () => {
         {/* 제목 입력 */}
         <div className={`select-option ${isDateVisible ? "visible" : ""}`}>
           {selectedSubArea && selectedThemes.length > 0 && endDate && (
-            <>
+            <div className="planningTitle">
               <h2 className="question-title">플래닝 제목 입력</h2>
               <input
                 type="text"
@@ -238,7 +238,7 @@ export const MakePlanning = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value.replace(/^\s+/, ""))}
               />
-            </>
+            </div>
           )}
         </div>
 
@@ -254,7 +254,9 @@ export const MakePlanning = () => {
                 />
               </div>
               <h2 className="question-title">공개 여부</h2>
-              <ToggleSwitch setIsOn={setIsPublic} isOn={isPublic} />
+              <div className="public">
+                <ToggleSwitch setIsOn={setIsPublic} isOn={isPublic} />
+              </div>
             </>
           )}
         </div>

@@ -4,7 +4,6 @@ import { colors } from "./GlobalStyle";
 export const MyPageMainContainer = styled.div`
   display: flex;
   flex-direction: row;
-
   min-height: 1000px;
   justify-content: center;
   margin: 20px 0 20px 0;
@@ -16,8 +15,8 @@ export const MyPageMainContainer = styled.div`
     align-items: center;
     padding: 20px;
     position: fixed;
-    top: 200px;
-    left: 150px;
+    top: 20vh;
+    left: 5vw;
     width: 150px;
     z-index: 1;
     background-color: white;
@@ -27,6 +26,11 @@ export const MyPageMainContainer = styled.div`
   .MyPageMenu {
     margin-left: 20px;
     width: 60%;
+  }
+  @media (max-width: 768px) {
+    .menu {
+      width: 100px;
+    }
   }
 `;
 export const UserMain = styled.div`

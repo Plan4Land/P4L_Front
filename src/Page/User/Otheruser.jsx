@@ -3,12 +3,11 @@ import {
   UserMain,
   UserInfo,
   UserPlanning,
-  FollowList,
 } from "../../Style/MyPageMainStyled";
 import {useState, useEffect} from "react";
 import {CheckModal} from "../../Util/Modal";
 import {Button} from "../../Component/ButtonComponent";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {UserPlannerApi} from "../../Api/ItemApi";
 import {areas} from "../../Util/Common";
 import {PlanItem} from "../../Component/ItemListComponent";
@@ -18,6 +17,7 @@ import {Pagination} from "../../Component/Pagination";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {useMediaQuery} from "react-responsive";
 import {useAuth} from "../../Context/AuthContext";
+import FollowLoad from "../../Component/UserPageComponent/FollowLoad";
 
 export const Otheruser = () => {
   const {userId} = useParams();
@@ -33,6 +33,7 @@ export const Otheruser = () => {
   const [followings, setFollowings] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [isFollowed, setIsFollowed] = useState(false);
+  const navigate = useNavigate();
 
   const isMobile = useMediaQuery({query: "(max-width: 454px)"});
   const handlePageChange = (newPage) => {
@@ -265,43 +266,10 @@ export const Otheruser = () => {
         </UserMain>
       </div>
       <CheckModal isOpen={isFollowModalOpen} onClose={closeFollowModal}>
-        <FollowList>
-          <div className="tabs">
-            <button
-              onClick={() => handleTabClick("followings")}
-              className={selectedTab === "followings" ? "active" : ""}
-            >
-              팔로잉
-            </button>
-            <button
-              onClick={() => handleTabClick("followers")}
-              className={selectedTab === "followers" ? "active" : ""}
-            >
-              팔로워
-            </button>
-          </div>
-          <div className="tab-content">
-            {selectedTab === "followings" && (
-              <div className="list">
-                {followings && followings.map((following, index) => (
-                  <div key={index} className="list-item">
-                    {following.id}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {selectedTab === "followers" && (
-              <div className="list">
-                {followers && followers.map((follower, index) => (
-                  <div key={index} className="list-item">
-                    {follower.id}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </FollowList>
+        <FollowLoad
+          followers={followers}
+          followings={followings}>
+        </FollowLoad>
       </CheckModal>
       <Footer/>
     </>
