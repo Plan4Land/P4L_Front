@@ -373,7 +373,7 @@ export const Signup = () => {
               {idMsg}
             </div>
             <div className="inputWrapper">
-              <InputBox style={{ width: "360px" }}>
+              <InputBox>
                 <div className="iconBox-left">
                   <VscAccount />
                 </div>
@@ -405,7 +405,7 @@ export const Signup = () => {
               {emailMsg}
             </div>
             <div className="inputWrapper">
-              <InputBox style={{ width: "360px" }}>
+              <InputBox>
                 <div className="iconBox-left">
                   <GoMail />
                 </div>
@@ -438,7 +438,7 @@ export const Signup = () => {
                 {email2Msg}
               </div>
               <div className="inputWrapper">
-                <InputBox style={{ width: "360px" }}>
+                <InputBox>
                   <div className="iconBox-left">
                     <GoMail />
                   </div>
@@ -528,7 +528,7 @@ export const Signup = () => {
               {nicknameMsg}
             </div>
             <div className="inputWrapper">
-              <InputBox style={{ width: "360px" }}>
+              <InputBox>
                 <div className="iconBox-left">
                   <GoPencil />
                 </div>
