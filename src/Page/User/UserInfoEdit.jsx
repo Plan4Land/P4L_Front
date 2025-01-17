@@ -6,6 +6,7 @@ import { Center, Container, InputBox } from "../../Style/UserInfoEditStyle";
 import { Button } from "../../Component/ButtonComponent";
 import { useAuth } from "../../Context/AuthContext";
 import { storage } from "../../Api/Firebase";
+import { PictureComponent } from "../../Component/PictureCommponent";
 import { ProfilePicModal } from "../../Component/PictureModalComponent";
 import { CheckModal } from "../../Util/Modal";
 // icon
@@ -30,14 +31,6 @@ const UserInfoEdit = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
-
-  const handlePicSelect = (picName) => {
-    setCurrentPic(`profile-pic/${picName}`);
-  };
-  const handlePicAdd = (picture) => {
-    // 사진 추가하는 기능 구현하기.
-    setCurrentPic(URL.createObjectURL(picture));
-  };
 
   // 정보 가져오기
   useEffect(() => {
@@ -167,29 +160,13 @@ const UserInfoEdit = () => {
           </div>
         </InputBox>
 
-        <div className="picture-box">
-          <div 
-            className="current-pic" 
-            onClick={() => setIsPicsModalOpen(true)}
-          >
-            <img src={currentPic} alt="프로필 이미지" />
-            <label htmlFor="profile-upload" className="upload-label">
-              <FontAwesomeIcon icon={faCamera} />
-            </label>
-          </div>
-        </div>
+        <PictureComponent 
+          currentPic={currentPic}
+          setCurrentPic={setCurrentPic}
+          role={userRole}
+        />
         
         <Button onClick={handleSave}>저장하기</Button>
-
-        {/* 프로필 사진 모달 */}
-        <ProfilePicModal
-          open={isPicsModalOpen}
-          close={() => setIsPicsModalOpen(false)}
-          onSelect={handlePicSelect}
-          state={userRole === "ROLE_MEMBERSHIP" ? "edit" : "new"}
-          addPicture={handlePicAdd}
-          type="profile"
-        />
 
         <button 
           className="back-button"
