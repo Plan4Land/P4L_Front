@@ -78,7 +78,7 @@ export const MakePlanning = () => {
     try {
       const response = await PlanningApi.makePlanning(
         title,
-        selectedThemes.join(","),
+        selectedThemes.join(", "),
         memberId,
         startDate,
         endDate,
