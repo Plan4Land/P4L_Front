@@ -11,7 +11,7 @@ export const SignupContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 500px;
+  width: 700px;
   padding: 30px;
   box-sizing: border-box;
 
@@ -42,7 +42,7 @@ export const SignupContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    gap: 10px;
   }
 
   .linkBox {
