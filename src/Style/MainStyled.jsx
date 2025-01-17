@@ -10,7 +10,6 @@ export const MainBox = styled.div`
   height: 1000px;
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(4, 1fr);
     height: 100%;
   }
 `;
@@ -25,6 +24,7 @@ export const QuickSearch = styled(GridItem)`
   grid-column: span 2;
   display: flex;
   flex-direction: column;
+
   .QuickSelect {
     display: flex;
     padding: 10px;
@@ -82,6 +82,12 @@ export const QuickSearch = styled(GridItem)`
         margin: 10px;
         text-align: center;
       }
+    }
+  }
+  @media (max-width: 768px) {
+    button {
+      font-size: 12px;
+      padding: 5px;
     }
   }
 `;
@@ -196,70 +202,85 @@ export const Festive = styled(GridItem)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
   overflow: hidden;
+  @media (max-width: 768px) {
+    grid-column: span 2;
+  }
+
   .react-calendar {
     width: 100%;
     height: 400px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
   }
 
   .react-calendar__tile {
     position: relative;
-    height: 50px;
-    aspect-ratio: 1;
+    height: 45px;
     padding: 0;
+    border-radius: 10px;
   }
 
   .react-calendar__tile--now {
-    position: relative;
     background: ${colors.colorD} !important;
-    border-radius: 20% !important;
+    border-radius: 50% !important;
+    color: white;
+    font-weight: bold;
     padding: 0;
   }
+
   .red-dot {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     background-color: red;
     border-radius: 50%;
     position: absolute;
-    bottom: 5px;
+    bottom: 8px;
     left: 45%;
   }
+
   .react-calendar__month-view__days__day {
-    color: black;
-  }
-  .react-calendar-sunday {
-    color: red; /* 일요일 빨간색 */
-  }
-
-  .react-calendar-saturday {
-    color: blue; /* 토요일 파란색 */
-  }
-
-  .react-calendar__tile {
     background-color: transparent;
+    color: #333;
   }
+
+  .react-calendar__month-view__weekdays__weekday--sunday {
+    color: red;
+    font-weight: bold;
+  }
+
+  .react-calendar__month-view__weekdays__weekday--saturday {
+    color: blue;
+    font-weight: bold;
+  }
+
   .react-calendar__tile--inactive {
     color: #d3d3d3;
     pointer-events: none;
+    background-color: transparent !important;
   }
 `;
 
 export const HolidayList = styled.div`
-  margin: 10px;
+  margin: 20px;
   width: 100%;
-  height: 150px;
+  height: 180px;
   overflow-y: auto;
   border: 1px solid #ddd;
-  background-color: #f9f9f9;
-  border-radius: 5px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+
   ul {
     margin: 0;
-    padding-left: 25px;
+    padding-left: 20px;
   }
 
   li {
-    padding: 3px 0;
-    font-size: 14px;
+    padding: 5px 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
   }
 `;

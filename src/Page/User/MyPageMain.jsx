@@ -24,6 +24,8 @@ import { MyIncludePlans } from "./MyIncludePlans";
 import { Pagination } from "../../Component/Pagination";
 import AxiosApi from "../../Api/AxiosApi";
 import FollowLoad from "../../Component/UserPageComponent/FollowLoad";
+import { FilterButton } from "../../Style/ItemListStyled";
+import { FaBars } from "react-icons/fa";
 
 export const MyPageMain = () => {
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
@@ -41,11 +43,15 @@ export const MyPageMain = () => {
   const [followers, setFollowers] = useState([]);
   const { user } = useAuth();
   const [invitedPlannings, setInvitedPlannings] = useState([]);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
 
+  const handleToggleSelect = () => {
+    setIsSelectOpen(!isSelectOpen);
+  };
 
   const handleFollow = async (follower, followed, isFollow) => {
     const data = await AxiosApi.follow(follower, followed, isFollow);
-  }
+  };
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -107,12 +113,12 @@ export const MyPageMain = () => {
       try {
         const data = await AxiosApi.loadFollow(user.id);
         setFollowings(data.followingInfo);
-        setFollowers(data.followerInfo)
-        console.log(data.followerInfo)
+        setFollowers(data.followerInfo);
+        console.log(data.followerInfo);
       } catch (error) {
         console.error("팔로워 정보를 불러오는데 오류가 발생했습니다.", error);
       }
-    }
+    };
 
     fetchInvites();
     fetchFollowInfo();
@@ -154,8 +160,11 @@ export const MyPageMain = () => {
   return (
     <>
       <Header />
+      <FilterButton onClick={handleToggleSelect}>
+        <FaBars />
+      </FilterButton>
       <MyPageMainContainer>
-        <div className="menu">
+        <div className={`menu ${isSelectOpen ? "open" : ""}`}>
           <UserMenu
             setSelectedMenu={setSelectedMenu}
             selectedMenu={selectedMenu}
@@ -178,7 +187,9 @@ export const MyPageMain = () => {
                     <p>닉네임: {user.nickname}</p>
                     <p>아이디: {user.id}</p>
                     <div className="follow" onClick={openFollowModal}>
-                      <p>팔로잉: {followings.length} 팔로워: {followers.length}</p>
+                      <p>
+                        팔로잉: {followings.length} 팔로워: {followers.length}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -250,10 +261,7 @@ export const MyPageMain = () => {
       </MyPageMainContainer>
 
       <CheckModal isOpen={isFollowModalOpen} onClose={closeFollowModal}>
-        <FollowLoad
-          followers={followers}
-          followings={followings}>
-        </FollowLoad>
+        <FollowLoad followers={followers} followings={followings}></FollowLoad>
       </CheckModal>
 
       <CloseModal

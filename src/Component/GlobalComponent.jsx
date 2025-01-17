@@ -118,7 +118,7 @@ export const Header = () => {
                     key={`plan-${index}`}
                     onClick={() => topPlanClick(plan.id)}
                   >
-                    <strong>{plan.title}</strong> - {areaName} {subAreaName}{" "}
+                    <strong>{plan.title}</strong> - {areaName} {subAreaName}
                     <span>||</span>
                     {plan.theme}
                   </p>
@@ -135,7 +135,8 @@ export const Header = () => {
               <div
                 className="profile-img"
                 style={{
-                  backgroundImage: `url(${user.imgPath})`,
+                  backgroundColor: "white",
+                  backgroundImage: `url(/${user.imgPath})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}

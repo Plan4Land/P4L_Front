@@ -15,7 +15,7 @@ export const MyPageMainContainer = styled.div`
     align-items: center;
     padding: 20px;
     position: fixed;
-    top: 20vh;
+    top: 15vh;
     left: 5vw;
     width: 150px;
     z-index: 1;
@@ -25,10 +25,18 @@ export const MyPageMainContainer = styled.div`
   }
   .MyPageMenu {
     margin-left: 20px;
-    width: 60%;
   }
   @media (max-width: 768px) {
+    margin-top: -30px;
     .menu {
+      position: absolute;
+      display: none;
+      &.open {
+        display: block;
+        p {
+          font-size: 13px;
+        }
+      }
       width: 100px;
     }
   }
@@ -42,12 +50,13 @@ export const UserMain = styled.div`
   flex-direction: column;
 `;
 export const UserInfo = styled.div`
-  width: 90%;
+  width: 100%;
   height: 200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #e7e7e7;
+  /* background-color: ${colors.colorD}; */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
   border-radius: 20px;
   margin-bottom: 15px;
 
@@ -55,8 +64,9 @@ export const UserInfo = styled.div`
     height: 100px;
     width: 100px;
     min-width: 100px;
-    border: 1px solid black;
+    object-fit: cover;
     border-radius: 50%;
+    background-color: white;
   }
   .follow {
     cursor: pointer;
@@ -89,6 +99,25 @@ export const UserInfo = styled.div`
     justify-content: center;
     align-items: center;
     padding: 0 20px 0 20px;
+  }
+  @media (max-width: 768px) {
+    flex-direction: column;
+    width: 80vw;
+    height: 20vh;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    p {
+      margin: 8px 0 0 0;
+    }
+    .ProfileImg {
+      scale: 0.7;
+    }
+    .Button {
+      margin: 0;
+      flex-direction: row;
+      scale: 0.7;
+    }
   }
 `;
 

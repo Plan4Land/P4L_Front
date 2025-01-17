@@ -196,3 +196,18 @@ export const InPlannerApi = {
     }
   },
 };
+
+// 공휴일 목록 불러오기
+export const HolidayApi = {
+  getHolidaysByMonth: async (year, month) => {
+    try {
+      const response = await AxiosInstance.get("/holidays", {
+        params: { year, month },
+      });
+      return response.data; // 공휴일 목록 반환
+    } catch (error) {
+      console.error("공휴일 조회 오류:", error);
+      throw error;
+    }
+  },
+};
