@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import AxiosApi from "../../Api/AxiosApi";
 // component
@@ -7,25 +7,24 @@ import { Button } from "../../Component/ButtonComponent";
 import { useAuth } from "../../Context/AuthContext";
 import { storage } from "../../Api/Firebase";
 import { PictureComponent } from "../../Component/PictureCommponent";
-import { ProfilePicModal } from "../../Component/PictureModalComponent";
 import { CheckModal } from "../../Util/Modal";
 // icon
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { IoIosArrowBack } from "react-icons/io";
 
 const UserInfoEdit = () => {
   const { user, updateUser } = useAuth();
-  const [userId, setUserId] = useState("test1");
-  const [userPw, setUserPw] = useState("");
-  const [userPwCheck, setUserPwCheck] = useState("");
-  const [isPwCheck, setIsPwCheck] = useState(false);
-  const [name, setName] = useState("홍길동");
-  const [nickName, setNickName] = useState("길동이");
-  const [email, setEmail] = useState("hong@example.com");
+  const [userId, setUserId] = useState("");
+  const [name, setName] = useState("");
+  const [nameMsg, setNameMsg] = useState("");
+  const [nameCheck, setNameCheck] = useState(false);
+  const [nickname, setNickname] = useState("");
+  const [nicknameMsg, setNicknameMsg] = useState("");
+  const [nicknameCheck, setNicknameCheck] = useState(false);
+  const nicknameRef = useRef(null);
+  const [email, setEmail] = useState("");
   const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
   const [userRole, setUserRole] = useState("");
-  const [isPicsModalOpen, setIsPicsModalOpen] = useState("");
+
   const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
   const [checkModalMessage, setCheckModalMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +39,7 @@ const UserInfoEdit = () => {
         setUserId(response.data.id);
         setName(response.data.name);
         setEmail(response.data.email);
-        setNickName(response.data.nickname);
+        setNickname(response.data.nickname);
         setCurrentPic(response.data.imgPath);
         setUserRole(response.data.role);
         console.log(response.data.imgPath);
@@ -50,9 +49,58 @@ const UserInfoEdit = () => {
     };
     getUserInfo();
   }, []);
+
+  // 이름 체크
+  const handleName = (e) => {
+    const input = e.target.value;
+    setName(input);
+    if (user.name !== name) {
+      if (!input.trim()) {
+        setNameMsg("이름을 입력해주세요");
+        setNameCheck(false);
+      } else if (input.length < 3) {
+        setNameMsg("이름은 3글자 이상이어야 합니다.");
+        setNameCheck(false);
+      } else {
+        setNameMsg("");
+        setNameCheck(true);
+      }
+    }
+  };
+
+
+  // 닉네임 체크
+  const handleNickname = (e) => {
+    const input = e.target.value;
+    setNickname(input);
+    if (!input.trim()) {
+      setNicknameMsg("닉네임을 입력해주세요.");
+      setNicknameCheck(false);
+    } else if (input.length < 3) {
+      setNicknameMsg("닉네임은 3글자 이상이어야 합니다.");
+      setNicknameCheck(false);
+    } else {
+      setNicknameMsg("");
+      setNicknameCheck(true);
+    }
+  };
+  // 닉네임 중복 체크
+  const handleNicknameCheck = async () => {
+    if(user.nickname !== nickname) {
+      const response = await AxiosApi.memberNicknameExists(nickname);
+      if (response.data) {
+        setNicknameMsg("중복된 닉네임입니다.");
+        setNicknameCheck(false);
+        nicknameRef.current.focus();
+        return;
+      }
+    }
+  };
   
   // 회원정보 수정 기능
   const handleSave = async () => {
+    handleNicknameCheck();
+    if (!nameCheck || !nicknameCheck) return;
     setIsLoading(true);
     try {
       let updatedPic  = currentPic;
@@ -77,13 +125,13 @@ const UserInfoEdit = () => {
       }
 
       // 회원 정보 수정 진행
-      const rsp = await AxiosApi.memberUpdate(userId, name, nickName, email, updatedPic);
+      const rsp = await AxiosApi.memberUpdate(userId, name, nickname, email, updatedPic);
       if (rsp.data) {
         setCheckModalMessage("회원정보가 수정되었습니다.");
         setIsCheckModalOpen(true);
 
         updateUser({
-          nickName: nickName,
+          nickName: nickname,
           email,
           imgPath: updatedPic,
         });
@@ -113,52 +161,63 @@ const UserInfoEdit = () => {
         <h2 className="title">회원정보 수정</h2>
 
         <label htmlFor="userId">아이디</label>
-        <InputBox>
-          <div className="inputBox">
-            <input
-              id="userId"
-              type="text"
-              value={userId}
-              readOnly
-            />
-          </div>
-        </InputBox>
+        <div className="input-container">
+          <InputBox>
+            <div className="inputBox">
+              <input
+                id="userId"
+                type="text"
+                value={userId}
+                readOnly
+              />
+            </div>
+          </InputBox>
+        </div>
 
         <label htmlFor="name">이름</label>
-        <InputBox>
-          <div className="inputBox">
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-        </InputBox>
+        <div className="input-container">
+        <div className="textMessage">{nameMsg}</div>
+          <InputBox>
+            <div className="inputBox">
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => handleName(e)}
+              />
+            </div>
+          </InputBox>
+        </div>
 
         <label htmlFor="nickName">닉네임</label>
-        <InputBox>
-          <div className="inputBox">
-            <input
-              id="nickName"
-              type="text"
-              value={nickName}
-              onChange={(e) => setNickName(e.target.value)}
-            />
-          </div>
-        </InputBox>
+        <div className="input-container">
+          <div className="textMessage">{nicknameMsg}</div>
+          <InputBox>
+            <div className="inputBox">
+              <input
+                ref={nicknameRef}
+                id="nickName"
+                type="text"
+                value={nickname}
+                onChange={(e) => handleNickname(e)}
+              />
+            </div>
+          </InputBox>
+        </div>
         
         <label htmlFor="email">이메일</label>
-        <InputBox>
-          <div className="inputBox">
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-        </InputBox>
+        <div className="input-container">
+          <InputBox>
+            <div className="inputBox">
+              <input
+                id="email"
+                type="email"
+                value={email}
+                readOnly
+              />
+            </div>
+          </InputBox>
+        </div>
 
         {/* 프로필 사진 */}
         <PictureComponent 
