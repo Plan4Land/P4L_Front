@@ -4,10 +4,9 @@ import { Header, Footer } from "../../Component/GlobalComponent";
 import {
   Center,
   SignupContainer,
-  InputBox,
-  Button,
   Terms
 } from "../../Component/SignupComponents/SignupComponent";
+import { Button } from "../../Component/ButtonComponent";
 
 // icon
 import { GoCheckCircle } from "react-icons/go";
