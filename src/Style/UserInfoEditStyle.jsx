@@ -155,6 +155,42 @@ export const Container = styled.div`
       transform: rotate(360deg);
     }
   }
+
+  .delete-header {
+    font-size: small;
+    h2 {
+      margin: 0;
+    }
+    p {
+      margin: 0;
+      padding-top: 10px;
+    }
+  }
+  .delete-content {
+    font-size: small;
+    .span1 {
+      font-weight: 500;
+      color: ${colors.colorA};
+    }
+    .span2 {
+      color: ${colors.colorE};
+    }
+    .dropout {
+      margin: 0;
+      margin-top: 40px;
+    }
+    .dropout-dsc {
+      margin: 0;
+      padding-top: 15px;
+    }
+    hr {
+      margin: 40px 0 30px 0;
+    }
+    .agreeBox {
+      font-weight: 700;
+      color: ${colors.colorE};
+    }
+  }
 `;
 
 export const InputBox = styled.div`

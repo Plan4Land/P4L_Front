@@ -5,6 +5,7 @@ export const colors = {
   colorB: "#579450",
   colorC: "#d3eea9",
   colorD: "#ffffcf",
+  colorE: "#ff7700"
 };
 
 export const HeaderSt = styled.div`
