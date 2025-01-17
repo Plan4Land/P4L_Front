@@ -226,11 +226,13 @@ export const MakePlanningContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 
   .select-option {
-    opacity: 0;
+    /* opacity: 0; */
     transform: translateY(10px);
     transition: all 0.5s ease;
+    /* z-index: -1; */
   }
 
   .select-option.visible {
@@ -310,6 +312,11 @@ export const MakePlanningContainer = styled.div`
   .profile-container {
     width: 200px;
     height: 200px;
+  }
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 20px;
+    }
   }
 `;
 
