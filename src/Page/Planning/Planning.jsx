@@ -156,6 +156,7 @@ export const Planning = () => {
   const { plannerId } = useParams();
   const { user } = useAuth();
   const [plannerInfo, setPlannerInfo] = useState(null);
+  const [editPlannerInfo, setEditPlannerInfo] = useState(null);
   const [selectedThemes, setSelectedThemes] = useState([]);
   const [areaState, setAreaState] = useState({
     area: "",
@@ -223,7 +224,7 @@ export const Planning = () => {
 
   const handleInfoInputChange = (e) => {
     const { name, value } = e.target;
-    setPlannerInfo((prev) => ({
+    setEditPlannerInfo((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -233,7 +234,7 @@ export const Planning = () => {
       // Remove theme from selection
       const updatedThemes = selectedThemes.filter((t) => t !== theme);
       setSelectedThemes(updatedThemes);
-      setPlannerInfo((prev) => ({
+      setEditPlannerInfo((prev) => ({
         ...prev,
         theme: updatedThemes.join(", "),
       }));
@@ -241,7 +242,7 @@ export const Planning = () => {
       // Add theme to selection
       const updatedThemes = [...selectedThemes, theme];
       setSelectedThemes(updatedThemes);
-      setPlannerInfo((prev) => ({
+      setEditPlannerInfo((prev) => ({
         ...prev,
         theme: updatedThemes.join(", "),
       }));
@@ -250,9 +251,16 @@ export const Planning = () => {
 
   const handleOnClickEdit = () => {
     setIsEditting(!isEditting);
-    if (!isEditting) {
+    if (isEditting) {
       // 편집 완료하면
+      console.log("수정 완료 버튼 누름");
       setEditor("");
+      setEditPlannerInfo(null);
+      setPlannerInfo(editPlannerInfo);
+    } else {
+      // 편집 시작하면
+      console.log("편집 시작");
+      setEditPlannerInfo(plannerInfo);
     }
 
     const message = {
@@ -260,7 +268,7 @@ export const Planning = () => {
       plannerId: plannerId,
       sender: sender,
       data: {
-        // plannerInfo: plannerInfo,
+        plannerInfo: plannerInfo,
         plans: plans,
         isEditting: !isEditting,
       },
@@ -270,8 +278,6 @@ export const Planning = () => {
     if (ws.current) {
       ws.current.send(JSON.stringify(message));
     }
-
-    // console.log("plannerInfo : ", plannerInfo);
   };
 
   // 웹 소켓 연결하기
@@ -296,15 +302,13 @@ export const Planning = () => {
         ws.current.onmessage = (msg) => {
           const data = JSON.parse(msg.data);
           console.log("받은 데이터:", data);
+          console.log("editPlannerInfo : ", editPlannerInfo);
 
-          if (data.type === "PLANNER") {
-            // 상태 업데이트
-            // if (data.data.plannerInfo != null) {
-            // setPlannerInfo(data.data.plannerInfo);
+          if (data.type === "PLANNER" && data.data.plannerInfo !== null) {
+            // setEditPlannerInfo(data.data.plannerInfo);
             setPlans(data.data.plans);
             setIsEditting(data.data.isEditting);
             setEditor(data.sender);
-            // }
           } else if (data.type === "ENTER") {
             console.log(`${data.sender} 님이 입장했습니다.`);
           }
@@ -321,23 +325,6 @@ export const Planning = () => {
     };
   }, [plannerInfo, user.nickname]);
 
-  // useEffect(() => {
-  //   console.log("이게 꼐속 실행되는거임????");
-  //   console.log(isEditting, editor);
-  //   if (socketConnected && sender) {
-  //     const message = {
-  //       type: "PLANNER",
-  //       plannerId: plannerId,
-  //       sender: sender,
-  //       data: {
-  //         plans: plans,
-  //         isEditting: isEditting,
-  //       },
-  //     };
-  //     ws.current.send(JSON.stringify(message));
-  //   }
-  // }, [isEditting, plans]);
-
   useEffect(() => {
     // 소켓이 연결된 상태에서 메시지 전송
     if (socketConnected && sender) {
@@ -351,7 +338,24 @@ export const Planning = () => {
       ws.current.send(JSON.stringify(message));
       console.log("입장 메시지 전송:", message);
     }
-  }, [socketConnected, sender]);
+  }, [socketConnected, sender, plannerId]);
+
+  useEffect(() => {
+    if (socketConnected && editPlannerInfo) {
+      console.log("여기서 보냄");
+      const message = {
+        type: "PLANNER",
+        plannerId: plannerId,
+        sender: sender,
+        data: {
+          plannerInfo: plannerInfo,
+          plans: plans,
+          isEditting: isEditting,
+        },
+      };
+      ws.current.send(JSON.stringify(message));
+    }
+  }, [editPlannerInfo]);
 
   useEffect(() => {
     const fetchPlanner = async () => {
@@ -386,7 +390,7 @@ export const Planning = () => {
     fetchChatMsg();
     setPlans(plansEx);
     setSender(user.nickname);
-  }, [plannerId]);
+  }, [plannerId, user.id, user.nickname]);
 
   const fetchMember = async () => {
     try {

@@ -109,31 +109,34 @@ const TourItemStyled = styled.div`
     }
   }
   @media (max-width: 768px) {
-    height: 150px;
+    height: 25vw;
     width: 80vw;
     .img {
-      max-width: 300px;
-      min-width: 300px;
+      max-width: 40%;
+      min-width: 40%;
     }
     .thumbnail {
     }
     .title {
       font-size: 15px;
+      margin: 5px 0 0 5px;
     }
     .address,
     .subCategory,
     .type {
-      font-size: 10px;
+      font-size: 9px;
       margin: 5px;
     }
-  }
-  .owner {
-    width: 150px;
-    font-size: 10px;
-    right: -20px;
-    img {
-      width: 50px;
-      height: 50px;
+    .owner {
+      width: 20vw;
+      font-size: 10px;
+      right: 0px;
+      bottom: 5px;
+      gap: 10px;
+      img {
+        width: 40%;
+        height: 40%;
+      }
     }
   }
 `;

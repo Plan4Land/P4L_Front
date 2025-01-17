@@ -1,7 +1,7 @@
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { useState, useEffect } from "react";
 import { areas, themes } from "../../Util/Common";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
 import { Button, ToggleButton } from "../../Component/ButtonComponent";
 import {
   SelectTourItem,
@@ -9,6 +9,7 @@ import {
   List,
   ItemList,
   FilterButton,
+  SortSelect,
 } from "../../Style/ItemListStyled";
 import { FaSearch, FaUndo } from "react-icons/fa";
 import { PlannerItemApi } from "../../Api/ItemApi";
@@ -224,7 +225,7 @@ export const PlanningList = () => {
               />
             </h3>
             {isAreaOpen && (
-              <div>
+              <div className="buttons">
                 {areas.map((area) => (
                   <Button
                     key={area.code}
@@ -249,7 +250,7 @@ export const PlanningList = () => {
                 />
               </h3>
               {isSubAreaOpen && (
-                <div>
+                <div className="buttons">
                   {selectedAreaData.subAreas.map((subArea) => (
                     <Button
                       key={subArea.code}
@@ -274,7 +275,7 @@ export const PlanningList = () => {
               />
             </h3>
             {isThemeOpen && (
-              <div>
+              <div className="buttons">
                 {themes.map((theme) => (
                   <Button
                     key={theme}
@@ -295,17 +296,18 @@ export const PlanningList = () => {
         <ItemList>
           {loading && <p>로딩 중...</p>}
           {error && <p style={{ color: "red" }}>{error}</p>}
-          <select
-            value={filters.sortBy}
-            onChange={handleSortChange}
-            className={"sort-select"}
-          >
-            {sortBy.map((e) => (
-              <option key={e.name} value={e.value}>
-                {e.name}
-              </option>
-            ))}
-          </select>
+          <div className="selectMenu">
+            <SortSelect value={filters.sortBy} onChange={handleSortChange}>
+              {sortBy.map((e) => (
+                <option key={e.name} value={e.value}>
+                  {e.name}
+                </option>
+              ))}
+            </SortSelect>
+            <Link to={"/makeplanning"}>
+              <Button>플래닝 만들기</Button>
+            </Link>
+          </div>
           <div className="plannerList">
             {planners.map((planner) => {
               const areaName =

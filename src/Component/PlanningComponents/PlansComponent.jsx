@@ -112,7 +112,7 @@ export const PlansComponent = ({
     const groupPlansByDate = () => {
       // 1. 날짜별로 그룹화
       const groupedPlans = plans.reduce((acc, plan) => {
-        console.log(plan);
+        // console.log(plan);
         const dateKey = plan.date; // "2025-01-10" 형태로 날짜만 추출
         if (!acc[dateKey]) {
           acc[dateKey] = [];

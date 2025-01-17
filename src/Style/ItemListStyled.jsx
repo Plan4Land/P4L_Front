@@ -3,9 +3,11 @@ import { colors } from "./GlobalStyle";
 
 export const List = styled.div`
   display: flex;
-  width: 100%;
-  margin: 20px;
+  width: 90%;
+  margin: auto;
+  margin-top: 20px;
   margin-bottom: 50px;
+  gap: 20px;
   @media (max-width: 768px) {
     width: 90%;
   }
@@ -34,10 +36,33 @@ export const TrafficBox = styled.div`
   margin-bottom: 50px;
 `;
 
+export const SortSelect = styled.select`
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 200px;
+
+  &:focus {
+    outline: none;
+    border-color: ${colors.colorA};
+  }
+
+  option {
+    padding: 10px;
+    background-color: white;
+    color: #333;
+  }
+`;
+
 export const SelectTourItem = styled.div`
-  width: 450px;
+  width: 400px;
   padding-top: 40px;
-  left: 20px;
+
   position: relative;
   button {
     font-size: 12px;
@@ -86,6 +111,11 @@ export const SelectTourItem = styled.div`
   .toggle-button:hover {
     color: ${colors.colorB};
   }
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    place-items: center;
+  }
   /* SelectTourItem 기본 상태 숨기기 (모바일 화면) */
   @media (max-width: 768px) {
     display: none; /* 기본적으로 숨기기 */
@@ -100,14 +130,18 @@ export const SelectTourItem = styled.div`
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    .buttons {
+      width: 80%;
+      margin: auto;
+    }
     button {
       font-size: 10px;
-      width: 80px;
+      width: 100px;
       height: 30px;
-      padding: 0;
     }
     h3 {
       font-size: 18px;
+      margin: 15px 0 5px 10px;
     }
   }
 `;
@@ -183,12 +217,17 @@ export const SearchSt = styled.div`
 
 export const ItemList = styled.div`
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 
   .tour-list,
   .plannerList {
+    padding: 0;
+  }
+  .selectMenu {
     width: 90%;
+    display: flex;
+    justify-content: space-between;
   }
 `;

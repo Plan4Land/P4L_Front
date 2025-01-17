@@ -18,31 +18,49 @@ import "swiper/css/navigation"; // 추천 관광지 스와이퍼
 import "swiper/css/pagination"; // 추천 관광지 스와이퍼
 import { Navigation, Pagination } from "swiper/modules"; // 추천 관광지 스와이퍼
 import Calendar from "react-calendar"; // 축제 캘린더
-import "react-calendar/dist/Calendar.css"; // 축제 캘린더
-import axios from "axios";
-import { TopTourApi, TopPlanApi } from "../Api/ItemApi";
+import "react-calendar/dist/Calendar.css"; // 캘린더
+import { TopTourApi, TopPlanApi, HolidayApi } from "../Api/ItemApi";
 
 export const Main = () => {
   const [selectedMenu, setSelectedMenu] = useState("지역"); // 미니검색창
   const [selectedArea, setSelectedArea] = useState("");
-  const [value, onChange] = useState(new Date()); // 축제 캘린더
-  const [holidays, setHolidays] = useState([]); // 공휴일 목록
-  const [currentMonth, setCurrentMonth] = useState({
-    year: new Date().getFullYear(),
-    month: new Date().getMonth(),
-  });
-  const today = new Date();
-  const selectedMonth = value.getMonth();
-  const selectedYear = value.getFullYear();
+  const [holidays, setHolidays] = useState([]);
+  const [holidayDates, setHolidayDates] = useState([]);
   const [topTourList, setTopTourList] = useState([]);
   const [topPlans, setTopPlans] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date()); // 선택된 날짜
+  const [year, setYear] = useState(new Date().getFullYear()); // 현재 연도
+  const [month, setMonth] = useState(new Date().getMonth()); // 현재 월
   const navigate = useNavigate();
 
+  // 공휴일 데이터 fetch
+  useEffect(() => {
+    const fetchHolidays = async () => {
+      try {
+        const holidaysData = await HolidayApi.getHolidaysByMonth(
+          year,
+          month + 1
+        ); // API에 전달할 때 월을 1부터 시작하므로 +1
+        setHolidays(holidaysData); // 공휴일 목록 상태 업데이트
+
+        // 공휴일 날짜만 추출하여 holidayDates에 저장
+        const holidayDatesArray = holidaysData.map((holiday) =>
+          new Date(holiday.holidayDate).toDateString()
+        );
+        setHolidayDates(holidayDatesArray);
+      } catch (error) {
+        console.error("공휴일 조회 오류:", error);
+      }
+    };
+
+    fetchHolidays();
+  }, [year, month]);
+
+  // 상위 플래닝 3개 데이터 fetch
   useEffect(() => {
     const fetchTopPlans = async () => {
       try {
         const response = await TopPlanApi.getTop3Plans();
-
         setTopPlans(response);
       } catch (error) {
         console.error("상위 3개 플래닝 데이터를 가져오는 데 실패:", error);
@@ -51,10 +69,7 @@ export const Main = () => {
     fetchTopPlans();
   }, []);
 
-  const planHandleClick = (id) => {
-    navigate(`/planning/${id}`);
-  };
-
+  // 상위 관광지 5개 데이터 fetch
   useEffect(() => {
     const fetchTopTourList = async () => {
       try {
@@ -67,52 +82,32 @@ export const Main = () => {
     fetchTopTourList();
   }, []);
 
+  // 플래닝 클릭 시 상세 페이지로 이동
+  const planHandleClick = (id) => {
+    navigate(`/planning/${id}`);
+  };
+
+  // 관광지 클릭 시 상세 페이지로 이동
   const tourHandleClick = (id) => {
     navigate(`/tourItemInfo/${id}`);
   };
 
+  // 지역 선택
   const handleAreaClick = (areaCode) => {
     setSelectedArea(areaCode);
   };
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/holiday")
-      .then((response) => {
-        const holidaysData = Array.isArray(response.data) ? response.data : [];
-        setHolidays(holidaysData);
-      })
-      .catch((error) => {
-        // console.error("공휴일 데이터를 불러오는 데 실패했습니다.", error);
-      });
-  }, []);
-
-  const holidayDates = holidays.map((holiday) => {
-    const date = holiday.locdate.toString();
-    return new Date(
-      parseInt(date.slice(0, 4)), // 연도
-      parseInt(date.slice(4, 6)) - 1, // 월
-      parseInt(date.slice(6, 8)) // 일
-    );
-  });
-
-  const filterHolidaysForMonth = (year, month) => {
-    return holidays.filter((holiday) => {
-      const holidayDate = new Date(
-        parseInt(holiday.locdate.toString().slice(0, 4)), // 연도
-        parseInt(holiday.locdate.toString().slice(4, 6)) - 1, // 월
-        parseInt(holiday.locdate.toString().slice(6, 8)) // 일
-      );
-      return (
-        holidayDate.getFullYear() === year && holidayDate.getMonth() === month
-      );
-    });
+  // 날짜 변경 시 처리
+  const onChange = (date) => {
+    setSelectedDate(date);
+    setYear(date.getFullYear());
+    setMonth(date.getMonth());
   };
 
+  // 월 변경 시 처리
   const handleMonthChange = ({ activeStartDate }) => {
-    const newYear = activeStartDate.getFullYear();
-    const newMonth = activeStartDate.getMonth();
-    setCurrentMonth({ year: newYear, month: newMonth });
+    setYear(activeStartDate.getFullYear());
+    setMonth(activeStartDate.getMonth());
   };
 
   return (
@@ -199,7 +194,6 @@ export const Main = () => {
 
         {/* 상위 플래닝 3개 */}
         <RecommPlan className="GridItem">
-          <h3>----------인기 플래닝----------</h3>
           <PlanBox>
             {topPlans.map((plan, index) => {
               const areaName =
@@ -229,58 +223,40 @@ export const Main = () => {
           </PlanBox>
         </RecommPlan>
 
-        {/* 축제 미니 캘린더 */}
         <Festive className="GridItem">
           <Calendar
             calendarType="hebrew"
             onChange={onChange}
-            value={value} // 선택된 날짜
-            onActiveStartDateChange={handleMonthChange} // 월 변경 시 공휴일 목록 필터링
+            value={selectedDate} // 선택된 날짜
+            onActiveStartDateChange={handleMonthChange}
             tileClassName={({ date, view }) => {
-              const { year, month } = currentMonth; // 현재 선택된 연도/월을 가져옵니다.
-
-              if (date.toDateString() === today.toDateString()) {
-                return "react-calendar__tile--now";
-              }
-
-              // 현재 월을 벗어난 날짜는 반투명 처리
-              if (view === "month") {
-                const isSameMonth = date.getMonth() === month; // 현재 월과 비교
-                const isSameYear = date.getFullYear() === year; // 현재 연도와 비교
-                if (!isSameMonth || !isSameYear) {
-                  return "react-calendar__tile--inactive"; // 흐릿한 날짜
-                }
-
-                // 토요일/일요일 스타일 추가
-                if (date.getDay() === 0) return "react-calendar-sunday";
-                if (date.getDay() === 6) return "react-calendar-saturday";
+              const isSameMonth = date.getMonth() === month;
+              const isSameYear = date.getFullYear() === year;
+              if (!isSameMonth || !isSameYear) {
+                return "react-calendar__tile--inactive";
               }
             }}
             tileContent={({ date }) =>
               holidayDates.some(
-                (holidayDate) =>
-                  holidayDate.toDateString() === date.toDateString()
+                (holidayDate) => holidayDate === date.toDateString()
               ) ? (
-                <div className="red-dot"></div> // 날짜 아래 빨간 점 표시
+                <div className="red-dot"></div> // 공휴일 날짜에 빨간 점 표시
               ) : null
             }
             formatDay={(locale, date) => date.getDate()}
-            tileDisabled={({ date, view }) => view === "month"} // 'month' 뷰일 때 날짜만 선택 불가능
+            tileDisabled={({ date, view }) => view === "month"}
           />
 
           <HolidayList>
             <ul>
               {holidays.length === 0 ? (
-                <li>일정이 존재하지 않습니다..</li>
+                <li>일정이 존재하지 않습니다.</li>
               ) : (
-                filterHolidaysForMonth(
-                  currentMonth.year,
-                  currentMonth.month
-                ).map((holiday) => (
+                holidays.map((holiday) => (
                   <li key={holiday.seq}>
-                    {parseInt(holiday.locdate.toString().slice(4, 6))}월{" "}
-                    {parseInt(holiday.locdate.toString().slice(6, 8))}일 -{" "}
-                    {holiday.dateName}
+                    {parseInt(holiday.holidayDate.toString().slice(5, 7))}월{" "}
+                    {parseInt(holiday.holidayDate.toString().slice(8, 10))}일 -{" "}
+                    {holiday.holidayName}
                   </li>
                 ))
               )}

@@ -1,16 +1,18 @@
 import styled from "styled-components";
 
 export const colors = {
-  colorA: "#19660a",
-  colorB: "#579450",
-  colorC: "#d3eea9",
-  colorD: "#ffffcf",
+
+  colorA: "#4d2c0d",
+  colorB: "#7a4b14",
+  colorC: "#d4a76c",
+  colorD: "#fff6e2",
   colorE: "#ff7700"
 };
 
 export const HeaderSt = styled.div`
   height: 80px;
-  background-color: ${colors.colorD};
+  background-color: ${colors.colorB};
+  color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -147,28 +149,35 @@ export const HeaderSt = styled.div`
       padding: 0 5px 0 5px;
     }
     p {
-      cursor: pointer;
+      color: ${colors.colorA};
       font-size: 16px;
       margin: 5px 0;
       cursor: pointer;
       transition: all 0.3s ease;
 
       &:hover {
-        color: ${colors.colorA};
-        background-color: #ececec;
+        background-color: ${colors.colorD};
       }
+    }
+  }
+  @media (max-width: 768px) {
+    .dropdown-list {
+      top: 0;
+      right: -180px;
+      scale: 0.7;
     }
   }
 `;
 
 export const NavSt = styled.div`
   height: 50px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-grow: 0.6;
   .tag {
-    color: ${colors.colorA};
+    color: white;
     font-weight: bold;
     text-decoration: none;
     flex: 0.8;
@@ -185,7 +194,7 @@ export const NavSt = styled.div`
     opacity: 0.7;
   }
   p {
-    color: ${colors.colorA};
+    color: white;
     margin: -10px;
   }
   @media (max-width: 768px) {
@@ -194,6 +203,7 @@ export const NavSt = styled.div`
     right: 0;
     bottom: 0;
     background-color: white;
+    color: black;
     font-size: 12px;
     z-index: 10;
   }

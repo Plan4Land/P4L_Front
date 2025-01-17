@@ -281,7 +281,7 @@ export const TourList = () => {
               />
             </h3>
             {isAreaOpen && (
-              <div>
+              <div className="buttons">
                 {areas.map((area) => (
                   <Button
                     key={area.code}
@@ -307,7 +307,7 @@ export const TourList = () => {
                 />
               </h3>
               {isSubAreaOpen && (
-                <div>
+                <div className="buttons">
                   {selectedAreaData.subAreas.map((subArea) => (
                     <Button
                       key={subArea.code}
@@ -333,7 +333,7 @@ export const TourList = () => {
               />
             </h3>
             {isTopThemeOpen && (
-              <div>
+              <div className="buttons">
                 {ServiceCode.map((cat) => (
                   <Button
                     key={cat.cat1}
@@ -359,7 +359,7 @@ export const TourList = () => {
                 />
               </h3>
               {isMiddleThemeOpen && (
-                <div>
+                <div className="buttons">
                   {ServiceCode.find(
                     (cat) => cat.cat1 === filters.topTheme
                   )?.cat2List.map((cat2) => (
@@ -388,7 +388,7 @@ export const TourList = () => {
                 />
               </h3>
               {isBottomThemeOpen && (
-                <div>
+                <div className="buttons">
                   {filters.middleTheme &&
                     ServiceCode.find((cat) => cat.cat1 === filters.topTheme)
                       ?.cat2List.find(
@@ -421,7 +421,7 @@ export const TourList = () => {
               />
             </h3>
             {isCategoryOpen && (
-              <div>
+              <div className="buttons">
                 {types.map((type) => (
                   <Button
                     key={type.code}
