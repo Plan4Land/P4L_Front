@@ -8,11 +8,7 @@ export const TravelSpotApi = {
         ...filters,
       };
 
-      console.log("******************************");
-      console.log(filters);
-
       const response = await AxiosInstance.get("/api/travelspots", { params });
-      console.log("API 응답 데이터:", response.data);
 
       return response.data || [];
     } catch (error) {
@@ -99,7 +95,6 @@ export const PlannerItemApi = {
         ...filters, // 필터 추가
       };
       const response = await AxiosInstance.get("/planner/planners", { params });
-      console.log("API 응답 데이터:", response.data);
       return response.data || [];
     } catch (error) {
       console.error("플래너 데이터 조회 오류:", error);
