@@ -160,6 +160,7 @@ const UserInfoEdit = () => {
           </div>
         </InputBox>
 
+        {/* 프로필 사진 */}
         <PictureComponent 
           currentPic={currentPic}
           setCurrentPic={setCurrentPic}
