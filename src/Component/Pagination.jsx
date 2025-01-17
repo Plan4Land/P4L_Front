@@ -43,8 +43,14 @@ export const Pagination = ({ currentPage, totalPages, handlePageChange }) => {
   const firstPage = currentPage - 1;
   const lastPage = Math.min(currentPage + 3, totalPages);
 
-  for (let i = firstPage; i <= lastPage; i++) {
-    pageNumbers.push(i);
+  if(currentPage > 3){
+    for (let i = firstPage; i <= lastPage; i++) {
+      pageNumbers.push(i);
+    }
+  }else{
+    for (let i = 1; i <= 5; i++) {
+      pageNumbers.push(i);
+    }
   }
 
   return (
