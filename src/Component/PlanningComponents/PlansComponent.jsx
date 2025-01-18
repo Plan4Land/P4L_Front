@@ -1,11 +1,18 @@
-import { MainPlanning, DayToggleContainer } from "../../Style/PlanningStyled";
+import {
+  MainPlanning,
+  DayToggleContainer,
+  DatePickerContainer,
+} from "../../Style/PlanningStyled";
 import { Button } from "../ButtonComponent";
-import { themes } from "../../Util/Common";
+import { themes, areas } from "../../Util/Common";
 import { ProfileImg } from "../ProfileImg";
 import MemoIcon from "../../Img/memo-icon.png";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../Context/AuthContext";
-import _ from "lodash";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { ko } from "date-fns/locale";
+// import _ from "lodash";
 
 export const PlannerInfoEditComponent = ({
   ws,
@@ -20,18 +27,69 @@ export const PlannerInfoEditComponent = ({
   plannerId,
   sender,
 }) => {
-  const handleInfoInputChange = (e) => {
-    const { name, value } = e.target;
-    const byteLength = new TextEncoder().encode(value).length;
+  const [editTitle, setEditTitle] = useState(false);
+  const [title, setTitle] = useState(plannerInfo.title);
+  const [editArea, setEditArea] = useState(false);
+  const [selectedArea, setSelectedArea] = useState("");
+  const [selectedSubArea, setSelectedSubArea] = useState("");
 
-    // 한글 기준 20글자 제한 (20자 * 2바이트 = 40바이트 이하)
-    if (byteLength <= 40) {
-      setEditPlannerInfo((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+  useEffect(() => {
+    if (plannerInfo.area) {
+      const area = areas.find((area) => area.code === plannerInfo.area);
+      if (area) {
+        setSelectedArea(area.name);
+
+        // 세부 지역 처리
+        const subArea = area.subAreas.find(
+          (subArea) => subArea.code === plannerInfo.subArea
+        );
+        if (subArea) {
+          setSelectedSubArea(subArea.name);
+        }
+      }
+    }
+  }, []);
+
+  const handleInfoInputChange = (e) => {
+    // const byteLength = new TextEncoder().encode(e.target.value).length;
+
+    // // 한글 기준 20글자 제한 (20자 * 2바이트 = 40바이트 이하)
+    // if (byteLength <= 40) {
+    //   setTitle(e.target.value);
+    // }
+    if (e.target.value.length <= 20) {
+      setTitle(e.target.value);
     }
   };
+
+  const handleSaveTitle = () => {
+    setEditPlannerInfo((prev) => ({
+      ...prev,
+      title: title,
+    }));
+    setEditTitle(!editTitle);
+  };
+
+  const handleSaveArea = () => {
+    const areaCode = areas.find((area) => area.name === selectedArea)?.code;
+    const subAreaCode = areas
+      .find((area) => area.name === selectedArea)
+      ?.subAreas.find((subArea) => subArea.name === selectedSubArea)?.code;
+
+    setEditPlannerInfo((prev) => ({
+      ...prev,
+      area: areaCode,
+      subArea: subAreaCode,
+    }));
+    setEditArea(!editArea);
+  };
+
+  const handleAreaChange = (e) => {
+    const selected = e.target.value;
+    setSelectedArea(selected);
+    setSelectedSubArea(""); // 지역 변경 시 세부 지역 초기화
+  };
+  const selectedAreaData = areas.find((area) => area.name === selectedArea);
 
   const handleThemeClick = (theme) => {
     if (selectedThemes.includes(theme)) {
@@ -50,6 +108,21 @@ export const PlannerInfoEditComponent = ({
       setEditPlannerInfo((prev) => ({
         ...prev,
         theme: updatedThemes.join(", "),
+      }));
+    }
+  };
+
+  const handleStartDateChange = (date) => {
+    setEditPlannerInfo((prev) => ({
+      ...prev,
+      startDate: date,
+    }));
+    console.log("date >>>>>>> : ", date);
+    console.log("endDate >>>>>>>> : ", new Date(editPlannerInfo.endDate));
+    if (editPlannerInfo.endDate && date > new Date(editPlannerInfo.endDate)) {
+      setEditPlannerInfo((prev) => ({
+        ...prev,
+        endDate: date,
       }));
     }
   };
@@ -80,13 +153,71 @@ export const PlannerInfoEditComponent = ({
         />
       </div>
       <div>
-        <input
-          type="text"
-          name="title"
-          className="planner-edit-title"
-          value={editPlannerInfo.title}
-          onChange={handleInfoInputChange}
-        />
+        <div>
+          <input
+            type="text"
+            name="title"
+            className="planner-edit-title"
+            value={title}
+            onChange={handleInfoInputChange}
+            disabled={!editTitle}
+          />
+          {editTitle ? (
+            <button className="edit-button" onClick={() => handleSaveTitle()}>
+              수정 완료
+            </button>
+          ) : (
+            <button
+              className="edit-button"
+              onClick={() => setEditTitle(!editTitle)}
+            >
+              제목 수정
+            </button>
+          )}
+        </div>
+        <div className="edit-area">
+          <select
+            value={selectedArea}
+            onChange={handleAreaChange}
+            className="location-select"
+            disabled={!editArea}
+          >
+            <option value="">지역을 선택하세요</option>
+            {areas.map((area) => (
+              <option key={area.name} value={area.name}>
+                {area.name}
+              </option>
+            ))}
+          </select>
+          {selectedAreaData && (
+            <select
+              value={selectedSubArea}
+              onChange={(e) => setSelectedSubArea(e.target.value)}
+              className="location-select"
+              disabled={!editArea}
+            >
+              <option value="">세부 지역을 선택하세요</option>
+              {selectedAreaData.subAreas.map((subArea) => (
+                <option key={subArea.code} value={subArea.name}>
+                  {subArea.name}
+                </option>
+              ))}
+            </select>
+          )}
+
+          {editArea ? (
+            <button className="edit-button" onClick={() => handleSaveArea()}>
+              수정 완료
+            </button>
+          ) : (
+            <button
+              className="edit-button"
+              onClick={() => setEditArea(!editArea)}
+            >
+              지역 수정
+            </button>
+          )}
+        </div>
         <div className="theme-buttons">
           {themes.map((theme) => (
             <button
@@ -103,38 +234,46 @@ export const PlannerInfoEditComponent = ({
             </button>
           ))}
         </div>
-        <input
-          type="text"
-          name="theme"
-          value={plannerInfo.theme}
-          onChange={handleInfoInputChange}
-        />
-        <input
-          type="date"
-          name="startDate"
-          value={plannerInfo.startDate.split("T")[0]}
-          onChange={(e) =>
-            handleInfoInputChange({
-              target: {
-                name: "startDate",
-                value: `${e.target.value}T00:00:00`,
-              },
-            })
-          }
-        />
-        <input
-          type="date"
-          name="endDate"
-          value={plannerInfo.endDate.split("T")[0]}
-          onChange={(e) =>
-            handleInfoInputChange({
-              target: {
-                name: "endDate",
-                value: `${e.target.value}T00:00:00`,
-              },
-            })
-          }
-        />
+        <DatePickerContainer>
+          <DatePicker
+            className="input-date-picker"
+            locale={ko}
+            dateFormat="yyyy-MM-dd"
+            dateFormatCalendar="yyyy년 MM월"
+            timeCaption="시간"
+            selected={new Date(editPlannerInfo.startDate)}
+            onChange={handleStartDateChange}
+            selectsStart
+            startDate={new Date(editPlannerInfo.startDate)}
+            endDate={new Date(editPlannerInfo.endDate)}
+            minDate={new Date()}
+            placeholderText="시작일 선택"
+          />
+          <span>~</span>
+          {editPlannerInfo.startDate ? (
+            <DatePicker
+              className="input-date-picker"
+              locale={ko}
+              dateFormat="yyyy-MM-dd"
+              dateFormatCalendar="yyyy년 MM월"
+              timeCaption="시간"
+              selected={new Date(editPlannerInfo.endDate)}
+              onChange={(date) =>
+                setEditPlannerInfo((prev) => ({
+                  ...prev,
+                  endDate: date,
+                }))
+              }
+              selectsEnd
+              startDate={new Date(editPlannerInfo.startDate)}
+              endDate={new Date(editPlannerInfo.endDate)}
+              minDate={new Date(editPlannerInfo.startDate)}
+              placeholderText="종료일 선택"
+            />
+          ) : (
+            <input className="input-date-picker" placeholder="종료일 선택" />
+          )}
+        </DatePickerContainer>
       </div>
     </>
   );
@@ -149,7 +288,6 @@ export const PlansComponent = ({
   setCurrentAddedPlace,
   memoState,
   setMemoState,
-  plansEx,
   plans,
   plannerInfo,
   setModals,
@@ -246,6 +384,7 @@ export const PlansComponent = ({
     }));
 
     const groupPlansByDate = () => {
+      console.log("plans : ", plans);
       // 1. 날짜별로 그룹화
       const groupedPlans = plans.reduce((acc, plan) => {
         // console.log(plan);

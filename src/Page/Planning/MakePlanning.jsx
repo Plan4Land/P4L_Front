@@ -111,6 +111,10 @@ export const MakePlanning = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("selectedarea : ", selectedArea);
+  }, [selectedArea]);
+
   return (
     <>
       <Header />

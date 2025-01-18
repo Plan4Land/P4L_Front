@@ -32,129 +32,6 @@ import {
 } from "../../Component/PlanningComponents/PlanningModals";
 import _ from "lodash";
 
-// const plannerInfo = {
-//   title: "떠나요~ 두리서~",
-//   thumbnail:
-//     "https://contentful.harrypotter.com/usf1vwtuqyxm/4dZqNX3cU4Vb65CHOUW5VH/1f754fdad963b35da285798b84b7b30b/HP-F2-chamber-of-secrets-chamber-door-snakes-harry-web-landscape?q=75&fm=webp&w=370&h=210&fit=fill",
-//   area: "전라남도",
-//   subArea: "보성군",
-//   themes: "가족,힐링,인생샷",
-//   startDate: "Fri Jan 10 2025 00:00:00 GMT+0900 (한국 표준시)",
-//   endDate: "Wed Jan 15 2025 00:00:00 GMT+0900 (한국 표준시)",
-//   owner: {
-//     id: "owner123",
-//     nickname: "위즐리",
-//     profileImg:
-//       "https://contentful.harrypotter.com/usf1vwtuqyxm/4l9s1Qk6QamXxv1nTQKRQ0/721b11680a7df8bd9a22c7c232fa8283/HP-F5-order-of-the-phoenix-ginny-fred-george-ron-posing-web-landscape?q=75&fm=webp&w=500",
-//   },
-//   participants: [
-//     {
-//       id: "participant1",
-//       nickname: "해그리드",
-//       profileImg:
-//         "https://contentful.harrypotter.com/usf1vwtuqyxm/6MYGoPvMPUJz2biUkBUyxJ/72829bf3386bb2e0046036c565d54813/hp-f1-philosophers-stone-hagrid-fang-outside-hagrids-hut-playing-flute-web-landscape.jpg?q=75&fm=webp&w=500",
-//     },
-//     {
-//       id: "participant2",
-//       nickname: "드래곤",
-//       profileImg:
-//         "https://contentful.harrypotter.com/usf1vwtuqyxm/3C3YOcwXaUFwUHSty4tarh/6ab72d65cba1452a4bd3270b5be625ec/HP-F4-goblet-of-fire-dragon-first-task-triwizard-tournament-hungarian-horntail-web-landscape?q=75&fm=jpg&w=380&h=285&fit=fill&f=top",
-//     },
-//     {
-//       id: "participant3",
-//       nickname: "그자",
-//       profileImg:
-//         "https://contentful.harrypotter.com/usf1vwtuqyxm/ULm0YI9QFofCv7v2Toy8W/3be6b983fc5c8197fabea4770f1a76de/HP-F7-deathly-hallows-part-one-voldemort-sitting-staring-web-landscape.jpg?q=75&fm=webp&w=370&h=210&fit=fill",
-//     },
-//   ],
-// };
-const plansEx = [
-  {
-    id: 1,
-    seq: 1,
-    date: "2025-01-21T10:00:00", // 계획일 (ISO 8601 형식)
-    spotName: "Namsan Tower",
-    category: "관광명소",
-    memo: "서울의 멋진 야경을 볼 수 있는 곳",
-    latitude: "37.551229",
-    longitude: "126.988205",
-    planner: {
-      id: 101,
-      name: "John's Planner",
-    },
-  },
-  {
-    id: 2,
-    seq: 2,
-    date: "2025-01-21T12:00:00",
-    spotName: "Gwangjang Market",
-    category: "음식점",
-    memo: "한국 전통 시장 탐방",
-    latitude: "37.570379",
-    longitude: "126.999017",
-    planner: {
-      id: 101,
-      name: "John's Planner",
-    },
-  },
-  {
-    id: 3,
-    seq: 3,
-    date: "2025-01-21T14:00:00",
-    spotName: "Bukchon Hanok Village",
-    category: "문화체험",
-    memo: "전통 한옥 체험",
-    latitude: "37.582606",
-    longitude: "126.986294",
-    planner: {
-      id: 101,
-      name: "John's Planner",
-    },
-  },
-  {
-    id: 4,
-    seq: 1,
-    date: "2025-01-22T16:00:00",
-    spotName: "Lotte World Tower",
-    category: "쇼핑",
-    memo: "서울의 고층 빌딩에서 쇼핑과 전망 즐기기",
-    latitude: "37.512038",
-    longitude: "127.102785",
-    planner: {
-      id: 101,
-      name: "John's Planner",
-    },
-  },
-  {
-    id: 5,
-    seq: 2,
-    date: "2025-01-22T18:00:00",
-    spotName: "Dongdaemun Design Plaza",
-    category: "문화예술",
-    memo: "현대적인 디자인과 전시 관람",
-    latitude: "37.566295",
-    longitude: "127.009669",
-    planner: {
-      id: 101,
-      name: "John's Planner",
-    },
-  },
-  {
-    id: 6,
-    seq: 3,
-    date: "2025-01-22T20:00:00",
-    spotName: "Han River Park",
-    category: "야외활동",
-    memo: "한강공원에서 자전거와 산책",
-    latitude: "37.517236",
-    longitude: "126.953104",
-    planner: {
-      id: 101,
-      name: "John's Planner",
-    },
-  },
-];
-
 export const Planning = () => {
   const navigate = useNavigate();
   const { plannerId } = useParams();
@@ -279,12 +156,14 @@ export const Planning = () => {
           data.data?.plannerInfo?.[0] &&
           !_.isEqual(data.data.plannerInfo[0], editPlannerInfo)
         ) {
+          console.log("바뀐거 있음");
           setEditPlannerInfo(data.data.plannerInfo[0]);
           setReceivePlanner(data.data.plannerInfo[0]);
           setPlans(data.data.plans);
           setIsEditting(data.data.isEditting);
           setEditor(data.sender);
         } else if (data.type === "PLANNER") {
+          console.log("바뀐거 없음");
           setReceivePlanner(
             Array.isArray(data.data.plannerInfo) &&
               data.data.plannerInfo.length > 0
@@ -393,7 +272,7 @@ export const Planning = () => {
     fetchPlanner();
     fetchIsBookmarked();
     fetchChatMsg();
-    setPlans(plansEx);
+    setPlans([]);
     setSender(user.nickname);
   }, [plannerId, user.id, user.nickname]);
 
@@ -419,19 +298,19 @@ export const Planning = () => {
   }, [searchState.submitUserKeyword]);
 
   useEffect(() => {
-    if (plannerInfo) {
-      const areaName = areas.find(
-        (area) => area.code === plannerInfo.area
-      ).name;
+    const planner = editPlannerInfo || plannerInfo;
+    if (planner) {
+      const areaName = areas.find((area) => area.code === planner.area)?.name;
       const subAreaName = areas
-        .find((area) => area.code === plannerInfo.area)
-        ?.subAreas.find((sub) => sub.code === plannerInfo.subArea)?.name;
+        .find((area) => area.code === planner.area)
+        ?.subAreas.find((sub) => sub.code === planner.subArea)?.name;
+
       setAreaState({
         area: areaName || "",
         subArea: subAreaName || "",
       });
     }
-  }, [plannerInfo]);
+  }, [plannerInfo, editPlannerInfo]);
 
   useEffect(() => {
     if (
@@ -455,6 +334,10 @@ export const Planning = () => {
       searchUsersRst: [],
     });
   }, [modals.searchUser]);
+
+  useEffect(() => {
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>", plans);
+  }, [plans]);
 
   if (plannerInfo) {
     return (
@@ -603,11 +486,13 @@ export const Planning = () => {
                     className="edit-button"
                     onClick={() => handleOnClickEdit()}
                   >
-                    수정 완료
+                    편집 완료
                   </Button>
-                ) : isEditting && editor !== user.nickname ? (
+                ) : isEditting && editor && editor !== user.nickname ? (
                   // 다른 사용자가 수정 중이라는 문구
-                  <p className="editing-info">{editor} 님이 수정 중입니다.</p>
+                  <p className="editing-info">
+                    <span>{editor}</span> 님이 수정 중입니다.
+                  </p>
                 ) : (
                   // 기본 편집 버튼
                   <Button
@@ -630,7 +515,6 @@ export const Planning = () => {
               setCurrentAddedPlace={setCurrentAddedPlace}
               memoState={memoState}
               setMemoState={setMemoState}
-              plansEx={plansEx}
               plans={plans}
               plannerInfo={plannerInfo}
               setModals={setModals}

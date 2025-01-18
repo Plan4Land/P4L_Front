@@ -37,18 +37,57 @@ export const Info = styled.div`
       height: 150px;
     }
   }
+
   .planner-edit-title {
     width: 400px;
     padding: 10px;
-    font-size: 16px;
+    margin: 0 0 10px 5px;
+    font-size: 18px;
+    font-weight: bold;
     border: none;
     border-bottom: 1px solid #ccc;
+  }
+
+  .edit-button {
+    margin-left: 3%;
+    padding: 2px 8px;
+    border-radius: 5px;
+    border: 1px solid ${colors.colorB};
+    background-color: ${colors.colorB};
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .location-select {
+    margin-left: 0.8%;
+    font-size: 14px;
+    padding: 5px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    width: 25%;
+    background-color: #f9f9f9;
+    cursor: pointer;
+  }
+  .location-select:first-of-type {
+    margin-bottom: 10px;
+  }
+
+  .location-select option {
+    padding: 10px;
   }
 
   .theme-buttons {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     gap: 10px; /* 버튼 사이 간격 */
+    margin-bottom: 10px;
   }
 
   .theme-button {
@@ -117,7 +156,8 @@ export const Users = styled.div`
     }
   }
 
-  .edit-button {
+  .edit-button,
+  .editing-info {
     display: flex;
     position: absolute;
     right: 0;
@@ -434,7 +474,7 @@ export const DatePickerContainer = styled.div`
   }
 
   .react-datepicker__navigation-icon::before {
-    border-color: #90af5e;
+    border-color: ${colors.colorB};
     border-style: solid;
     border-width: 3px 3px 0 0;
     content: "";
@@ -479,6 +519,15 @@ export const DatePickerContainer = styled.div`
       .react-datepicker__year-text--in-range
     ) {
     background-color: ${colors.colorC};
+  }
+  .jFcLGg
+    .react-datepicker__day--in-range:not(
+      .react-datepicker__day--in-selecting-range,
+      .react-datepicker__month-text__month-text--in-selecting-range,
+      .react-datepicker__quarter-text--in-selecting-range,
+      .react-datepicker____year-text--in-selecting-range
+    ) {
+    background-color: white;
   }
   .react-datepicker__day--selected,
   .react-datepicker__day--in-selecting-range,
