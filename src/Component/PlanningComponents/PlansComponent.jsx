@@ -16,19 +16,21 @@ export const PlannerInfoEditComponent = ({
   selectedThemes,
   setSelectedThemes,
   isEditting,
-  setIsEditting,
   plans,
-  setPlans,
   plannerId,
   sender,
-  setEditor,
 }) => {
   const handleInfoInputChange = (e) => {
     const { name, value } = e.target;
-    setEditPlannerInfo((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const byteLength = new TextEncoder().encode(value).length;
+
+    // 한글 기준 20글자 제한 (20자 * 2바이트 = 40바이트 이하)
+    if (byteLength <= 40) {
+      setEditPlannerInfo((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleThemeClick = (theme) => {
@@ -51,25 +53,6 @@ export const PlannerInfoEditComponent = ({
       }));
     }
   };
-
-  useEffect(() => {
-    ws.current.onmessage = (msg) => {
-      const data = JSON.parse(msg.data);
-      console.log("data ::::: ", data);
-      if (
-        data.type === "PLANNER" &&
-        data.data?.plannerInfo?.[0] &&
-        !_.isEqual(data.data.plannerInfo[0], editPlannerInfo)
-      ) {
-        console.log("data.data.plannerInfo[0] : ", data.data.plannerInfo[0]);
-        console.log("editPlannerInfo : ", editPlannerInfo);
-        setEditPlannerInfo(data.data.plannerInfo);
-        setPlans(data.data.plans);
-        setIsEditting(data.data.isEditting);
-        setEditor(data.sender);
-      }
-    };
-  }, [socketConnected, editPlannerInfo]);
 
   useEffect(() => {
     if (socketConnected && editPlannerInfo) {
@@ -99,9 +82,9 @@ export const PlannerInfoEditComponent = ({
       <div>
         <input
           type="text"
-          // name="title"
+          name="title"
           className="planner-edit-title"
-          value={plannerInfo.title}
+          value={editPlannerInfo.title}
           onChange={handleInfoInputChange}
         />
         <div className="theme-buttons">

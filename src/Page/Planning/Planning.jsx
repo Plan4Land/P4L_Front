@@ -30,6 +30,7 @@ import {
   SetPublicModal,
   DeletePlanning,
 } from "../../Component/PlanningComponents/PlanningModals";
+import _ from "lodash";
 
 // const plannerInfo = {
 //   title: "떠나요~ 두리서~",
@@ -160,6 +161,7 @@ export const Planning = () => {
   const { user } = useAuth();
   const [plannerInfo, setPlannerInfo] = useState(null);
   const [editPlannerInfo, setEditPlannerInfo] = useState(null);
+  const [receivePlanner, setReceivePlanner] = useState(null);
   const [selectedThemes, setSelectedThemes] = useState([]);
   const [areaState, setAreaState] = useState({
     area: "",
@@ -227,34 +229,82 @@ export const Planning = () => {
 
   const handleOnClickEdit = () => {
     setIsEditting(!isEditting);
+    let message;
     if (isEditting) {
       // 편집 완료하면
       console.log("수정 완료 버튼 누름");
-      setEditor("");
-      setEditPlannerInfo(null);
-      setPlannerInfo(editPlannerInfo);
+      // setEditor("");
+      // setEditPlannerInfo(null);
+      // setPlannerInfo(editPlannerInfo);
+      message = {
+        type: "PLANNER",
+        plannerId: plannerId,
+        sender: sender,
+        message: "편집완료",
+        data: {
+          plannerInfo: editPlannerInfo,
+          plans: plans,
+          isEditting: !isEditting,
+        },
+      };
     } else {
       // 편집 시작하면
       console.log("편집 시작", plannerInfo);
       setEditPlannerInfo(plannerInfo);
+      message = {
+        type: "PLANNER",
+        plannerId: plannerId,
+        sender: sender,
+        message: "편집시작",
+        data: {
+          plannerInfo: plannerInfo,
+          plans: plans,
+          isEditting: !isEditting,
+        },
+      };
     }
-
-    const message = {
-      type: "PLANNER",
-      plannerId: plannerId,
-      sender: sender,
-      data: {
-        plannerInfo: editPlannerInfo,
-        plans: plans,
-        isEditting: !isEditting,
-      },
-    };
 
     // 웹소켓 메시지 전송
     if (ws.current) {
       ws.current.send(JSON.stringify(message));
     }
   };
+  useEffect(() => {
+    if (ws.current) {
+      ws.current.onmessage = (msg) => {
+        const data = JSON.parse(msg.data);
+        console.log("data ::::: ", data);
+        if (
+          data.type === "PLANNER" &&
+          data.data?.plannerInfo?.[0] &&
+          !_.isEqual(data.data.plannerInfo[0], editPlannerInfo)
+        ) {
+          setEditPlannerInfo(data.data.plannerInfo[0]);
+          setReceivePlanner(data.data.plannerInfo[0]);
+          setPlans(data.data.plans);
+          setIsEditting(data.data.isEditting);
+          setEditor(data.sender);
+        } else if (data.type === "PLANNER") {
+          setReceivePlanner(
+            Array.isArray(data.data.plannerInfo) &&
+              data.data.plannerInfo.length > 0
+              ? data.data.plannerInfo[0]
+              : data.data.plannerInfo
+          );
+          setPlans(data.data.plans);
+          setIsEditting(data.data.isEditting);
+          if (data.message === "편집완료") {
+            setEditor(null);
+            setEditPlannerInfo(null);
+            setReceivePlanner(null);
+          } else {
+            setEditor(data.sender);
+          }
+        }
+      };
+    }
+    console.log(editPlannerInfo);
+  }, [socketConnected, editPlannerInfo]);
 
   // 웹 소켓 연결하기
   useEffect(() => {
@@ -277,11 +327,8 @@ export const Planning = () => {
         };
         ws.current.onmessage = (msg) => {
           const data = JSON.parse(msg.data);
-          console.log("받은 데이터:", data);
-          console.log("editPlannerInfo : ", editPlannerInfo);
 
           if (data.type === "PLANNER") {
-            console.log("여기도 출력해봄");
             setIsEditting(data.data.isEditting);
             setEditor(data.sender);
           } else if (data.type === "ENTER") {
@@ -415,30 +462,61 @@ export const Planning = () => {
         <Header />
         <MainContainer onClick={() => closeMemo()}>
           <Info>
-            {isEditting && editor === user.nickname ? (
-              <PlannerInfoEditComponent
-                ws={ws}
-                socketConnected={socketConnected}
-                plannerInfo={plannerInfo}
-                editPlannerInfo={editPlannerInfo}
-                setEditPlannerInfo={setEditPlannerInfo}
-                selectedThemes={selectedThemes}
-                setSelectedThemes={setSelectedThemes}
-                isEditting={isEditting}
-                setIsEditting={setIsEditting}
-                plans={plans}
-                setPlans={setPlans}
-                plannerId={plannerId}
-                sender={sender}
-                setEditor={setEditor}
-              />
+            {isEditting ? (
+              editor === user.nickname ? (
+                <PlannerInfoEditComponent
+                  ws={ws}
+                  socketConnected={socketConnected}
+                  plannerInfo={plannerInfo}
+                  editPlannerInfo={editPlannerInfo}
+                  setEditPlannerInfo={setEditPlannerInfo}
+                  selectedThemes={selectedThemes}
+                  setSelectedThemes={setSelectedThemes}
+                  isEditting={isEditting}
+                  plans={plans}
+                  plannerId={plannerId}
+                  sender={sender}
+                />
+              ) : editPlannerInfo !== null ? (
+                <>
+                  <div className="planner-thumbnail">
+                    <ProfileImg file={"/img/planning-pic/planningth1.jpg"} />
+                  </div>
+                  <div>
+                    <h1>{editPlannerInfo.title}</h1>
+                    <h3>
+                      {areaState.area} {areaState.subArea} /{" "}
+                      {editPlannerInfo.theme}
+                    </h3>
+                    <h3>
+                      {new Date(editPlannerInfo.startDate).toLocaleDateString()}
+                      &nbsp;&nbsp;~&nbsp;&nbsp;
+                      {new Date(editPlannerInfo.endDate).toLocaleDateString()}
+                    </h3>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="planner-thumbnail">
+                    <ProfileImg file={"/img/planning-pic/planningth1.jpg"} />
+                  </div>
+                  <div>
+                    <h1>{plannerInfo.title}</h1>
+                    <h3>
+                      {areaState.area} {areaState.subArea} / {plannerInfo.theme}
+                    </h3>
+                    <h3>
+                      {new Date(plannerInfo.startDate).toLocaleDateString()}
+                      &nbsp;&nbsp;~&nbsp;&nbsp;
+                      {new Date(plannerInfo.endDate).toLocaleDateString()}
+                    </h3>
+                  </div>
+                </>
+              )
             ) : (
               <>
                 <div className="planner-thumbnail">
-                  <ProfileImg
-                    // file={`/img/${plannerInfo.thumbnail}`}
-                    file={"/img/planning-pic/planningth1.jpg"}
-                  />
+                  <ProfileImg file={"/img/planning-pic/planningth1.jpg"} />
                 </div>
                 <div>
                   <h1>{plannerInfo.title}</h1>
@@ -453,6 +531,7 @@ export const Planning = () => {
                 </div>
               </>
             )}
+
             <MenuIcons
               plannerId={plannerId}
               plannerInfo={plannerInfo}
