@@ -112,8 +112,8 @@ export const MyPageMain = () => {
     const fetchFollowInfo = async () => {
       try {
         const data = await AxiosApi.loadFollow(user.id);
-        setFollowings(data.followingInfo);
-        setFollowers(data.followerInfo);
+        setFollowings(data?.followingInfo || []);
+        setFollowers(data?.followerInfo || []);
         console.log(data.followerInfo);
       } catch (error) {
         console.error("팔로워 정보를 불러오는데 오류가 발생했습니다.", error);
@@ -266,8 +266,7 @@ export const MyPageMain = () => {
           followings={followings}
           isMyPage={true}
           loginUser={user.id}
-        >
-        </FollowLoad>
+        ></FollowLoad>
       </CheckModal>
 
       <CloseModal

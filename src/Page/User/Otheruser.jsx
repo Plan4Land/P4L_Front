@@ -1,28 +1,24 @@
-import {Header, Footer} from "../../Component/GlobalComponent";
-import {
-  UserMain,
-  UserInfo,
-  UserPlanning,
-} from "../../Style/MyPageMainStyled";
-import {useState, useEffect} from "react";
-import {CheckModal} from "../../Util/Modal";
-import {Button} from "../../Component/ButtonComponent";
-import {useNavigate, useParams} from "react-router-dom";
-import {UserPlannerApi} from "../../Api/ItemApi";
-import {areas} from "../../Util/Common";
-import {PlanItem} from "../../Component/ItemListComponent";
+import { Header, Footer } from "../../Component/GlobalComponent";
+import { UserMain, UserInfo, UserPlanning } from "../../Style/MyPageMainStyled";
+import { useState, useEffect } from "react";
+import { CheckModal } from "../../Util/Modal";
+import { Button } from "../../Component/ButtonComponent";
+import { useNavigate, useParams } from "react-router-dom";
+import { UserPlannerApi } from "../../Api/ItemApi";
+import { areas } from "../../Util/Common";
+import { PlanItem } from "../../Component/ItemListComponent";
 import AxiosApi from "../../Api/AxiosApi";
-import {Pagination} from "../../Component/Pagination";
+import { Pagination } from "../../Component/Pagination";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import {useMediaQuery} from "react-responsive";
-import {useAuth} from "../../Context/AuthContext";
+import { useMediaQuery } from "react-responsive";
+import { useAuth } from "../../Context/AuthContext";
 import FollowLoad from "../../Component/UserPageComponent/FollowLoad";
 import ReportModal from "../../Component/UserPageComponent/ReportModalComponent";
 
 export const Otheruser = () => {
-  const {userId} = useParams();
-  const {user} = useAuth()
+  const { userId } = useParams();
+  const { user } = useAuth();
   const [planners, setPlanners] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -37,7 +33,7 @@ export const Otheruser = () => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const navigate = useNavigate();
 
-  const isMobile = useMediaQuery({query: "(max-width: 454px)"});
+  const isMobile = useMediaQuery({ query: "(max-width: 454px)" });
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
@@ -53,15 +49,15 @@ export const Otheruser = () => {
 
   const openReportModal = () => {
     setIsReportModalOpen(true);
-  }
+  };
   const closeReportModal = () => {
     setIsReportModalOpen(false);
-  }
+  };
 
   const handleFollow = async (follower, followed, isFollow) => {
     const data = await AxiosApi.follow(follower, followed, isFollow);
-    setIsFollowed(!isFollowed)
-  }
+    setIsFollowed(!isFollowed);
+  };
 
   const fetchPlanners = async () => {
     try {
@@ -104,13 +100,11 @@ export const Otheruser = () => {
     if (!isMobile) {
       // PC에서는 page가 변경될 때마다 데이터를 새로 고침
       fetchPlanners();
-    } else{
+    } else {
       // 모바일에서는 page가 변경될 때만 데이터를 추가
       fetchPlanners();
     }
   }, [page, isMobile, userId]);
-
-
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -124,22 +118,22 @@ export const Otheruser = () => {
     const fetchFollowInfo = async () => {
       try {
         const data = await AxiosApi.loadFollow(userId);
-        setFollowings(data.followingInfo);
-        setFollowers(data.followerInfo)
-        if (data.followerInfo.some(member => member.id === user.id)) {
+        setFollowings(data?.followingInfo || []);
+        setFollowers(data?.followerInfo || []);
+        if (data.followerInfo.some((member) => member.id === user.id)) {
           setIsFollowed(true);
         }
       } catch (error) {
         console.error("팔로워 정보를 불러오는데 오류가 발생했습니다.", error);
       }
-    }
+    };
 
     if (userId) {
       fetchUserInfo();
       fetchFollowInfo();
     }
 
-    console.log(user.id ," : ", userId)
+    console.log(user.id, " : ", userId);
 
     closeFollowModal();
   }, [userId, isFollowed]);
@@ -152,7 +146,7 @@ export const Otheruser = () => {
 
   return (
     <>
-      <Header/>
+      <Header />
       <div className="otheruser">
         <UserMain>
           <UserInfo>
@@ -179,20 +173,27 @@ export const Otheruser = () => {
                   <p>유저 정보를 불러오지 못했습니다.</p>
                 )}
                 <div className="follow" onClick={openFollowModal}>
-                  <p>팔로잉: {followings.length} 팔로워: {followers.length}</p>
+                  <p>
+                    팔로잉: {followings.length} 팔로워: {followers.length}
+                  </p>
                 </div>
               </div>
             </div>
-            {(user.id !== userId) && (
+            {user.id !== userId && (
               <div className="Button">
                 {isFollowed ? (
                   <Button
                     onClick={() => handleFollow(user.id, userInfo.id, false)}
-                  >팔로우 해제</Button>
+                  >
+                    팔로우 해제
+                  </Button>
                 ) : (
                   <Button
                     onClick={() => handleFollow(user.id, userInfo.id, true)}
-                  >팔로우</Button>)}
+                  >
+                    팔로우
+                  </Button>
+                )}
               </div>
             )}
           </UserInfo>
@@ -214,8 +215,8 @@ export const Otheruser = () => {
                       areas
                         .find((area) => area.code === planner.area)
                         ?.subAreas.find(
-                        (subArea) => subArea.code === planner.subArea
-                      )?.name || "알 수 없는 하위 지역";
+                          (subArea) => subArea.code === planner.subArea
+                        )?.name || "알 수 없는 하위 지역";
                     return (
                       <PlanItem
                         key={planner.id}
@@ -245,8 +246,8 @@ export const Otheruser = () => {
                     areas
                       .find((area) => area.code === planner.area)
                       ?.subAreas.find(
-                      (subArea) => subArea.code === planner.subArea
-                    )?.name || "알 수 없는 하위 지역";
+                        (subArea) => subArea.code === planner.subArea
+                      )?.name || "알 수 없는 하위 지역";
                   return (
                     <PlanItem
                       key={planner.id}
@@ -279,15 +280,13 @@ export const Otheruser = () => {
           followings={followings}
           isMyPage={false}
           loginUser={user.id}
-        >
-        </FollowLoad>
+        ></FollowLoad>
       </CheckModal>
 
       <CheckModal isOpen={isReportModalOpen} onClose={closeReportModal}>
-        <ReportModal reporter={user.id} reported={userId}>
-        </ReportModal>
+        <ReportModal reporter={user.id} reported={userId}></ReportModal>
       </CheckModal>
-      <Footer/>
+      <Footer />
     </>
   );
 };

@@ -1,8 +1,113 @@
 import { MainPlanning, DayToggleContainer } from "../../Style/PlanningStyled";
 import { Button } from "../ButtonComponent";
+import { themes } from "../../Util/Common";
+import { ProfileImg } from "../ProfileImg";
 import MemoIcon from "../../Img/memo-icon.png";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../Context/AuthContext";
+
+export const PlannerInfoEditComponent = ({
+  plannerInfo,
+  editPlannerInfo,
+  setEditPlannerInfo,
+  selectedThemes,
+  setSelectedThemes,
+}) => {
+  const handleInfoInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditPlannerInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const handleThemeClick = (theme) => {
+    if (selectedThemes.includes(theme)) {
+      // Remove theme from selection
+      const updatedThemes = selectedThemes.filter((t) => t !== theme);
+      setSelectedThemes(updatedThemes);
+      console.log("여기서 출력한거임 : ", editPlannerInfo);
+      setEditPlannerInfo((prev) => ({
+        ...prev,
+        theme: updatedThemes.join(", "),
+      }));
+    } else if (selectedThemes.length < 3) {
+      // Add theme to selection
+      const updatedThemes = [...selectedThemes, theme];
+      setSelectedThemes(updatedThemes);
+      setEditPlannerInfo((prev) => ({
+        ...prev,
+        theme: updatedThemes.join(", "),
+      }));
+    }
+  };
+  return (
+    <>
+      <div className="planner-thumbnail">
+        <ProfileImg
+          // file={`/img/${plannerInfo.thumbnail}`}
+          file={"/img/planning-pic/planningth1.jpg"}
+        />
+      </div>
+      <div>
+        <input
+          type="text"
+          // name="title"
+          className="planner-edit-title"
+          value={plannerInfo.title}
+          onChange={handleInfoInputChange}
+        />
+        <div className="theme-buttons">
+          {themes.map((theme) => (
+            <button
+              key={theme}
+              onClick={() => handleThemeClick(theme)}
+              className={`theme-button ${
+                selectedThemes.includes(theme) ? "selected" : ""
+              }`}
+              disabled={
+                selectedThemes.length >= 3 && !selectedThemes.includes(theme)
+              }
+            >
+              {theme}
+            </button>
+          ))}
+        </div>
+        <input
+          type="text"
+          name="theme"
+          value={plannerInfo.theme}
+          onChange={handleInfoInputChange}
+        />
+        <input
+          type="date"
+          name="startDate"
+          value={plannerInfo.startDate.split("T")[0]}
+          onChange={(e) =>
+            handleInfoInputChange({
+              target: {
+                name: "startDate",
+                value: `${e.target.value}T00:00:00`,
+              },
+            })
+          }
+        />
+        <input
+          type="date"
+          name="endDate"
+          value={plannerInfo.endDate.split("T")[0]}
+          onChange={(e) =>
+            handleInfoInputChange({
+              target: {
+                name: "endDate",
+                value: `${e.target.value}T00:00:00`,
+              },
+            })
+          }
+        />
+      </div>
+    </>
+  );
+};
 
 export const PlansComponent = ({
   travelInfo,
