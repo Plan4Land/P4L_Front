@@ -2,6 +2,7 @@ import { Header, Footer } from "../Component/GlobalComponent";
 import {
   MainBox,
   QuickSearch,
+  CateButton,
   RecommItem,
   RecommPlan,
   Festive,
@@ -154,12 +155,15 @@ export const Main = () => {
             )}
             {selectedMenu === "카테고리" && (
               <div className="SelectCategory">
+              <div className="catebuttons">
                 {types.map((type) => (
                   <Link key={type.code} to={`/tourlist?category=${type.code}`}>
-                    <Button className="Category">{type.name}</Button>
+                    <CateButton type={type.code} typeName={type.name}/>
                   </Link>
                 ))}
               </div>
+            </div>
+            
             )}
           </div>
         </QuickSearch>

@@ -77,19 +77,89 @@ export const QuickSearch = styled(GridItem)`
       align-items: center;
       justify-content: center;
       width: 100%;
-      .Category {
-        margin: 10px;
-        text-align: center;
-      }
+.catebuttons{
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  justify-content: space-around;
+}
     }
   }
   @media (max-width: 768px) {
     button {
+      
       font-size: 12px;
       padding: 5px;
     }
   }
 `;
+
+export const CateButton = styled.button`
+width: 180px;
+  position: relative;
+  flex-grow: 1; 
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  overflow: hidden;
+  /* transition: background-color 0.3s ease; */
+  
+  /* 배경 이미지 설정 */
+  background-image: ${({ type }) => {
+    switch (type) {
+      case '100':
+        return 'url(/img/cateimg/cate_tour.png)';
+      case '200':
+        return 'url(/img/cateimg/cate_lodgin.png)';
+      case '300':
+        return 'url(/img/cateimg/cate_restaurant.png)';
+      default:
+        return 'url(/img/cateimg/cate_tour.png)';
+    }
+  }};
+  
+  /* hover 시 배경 어두워지기 */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0); /* 기본값은 투명 */
+    transition: background-color 0.5s ease; /* 어두워지는 효과 */
+    z-index: 1; /* 텍스트보다 아래 */
+  }
+
+  /* hover 시 배경 어두워지기 */
+  &:hover::before {
+    background-color: rgba(0, 0, 0, 0.3); /* 어두운 레이어 */
+  }
+
+  /* 텍스트가 서서히 나타나도록 설정 */
+  &::after {
+    content: ${({ typeName }) => `"${typeName}"`};
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 30px;
+    opacity: 0; /* 기본값은 숨김 */
+    z-index: 2; /* 어두운 레이어 위 */
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover::after {
+    opacity: 1; /* hover 시 텍스트 표시 */
+  }
+`;
+
+
 
 //         {/* 상위 관광지 n개 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const RecommItem = styled(GridItem)`

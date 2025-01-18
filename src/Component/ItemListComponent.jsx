@@ -153,14 +153,29 @@ export const TourItem = ({
   margin,
 }) => {
   const navigate = useNavigate();
+  
   const handleOnClick = () => {
     navigate(`/tourItemInfo/${id}`, {
       state: { title, address, subCategory, type, thumbnail },
     });
   };
 
-  const defaultImage = "/profile-pic/basic7.png";
-  const imageUrl = thumbnail ? thumbnail : defaultImage;
+  // 기본 이미지 설정: type에 따라 다르게 설정
+  const getDefaultImage = (type) => {
+    switch (type) {
+      case '숙소':
+        return '/img/cateimg/type_100.png'; // type 100일 때 기본 이미지
+      case '관광지':
+        return '/img/cateimg/type_200.png'; // type 200일 때 기본 이미지
+      case '음식점':
+        return '/img/cateimg/type_300.png'; // type 300일 때 기본 이미지
+      default:
+        return '/profile-pic/basic7.png'; // 그 외 기본 이미지
+    }
+  };
+
+  const imageUrl = thumbnail ? thumbnail : getDefaultImage(type);
+
   return (
     <TourItemStyled
       width={width}
@@ -180,6 +195,7 @@ export const TourItem = ({
     </TourItemStyled>
   );
 };
+
 
 export const PlanItem = ({
   thumbnail,
