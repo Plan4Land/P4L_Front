@@ -18,6 +18,7 @@ import ProtectedRoute from "./Util/ProtectedRoute";
 import { TourItemInfo } from "./Page/Item/TourItemInfo";
 import { KakaoRedirect } from "./Component/KakaoLoginRedirect";
 import { Otheruser } from "./Page/User/Otheruser";
+import { AdminPage } from "./Page/AdminPage";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
               <Route path="/signup/terms" element={<TermsOfService />} />
               <Route path="/otheruser/:userId" element={<Otheruser />} />
               <Route path="/test" element={<Test />} />
+              <Route path="/Admin" element={<AdminPage />} />
 
               {/* 로그인 필요한 페이지 */}
               <Route

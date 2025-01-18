@@ -203,9 +203,11 @@ export const NavSt = styled.div`
     right: 0;
     bottom: 0;
     background-color: white;
-    color: black;
     font-size: 12px;
     z-index: 10;
+    .tag, p{
+      color: ${colors.colorA};
+    }
   }
 `;
 
