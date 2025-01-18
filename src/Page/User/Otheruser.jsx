@@ -321,8 +321,6 @@ export const Otheruser = () => {
       <CheckModal
         isOpen={showConfirmationModal}
         onClose={handleConfirmationClose}
-        onConfirm={handleConfirmationClose}
-        buttonProps={{ children: "확인" }}
       >
         <p>신고가 완료되었습니다.</p>
       </CheckModal>
