@@ -57,7 +57,8 @@ export const Modal = ({
   onClose,
   onConfirm,
   children,
-  buttonProps,
+  confirmText = "확인", // 기본값: "확인"
+  cancelText = "취소", // 기본값: "취소"
 }) => {
   if (!isOpen) return null;
 
@@ -65,14 +66,13 @@ export const Modal = ({
     <ModalBackdrop>
       <ModalContent>
         {children} {/* 자식 요소로 전달된 내용 */}
-        <Button onClick={onConfirm} {...buttonProps}>
-          확인
-        </Button>
-        <CancelButton onClick={onClose}>취소</CancelButton>
+        <Button onClick={onConfirm}>{confirmText}</Button> {/* 확인 버튼 텍스트 변경 가능 */}
+        <CancelButton onClick={onClose}>{cancelText}</CancelButton> {/* 취소 버튼 텍스트 변경 가능 */}
       </ModalContent>
     </ModalBackdrop>
   );
 };
+
 
 export const CheckModal = ({ isOpen, onClose, children, buttonProps }) => {
   if (!isOpen) return null;

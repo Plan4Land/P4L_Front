@@ -168,8 +168,8 @@ export const Header = () => {
           onClose={() => setShowLogoutModal(false)}
           onConfirm={handleLogout}
         >
-          <p>로그아웃 하시겠습니까?</p>
-        </Modal>
+<p style={{ color: "black" }}>로그아웃 하시겠습니까?</p>
+</Modal>
       </div>
     </HeaderSt>
   );
