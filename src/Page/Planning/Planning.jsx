@@ -225,34 +225,6 @@ export const Planning = () => {
     setSelectedPlan({});
   };
 
-  // const handleInfoInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setEditPlannerInfo((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
-  // const handleThemeClick = (theme) => {
-  //   if (selectedThemes.includes(theme)) {
-  //     // Remove theme from selection
-  //     const updatedThemes = selectedThemes.filter((t) => t !== theme);
-  //     setSelectedThemes(updatedThemes);
-  //     console.log("여기서 출력한거임 : ", editPlannerInfo);
-  //     setEditPlannerInfo((prev) => ({
-  //       ...prev,
-  //       theme: updatedThemes.join(", "),
-  //     }));
-  //   } else if (selectedThemes.length < 3) {
-  //     // Add theme to selection
-  //     const updatedThemes = [...selectedThemes, theme];
-  //     setSelectedThemes(updatedThemes);
-  //     setEditPlannerInfo((prev) => ({
-  //       ...prev,
-  //       theme: updatedThemes.join(", "),
-  //     }));
-  //   }
-  // };
-
   const handleOnClickEdit = () => {
     setIsEditting(!isEditting);
     if (isEditting) {
@@ -308,24 +280,8 @@ export const Planning = () => {
           console.log("받은 데이터:", data);
           console.log("editPlannerInfo : ", editPlannerInfo);
 
-          if (
-            data.type === "PLANNER" &&
-            editPlannerInfo !== null &&
-            data.data.plannerInfo !== null &&
-            JSON.stringify(data.data.plannerInfo[0]) !==
-              JSON.stringify(editPlannerInfo)
-          ) {
-            console.log(
-              "이건 0번째 배열이구여 : ",
-              JSON.stringify(data.data.plannerInfo[0])
-            );
-            console.log(
-              "이건 기존의 플래너에여 : ",
-              JSON.stringify(editPlannerInfo)
-            );
-            setEditPlannerInfo(data.data.plannerInfo[0]);
-          } else if (data.type === "PLANNER") {
-            setPlans(data.data.plans);
+          if (data.type === "PLANNER") {
+            console.log("여기도 출력해봄");
             setIsEditting(data.data.isEditting);
             setEditor(data.sender);
           } else if (data.type === "ENTER") {
@@ -358,23 +314,6 @@ export const Planning = () => {
       console.log("입장 메시지 전송:", message);
     }
   }, [socketConnected, sender, plannerId]);
-
-  useEffect(() => {
-    if (socketConnected && editPlannerInfo) {
-      const message = {
-        type: "PLANNER",
-        plannerId: plannerId,
-        sender: sender,
-        data: {
-          plannerInfo: [editPlannerInfo],
-          plans: plans,
-          isEditting: isEditting,
-        },
-      };
-      ws.current.send(JSON.stringify(message));
-      console.log("여기서 보냄", message);
-    }
-  }, [editPlannerInfo]);
 
   useEffect(() => {
     const fetchPlanner = async () => {
@@ -478,11 +417,20 @@ export const Planning = () => {
           <Info>
             {isEditting && editor === user.nickname ? (
               <PlannerInfoEditComponent
+                ws={ws}
+                socketConnected={socketConnected}
                 plannerInfo={plannerInfo}
                 editPlannerInfo={editPlannerInfo}
                 setEditPlannerInfo={setEditPlannerInfo}
                 selectedThemes={selectedThemes}
                 setSelectedThemes={setSelectedThemes}
+                isEditting={isEditting}
+                setIsEditting={setIsEditting}
+                plans={plans}
+                setPlans={setPlans}
+                plannerId={plannerId}
+                sender={sender}
+                setEditor={setEditor}
               />
             ) : (
               <>

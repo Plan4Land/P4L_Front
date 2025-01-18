@@ -5,13 +5,23 @@ import { ProfileImg } from "../ProfileImg";
 import MemoIcon from "../../Img/memo-icon.png";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../Context/AuthContext";
+import _ from "lodash";
 
 export const PlannerInfoEditComponent = ({
+  ws,
+  socketConnected,
   plannerInfo,
   editPlannerInfo,
   setEditPlannerInfo,
   selectedThemes,
   setSelectedThemes,
+  isEditting,
+  setIsEditting,
+  plans,
+  setPlans,
+  plannerId,
+  sender,
+  setEditor,
 }) => {
   const handleInfoInputChange = (e) => {
     const { name, value } = e.target;
@@ -20,6 +30,7 @@ export const PlannerInfoEditComponent = ({
       [name]: value,
     }));
   };
+
   const handleThemeClick = (theme) => {
     if (selectedThemes.includes(theme)) {
       // Remove theme from selection
@@ -40,6 +51,43 @@ export const PlannerInfoEditComponent = ({
       }));
     }
   };
+
+  useEffect(() => {
+    ws.current.onmessage = (msg) => {
+      const data = JSON.parse(msg.data);
+      console.log("data ::::: ", data);
+      if (
+        data.type === "PLANNER" &&
+        data.data?.plannerInfo?.[0] &&
+        !_.isEqual(data.data.plannerInfo[0], editPlannerInfo)
+      ) {
+        console.log("data.data.plannerInfo[0] : ", data.data.plannerInfo[0]);
+        console.log("editPlannerInfo : ", editPlannerInfo);
+        setEditPlannerInfo(data.data.plannerInfo);
+        setPlans(data.data.plans);
+        setIsEditting(data.data.isEditting);
+        setEditor(data.sender);
+      }
+    };
+  }, [socketConnected, editPlannerInfo]);
+
+  useEffect(() => {
+    if (socketConnected && editPlannerInfo) {
+      const message = {
+        type: "PLANNER",
+        plannerId: plannerId,
+        sender: sender,
+        data: {
+          plannerInfo: [editPlannerInfo],
+          plans: plans,
+          isEditting: isEditting,
+        },
+      };
+      ws.current.send(JSON.stringify(message));
+      console.log("여기서 보냄", message);
+    }
+  }, [editPlannerInfo]);
+
   return (
     <>
       <div className="planner-thumbnail">
