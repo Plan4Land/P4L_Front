@@ -24,6 +24,11 @@ const ModalContent = styled.div`
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  .buttons{
+    flex-direction: row;
+  }
 `;
 
 const CloseModalContent = styled.div`
@@ -66,8 +71,10 @@ export const Modal = ({
     <ModalBackdrop>
       <ModalContent>
         {children} {/* 자식 요소로 전달된 내용 */}
+        <div className="buttons">
         <Button onClick={onConfirm}>{confirmText}</Button> {/* 확인 버튼 텍스트 변경 가능 */}
         <CancelButton onClick={onClose}>{cancelText}</CancelButton> {/* 취소 버튼 텍스트 변경 가능 */}
+        </div>
       </ModalContent>
     </ModalBackdrop>
   );

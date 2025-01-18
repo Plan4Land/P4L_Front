@@ -1,7 +1,7 @@
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { UserMain, UserInfo, UserPlanning } from "../../Style/MyPageMainStyled";
 import { useState, useEffect } from "react";
-import { CheckModal } from "../../Util/Modal";
+import { CheckModal, Modal } from "../../Util/Modal";
 import { Button } from "../../Component/ButtonComponent";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserPlannerApi } from "../../Api/ItemApi";
@@ -32,7 +32,20 @@ export const Otheruser = () => {
   const [isFollowed, setIsFollowed] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const navigate = useNavigate();
+  const [showReportModal, setShowReportModal] = useState(false); // 신고 모달 상태
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false); // 신고 완료 모달 상태
+  const [reportContent, setReportContent] = useState(""); // 신고 내용 저장
 
+  // 신고하기 모달을 닫고 완료 모달을 열기
+  const handleReportConfirm = () => {
+    setShowReportModal(false); // 신고 모달 닫기
+    setShowConfirmationModal(true); // 신고 완료 모달 열기
+  };
+
+  // 신고 완료 모달을 닫기
+  const handleConfirmationClose = () => {
+    setShowConfirmationModal(false);
+  };
   const isMobile = useMediaQuery({ query: "(max-width: 454px)" });
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -181,6 +194,9 @@ export const Otheruser = () => {
             </div>
             {user.id !== userId && (
               <div className="Button">
+                <Button onClick={() => setShowReportModal(true)}>
+        신고하기
+      </Button>
                 {isFollowed ? (
                   <Button
                     onClick={() => handleFollow(user.id, userInfo.id, false)}
@@ -285,6 +301,30 @@ export const Otheruser = () => {
 
       <CheckModal isOpen={isReportModalOpen} onClose={closeReportModal}>
         <ReportModal reporter={user.id} reported={userId}></ReportModal>
+      </CheckModal>
+      {/* 신고하기 모달 */}
+      <Modal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        onConfirm={handleReportConfirm}
+        buttonProps={{ children: "확인" }}
+      >
+        <h3>신고 내용을 입력해주세요</h3>
+        <textarea
+          value={reportContent}
+          onChange={(e) => setReportContent(e.target.value)}
+          placeholder="신고 내용을 입력하세요."
+        />
+      </Modal>
+
+      {/* 신고 완료 모달 */}
+      <CheckModal
+        isOpen={showConfirmationModal}
+        onClose={handleConfirmationClose}
+        onConfirm={handleConfirmationClose}
+        buttonProps={{ children: "확인" }}
+      >
+        <p>신고가 완료되었습니다.</p>
       </CheckModal>
       <Footer />
     </>
