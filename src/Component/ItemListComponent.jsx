@@ -164,13 +164,13 @@ export const TourItem = ({
   const getDefaultImage = (type) => {
     switch (type) {
       case '숙소':
-        return '/img/cateimg/type_100.png'; // type 100일 때 기본 이미지
+        return '/img/cateimg/type_100.png'; 
       case '관광지':
-        return '/img/cateimg/type_200.png'; // type 200일 때 기본 이미지
+        return '/img/cateimg/type_200.png'; 
       case '음식점':
-        return '/img/cateimg/type_300.png'; // type 300일 때 기본 이미지
+        return '/img/cateimg/type_300.png'; 
       default:
-        return '/profile-pic/basic7.png'; // 그 외 기본 이미지
+        return '/profile-pic/basic7.png'; 
     }
   };
 

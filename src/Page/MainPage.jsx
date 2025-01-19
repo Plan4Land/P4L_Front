@@ -170,31 +170,48 @@ export const Main = () => {
 
         {/* 상위 관광지 n개 */}
         <RecommItem className="GridItem">
-          <Swiper
-            modules={[Navigation, Pagination]}
-            spaceBetween={50}
-            slidesPerView={1}
-            navigation
-            pagination={{ clickable: true }}
-            scrollbar={{ draggable: true }}
+  <Swiper
+    modules={[Navigation, Pagination]}
+    spaceBetween={50}
+    slidesPerView={1}
+    navigation
+    pagination={{ clickable: true }}
+    scrollbar={{ draggable: true }}
+  >
+    {topTourList.map((tour, index) => {
+      // 기본 이미지 결정 함수
+      const getDefaultImage = (typeId) => {
+        switch (typeId) {
+          case "100":
+            return "/img/cateimg/type_200.png";
+          case "200":
+            return "/img/cateimg/type_300.png";
+          case "300":
+            return "/img/cateimg/type_300.png";
+          default:
+            return "/profile-pic/basic1.png"; 
+        }
+      };
+
+      return (
+        <SwiperSlide key={index}>
+          <div
+            className="topTourItem"
+            onClick={() => tourHandleClick(tour.id)}
           >
-            {topTourList.map((tour, index) => (
-              <SwiperSlide key={index}>
-                <div
-                  className="topTourItem"
-                  onClick={() => tourHandleClick(tour.id)}
-                >
-                  <img
-                    src={tour.thumbnail || `/profile-pic/basic1.png`}
-                    alt={tour.title}
-                  />
-                  <h3>{tour.title}</h3>
-                  <p>{tour.addr1}</p>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </RecommItem>
+            <img
+              src={tour.thumbnail || getDefaultImage(tour.typeId)}
+              alt={tour.title}
+            />
+            <h3>{tour.title}</h3>
+            <p>{tour.addr1}</p>
+          </div>
+        </SwiperSlide>
+      );
+    })}
+  </Swiper>
+</RecommItem>
+
 
         {/* 상위 플래닝 3개 */}
         <RecommPlan className="GridItem">
