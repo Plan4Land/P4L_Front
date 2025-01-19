@@ -91,10 +91,20 @@ export const TourItemInfo = () => {
         {spotDetails ? (
           <>
             <img
-              src={spotDetails.thumbnail || "/profile-pic/basic2.png"}
-              alt="여행지 이미지"
-              className="tour-image"
-            />
+  src={
+    spotDetails.thumbnail ||
+    (spotDetails.typeId === "100"
+      ? "/img/cateimg/type_200.png"
+      : spotDetails.typeId === "200"
+      ? "/img/cateimg/type_200.png"
+      : spotDetails.typeId === "300"
+      ? "/img/cateimg/type_300.png"
+      : "/profile-pic/basic1.png") // 기본 이미지
+  }
+  alt="여행지 이미지"
+  className="tour-image"
+/>
+
             <div className="tour-details">
               <button className="bookmark" onClick={toggleBookmark}>
                 <FontAwesomeIcon
