@@ -240,7 +240,9 @@ export const MakePlanning = () => {
                 placeholder="플래닝 제목을 입력하세요"
                 className="title-input"
                 value={title}
-                onChange={(e) => setTitle(e.target.value.replace(/^\s+/, ""))}
+                onChange={(e) =>
+                  setTitle(e.target.value.replace(/^\s+/, "").substring(0, 20))
+                }
               />
             </div>
           )}

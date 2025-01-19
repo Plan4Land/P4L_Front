@@ -25,6 +25,40 @@ const PlanningApi = {
     };
     return await AxiosInstance.post(`/planner/insert`, plannerInfo);
   },
+  editPlannerInfo: async (editPlannerInfo, plannerId) => {
+    const plannerInfo = {
+      title: editPlannerInfo.title,
+      theme: editPlannerInfo.theme,
+      id: editPlannerInfo.ownerId,
+      startDate: new Date(editPlannerInfo.startDate),
+      endDate: new Date(editPlannerInfo.endDate),
+      area: editPlannerInfo.area,
+      subArea: editPlannerInfo.subArea,
+      thumbnail: editPlannerInfo.thumbnail,
+      plannerId: plannerId,
+    };
+    return await AxiosInstance.post(
+      `/planner/update?plannerId=${plannerId}`,
+      plannerInfo
+    );
+  },
+  getPlan: async (plannerId) => {
+    return (await AxiosInstance.get(`/planner/getPlan?plannerId=${plannerId}`))
+      .data;
+  },
+  editPlan: async (plannerId, newPlans) => {
+    const planInfo = newPlans.map((plan) => ({
+      category: plan.category,
+      date: new Date(plan.date),
+      latitude: plan.position.lat,
+      longitude: plan.position.lng,
+      seq: plan.seq,
+      spotName: plan.content,
+    }));
+    return await AxiosInstance.post(`/planner/updatePlan`, planInfo, {
+      params: { plannerId },
+    });
+  },
   getPlanning: async (plannerId) => {
     return (await AxiosInstance.get(`/planner/${plannerId}`)).data;
   },

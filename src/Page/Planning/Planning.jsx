@@ -44,7 +44,8 @@ export const Planning = () => {
     area: "",
     subArea: "",
   });
-  const [plans, setPlans] = useState([]); ///////////////////////////////////////////
+  const [plans, setPlans] = useState([]);
+  const [editPlans, setEditPlans] = useState(null); ///////////////////////////////////////////
   const [modals, setModals] = useState({
     userModal: false, // 초대된 users 모달 open 여부
     addPlaceModal: false, // 장소 추가 모달 open 여부
@@ -120,14 +121,16 @@ export const Planning = () => {
         message: "편집완료",
         data: {
           plannerInfo: editPlannerInfo,
-          plans: plans,
+          plans: editPlans,
           isEditting: !isEditting,
         },
       };
     } else {
       // 편집 시작하면
       console.log("편집 시작", plannerInfo);
+      console.log(selectedThemes);
       setEditPlannerInfo(plannerInfo);
+      setEditPlans(plans);
       message = {
         type: "PLANNER",
         plannerId: plannerId,
@@ -147,43 +150,78 @@ export const Planning = () => {
     }
   };
   useEffect(() => {
-    if (ws.current) {
-      ws.current.onmessage = (msg) => {
-        const data = JSON.parse(msg.data);
-        console.log("data ::::: ", data);
-        if (
-          data.type === "PLANNER" &&
-          data.data?.plannerInfo?.[0] &&
-          !_.isEqual(data.data.plannerInfo[0], editPlannerInfo)
-        ) {
-          console.log("바뀐거 있음");
-          setEditPlannerInfo(data.data.plannerInfo[0]);
-          setReceivePlanner(data.data.plannerInfo[0]);
-          setPlans(data.data.plans);
-          setIsEditting(data.data.isEditting);
-          setEditor(data.sender);
-        } else if (data.type === "PLANNER") {
-          console.log("바뀐거 없음");
-          setReceivePlanner(
-            Array.isArray(data.data.plannerInfo) &&
-              data.data.plannerInfo.length > 0
-              ? data.data.plannerInfo[0]
-              : data.data.plannerInfo
-          );
-          setPlans(data.data.plans);
-          setIsEditting(data.data.isEditting);
-          if (data.message === "편집완료") {
-            setEditor(null);
-            setEditPlannerInfo(null);
-            setReceivePlanner(null);
-          } else {
+    const fetchData = async () => {
+      if (ws.current) {
+        ws.current.onmessage = async (msg) => {
+          const data = JSON.parse(msg.data);
+          console.log("data ::::: ", data);
+
+          if (
+            data.type === "PLANNER" &&
+            data.data?.plannerInfo?.[0] &&
+            !_.isEqual(data.data.plannerInfo[0], editPlannerInfo)
+          ) {
+            console.log("plannerInfo 바뀐거 있음");
+            setEditPlannerInfo(data.data.plannerInfo[0]);
+            setReceivePlanner(data.data.plannerInfo[0]);
+            // setPlans(data.data.plans);
+            setIsEditting(data.data.isEditting);
             setEditor(data.sender);
+          } else if (
+            data.type === "PLANNER" &&
+            data.data?.plans !== null &&
+            !_.isEqual(data.data.plans, editPlans)
+          ) {
+            console.log("plans 바뀐거 있음");
+            setEditPlans(data.data.plans);
+            setIsEditting(data.data.isEditting);
+            setEditor(data.sender);
+          } else if (data.type === "PLANNER") {
+            console.log("바뀐거 없음");
+            setReceivePlanner(
+              Array.isArray(data.data.plannerInfo) &&
+                data.data.plannerInfo.length > 0
+                ? data.data.plannerInfo[0]
+                : data.data.plannerInfo
+            );
+            setPlans(data.data.plans);
+            setIsEditting(data.data.isEditting);
+
+            if (data.message === "편집완료") {
+              setPlannerInfo(editPlannerInfo);
+              setEditor(null);
+              setReceivePlanner(null);
+
+              // 비동기 호출 처리
+              if (editPlannerInfo) {
+                const plannerResult = await PlanningApi.editPlannerInfo(
+                  editPlannerInfo,
+                  plannerId
+                );
+                console.log("*********************************");
+                console.log(editPlans);
+                const planResult = await PlanningApi.editPlan(
+                  plannerId,
+                  editPlans
+                );
+                setPlannerInfo(plannerResult.data);
+                setPlans(editPlans);
+              }
+
+              setEditPlannerInfo(null);
+              setEditPlans(null);
+            } else {
+              setEditor(data.sender);
+            }
           }
-        }
-      };
-    }
+        };
+      }
+    };
+
+    fetchData(); // async 함수 호출
+
     console.log(editPlannerInfo);
-  }, [socketConnected, editPlannerInfo]);
+  }, [socketConnected, editPlannerInfo, editPlans]);
 
   // 웹 소켓 연결하기
   useEffect(() => {
@@ -224,7 +262,7 @@ export const Planning = () => {
         console.log("페이지 이동으로 인해 소켓 연결 종료");
       }
     };
-  }, [plannerInfo, user.nickname]);
+  }, [plannerInfo?.id, user.nickname]);
 
   useEffect(() => {
     // 소켓이 연결된 상태에서 메시지 전송
@@ -246,10 +284,23 @@ export const Planning = () => {
       try {
         const response = await PlanningApi.getPlanning(plannerId);
         setPlannerInfo(response); // 데이터를 상태에 저장
-        setSelectedThemes(response.theme ? response.theme.split(",") : []);
+        setSelectedThemes(
+          response.theme
+            ? response.theme.split(",").map((theme) => theme.trim())
+            : []
+        );
         console.log("fetchPlanner : ", response);
       } catch (e) {
         console.log("플래너 불러오는 중 에러", e);
+      }
+    };
+    const fetchPlan = async () => {
+      try {
+        const response = await PlanningApi.getPlan(plannerId);
+        setPlans(response);
+        console.log("fetchPlan : ", response);
+      } catch (e) {
+        console.log("플랜 불러오는 중 에러", e);
       }
     };
     const fetchIsBookmarked = async () => {
@@ -270,9 +321,9 @@ export const Planning = () => {
       }
     };
     fetchPlanner();
+    fetchPlan();
     fetchIsBookmarked();
     fetchChatMsg();
-    setPlans([]);
     setSender(user.nickname);
   }, [plannerId, user.id, user.nickname]);
 
@@ -317,7 +368,8 @@ export const Planning = () => {
       currentAddedPlace.content &&
       Object.keys(currentAddedPlace.content).length > 0
     ) {
-      setPlans((prevPlans) => [...prevPlans, currentAddedPlace]);
+      // setPlans((prevPlans) => [...prevPlans, currentAddedPlace]);
+      setEditPlans((prevPlans) => [...prevPlans, currentAddedPlace]);
       console.log("이게 추가될 일정", currentAddedPlace);
       setCurrentAddedPlace({});
       setSelectedPlan({});
@@ -334,10 +386,6 @@ export const Planning = () => {
       searchUsersRst: [],
     });
   }, [modals.searchUser]);
-
-  useEffect(() => {
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>", plans);
-  }, [plans]);
 
   if (plannerInfo) {
     return (
@@ -507,6 +555,10 @@ export const Planning = () => {
           </Users>
           <ContentContainer>
             <PlansComponent
+              socketConnected={socketConnected}
+              ws={ws}
+              plannerId={plannerId}
+              sender={sender}
               travelInfo={travelInfo}
               setTravelInfo={setTravelInfo}
               groupPlans={groupPlans}
@@ -516,7 +568,9 @@ export const Planning = () => {
               memoState={memoState}
               setMemoState={setMemoState}
               plans={plans}
+              editPlans={editPlans}
               plannerInfo={plannerInfo}
+              editPlannerInfo={editPlannerInfo}
               setModals={setModals}
               isEditting={isEditting}
               setEditor={setEditor}

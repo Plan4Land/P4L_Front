@@ -280,6 +280,10 @@ export const PlannerInfoEditComponent = ({
 };
 
 export const PlansComponent = ({
+  socketConnected,
+  ws,
+  plannerId,
+  sender,
   travelInfo,
   setTravelInfo,
   groupPlans,
@@ -289,7 +293,9 @@ export const PlansComponent = ({
   memoState,
   setMemoState,
   plans,
+  editPlans,
   plannerInfo,
+  editPlannerInfo,
   setModals,
   isEditting,
   editor,
@@ -352,10 +358,20 @@ export const PlansComponent = ({
   }, [travelInfo.days]);
 
   useEffect(() => {
-    const startDate = new Date(plannerInfo.startDate);
-    const endDate = new Date(plannerInfo.endDate);
+    const currentPlannerInfo = editPlannerInfo || plannerInfo;
+    const currentPlans = editPlans || plans;
+    if (editPlans) {
+      console.log("editPlans가 선택됨");
+    } else if (plans) {
+      console.log("plans가 선택됨");
+    }
+    console.group("editPlans : ", editPlans);
+
+    const startDate = new Date(currentPlannerInfo.startDate);
+    const endDate = new Date(currentPlannerInfo.endDate);
     const timeDiff = endDate.getTime() - startDate.getTime();
     const diffInDays = timeDiff / (1000 * 3600 * 24);
+
     setTravelInfo((prevState) => ({
       ...prevState,
       days: diffInDays + 1, // 여행 기간 설정
@@ -365,29 +381,29 @@ export const PlansComponent = ({
       const dates = [];
       let currentDate = new Date(start);
       let lastDate = new Date(end);
-      currentDate.setDate(currentDate.getDate());
-      lastDate.setDate(lastDate.getDate());
+      currentDate.setDate(currentDate.getDate() + 1);
+      lastDate.setDate(lastDate.getDate() + 1);
       while (currentDate <= lastDate) {
         dates.push(new Date(currentDate).toISOString().split("T")[0]); // YYYY-MM-DD 포맷
-        // dates.push(new Date(currentDate));
         currentDate.setDate(currentDate.getDate() + 1); // 하루씩 증가
       }
       return dates;
     };
+
     const travelDates = generateTravelDates(
-      plannerInfo.startDate,
-      plannerInfo.endDate
+      currentPlannerInfo.startDate,
+      currentPlannerInfo.endDate
     );
+
     setTravelInfo((prevState) => ({
       ...prevState,
       dates: travelDates, // 여행 날짜 설정
     }));
 
     const groupPlansByDate = () => {
-      console.log("plans : ", plans);
+      console.log("plans : ", currentPlans);
       // 1. 날짜별로 그룹화
-      const groupedPlans = plans.reduce((acc, plan) => {
-        // console.log(plan);
+      const groupedPlans = currentPlans.reduce((acc, plan) => {
         const dateKey = plan.date; // "2025-01-10" 형태로 날짜만 추출
         if (!acc[dateKey]) {
           acc[dateKey] = [];
@@ -409,10 +425,30 @@ export const PlansComponent = ({
       });
       return groupedPlans;
     };
+
     const groupedPlans = groupPlansByDate();
-    console.log(groupedPlans);
+    console.log("groupedPlans : ", groupedPlans);
     setGroupPlans(groupedPlans); // 정렬된 일정
-  }, [plannerInfo, plans]);
+  }, [editPlannerInfo, editPlans, plannerInfo, plans]);
+
+  useEffect(() => {
+    if (socketConnected && editPlans && editor === sender) {
+      console.log("sender: ", sender);
+      console.log("editor: ", editor);
+      const message = {
+        type: "PLANNER",
+        plannerId: plannerId,
+        sender: sender,
+        data: {
+          plannerInfo: [editPlannerInfo],
+          plans: editPlans,
+          isEditting: isEditting,
+        },
+      };
+      ws.current.send(JSON.stringify(message));
+      console.log("PlansComponent에서 보냄", message);
+    }
+  }, [editPlans]);
 
   return (
     <MainPlanning>
