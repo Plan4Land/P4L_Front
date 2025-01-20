@@ -63,6 +63,10 @@ export const Info = styled.div`
     }
   }
 
+  .editTitle{
+    display: flex;
+    align-items: center;
+  }
   .planner-edit-title {
     width: 400px;
     padding: 10px;
@@ -70,16 +74,20 @@ export const Info = styled.div`
     font-size: 18px;
     font-weight: bold;
     border: none;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;    
   }
 
   .edit-button {
+    font-size: 12px;
+    width: 80px;
+    height: 25px;
     margin-left: 3%;
     padding: 2px 8px;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 1px solid ${colors.colorB};
     background-color: ${colors.colorB};
     color: white;
+    white-space: nowrap;
     cursor: pointer;
     transition: all 0.2s ease;
 
@@ -111,14 +119,13 @@ export const Info = styled.div`
   .theme-buttons {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 3px 10px;
     margin-bottom: 10px;
+    place-items: center;
   }
 
   .theme-button {
     padding: 5px;
-    width: 100%;
-    max-width: 150px;
+    width: 90%;
     margin: 5px;
     border-radius: 10px;
     background-color: white;
@@ -205,13 +212,14 @@ export const UserProfile = styled.div`
 `;
 
 export const ParticipantsContainer = styled.div`
-  width: 70%;
+  width: 100%;
   height: 100%;
   overflow-y: auto;
   margin: 15px 0 20px 0;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  ${ScrollBar}
   img {
     cursor: pointer;
     width: 70px;
@@ -785,12 +793,12 @@ export const ChatContainer = styled.div`
   position: fixed;
   right: 10px;
   top: 130px;
-  width: 300px;
+  width: 350px;
   height: 60vh;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
   border-radius: 10px;
   z-index: 99;
-  background-color: ${colors.colorD};
+  background-color: #fffbf5;
   padding: 10px;
   .chat-header {
     width: 100%;
@@ -875,9 +883,11 @@ flex-direction: column;
   border: ${(props) =>
     props.isSender ? "1px solid #DCF8C6" : "1px solid #E0E0E0"};
   border-radius: 15px;
+  border-radius: ${(props)=> props.isSender? " 15px 0 0 15px  ":"0 15px 15px 0"};
   padding: 5px 15px;
   position: relative;
   margin: 0;
+  
 }
 .id{
   margin: 0 3px 2px 3px;

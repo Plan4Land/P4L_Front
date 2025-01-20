@@ -154,7 +154,7 @@ export const PlannerInfoEditComponent = ({
         />
       </div>
       <div className="edit-box">
-        <div>
+        <div className="editTitle">
           <input
             type="text"
             name="title"
