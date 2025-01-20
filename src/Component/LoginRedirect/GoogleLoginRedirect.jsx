@@ -14,14 +14,14 @@ export function GoogleRedirect() {
       console.log("code가 존재하지 않습니다.");
       return;
     }
-
+    
     // 1. 구글 토큰 발급
     axios
       .post(
         "https://oauth2.googleapis.com/token",
         new URLSearchParams({
           code: code,
-          cliend_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
           client_secret: process.env.REACT_APP_GOOGLE_CLIENT_PW,
           redirect_uri: process.env.REACT_APP_GOOGLE_REDIRECT_URI,
           grant_type: "authorization_code",

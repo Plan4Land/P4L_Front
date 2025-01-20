@@ -93,6 +93,7 @@ export const Login = () => {
   const google_api_key = process.env.REACT_APP_GOOGLE_CLIENT_ID;
   const google_redirect_uri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
   const googleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_api_key}&redirect_uri=${google_redirect_uri}&response_type=code&scope=email+profile`;
+  // const googleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=833604730211-ihphu6ve5pq1ork6dnia79qvl829n71m.apps.googleusercontent.com&redirect_uri=http://localhost:3000/login/oauth/google&response_type=code&scope=email+profile`
   const googleLogin = () => {
     window.location.href = googleURL;
   };
