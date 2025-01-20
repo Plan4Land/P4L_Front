@@ -16,7 +16,8 @@ import RequestPayment from "./Page/Payment/RequestPayment";
 import Test from "./Page/test";
 import ProtectedRoute from "./Util/ProtectedRoute";
 import { TourItemInfo } from "./Page/Item/TourItemInfo";
-import { KakaoRedirect } from "./Component/KakaoLoginRedirect";
+import { KakaoRedirect } from "./Component/LoginRedirect/KakaoLoginRedirect";
+import { GoogleRedirect } from "./Component/LoginRedirect/GoogleLoginRedirect";
 import { Otheruser } from "./Page/User/Otheruser";
 import { AdminPage } from "./Page/AdminPage";
 
@@ -32,6 +33,7 @@ function App() {
               <Route path="/planning/:plannerId" element={<Planning />} />
               <Route path="/login" element={<Login />} />
               <Route path="/login/oauth/kakao" element={<KakaoRedirect />} />
+              <Route path="/login/oauth/google" element={<GoogleRedirect />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/ktxInquiry" element={<KtxInquiry />} />
               <Route path="/tourlist" element={<TourList />} />
