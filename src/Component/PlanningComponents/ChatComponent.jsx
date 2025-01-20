@@ -43,7 +43,7 @@ export const ChatComponent = ({
         type: "CHAT",
         plannerId: plannerId,
         sender: sender,
-        message: inputMsg,
+        message: inputMsg.replace(/\n/g, "<br>"),
       })
     );
     setInputMsg("");
@@ -138,7 +138,11 @@ export const ChatComponent = ({
         {chatList.map((chat, index) => (
           <Message key={index} isSender={chat.sender === sender}>
             <p className="id">{`${chat.sender}`}</p>
-            <p className="talk">{`  ${chat.message}`}</p>
+            {/* <p className="talk">{`  ${chat.message}`}</p> */}
+            <p
+              className="talk"
+              dangerouslySetInnerHTML={{ __html: chat.message }}
+            />
           </Message>
         ))}
       </ChatMsgContainer>

@@ -313,7 +313,8 @@ export const Planning = () => {
     const fetchChatMsg = async () => {
       try {
         const response = await PlanningApi.getChatMsgs(plannerId);
-        setChatList(response);
+        const reversedResponse = [...response].reverse();
+        setChatList(reversedResponse);
         console.log("fetchChatMsg : ", response);
       } catch (e) {
         console.log("채팅 메시지 목록 불러오는 중 에러", e);
