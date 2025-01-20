@@ -565,6 +565,7 @@ export const Planning = () => {
               setMemoState={setMemoState}
               plans={plans}
               editPlans={editPlans}
+              setEditPlans={setEditPlans}
               plannerInfo={plannerInfo}
               editPlannerInfo={editPlannerInfo}
               setModals={setModals}

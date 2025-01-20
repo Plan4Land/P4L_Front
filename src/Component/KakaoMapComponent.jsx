@@ -122,16 +122,9 @@ export const KakaoMap = React.memo(({ plans, date }) => {
     lat: plans[Object.keys(plans)[0]]?.[0].latitude,
     lng: plans[Object.keys(plans)[0]]?.[0].longitude,
   });
-  // const [firstPlan, setFirstPlan] = useState(null);
   const firstPlan = plans[date]?.[0];
 
-  console.log("카카오맵에 plans : ", plans, date);
   const allPlans = Object.values(plans).flat();
-  // const filteredPlans = plans[date] || [];
-
-  // const firstPlan = plans[firstDate]?.[0];
-  // console.log("firstDate : ", firstDate);
-  // console.log("firstPlan : ", firstPlan);
 
   useEffect(() => {
     if (firstPlan) {
@@ -211,9 +204,9 @@ export const KakaoMap = React.memo(({ plans, date }) => {
       }}
       level={4} // 지도의 확대 레벨
     >
-      {data.map((value) => (
+      {data.map((value, index) => (
         <EventMarkerContainer
-          key={`EventMarkerContainer-${value.latlng.lat}-${value.latlng.lng}`}
+          key={`${value.latlng.lat}-${value.latlng.lng}-${index}`}
           position={value.latlng}
           content={value.content}
           category={value.category}

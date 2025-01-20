@@ -665,8 +665,16 @@ export const DayToggleContainer = styled.div`
         justify-content: center;
         align-items: center;
         border-radius: 50%;
-        background-color: ${colors.colorB};
         color: white;
+      }
+      .delete-btn {
+        background-color: red;
+        border: 1px solid red;
+        cursor: pointer;
+      }
+      .seq-div {
+        background-color: ${colors.colorB};
+        border: none;
       }
 
       .place-name {

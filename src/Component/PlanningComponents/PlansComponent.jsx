@@ -297,6 +297,7 @@ export const PlansComponent = ({
   setMemoState,
   plans,
   editPlans,
+  setEditPlans,
   plannerInfo,
   editPlannerInfo,
   setModals,
@@ -376,17 +377,15 @@ export const PlansComponent = ({
     // } else if (plans) {
     //   console.log("plans가 선택됨");
     // }
-    if (editPlannerInfo) {
-      console.log("editPlannerInfo 선택됨");
-    } else if (plannerInfo) {
-      console.log("plannerInfo 선택됨");
-    }
+    // if (editPlannerInfo) {
+    //   console.log("editPlannerInfo 선택됨");
+    // } else if (plannerInfo) {
+    //   console.log("plannerInfo 선택됨");
+    // }
     const startDate = new Date(currentPlannerInfo.startDate);
     const endDate = new Date(currentPlannerInfo.endDate);
     const timeDiff = endDate.getTime() - startDate.getTime();
     const diffInDays = timeDiff / (1000 * 3600 * 24);
-    console.log(currentPlannerInfo);
-    console.log(startDate);
 
     setTravelInfo((prevState) => ({
       ...prevState,
@@ -447,6 +446,16 @@ export const PlansComponent = ({
     setGroupPlans(groupedPlans); // 정렬된 일정
   }, [editPlannerInfo, editPlans, plannerInfo, plans]);
 
+  const handleDeletePlan = (date, planIndex) => {
+    setEditPlans((prev) =>
+      prev.filter((p) => !(p.date === date && p.planIndex === planIndex))
+    );
+  };
+
+  useEffect(() => {
+    console.log("????????????????????????????? : ", editPlans);
+  }, [editPlans]);
+
   useEffect(() => {
     if (socketConnected && editPlans && editor === sender) {
       console.log("sender: ", sender);
@@ -490,7 +499,20 @@ export const PlansComponent = ({
                     className="plan-place-container"
                   >
                     <div className="plan-place">
-                      <div className="seq-num-container">{plan.seq}</div>
+                      {isEditting && editor === user.nickname ? (
+                        <button
+                          className="seq-num-container delete-btn"
+                          onClick={() => {
+                            handleDeletePlan(date, planIndex);
+                          }}
+                        >
+                          X
+                        </button>
+                      ) : (
+                        <div className="seq-num-container seq-div">
+                          {plan.seq}
+                        </div>
+                      )}
                       <p className="place-name">
                         {plan.spotName || plan.content}
                       </p>
