@@ -392,6 +392,18 @@ export const Planning = () => {
       <div>
         <Header />
         <MainContainer onClick={() => closeMemo()}>
+          <MenuIcons
+            plannerId={plannerId}
+            plannerInfo={plannerInfo}
+            isBookmarked={isBookmarked}
+            setIsBookmarked={setIsBookmarked}
+            isParticipant={isParticipant}
+            setModals={setModals}
+            isChatOpen={isChatOpen}
+            setIsChatOpen={setIsChatOpen}
+            setPlans={setPlans}
+            setIsEditting={setIsEditting}
+          />
           <Info>
             {isEditting ? (
               editor === user.nickname ? (
@@ -463,18 +475,6 @@ export const Planning = () => {
               </>
             )}
 
-            <MenuIcons
-              plannerId={plannerId}
-              plannerInfo={plannerInfo}
-              isBookmarked={isBookmarked}
-              setIsBookmarked={setIsBookmarked}
-              isParticipant={isParticipant}
-              setModals={setModals}
-              isChatOpen={isChatOpen}
-              setIsChatOpen={setIsChatOpen}
-              setPlans={setPlans}
-              setIsEditting={setIsEditting}
-            />
             {isChatOpen && (
               <ChatComponent
                 inputMsg={inputMsg}
@@ -531,7 +531,7 @@ export const Planning = () => {
                 {isEditting && editor === user.nickname ? (
                   // 수정 완료 버튼
                   <Button
-                    className="edit-button"
+                    className="edit-button-complete"
                     onClick={() => handleOnClickEdit()}
                   >
                     편집 완료

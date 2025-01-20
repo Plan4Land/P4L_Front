@@ -19,6 +19,7 @@ import PlanningApi from "../../Api/PlanningApi";
 import { BookmarkedSpotsApi } from "../../Api/ItemApi";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaSearch } from "react-icons/fa";
 
 // 플래닝에 초대 수락한 회원들 모달창
 export const UserModal = ({ plannerInfo, modals, setModals }) => {
@@ -44,11 +45,10 @@ export const UserModal = ({ plannerInfo, modals, setModals }) => {
               // profileImg={`/${participant.memberProfileImg}`}
               onClick={() => navigate(`/otheruser/${participant.id}`)}
             >
-              <ProfileImg
-                file={`/${participant.memberProfileImg}`}
-                width={"100%"}
-              />
-              <span>{participant.memberNickname}</span>
+              <div className="participantsInfo">
+                <img src={`/${participant.memberProfileImg}`} alt="Profile" />
+                <p>{participant.memberNickname}</p>
+              </div>
             </div>
           ))}
       </ParticipantsContainer>
@@ -144,22 +144,8 @@ export const AddPlaceModal = ({
               handleKeywordSearch();
             }
           }}
-          style={{
-            width: "80%",
-            height: "25px",
-            fontSize: "14px",
-            padding: "3px",
-          }}
         />
-        <Button
-          $width={"60px"}
-          $height={"35px"}
-          fontSize={"14px"}
-          padding={"10px 15px"}
-          onClick={handleKeywordSearch}
-        >
-          검색
-        </Button>
+        <FaSearch className="searchIcon" onClick={handleKeywordSearch} />
       </SearchInputContainer>
       {selectedMenu === "장소 검색" ? (
         <>
@@ -255,23 +241,8 @@ export const SearchUser = ({
                 handleUserSearch();
               }
             }}
-            style={{
-              width: "80%",
-              height: "35px",
-              fontSize: "14px",
-              padding: "3px 8px",
-              boxSizing: "border-box",
-            }}
           />
-          <Button
-            $width={"60px"}
-            $height={"35px"}
-            fontSize={"14px"}
-            padding={"10px 15px"}
-            onClick={handleUserSearch}
-          >
-            검색
-          </Button>
+          <FaSearch className="searchIcon" onClick={handleUserSearch} />
         </SearchInputContainer>
         <div className="searched-users-container">
           {searchState.searchUsersRst &&

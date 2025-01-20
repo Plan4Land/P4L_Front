@@ -153,7 +153,7 @@ export const TourItem = ({
   margin,
 }) => {
   const navigate = useNavigate();
-  
+
   const handleOnClick = () => {
     navigate(`/tourItemInfo/${id}`, {
       state: { title, address, subCategory, type, thumbnail },
@@ -163,14 +163,14 @@ export const TourItem = ({
   // 기본 이미지 설정: type에 따라 다르게 설정
   const getDefaultImage = (type) => {
     switch (type) {
-      case '숙소':
-        return '/img/cateimg/type_100.png'; 
-      case '관광지':
-        return '/img/cateimg/type_200.png'; 
-      case '음식점':
-        return '/img/cateimg/type_300.png'; 
+      case "숙소":
+        return "/img/cateimg/type_100.png";
+      case "관광지":
+        return "/img/cateimg/type_200.png";
+      case "음식점":
+        return "/img/cateimg/type_300.png";
       default:
-        return '/profile-pic/basic7.png'; 
+        return "/profile-pic/basic7.png";
     }
   };
 
@@ -195,7 +195,6 @@ export const TourItem = ({
     </TourItemStyled>
   );
 };
-
 
 export const PlanItem = ({
   thumbnail,
@@ -258,8 +257,26 @@ export const SearchTourItem = ({
   setCurrentAddedPlace,
   setModals,
 }) => {
-  const defaultImage = "/profile-pic/basic7.png";
-  const imageUrl = data.thumbnail ? data.thumbnail : defaultImage;
+  // 기본 썸네일 이미지를 typeId에 따라 반환
+  const getDefaultImage = (typeId) => {
+    switch (typeId) {
+      case "100":
+        return "/img/cateimg/type_200.png";
+      case "200":
+        return "/img/cateimg/type_100.png";
+      case "300":
+        return "/img/cateimg/type_300.png";
+      default:
+        return "/profile-pic/basic7.png"; // 기본 이미지
+    }
+  };
+
+  // 썸네일 이미지 결정
+  const imageUrl = data.thumbnail
+    ? data.thumbnail
+    : getDefaultImage(data.typeId);
+
+  // 카테고리 경로 계산
   const getCategoryPath = () => {
     const cat1Item = ServiceCode.find((item) => item.cat1 === data.cat1);
     const cat2Item = cat1Item?.cat2List.find((item) => item.cat2 === data.cat2);
@@ -269,6 +286,8 @@ export const SearchTourItem = ({
       .filter(Boolean)
       .join(" > ");
   };
+
+  // 마커 정보 생성
   const marker = {
     position: {
       lat: data.mapY,
@@ -279,6 +298,7 @@ export const SearchTourItem = ({
     category: getCategoryPath() || "정보 없음",
   };
 
+  // 아이템 클릭 이벤트 처리
   const handleTourItemClick = () => {
     setCurrentAddedPlace((prev) => ({
       ...prev,
@@ -286,6 +306,7 @@ export const SearchTourItem = ({
     }));
     setModals((prevModals) => ({ ...prevModals, addPlaceModal: false }));
   };
+
   return (
     <TourItemStyled
       width={width}
