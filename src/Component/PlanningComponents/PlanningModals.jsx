@@ -10,7 +10,7 @@ import {
   SearchBookmarkContainer,
 } from "../../Style/PlanningStyled";
 import { CloseModal, Modal } from "../../Util/Modal";
-import { Button } from "../ButtonComponent";
+import { Button} from "../ButtonComponent";
 import { colors } from "../../Style/GlobalStyle";
 import { SearchKakaoMap } from "../KakaoMapComponent";
 import { SearchTourItem } from "../ItemListComponent";
