@@ -5,6 +5,7 @@ import {
   DateBox,
 } from "../../Style/PlanningStyled";
 import { Button } from "../ButtonComponent";
+import { colors } from "../../Style/GlobalStyle";
 import { themes, areas } from "../../Util/Common";
 import { ProfileImg } from "../ProfileImg";
 import { useEffect, useState } from "react";
@@ -13,7 +14,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { FaPenToSquare } from "react-icons/fa6";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { FaChevronCircleUp, FaChevronCircleDown } from "react-icons/fa";
+
+// import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 export const PlannerInfoEditComponent = ({
   ws,
@@ -416,6 +419,8 @@ export const PlansComponent = ({
       dates: travelDates, // 여행 날짜 설정
     }));
 
+    console.log(editPlans);
+
     const groupPlansByDate = () => {
       // 1. 날짜별로 그룹화
       const groupedPlans = currentPlans.reduce((acc, plan) => {
@@ -453,6 +458,44 @@ export const PlansComponent = ({
 
   const handleDeletePlan = (plan) => {
     setEditPlans((prev) => prev.filter((p) => !(p === plan)));
+  };
+
+  const handleSwapSeq = (planId, direction, date) => {
+    // editPlans에서 해당 날짜의 플랜들만 가져오기
+    const plansForDate = editPlans.filter(
+      (plan) => plan.date.split("T")[0] === date
+    );
+
+    // 해당 날짜의 플랜에서 planId에 해당하는 플랜의 인덱스 찾기
+    const planIndex = plansForDate.findIndex((plan) => plan.id === planId);
+
+    // 해당 planId가 존재하지 않으면 종료
+    if (planIndex === -1) return;
+
+    // seq 교환
+    if (direction === "up" && planIndex > 0) {
+      // 앞의 요소와 seq 교환
+      const temp = plansForDate[planIndex].seq;
+      plansForDate[planIndex].seq = plansForDate[planIndex - 1].seq;
+      plansForDate[planIndex - 1].seq = temp;
+    } else if (direction === "down" && planIndex < plansForDate.length - 1) {
+      // 뒤의 요소와 seq 교환
+      const temp = plansForDate[planIndex].seq;
+      plansForDate[planIndex].seq = plansForDate[planIndex + 1].seq;
+      plansForDate[planIndex + 1].seq = temp;
+    }
+
+    // 기존의 editPlans에서 해당 date를 제외한 다른 날짜의 플랜들
+    const otherPlans = editPlans.filter(
+      (plan) => plan.date.split("T")[0] !== date
+    );
+
+    // 수정된 plansForDate와 otherPlans 합치기
+    const updatedPlans = [...otherPlans, ...plansForDate];
+
+    // 새로운 상태로 업데이트
+    setEditPlans(updatedPlans);
+    console.log("여기여기여깅겨ㅣ : ", updatedPlans);
   };
 
   useEffect(() => {
@@ -516,6 +559,32 @@ export const PlansComponent = ({
                       <p className="place-category">{plan.category}</p>
                     </div>
                     <div className="memo-container">
+                      {isEditting && editor === user.nickname && (
+                        <div>
+                          {planIndex > 0 && ( // 첫 번째 요소가 아닐 때만 위쪽 화살표 버튼 표시
+                            <FaChevronCircleUp
+                              style={{
+                                marginRight: "4px",
+                                fontSize: "24px",
+                                color: colors.colorB,
+                              }}
+                              onClick={() => handleSwapSeq(plan.id, "up", date)} // up 아이콘 클릭 시
+                            />
+                          )}
+                          {planIndex < groupPlans[date].length - 1 && ( // 마지막 요소가 아닐 때만 아래쪽 화살표 버튼 표시
+                            <FaChevronCircleDown
+                              style={{
+                                marginRight: "4px",
+                                fontSize: "24px",
+                                color: colors.colorB,
+                              }}
+                              onClick={() =>
+                                handleSwapSeq(plan.id, "down", date)
+                              } // down 아이콘 클릭 시
+                            />
+                          )}
+                        </div>
+                      )}
                       <FaPenToSquare
                         className="memo-icon"
                         style={{

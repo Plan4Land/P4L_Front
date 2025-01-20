@@ -86,6 +86,7 @@ export const Planning = () => {
   const [sender, setSender] = useState(""); // 메시지를 보낸 사람
   const ws = useRef(null); // 웹소켓 객체 생성, 소켓 연결 정보를 유지해야 하지만, 렌더링과는 무관
   const [isParticipant, setIsParticipant] = useState(false);
+
   const closeChat = () => {
     setIsChatOpen(false); // "X" 버튼 클릭 시 채팅 창 닫기
   };
@@ -197,7 +198,7 @@ export const Planning = () => {
               setReceivePlanner(null);
 
               // 비동기 호출 처리
-              if (editPlannerInfo) {
+              if (editPlannerInfo && data.sender === user.nickname) {
                 const plannerResult = await PlanningApi.editPlannerInfo(
                   editPlannerInfo,
                   plannerId

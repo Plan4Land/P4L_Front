@@ -821,7 +821,6 @@ export const ChatContainer = styled.div`
       resize: none;
       border-radius: 10px;
       ${ScrollBar};
-
     }
 
     button {
@@ -867,22 +866,21 @@ export const ChatMsgContainer = styled.div`
 export const Message = styled.div`
   max-width: 70%;
   align-self: ${(props) => (props.isSender ? "flex-end" : "flex-start")};
-display: flex;
-flex-direction: column;
-.talk{
-  font-size: 14px;
-  background-color: ${(props) => (props.isSender ? "#cfebbb" : "#E0E0E0")};
-  border: ${(props) =>
-    props.isSender ? "1px solid #DCF8C6" : "1px solid #E0E0E0"};
-  border-radius: 15px;
-  padding: 5px 15px;
-  position: relative;
-  margin: 0;
-}
-.id{
-  margin: 0 3px 2px 3px;
-  font-size: 12px;
-  align-self: ${(props) => (props.isSender ? "flex-end" : "flex-start")};
-}
+  display: flex;
+  flex-direction: column;
+  .talk {
+    font-size: 14px;
+    background-color: ${(props) => (props.isSender ? "#cfebbb" : "#E0E0E0")};
+    border: ${(props) =>
+      props.isSender ? "1px solid #DCF8C6" : "1px solid #E0E0E0"};
+    border-radius: 15px;
+    padding: 5px 15px;
+    position: relative;
+    margin: 0;
+  }
+  .id {
+    margin: 0 3px 2px 3px;
+    font-size: 12px;
+    align-self: ${(props) => (props.isSender ? "flex-end" : "flex-start")};
+  }
 `;
-
