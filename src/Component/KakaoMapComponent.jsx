@@ -11,6 +11,7 @@ import React, { useState, useEffect } from "react";
 
 const { kakao } = window;
 
+// 관광지 상세페이지에 사용되는 지도
 export const KakaoMapSpot = ({ mapX, mapY }) => {
   const [toggle, setToggle] = useState("map");
   const placePosition = {
@@ -19,7 +20,7 @@ export const KakaoMapSpot = ({ mapX, mapY }) => {
   };
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
-      <Map // 로드뷰를 표시할 Container
+      <Map
         center={placePosition}
         style={{
           display: toggle === "map" ? "block" : "none",
@@ -44,7 +45,7 @@ export const KakaoMapSpot = ({ mapX, mapY }) => {
           />
         )}
       </Map>
-      <Roadview // 로드뷰를 표시할 Container
+      <Roadview
         position={{ ...placePosition, radius: 50 }}
         style={{
           display: toggle === "roadview" ? "block" : "none",
@@ -111,7 +112,10 @@ export const KakaoMapSpot = ({ mapX, mapY }) => {
 //   );
 // };
 
+// 플래너 페이지에 사용되는 지도
 export const KakaoMap = React.memo(({ plans, date }) => {
+  console.log("카카오지도 : ", plans, date);
+  console.log(plans[Object.keys(plans)[0]]?.[0].latitude);
   // Rest API
   // https://developers.kakao.com/docs/latest/ko/local/dev-guide#address-coord
   // https://react-kakao-maps-sdk.jaeseokim.dev/docs/sample/library/keywordBasic
@@ -216,6 +220,7 @@ export const KakaoMap = React.memo(({ plans, date }) => {
   );
 });
 
+// 플래너 페이지에서 장소 추가할 때 검색
 export const SearchKakaoMap = ({
   searchKeyword,
   setModals,

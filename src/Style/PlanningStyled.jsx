@@ -717,23 +717,22 @@ export const DayToggleContainer = styled.div`
       .seq-num-container {
         display: flex;
         position: absolute;
-        left: -12.5px;
-        top: 15px;
-        width: 25px;
-        height: 25px;
+        left: -5px;
+        top: 17px;
+        width: 20px;
+        height: 20px;
         justify-content: center;
         align-items: center;
         border-radius: 50%;
         color: white;
+        border: none;
       }
       .delete-btn {
         background-color: red;
-        border: 1px solid red;
         cursor: pointer;
       }
       .seq-div {
         background-color: ${colors.colorB};
-        border: none;
       }
 
       .place-name {
