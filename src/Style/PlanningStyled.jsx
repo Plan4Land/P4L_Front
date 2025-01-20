@@ -714,7 +714,7 @@ export const DayToggleContainer = styled.div`
         display: flex;
         position: absolute;
         left: -5px;
-        top: 17px;
+        top: 35%;
         width: 20px;
         height: 20px;
         justify-content: center;

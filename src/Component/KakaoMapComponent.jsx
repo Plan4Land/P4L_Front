@@ -7,7 +7,7 @@ import {
   RoadviewMarker,
 } from "react-kakao-maps-sdk";
 import { useKakaoLoader, useMap } from "react-kakao-maps-sdk";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 const { kakao } = window;
 
@@ -114,33 +114,51 @@ export const KakaoMapSpot = ({ mapX, mapY }) => {
 
 // 플래너 페이지에 사용되는 지도
 export const KakaoMap = React.memo(({ plans, date }) => {
-  console.log("카카오지도 : ", plans, date);
-  console.log(plans[Object.keys(plans)[0]]?.[0].latitude);
+  console.log("카카오지도 호출");
   // Rest API
   // https://developers.kakao.com/docs/latest/ko/local/dev-guide#address-coord
   // https://react-kakao-maps-sdk.jaeseokim.dev/docs/sample/library/keywordBasic
   // 참고 사이트 : https://m.blog.naver.com/kiddwannabe/221812712712
   // https://bluepebble25.tistory.com/73#--%--%EA%B-%AC%ED%--%--%--%EC%--%B-%EA%B-%B--%---%--react-kakao-maps-sdk%--%ED%-C%A-%ED%--%A-%EC%A-%--%--%EC%-D%B-%EC%-A%A-
 
-  const [centerLatLng, setCenterLatLng] = useState({
-    lat: plans[Object.keys(plans)[0]]?.[0].latitude,
-    lng: plans[Object.keys(plans)[0]]?.[0].longitude,
-  });
+  // const [centerLatLng, setCenterLatLng] = useState({
+  //   lat: plans[Object.keys(plans)[0]]?.[0].latitude,
+  //   lng: plans[Object.keys(plans)[0]]?.[0].longitude,
+  // });
   const firstPlan = plans[date]?.[0];
 
   const allPlans = Object.values(plans).flat();
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (firstPlan) {
+  //     setCenterLatLng({
+  //       lat: parseFloat(firstPlan.latitude || firstPlan.position.lat),
+  //       lng: parseFloat(firstPlan.longitude || firstPlan.position.lng),
+  //     });
+  //   } else {
+  //     setCenterLatLng({
+  //       lat: allPlans[0]?.latitude,
+  //       lng: allPlans[0]?.longitude,
+  //     });
+  //   }
+  // }, [plans, date]);
+
+  const centerLatLng = useMemo(() => {
     if (firstPlan) {
-      setCenterLatLng({
+      return {
         lat: parseFloat(firstPlan.latitude || firstPlan.position.lat),
         lng: parseFloat(firstPlan.longitude || firstPlan.position.lng),
-      });
+      };
+    } else if (allPlans.length > 0) {
+      return {
+        lat: parseFloat(allPlans[0]?.latitude || allPlans[0]?.position.lat),
+        lng: parseFloat(allPlans[0]?.longitude || allPlans[0]?.position.lng),
+      };
     } else {
-      setCenterLatLng({
-        lat: allPlans[0]?.latitude,
-        lng: allPlans[0]?.longitude,
-      });
+      return {
+        lat: plans[Object.keys(plans)[0]]?.[0].latitude,
+        lng: plans[Object.keys(plans)[0]]?.[0].longitude,
+      };
     }
   }, [plans, date]);
 
@@ -165,7 +183,8 @@ export const KakaoMap = React.memo(({ plans, date }) => {
     const map = useMap();
     const [isVisible, setIsVisible] = useState(false);
     const handleOnClickMarker = () => {
-      setCenterLatLng(position);
+      const latLng = new kakao.maps.LatLng(position.lat, position.lng);
+      map.setCenter(latLng);
       map.setLevel(4);
     };
     const markerImage = (category) => {

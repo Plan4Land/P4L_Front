@@ -7,15 +7,13 @@ import {
 import { Button } from "../ButtonComponent";
 import { themes, areas } from "../../Util/Common";
 import { ProfileImg } from "../ProfileImg";
-import MemoIcon from "../../Img/memo-icon.png";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../Context/AuthContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { FaPenToSquare } from "react-icons/fa6";
-
-// import _ from "lodash";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 export const PlannerInfoEditComponent = ({
   ws,
@@ -439,6 +437,11 @@ export const PlansComponent = ({
       // 2. 각 날짜 그룹 내에서 seq 순으로 정렬
       Object.keys(groupedPlans).forEach((date) => {
         groupedPlans[date].sort((a, b) => a.seq - b.seq);
+
+        // 3. seq를 1부터 다시 채우기
+        groupedPlans[date].forEach((plan, index) => {
+          plan.seq = index + 1; // 1부터 시작하는 새로운 seq 부여
+        });
       });
       return groupedPlans;
     };
@@ -448,20 +451,12 @@ export const PlansComponent = ({
     setGroupPlans(groupedPlans); // 정렬된 일정
   }, [editPlannerInfo, editPlans, plannerInfo, plans]);
 
-  const handleDeletePlan = (date, planIndex) => {
-    setEditPlans((prev) =>
-      prev.filter((p) => !(p.date === date && p.planIndex === planIndex))
-    );
+  const handleDeletePlan = (plan) => {
+    setEditPlans((prev) => prev.filter((p) => !(p === plan)));
   };
 
   useEffect(() => {
-    console.log("????????????????????????????? : ", editPlans);
-  }, [editPlans]);
-
-  useEffect(() => {
     if (socketConnected && editPlans && editor === sender) {
-      console.log("sender: ", sender);
-      console.log("editor: ", editor);
       const message = {
         type: "PLANNER",
         plannerId: plannerId,
@@ -505,7 +500,7 @@ export const PlansComponent = ({
                         <div
                           className="seq-num-container delete-btn"
                           onClick={() => {
-                            handleDeletePlan(date, planIndex);
+                            handleDeletePlan(plan);
                           }}
                         >
                           X
@@ -562,9 +557,9 @@ export const PlansComponent = ({
               {isEditting && editor === user.nickname && (
                 <button
                   className="add-place-button"
-                  $margin="1.5% 0"
-                  $width="60%"
-                  $height="30px"
+                  margin="1.5% 0"
+                  width="60%"
+                  height="30px"
                   onClick={() => {
                     setModals((prev) => ({ ...prev, addPlaceModal: true }));
                     setCurrentAddedPlace((prev) => ({
