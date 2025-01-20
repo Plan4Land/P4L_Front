@@ -490,6 +490,7 @@ export const PlansComponent = ({
                     className="plan-place-container"
                   >
                     <div className="plan-place">
+                      <div className="seq-num-container">{plan.seq}</div>
                       <p className="place-name">
                         {plan.spotName || plan.content}
                       </p>
