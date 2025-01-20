@@ -13,6 +13,8 @@ import { useAuth } from "../../Context/AuthContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
+import { FaPenToSquare } from "react-icons/fa6";
+
 // import _ from "lodash";
 
 export const PlannerInfoEditComponent = ({
@@ -153,7 +155,7 @@ export const PlannerInfoEditComponent = ({
           file={"/img/planning-pic/planningth1.jpg"}
         />
       </div>
-      <div>
+      <div className="edit-box">
         <div>
           <input
             type="text"
@@ -519,12 +521,11 @@ export const PlansComponent = ({
                       <p className="place-category">{plan.category}</p>
                     </div>
                     <div className="memo-container">
-                      <img
+                      <FaPenToSquare
                         className="memo-icon"
-                        src={MemoIcon}
-                        alt="메모"
                         style={{
                           cursor: memoState.isOpened ? "default" : "pointer",
+                          color: memoState.isOpened ? "gray" : "black",
                         }}
                         onClick={(e) => {
                           if (memoState.isOpened) {
@@ -559,7 +560,7 @@ export const PlansComponent = ({
                 <p className="no-plans">일정이 없습니다.</p>
               )}
               {isEditting && editor === user.nickname && (
-                <Button
+                <button
                   className="add-place-button"
                   $margin="1.5% 0"
                   $width="60%"
@@ -573,7 +574,7 @@ export const PlansComponent = ({
                   }}
                 >
                   + 장소 추가
-                </Button>
+                </button>
               )}
             </DayToggleContainer>
           )}

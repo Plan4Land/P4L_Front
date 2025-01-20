@@ -7,6 +7,20 @@ export const MainContainer = styled.div`
   margin-bottom: 10vh;
   display: flex;
   flex-direction: column;
+  .menu-icons {
+    display: flex;
+    position: absolute;
+    right: 15vw;
+    top: 110px;
+
+    .menu-icon {
+      font-size: 2rem;
+      color: #666666;
+      cursor: pointer;
+      margin-right: 4px;
+      margin-left: 0.8vw;
+    }
+  }
 `;
 
 export const Info = styled.div`
@@ -14,7 +28,10 @@ export const Info = styled.div`
   display: flex;
   box-sizing: border-box;
   position: relative;
-
+  margin-top: 80px;
+  .edit-box {
+    width: 100%;
+  }
   div {
     margin: auto 0 auto 0;
   }
@@ -35,7 +52,7 @@ export const Info = styled.div`
       height: 200px;
     }
 
-    @media (max-width: 1160px) {
+    @media (max-width: 768px) {
       width: 150px;
       height: 150px;
     }
@@ -88,13 +105,13 @@ export const Info = styled.div`
 
   .theme-buttons {
     display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    gap: 10px; /* 버튼 사이 간격 */
+    grid-template-columns: repeat(5, 1fr);
+    gap: 3px 10px;
     margin-bottom: 10px;
   }
 
   .theme-button {
-    padding: 3px 5px;
+    padding: 5px;
     width: 100%;
     max-width: 150px;
     margin: 5px;
@@ -103,10 +120,8 @@ export const Info = styled.div`
     border: 1px solid ${colors.colorB};
     cursor: pointer;
     transition: all 0.2s ease;
-
+    white-space: nowrap;
     &:hover {
-      background-color: ${colors.colorB};
-      color: white;
       opacity: 0.7;
     }
   }
@@ -119,21 +134,6 @@ export const Info = styled.div`
   .theme-button:disabled {
     background-color: #f0f1f0;
     cursor: default;
-  }
-
-  .menu-icons {
-    display: flex;
-    position: absolute;
-    right: 0;
-    top: 25px;
-
-    .menu-icon {
-      font-size: 2rem;
-      color: #666666;
-      cursor: pointer;
-      margin-right: 4px;
-      margin-left: 0.8vw;
-    }
   }
 `;
 
@@ -153,35 +153,49 @@ export const Users = styled.div`
     font-size: 30px;
     background-color: ${colors.colorB};
     cursor: pointer;
-
     &:hover {
       scale: 1.1;
     }
   }
-
-  .edit-button,
   .editing-info {
-    display: flex;
     position: absolute;
     right: 0;
     bottom: 0;
+  }
+  .edit-button,
+  .edit-button-complete {
+    position: absolute;
+    right: 0;
+    bottom: -5px;
+    border: none;
+    color: black;
+    width: 80px;
+    height: 25px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  .edit-button {
+    background-color: #ddd;
+  }
+  .edit-button-complete {
+    background-color: #89bafa;
   }
 `;
 
 export const UserProfile = styled.div`
   display: flex;
   position: relative;
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   margin-left: -35px;
   cursor: pointer;
-  /* background-color: red; */
+  transition: all 0.3s ease;
   &:first-of-type {
-    margin-left: 0; /* 첫 번째 프로필은 이동하지 않도록 설정 */
+    margin-left: 0;
   }
   &:hover {
-    scale: 1.1;
+    scale: 1.05;
   }
 `;
 
@@ -189,15 +203,22 @@ export const ParticipantsContainer = styled.div`
   width: 70%;
   height: 100%;
   overflow-y: auto;
-  margin: 15px auto 20px;
-  padding: 5% 10%;
+  margin: 15px 0 20px 0;
   display: flex;
   flex-direction: column;
   gap: 15px;
-
-  .participants-profile {
+  img {
+    cursor: pointer;
     width: 70px;
     height: 70px;
+    border-radius: 50%;
+  }
+  .participantsInfo {
+    display: flex;
+    align-items: center;
+    p {
+      margin-left: 20px;
+    }
   }
 `;
 
@@ -242,9 +263,11 @@ export const SearchedUserHr = styled.hr`
 
 export const UserName = styled.div`
   width: 120px;
-  height: 30px;
-  background-color: pink;
+  height: 40px;
   margin-right: 70px;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
 `;
 
 export const ContentContainer = styled.div`
@@ -258,7 +281,7 @@ export const ContentContainer = styled.div`
 `;
 
 export const MainPlanning = styled.div`
-  width: 60%;
+  width: 50%;
   min-width: 400px; // 이거도 고민
   min-height: 100px; // 이거 고민
   max-height: 600px; // 이것도 고민
@@ -267,22 +290,30 @@ export const MainPlanning = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   /* overflow-x: visible; */
-  background-color: blanchedalmond;
+  border-radius: 10px;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
 
   .planning-day {
     display: flex;
     position: relative;
     align-items: center;
-    width: 92%;
+    width: 90%;
     height: 40px;
-    margin: 2px auto 0;
+    margin: 10px auto 0;
     cursor: pointer;
-    background-color: #e2f3a2;
+    background-color: ${colors.colorC};
+    border-radius: 5px;
+    padding-left: 10px;
 
     .arrow {
       display: flex;
       position: absolute;
       right: 7px;
+      color: ${colors.colorA};
+      transition: all 0.3s ease;
+      &:hover {
+        opacity: 0.7;
+      }
     }
   }
 `;
@@ -578,33 +609,24 @@ export const DatePickerContainer = styled.div`
 
 export const SearchSelectMenuContainer = styled.div`
   width: 90%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 15%;
   box-sizing: border-box;
-  margin: 3% 5% 0;
-
-  span {
-    display: inline-block; /* 텍스트 길이에 맞게 크기 조정 */
-    cursor: pointer; /* 클릭 가능 표시 */
-    padding-bottom: 4px; /* 텍스트와 밑줄 간격 */
-  }
-
+  margin: 3% 3% 0;
   .menu-item {
-    /* 일반 메뉴 스타일 */
-    display: inline-block; /* 텍스트 길이에 맞게 크기 조정 */
-    min-width: 30%;
-    border-bottom: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    padding: 0 20px;
+    white-space: nowrap;
+    &:hover {
+      background-color: ${colors.colorC};
+    }
   }
-
   .selected-menu {
-    border-bottom: 1px solid black; /* 선택된 메뉴 밑줄 */
+    background-color: ${colors.colorC};
   }
-
   .bar {
-    width: auto; /* 구분자 크기 조정 */
-    padding: 0 5px; /* 좌우 간격 추가 */
+    margin: 0 20px;
   }
 `;
 
@@ -621,7 +643,25 @@ export const SearchInputContainer = styled.div`
   width: 95%;
   margin: 20px auto 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+
+  input {
+    border: 1px solid ${colors.colorA};
+    border-radius: 20px;
+    font-size: 13px;
+    width: 80%;
+    height: 25px;
+    font-size: 14px;
+    padding: 3px 3px 3px 10px;
+  }
+
+  .searchIcon {
+    width: 50px;
+    font-size: 25px;
+    color: ${colors.colorA};
+    cursor: pointer;
+  }
 `;
 
 export const SearchBookmarkContainer = styled.div`
@@ -640,15 +680,30 @@ export const DayToggleContainer = styled.div`
   align-items: center;
   width: 85%;
   margin: 0 auto;
-  background-color: azure;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
 
+  button {
+    background-color: #ececec;
+    border: none;
+    border-radius: 10px;
+    padding: 3px 30px 3px 30px;
+    margin-top: 5px;
+    color: #474747;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
   .plan-place-container {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 5px;
-    background-color: #c7daf7;
+    background-color: ${colors.colorD};
 
     .plan-place {
       display: flex;
@@ -685,19 +740,18 @@ export const DayToggleContainer = styled.div`
       .place-category {
         margin: 0 5px 5px 20px;
         font-size: 13px;
-        color: #333;
+        color: #5f5f5f;
       }
     }
   }
   .memo-container {
     display: flex;
     position: relative;
-    img {
-      width: 30px;
-      height: 30px;
-    }
     .memo-icon {
       cursor: pointer;
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
     }
 
     .memo-input {
@@ -705,9 +759,9 @@ export const DayToggleContainer = styled.div`
       position: absolute;
       right: 0;
       bottom: 0;
-      transform: translateX(-5%) translateY(90%);
+      transform: translateX(-10%) translateY(95%);
       width: 230px;
-      height: 20vh;
+      height: 15vh;
       /* max-height: 100vh; */
       background-color: white;
       overflow-y: auto;

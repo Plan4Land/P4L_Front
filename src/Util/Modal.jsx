@@ -26,7 +26,7 @@ const ModalContent = styled.div`
   text-align: center;
   display: flex;
   flex-direction: column;
-  .buttons{
+  .buttons {
     flex-direction: row;
   }
 `;
@@ -72,14 +72,15 @@ export const Modal = ({
       <ModalContent>
         {children} {/* 자식 요소로 전달된 내용 */}
         <div className="buttons">
-        <Button onClick={onConfirm}>{confirmText}</Button> {/* 확인 버튼 텍스트 변경 가능 */}
-        <CancelButton onClick={onClose}>{cancelText}</CancelButton> {/* 취소 버튼 텍스트 변경 가능 */}
+          <Button onClick={onConfirm}>{confirmText}</Button>{" "}
+          {/* 확인 버튼 텍스트 변경 가능 */}
+          <CancelButton onClick={onClose}>{cancelText}</CancelButton>{" "}
+          {/* 취소 버튼 텍스트 변경 가능 */}
         </div>
       </ModalContent>
     </ModalBackdrop>
   );
 };
-
 
 export const CheckModal = ({ isOpen, onClose, children, buttonProps }) => {
   if (!isOpen) return null;
