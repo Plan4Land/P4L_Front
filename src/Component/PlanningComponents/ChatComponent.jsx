@@ -6,6 +6,7 @@ import {
 } from "../../Style/PlanningStyled";
 import { HiArrowCircleUp } from "react-icons/hi";
 import PlanningApi from "../../Api/PlanningApi";
+import { FaTimes } from "react-icons/fa";
 
 export const ChatComponent = ({
   inputMsg,
@@ -20,6 +21,7 @@ export const ChatComponent = ({
   setPlans,
   setIsEditting,
   setEditor,
+  closeChat,
 }) => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey && !event.ctrlKey) {
@@ -129,6 +131,9 @@ export const ChatComponent = ({
 
   return (
     <ChatContainer>
+      <div className="chat-header">
+        <FaTimes className="close-chat" onClick={closeChat} />
+      </div>
       <ChatMsgContainer ref={ChatContainerRef}>
         {chatList.map((chat, index) => (
           <Message key={index} isSender={chat.sender === sender}>
@@ -136,12 +141,16 @@ export const ChatComponent = ({
           </Message>
         ))}
       </ChatMsgContainer>
+
       <div className="sendChat">
         <textarea
           id="chatTyping"
           value={inputMsg ?? ""}
           onChange={(e) => setInputMsg(e.target.value)}
           onKeyDown={handleKeyDown}
+          style={{
+            height: `${Math.min(90, 15 + inputMsg.split("\n").length * 15)}px`,
+          }}
         />
         <button onClick={handleButtonClick} disabled={!inputMsg?.trim()}>
           <HiArrowCircleUp className="sendIcon" />

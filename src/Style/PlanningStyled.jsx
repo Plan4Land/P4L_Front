@@ -19,6 +19,10 @@ export const MainContainer = styled.div`
       cursor: pointer;
       margin-right: 4px;
       margin-left: 0.8vw;
+      transition: all 0.3s ease;
+      &:hover {
+        opacity: 0.7;
+      }
     }
   }
 `;
@@ -786,8 +790,21 @@ export const ChatContainer = styled.div`
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
   border-radius: 10px;
   z-index: 99;
-  background-color: #fefff3;
-
+  background-color: ${colors.colorD};
+  padding: 10px;
+  .chat-header {
+    width: 100%;
+    display: flex;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    .close-chat {
+      color: #666;
+      cursor: pointer;
+      position: absolute;
+      right: 0;
+    }
+  }
   .sendChat {
     width: 100%;
     display: flex;
@@ -795,18 +812,14 @@ export const ChatContainer = styled.div`
     justify-content: space-between;
     bottom: 0;
     margin-bottom: 8px;
-
+    margin-left: 5px;
     textarea {
       width: 16rem;
-      min-height: 40px;
-      /* max-height: 70px; */
-      font-size: 14px;
+      font-size: 15px;
       padding: 4px;
       box-sizing: border-box;
       resize: none;
-
-      scrollbar-width: thin;
-      scrollbar-color: #ccc #f0f0f0;
+      border-radius: 10px;
 
       /* &::-webkit-scrollbar {
         width: 6px;
@@ -826,12 +839,12 @@ export const ChatContainer = styled.div`
 
     button {
       width: 2.6rem;
-      margin-right: 6px;
+      margin-right: 20px;
       cursor: pointer;
       /* transition: all 0.2s ease; */
       background-color: transparent;
       border: none;
-      color: #3762d8;
+      color: #597bd8;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -844,7 +857,6 @@ export const ChatContainer = styled.div`
         color: #666;
         cursor: default;
       }
-
       svg {
         font-size: 2rem;
       }
@@ -857,7 +869,9 @@ export const ChatMsgContainer = styled.div`
   flex-direction: column;
   width: 100%;
   overflow-y: auto;
-  margin-bottom: 10px;
+  gap: 10px;
+  position: absolute;
+  top: 40px;
 `;
 
 export const Message = styled.div`
