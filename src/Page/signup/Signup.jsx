@@ -74,14 +74,14 @@ export const Signup = () => {
 
   // kakao
   const location = useLocation();
-  const { kakao_id, sso } = location.state || {};
-  const [kakaoId, setKakaoId] = useState(kakao_id || null);
+  const { social_id, sso } = location.state || {};
+  const [socialId, setSocialId] = useState(social_id || null);
   const [ssoState, setSsoState] = useState(sso || null);
 
   useEffect(() => {
-    setKakaoId(kakao_id || null);
+    setSocialId(social_id || null);
     setSsoState(sso || null);
-  }, [kakao_id, sso]);
+  }, [social_id, sso]);
 
   // 아이디 유효성 검사
   const handleIdInput = (e) => {
@@ -333,7 +333,7 @@ export const Signup = () => {
         inputNickname,
         inputEmail,
         currentPic,
-        kakao_id || null,
+        social_id || null,
         ssoState || null,
       );
       if (response.status === 201 || response.status === 200) {
@@ -558,7 +558,7 @@ export const Signup = () => {
             setCurrentPic={setCurrentPic}
           />
 
-          {kakao_id && <input type="hidden" name="kakao_id" value={kakaoId} />}
+          {social_id && <input type="hidden" name="social_id" value={socialId} />}
           {sso && <input type="hidden" name="sso" value={ssoState} />}
 
           <Button onClick={onClickSignup}>회원가입</Button>

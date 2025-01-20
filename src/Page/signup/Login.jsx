@@ -81,12 +81,20 @@ export const Login = () => {
   };
 
   // 카카오 로그인
-  const Rest_api_key = process.env.REACT_APP_KAKAO_API_KEY;
-  const redirect_uri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
+  const kakao_api_key = process.env.REACT_APP_KAKAO_API_KEY;
+  const kakao_redirect_uri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
   // oauth 요청 url
-  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`;
+  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao_api_key}&redirect_uri=${kakao_redirect_uri}&response_type=code`;
   const kakaoLogin = () => {
     window.location.href = kakaoURL;
+  };
+
+  // 구글 로그인
+  const google_api_key = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const google_redirect_uri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
+  const googleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_api_key}&redirect_uri=${google_redirect_uri}&response_type=code&scope=email+profile`;
+  const googleLogin = () => {
+    window.location.href = googleURL;
   };
 
   // 비밀번호 보이기
@@ -182,6 +190,15 @@ export const Login = () => {
             border={"1px solid rgb(240, 240, 0)"}
           >
             <span style={{color: "rgb(0,0,0)"}}>카카오 로그인</span>
+          </Button>
+          <div style={{margin: "15px"}} />
+          <Button 
+            onClick={googleLogin}
+            bgcolor={"rgb(70, 135, 255)"}
+            hoverBgColor={"rgb(50, 100, 220)"}
+            border={"1px solid rgb(50, 100, 220)"}
+          >
+            <span style={{color: "rgb(0,0,0)"}}>구글 로그인</span>
           </Button>
 
           {/* 아이디 찾기 모달 */}
