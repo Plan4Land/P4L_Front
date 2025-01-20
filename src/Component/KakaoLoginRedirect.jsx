@@ -49,9 +49,10 @@ export function KakaoRedirect() {
             console.log("카카오 사용자 정보:", kakaoUser);
             // 3. 백엔드로 사용자 정보 전송
             axios
-              .post("http://localhost:8111/auth/kakao", 
+              .post("http://localhost:8111/auth/login", 
                 {
-                  kakaoId: kakaoUser.id
+                  sso: "kakao",
+                  socialId: kakaoUser.id
                 },
                 {
                   headers: {
@@ -63,7 +64,7 @@ export function KakaoRedirect() {
                 
                 if (backendResponse.status === 200) {
                   // 4. 로그인 성공 -> 페이지 이동
-                  loginFront(kakaoUser.id);
+                  loginFront("kakao", kakaoUser.id);
                   navigate("/");
                 }
               })
@@ -87,8 +88,8 @@ export function KakaoRedirect() {
       });
   }, [code, navigate]);
 
-  const loginFront = async (kakaoId) => {
-    const userData = await AxiosApi.memberInfoByKakaoId(kakaoId);
+  const loginFront = async (sso, socialId) => {
+    const userData = await AxiosApi.memberInfoBySocialId(sso, socialId);
     login(userData);
   }
 

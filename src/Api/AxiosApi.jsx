@@ -21,7 +21,7 @@ const AxiosApi = {
     return await AxiosInstance.post("/auth/logout", member);
   },
   // 회원가입
-  signup: async (id, password, name, nickname, email, profileImg, kakaoId, sso) => {
+  signup: async (id, password, name, nickname, email, profileImg, socialId, sso) => {
     try {
       const member = {
         id: id,
@@ -30,7 +30,7 @@ const AxiosApi = {
         email: email,
         nickname: nickname,
         profileImg: profileImg,
-        kakaoId: kakaoId,
+        socialId: socialId,
         sso: sso,
       };
       const response = await AxiosInstance.post(`/auth/signup`, member);
@@ -48,8 +48,8 @@ const AxiosApi = {
   memberInfo: async (userId) => {
     return await AxiosInstance.get(`/member/${userId}`);
   },
-  memberInfoByKakaoId: async (kakaoId) => {
-    return await AxiosInstance.get(`/member/kakao/${kakaoId}`);
+  memberInfoBySocialId: async (sso, socialId) => {
+    return await AxiosInstance.get(`member/social/${sso}/${socialId}`);
   },
   // 멤버 검색
   searchMember: async (userKeyword, plannerId) => {

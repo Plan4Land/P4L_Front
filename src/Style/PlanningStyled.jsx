@@ -16,7 +16,10 @@ export const Info = styled.div`
   position: relative;
 
   div {
-    margin: auto 0 auto 2%;
+    margin: auto 0 auto 0;
+  }
+  .planner-thumbnail {
+    margin-right: 2%;
   }
   h1,
   h3 {
@@ -304,17 +307,17 @@ export const MakePlanningContainer = styled.div`
   align-items: center;
   text-align: center;
 
-  h2 {
+  h2.question-title {
     margin: 30px 0 20px 0;
   }
   .select-option {
-    transform: translateY(10px);
+    position: relative;
+    top: 10px;
     transition: all 0.5s ease;
   }
 
   .select-option.visible {
-    /* opacity: 1; */
-    transform: translateY(0);
+    top: 0;
   }
 
   .location-select {
@@ -433,6 +436,8 @@ export const DatePickerContainer = styled.div`
   align-items: center;
   border: 1px solid #aaa;
   border-radius: 20px;
+  position: relative;
+  z-index: 2;
   @media (max-width: 768px) {
     scale: 0.7;
   }
@@ -450,7 +455,7 @@ export const DatePickerContainer = styled.div`
     border-radius: 20px;
     background-color: transparent;
     cursor: pointer;
-    caret-color: transparent; // 키보드 커서 없애기
+    caret-color: transparent;
   }
 
   .input-date-picker:hover::placeholder {
@@ -463,16 +468,19 @@ export const DatePickerContainer = styled.div`
     outline: none; // 포커스 시 검은색 테두리 제거
   }
 
+  // 꼬다리
   .react-datepicker-popper[data-placement^="bottom"]
     .react-datepicker__triangle {
     fill: ${colors.colorC};
     color: ${colors.colorC};
   }
 
+  // 달력 헤더
   .react-datepicker__header {
     background-color: ${colors.colorC};
   }
 
+  // 날짜 변경 버튼
   .react-datepicker__navigation-icon::before {
     border-color: ${colors.colorB};
     border-style: solid;
@@ -485,6 +493,7 @@ export const DatePickerContainer = styled.div`
     width: 9px;
   }
 
+  // 선택 날짜
   .react-datepicker__day--keyboard-selected,
   .react-datepicker__month-text--keyboard-selected,
   .react-datepicker__quarter-text--keyboard-selected,
@@ -560,6 +569,10 @@ export const DatePickerContainer = styled.div`
       .react-datepicker____year-text--in-selecting-range
     ) {
     background-color: ${colors.colorC};
+  }
+  .react-datepicker__day--outside-month {
+    opacity: 0.5;
+    pointer-events: none;
   }
 `;
 
