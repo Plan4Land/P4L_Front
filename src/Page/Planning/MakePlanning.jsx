@@ -82,6 +82,7 @@ export const MakePlanning = () => {
       setEndDate(null);
     }
   };
+
   const isStepComplete =
     selectedSubArea && selectedThemes.length > 0 && endDate && title.trim();
   const handleSubmit = async () => {

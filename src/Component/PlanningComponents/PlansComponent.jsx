@@ -2,6 +2,7 @@ import {
   MainPlanning,
   DayToggleContainer,
   DatePickerContainer,
+  DateBox,
 } from "../../Style/PlanningStyled";
 import { Button } from "../ButtonComponent";
 import { themes, areas } from "../../Util/Common";
@@ -234,46 +235,48 @@ export const PlannerInfoEditComponent = ({
             </button>
           ))}
         </div>
-        <DatePickerContainer>
-          <DatePicker
-            className="input-date-picker"
-            locale={ko}
-            dateFormat="yyyy-MM-dd"
-            dateFormatCalendar="yyyy년 MM월"
-            timeCaption="시간"
-            selected={new Date(editPlannerInfo.startDate)}
-            onChange={handleStartDateChange}
-            selectsStart
-            startDate={new Date(editPlannerInfo.startDate)}
-            endDate={new Date(editPlannerInfo.endDate)}
-            minDate={new Date()}
-            placeholderText="시작일 선택"
-          />
-          <span>~</span>
-          {editPlannerInfo.startDate ? (
+        <div>
+          <DatePickerContainer>
             <DatePicker
               className="input-date-picker"
               locale={ko}
               dateFormat="yyyy-MM-dd"
               dateFormatCalendar="yyyy년 MM월"
               timeCaption="시간"
-              selected={new Date(editPlannerInfo.endDate)}
-              onChange={(date) =>
-                setEditPlannerInfo((prev) => ({
-                  ...prev,
-                  endDate: date,
-                }))
-              }
-              selectsEnd
+              selected={new Date(editPlannerInfo.startDate)}
+              onChange={handleStartDateChange}
+              selectsStart
               startDate={new Date(editPlannerInfo.startDate)}
               endDate={new Date(editPlannerInfo.endDate)}
-              minDate={new Date(editPlannerInfo.startDate)}
-              placeholderText="종료일 선택"
+              minDate={new Date()}
+              placeholderText="시작일 선택"
             />
-          ) : (
-            <input className="input-date-picker" placeholder="종료일 선택" />
-          )}
-        </DatePickerContainer>
+            <span>~</span>
+            {editPlannerInfo.startDate ? (
+              <DatePicker
+                className="input-date-picker"
+                locale={ko}
+                dateFormat="yyyy-MM-dd"
+                dateFormatCalendar="yyyy년 MM월"
+                timeCaption="시간"
+                selected={new Date(editPlannerInfo.endDate)}
+                onChange={(date) =>
+                  setEditPlannerInfo((prev) => ({
+                    ...prev,
+                    endDate: date,
+                  }))
+                }
+                selectsEnd
+                startDate={new Date(editPlannerInfo.startDate)}
+                endDate={new Date(editPlannerInfo.endDate)}
+                minDate={new Date(editPlannerInfo.startDate)}
+                placeholderText="종료일 선택"
+              />
+            ) : (
+              <input className="input-date-picker" placeholder="종료일 선택" />
+            )}
+          </DatePickerContainer>
+        </div>
       </div>
     </>
   );

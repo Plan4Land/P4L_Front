@@ -77,18 +77,17 @@ export const QuickSearch = styled(GridItem)`
       align-items: center;
       justify-content: center;
       width: 100%;
-.catebuttons{
-  display: flex;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  justify-content: space-around;
-}
+      .catebuttons {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        padding: 20px;
+        justify-content: space-around;
+      }
     }
   }
   @media (max-width: 768px) {
     button {
-      
       font-size: 12px;
       padding: 5px;
     }
@@ -96,9 +95,9 @@ export const QuickSearch = styled(GridItem)`
 `;
 
 export const CateButton = styled.button`
-width: 180px;
+  width: 180px;
   position: relative;
-  flex-grow: 1; 
+  flex-grow: 1;
   height: 100%;
   background-size: cover;
   background-position: center;
@@ -107,24 +106,24 @@ width: 180px;
   cursor: pointer;
   overflow: hidden;
   /* transition: background-color 0.3s ease; */
-  
+
   /* 배경 이미지 설정 */
   background-image: ${({ type }) => {
     switch (type) {
-      case '100':
-        return 'url(/img/cateimg/cate_tour.png)';
-      case '200':
-        return 'url(/img/cateimg/cate_lodgin.png)';
-      case '300':
-        return 'url(/img/cateimg/cate_restaurant.png)';
+      case "100":
+        return "url(/img/cateimg/cate_tour.png)";
+      case "200":
+        return "url(/img/cateimg/cate_lodgin.png)";
+      case "300":
+        return "url(/img/cateimg/cate_restaurant.png)";
       default:
-        return 'url(/img/cateimg/cate_tour.png)';
+        return "url(/img/cateimg/cate_tour.png)";
     }
   }};
-  
+
   /* hover 시 배경 어두워지기 */
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -158,8 +157,6 @@ width: 180px;
     opacity: 1; /* hover 시 텍스트 표시 */
   }
 `;
-
-
 
 //         {/* 상위 관광지 n개 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const RecommItem = styled(GridItem)`
@@ -232,7 +229,7 @@ export const RecommItem = styled(GridItem)`
   }
 
   .swiper-pagination-bullet-active {
-    background-color: #0d5231; /* 활성화된 페이지 점 색상 (빨간색) */
+    background-color: ${colors.colorB};
   }
   @media (max-width: 768px) {
     height: 350px;
