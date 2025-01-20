@@ -502,14 +502,14 @@ export const PlansComponent = ({
                   >
                     <div className="plan-place">
                       {isEditting && editor === user.nickname ? (
-                        <button
+                        <div
                           className="seq-num-container delete-btn"
                           onClick={() => {
                             handleDeletePlan(date, planIndex);
                           }}
                         >
                           X
-                        </button>
+                        </div>
                       ) : (
                         <div className="seq-num-container seq-div">
                           {plan.seq}

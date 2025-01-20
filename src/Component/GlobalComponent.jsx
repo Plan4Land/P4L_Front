@@ -49,8 +49,6 @@ export const Header = () => {
         const topPlansData = await TopPlanApi.getTop3Plans();
         setTopSpots(topSpotsData.slice(0, 3));
         setTopPlans(topPlansData.slice(0, 3));
-        console.log("Top 3 Spots Data:", topSpotsData);
-        console.log("Top 3 Plans Data:", topPlansData);
       } catch (error) {
         console.error("데이터 가져오기 실패: ", error);
       }
@@ -168,8 +166,8 @@ export const Header = () => {
           onClose={() => setShowLogoutModal(false)}
           onConfirm={handleLogout}
         >
-<p style={{ color: "black" }}>로그아웃 하시겠습니까?</p>
-</Modal>
+          <p style={{ color: "black" }}>로그아웃 하시겠습니까?</p>
+        </Modal>
       </div>
     </HeaderSt>
   );
