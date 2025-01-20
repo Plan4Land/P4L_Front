@@ -121,29 +121,68 @@ export const KakaoMap = React.memo(({ plans, date }) => {
   // https://bluepebble25.tistory.com/73#--%--%EA%B-%AC%ED%--%--%--%EC%--%B-%EA%B-%B--%---%--react-kakao-maps-sdk%--%ED%-C%A-%ED%--%A-%EC%A-%--%--%EC%-D%B-%EC%-A%A-
 
   console.log("카카오맵에 plans : ", plans, date);
-  const data = [
-    {
-      content: <div style={{ color: "#000" }}>카카오</div>,
-      latlng: { lat: 33.450705, lng: 126.570677 },
-    },
-    {
-      content: <div style={{ color: "#000" }}>생태연못</div>,
-      latlng: { lat: 33.450936, lng: 126.569477 },
-    },
-    {
-      content: <div style={{ color: "#000" }}>텃밭</div>,
-      latlng: { lat: 33.450879, lng: 126.56994 },
-    },
-    {
+  // const data = [
+  //   {
+  //     content: <div style={{ color: "#000" }}>카카오</div>,
+  //     latlng: { lat: 33.450705, lng: 126.570677 },
+  //   },
+  //   {
+  //     content: <div style={{ color: "#000" }}>생태연못</div>,
+  //     latlng: { lat: 33.450936, lng: 126.569477 },
+  //   },
+  //   {
+  //     content: <div style={{ color: "#000" }}>텃밭</div>,
+  //     latlng: { lat: 33.450879, lng: 126.56994 },
+  //   },
+  //   {
+  //     content: (
+  //       <>
+  //         <img src={MarkerPlace} alt="" style={{ margin: "10px" }} />
+  //         <div style={{ color: "#000" }}>근린공원</div>
+  //       </>
+  //     ),
+  //     latlng: { lat: 33.451393, lng: 126.570738 },
+  //   },
+  // ];
+  const allPlans = Object.values(plans).flat();
+  const filteredPlans = plans[date] || [];
+  console.log("filteredPlans : ", filteredPlans);
+
+  const firstDate = Object.keys(plans)[0];
+  console.log("firstDate : ", firstDate);
+  const firstPlan = plans[firstDate]?.[0];
+  console.log("firstPlan : ", firstPlan);
+  console.log("filteredPlans[0] : ", filteredPlans[0]);
+
+  const centerLatLng =
+    filteredPlans.length > 0
+      ? {
+          lat: parseFloat(filteredPlans[0].latitude),
+          lng: parseFloat(filteredPlans[0].longitude),
+        }
+      : firstPlan
+      ? {
+          lat: parseFloat(firstPlan.latitude),
+          lng: parseFloat(firstPlan.longitude),
+        }
+      : {
+          lat: 37.5563,
+          lng: 126.9723,
+        };
+
+  const data = Object.values(plans)
+    .flat()
+    .map((plan) => ({
       content: (
         <>
-          <img src={MarkerPlace} alt="" style={{ margin: "10px" }} />
-          <div style={{ color: "#000" }}>근린공원</div>
+          <div style={{ color: "#000" }}>{plan.spotName}</div>
         </>
       ),
-      latlng: { lat: 33.451393, lng: 126.570738 },
-    },
-  ];
+      latlng: {
+        lat: parseFloat(plan.latitude),
+        lng: parseFloat(plan.longitude),
+      },
+    }));
 
   const EventMarkerContainer = ({ position, content }) => {
     const map = useMap();
@@ -171,17 +210,13 @@ export const KakaoMap = React.memo(({ plans, date }) => {
 
   return (
     <Map // 지도를 표시할 Container
-      center={{
-        // 지도의 중심좌표
-        lat: 33.450701,
-        lng: 126.570667,
-      }}
+      center={centerLatLng}
       style={{
         // 지도의 크기
         width: "100%",
         height: "450px",
       }}
-      level={3} // 지도의 확대 레벨
+      level={4} // 지도의 확대 레벨
     >
       {data.map((value) => (
         <EventMarkerContainer

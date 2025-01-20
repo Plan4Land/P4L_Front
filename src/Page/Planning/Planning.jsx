@@ -573,7 +573,7 @@ export const Planning = () => {
               editor={editor}
             />
             <KakaoMapContainer>
-              <KakaoMap plans={groupPlans} date={selectedPlan} />
+              <KakaoMap plans={groupPlans} date={travelInfo.clickedDate} />
             </KakaoMapContainer>
           </ContentContainer>
         </MainContainer>

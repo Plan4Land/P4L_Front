@@ -305,15 +305,23 @@ export const PlansComponent = ({
 }) => {
   const { user } = useAuth();
   const toggleDay = (index, date) => {
-    setTravelInfo((prev) => ({
-      ...prev,
-      arrowDirections: prev.arrowDirections.map((dir, i) =>
-        i === index ? (dir === "▼" ? "▲" : "▼") : dir
-      ),
-      dayToggle: prev.dayToggle.map((toggle, i) =>
+    setTravelInfo((prev) => {
+      const newDayToggle = prev.dayToggle.map((toggle, i) =>
         i === index ? !toggle : toggle
-      ),
-    }));
+      );
+
+      // 열림 상태일 때만 clickedDate 업데이트
+      const newClickedDate = newDayToggle[index] ? date : prev.clickedDate;
+
+      return {
+        ...prev,
+        arrowDirections: prev.arrowDirections.map((dir, i) =>
+          i === index ? (dir === "▼" ? "▲" : "▼") : dir
+        ),
+        dayToggle: newDayToggle,
+        clickedDate: newClickedDate, // 새로운 clickedDate 설정
+      };
+    });
   };
 
   // 클릭한 메모 열기
