@@ -7,10 +7,10 @@ export const TourItemInfoBox = styled.div`
   padding: 20px;
   border-radius: 10px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
   .tour-image {
-    width: 600px;
+    width: 100%;
     height: 450px;
     margin: auto;
     border-radius: 10px;
@@ -41,5 +41,7 @@ export const TourItemInfoBox = styled.div`
     border: 1px solid black;
   }
   @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
   }
 `;
