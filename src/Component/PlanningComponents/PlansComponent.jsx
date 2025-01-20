@@ -306,16 +306,24 @@ export const PlansComponent = ({
   editor,
 }) => {
   const { user } = useAuth();
-  const toggleDay = (index) => {
-    setTravelInfo((prev) => ({
-      ...prev,
-      arrowDirections: prev.arrowDirections.map((dir, i) =>
-        i === index ? (dir === "▼" ? "▲" : "▼") : dir
-      ),
-      dayToggle: prev.dayToggle.map((toggle, i) =>
+  const toggleDay = (index, date) => {
+    setTravelInfo((prev) => {
+      const newDayToggle = prev.dayToggle.map((toggle, i) =>
         i === index ? !toggle : toggle
-      ),
-    }));
+      );
+
+      // 열림 상태일 때만 clickedDate 업데이트
+      const newClickedDate = newDayToggle[index] ? date : prev.clickedDate;
+
+      return {
+        ...prev,
+        arrowDirections: prev.arrowDirections.map((dir, i) =>
+          i === index ? (dir === "▼" ? "▲" : "▼") : dir
+        ),
+        dayToggle: newDayToggle,
+        clickedDate: newClickedDate, // 새로운 clickedDate 설정
+      };
+    });
   };
 
   // 클릭한 메모 열기
@@ -365,17 +373,22 @@ export const PlansComponent = ({
   useEffect(() => {
     const currentPlannerInfo = editPlannerInfo || plannerInfo;
     const currentPlans = editPlans || plans;
-    if (editPlans) {
-      console.log("editPlans가 선택됨");
-    } else if (plans) {
-      console.log("plans가 선택됨");
+    // if (editPlans) {
+    //   console.log("editPlans가 선택됨");
+    // } else if (plans) {
+    //   console.log("plans가 선택됨");
+    // }
+    if (editPlannerInfo) {
+      console.log("editPlannerInfo 선택됨");
+    } else if (plannerInfo) {
+      console.log("plannerInfo 선택됨");
     }
-    console.group("editPlans : ", editPlans);
-
     const startDate = new Date(currentPlannerInfo.startDate);
     const endDate = new Date(currentPlannerInfo.endDate);
     const timeDiff = endDate.getTime() - startDate.getTime();
     const diffInDays = timeDiff / (1000 * 3600 * 24);
+    console.log(currentPlannerInfo);
+    console.log(startDate);
 
     setTravelInfo((prevState) => ({
       ...prevState,
@@ -386,8 +399,9 @@ export const PlansComponent = ({
       const dates = [];
       let currentDate = new Date(start);
       let lastDate = new Date(end);
-      currentDate.setDate(currentDate.getDate() + 1);
-      lastDate.setDate(lastDate.getDate() + 1);
+      currentDate.setHours(10, 0, 0, 0);
+      lastDate.setHours(10, 0, 0, 0);
+
       while (currentDate <= lastDate) {
         dates.push(new Date(currentDate).toISOString().split("T")[0]); // YYYY-MM-DD 포맷
         currentDate.setDate(currentDate.getDate() + 1); // 하루씩 증가
@@ -406,10 +420,9 @@ export const PlansComponent = ({
     }));
 
     const groupPlansByDate = () => {
-      console.log("plans : ", currentPlans);
       // 1. 날짜별로 그룹화
       const groupedPlans = currentPlans.reduce((acc, plan) => {
-        const dateKey = plan.date; // "2025-01-10" 형태로 날짜만 추출
+        const dateKey = plan.date.split("T")[0]; // "2025-01-10" 형태로 날짜만 추출
         if (!acc[dateKey]) {
           acc[dateKey] = [];
         }
@@ -432,7 +445,7 @@ export const PlansComponent = ({
     };
 
     const groupedPlans = groupPlansByDate();
-    console.log("groupedPlans : ", groupedPlans);
+    // console.log("groupedPlans : ", groupedPlans);
     setGroupPlans(groupedPlans); // 정렬된 일정
   }, [editPlannerInfo, editPlans, plannerInfo, plans]);
 
@@ -462,7 +475,7 @@ export const PlansComponent = ({
           <div
             className="planning-day"
             onClick={() => {
-              toggleDay(index);
+              toggleDay(index, date);
               console.log(travelInfo);
             }}
           >
@@ -479,6 +492,7 @@ export const PlansComponent = ({
                     className="plan-place-container"
                   >
                     <div className="plan-place">
+                      <div className="seq-num-container">{plan.seq}</div>
                       <p className="place-name">
                         {plan.spotName || plan.content}
                       </p>

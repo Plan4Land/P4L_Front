@@ -12,12 +12,19 @@ const PlanningApi = {
     thumbnail,
     isPublic
   ) => {
+    // const date = new Date(plan.date);
+    // date.setHours(10, 0, 0, 0);
+    // const startDateSetHour = startDate.setHours(10, 0, 0, 0);
+    // console.log(new Date(startDate.setHours(10, 0, 0, 0)));
+    // console.log(startDate);
+    // console.log(new Date(startDate));
+    // console.log(new Date(startDate).setHours(10, 0, 0, 0));
     const plannerInfo = {
       title: title,
       theme: theme,
       id: id,
-      startDate: startDate,
-      endDate: endDate,
+      startDate: new Date(startDate.setHours(10, 0, 0, 0)),
+      endDate: new Date(endDate.setHours(10, 0, 0, 0)),
       area: area,
       subArea: subArea,
       thumbnail: thumbnail,
@@ -30,8 +37,12 @@ const PlanningApi = {
       title: editPlannerInfo.title,
       theme: editPlannerInfo.theme,
       id: editPlannerInfo.ownerId,
-      startDate: new Date(editPlannerInfo.startDate),
-      endDate: new Date(editPlannerInfo.endDate),
+      startDate: new Date(
+        new Date(editPlannerInfo.startDate).setHours(10, 0, 0, 0)
+      ),
+      endDate: new Date(
+        new Date(editPlannerInfo.endDate).setHours(10, 0, 0, 0)
+      ),
       area: editPlannerInfo.area,
       subArea: editPlannerInfo.subArea,
       thumbnail: editPlannerInfo.thumbnail,
@@ -47,14 +58,19 @@ const PlanningApi = {
       .data;
   },
   editPlan: async (plannerId, newPlans) => {
-    const planInfo = newPlans.map((plan) => ({
-      category: plan.category,
-      date: new Date(plan.date),
-      latitude: plan.position.lat,
-      longitude: plan.position.lng,
-      seq: plan.seq,
-      spotName: plan.content,
-    }));
+    const planInfo = newPlans.map((plan) => {
+      const date = new Date(plan.date);
+      date.setHours(10, 0, 0, 0);
+
+      return {
+        category: plan.category,
+        date: date, // 수정된 Date 객체 사용
+        latitude: plan.position?.lat || plan.latitude,
+        longitude: plan.position?.lng || plan.longitude,
+        seq: plan.seq,
+        spotName: plan.content || plan.spotName,
+      };
+    });
     return await AxiosInstance.post(`/planner/updatePlan`, planInfo, {
       params: { plannerId },
     });

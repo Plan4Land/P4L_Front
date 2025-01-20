@@ -707,15 +707,30 @@ export const DayToggleContainer = styled.div`
 
     .plan-place {
       display: flex;
+      position: relative;
       flex-direction: column;
 
+      .seq-num-container {
+        display: flex;
+        position: absolute;
+        left: -12.5px;
+        top: 15px;
+        width: 25px;
+        height: 25px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background-color: ${colors.colorB};
+        color: white;
+      }
+
       .place-name {
-        margin: 5px;
+        margin: 5px 5px 5px 20px;
         font-size: 17px;
         font-weight: bold;
       }
       .place-category {
-        margin: 0 5px 5px 5px;
+        margin: 0 5px 5px 20px;
         font-size: 13px;
         color: #5f5f5f;
       }
