@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { colors } from "./GlobalStyle";
+import { ScrollBar } from "../Component/ButtonComponent";
 
 export const MainContainer = styled.div`
   min-height: 700px; /////이거는 고민
@@ -296,13 +297,13 @@ export const MainPlanning = styled.div`
   /* overflow-x: visible; */
   border-radius: 10px;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
-
+  ${ScrollBar};
   .planning-day {
     display: flex;
     position: relative;
     align-items: center;
     width: 90%;
-    height: 40px;
+    height: 30px;
     margin: 10px auto 0;
     cursor: pointer;
     background-color: ${colors.colorC};
@@ -819,21 +820,8 @@ export const ChatContainer = styled.div`
       box-sizing: border-box;
       resize: none;
       border-radius: 10px;
+      ${ScrollBar};
 
-      /* &::-webkit-scrollbar {
-        width: 6px;
-      } */
-      /* &::-webkit-scrollbar-track {
-        background: #f0f0f0;
-      } */
-      /* &::-webkit-scrollbar-thumb {
-        background-color: #ccc;
-        border-radius: 10px;
-        border: 2px solid #f0f0f0;
-      } */
-      /* &::-webkit-scrollbar-thumb:hover {
-        background-color: #b3b3b3;
-      } */
     }
 
     button {
@@ -866,18 +854,35 @@ export const ChatContainer = styled.div`
 export const ChatMsgContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  overflow-y: auto;
+  width: 95%;
+  height: 83%;
+  overflow-y: scroll;
   gap: 10px;
   position: absolute;
   top: 40px;
+  border-top: 1px solid #ddd;
+  ${ScrollBar};
 `;
 
 export const Message = styled.div`
   max-width: 70%;
+  align-self: ${(props) => (props.isSender ? "flex-end" : "flex-start")};
+display: flex;
+flex-direction: column;
+.talk{
   font-size: 14px;
   background-color: ${(props) => (props.isSender ? "#cfebbb" : "#E0E0E0")};
-  align-self: ${(props) => (props.isSender ? "flex-end" : "flex-start")};
   border: ${(props) =>
     props.isSender ? "1px solid #DCF8C6" : "1px solid #E0E0E0"};
+  border-radius: 15px;
+  padding: 5px 15px;
+  position: relative;
+  margin: 0;
+}
+.id{
+  margin: 0 3px 2px 3px;
+  font-size: 12px;
+  align-self: ${(props) => (props.isSender ? "flex-end" : "flex-start")};
+}
 `;
+

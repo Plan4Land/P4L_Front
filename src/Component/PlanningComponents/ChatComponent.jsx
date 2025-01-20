@@ -137,7 +137,8 @@ export const ChatComponent = ({
       <ChatMsgContainer ref={ChatContainerRef}>
         {chatList.map((chat, index) => (
           <Message key={index} isSender={chat.sender === sender}>
-            {`${chat.sender} > ${chat.message}`}
+            <p className="id">{`${chat.sender}`}</p>
+            <p className="talk">{`  ${chat.message}`}</p>
           </Message>
         ))}
       </ChatMsgContainer>

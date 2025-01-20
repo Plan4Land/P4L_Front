@@ -1,5 +1,5 @@
 import { colors } from "../Style/GlobalStyle";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import React from "react";
 
 const StyledButton = styled.button`
@@ -12,7 +12,7 @@ const StyledButton = styled.button`
   border-radius: ${(props) => props.borderRadius || "8px"};
   background-color: ${(props) => props.bgColor || colors.colorB};
   color: ${(props) => props.color || "white"};
-
+white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
@@ -92,3 +92,28 @@ export const ToggleButton = ({ isOpen, onToggle }) => {
     </StyledToggleButton>
   );
 };
+
+export const ScrollBar = css`
+  /* 전체 스크롤바 영역 스타일 */
+  &::-webkit-scrollbar {
+    width: 6px; /* 스크롤바 두께 */
+    height: 6px; /* 가로 스크롤바 두께 */
+  }
+
+  /* 스크롤바 트랙(배경) 스타일 */
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 연한 배경색 */
+    border-radius: 10px; /* 부드러운 모서리 */
+  }
+
+  /* 스크롤바 핸들(움직이는 부분) 스타일 */
+  &::-webkit-scrollbar-thumb {
+    background: ${colors.colorC};
+    border-radius: 10px; /* 핸들의 모서리 둥글게 */
+  }
+
+  /* 스크롤바 핸들에 마우스를 올렸을 때 */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #888; /* 더 진한 회색 */
+  }
+`;
