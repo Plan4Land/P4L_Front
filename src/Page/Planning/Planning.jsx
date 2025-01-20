@@ -72,6 +72,7 @@ export const Planning = () => {
     dates: [], // 여행 날짜들
     arrowDirections: [], // 토글 화살표 클릭 여부
     dayToggle: [], // 토글 열림 여부
+    clickedDate: "",
   });
   const [groupPlans, setGroupPlans] = useState({}); // 계획 정렬    /////////////////////////////////////////////////////
   const [selectedPlan, setSelectedPlan] = useState({}); // date, planIndex, plan
@@ -169,6 +170,7 @@ export const Planning = () => {
             setEditor(data.sender);
           } else if (
             data.type === "PLANNER" &&
+            data.data?.plannerInfo?.[0] &&
             data.data?.plans !== null &&
             !_.isEqual(data.data.plans, editPlans)
           ) {
@@ -198,18 +200,15 @@ export const Planning = () => {
                   editPlannerInfo,
                   plannerId
                 );
-                console.log("*********************************");
-                console.log(editPlans);
                 const planResult = await PlanningApi.editPlan(
                   plannerId,
                   editPlans
                 );
                 setPlannerInfo(plannerResult.data);
                 setPlans(editPlans);
+                setEditPlannerInfo(null);
+                setEditPlans(null);
               }
-
-              setEditPlannerInfo(null);
-              setEditPlans(null);
             } else {
               setEditor(data.sender);
             }
@@ -219,8 +218,6 @@ export const Planning = () => {
     };
 
     fetchData(); // async 함수 호출
-
-    console.log(editPlannerInfo);
   }, [socketConnected, editPlannerInfo, editPlans]);
 
   // 웹 소켓 연결하기
@@ -275,7 +272,6 @@ export const Planning = () => {
       };
 
       ws.current.send(JSON.stringify(message));
-      console.log("입장 메시지 전송:", message);
     }
   }, [socketConnected, sender, plannerId]);
 
@@ -577,7 +573,7 @@ export const Planning = () => {
               editor={editor}
             />
             <KakaoMapContainer>
-              <KakaoMap />
+              <KakaoMap plans={groupPlans} date={selectedPlan} />
             </KakaoMapContainer>
           </ContentContainer>
         </MainContainer>

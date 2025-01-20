@@ -7,7 +7,7 @@ import {
   RoadviewMarker,
 } from "react-kakao-maps-sdk";
 import { useKakaoLoader, useMap } from "react-kakao-maps-sdk";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import MarkerPlace from "../Img/markerPlace.png";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 
@@ -74,7 +74,7 @@ export const KakaoMapSpot = ({ mapX, mapY }) => {
   );
 };
 
-export const KakaoMap = () => {
+export const KakaoMapEx = () => {
   useKakaoLoader();
   const [result, setResult] = useState("");
   const [state, setState] = useState({
@@ -113,120 +113,14 @@ export const KakaoMap = () => {
   );
 };
 
-export const KakaoEx = () => {
+export const KakaoMap = React.memo(({ plans, date }) => {
   // Rest API
   // https://developers.kakao.com/docs/latest/ko/local/dev-guide#address-coord
   // https://react-kakao-maps-sdk.jaeseokim.dev/docs/sample/library/keywordBasic
   // 참고 사이트 : https://m.blog.naver.com/kiddwannabe/221812712712
   // https://bluepebble25.tistory.com/73#--%--%EA%B-%AC%ED%--%--%--%EC%--%B-%EA%B-%B--%---%--react-kakao-maps-sdk%--%ED%-C%A-%ED%--%A-%EC%A-%--%--%EC%-D%B-%EC%-A%A-
 
-  // useEffect(() => {
-  //   window.kakao.maps.load(() => {
-
-  //   })
-  // })
-  //   import React, { useState, useEffect } from "react";
-  // import { Map, MapMarker, useMap } from "react-kakao-maps-sdk";
-
-  // export const CombinedKakaoMap = () => {
-  //   const [map, setMap] = useState(null);
-  //   const [info, setInfo] = useState(null);
-  //   const [markers, setMarkers] = useState([]);
-
-  //   const staticData = [
-  //     {
-  //       content: <div style={{ color: "#000" }}>카카오</div>,
-  //       latlng: { lat: 33.450705, lng: 126.570677 },
-  //     },
-  //     {
-  //       content: <div style={{ color: "#000" }}>생태연못</div>,
-  //       latlng: { lat: 33.450936, lng: 126.569477 },
-  //     },
-  //     {
-  //       content: <div style={{ color: "#000" }}>텃밭</div>,
-  //       latlng: { lat: 33.450879, lng: 126.56994 },
-  //     },
-  //     {
-  //       content: (
-  //         <>
-  //           <img src="/path/to/marker-image.png" alt="" style={{ margin: "10px" }} />
-  //           <div style={{ color: "#000" }}>근린공원</div>
-  //         </>
-  //       ),
-  //       latlng: { lat: 33.451393, lng: 126.570738 },
-  //     },
-  //   ];
-
-  //   useEffect(() => {
-  //     if (!map) return;
-
-  //     const ps = new kakao.maps.services.Places();
-
-  //     ps.keywordSearch("이태원 맛집", (data, status, _pagination) => {
-  //       if (status === kakao.maps.services.Status.OK) {
-  //         const bounds = new kakao.maps.LatLngBounds();
-  //         const dynamicMarkers = data.map((place) => {
-  //           bounds.extend(new kakao.maps.LatLng(place.y, place.x));
-  //           return {
-  //             position: { lat: parseFloat(place.y), lng: parseFloat(place.x) },
-  //             content: <div style={{ color: "#000" }}>{place.place_name}</div>,
-  //           };
-  //         });
-
-  //         setMarkers(dynamicMarkers);
-  //         map.setBounds(bounds);
-  //       }
-  //     });
-  //   }, [map]);
-
-  //   const EventMarkerContainer = ({ position, content }) => {
-  //     const map = useMap();
-  //     const [isVisible, setIsVisible] = useState(false);
-
-  //     return (
-  //       <MapMarker
-  //         position={position}
-  //         image={{
-  //           src: "/path/to/marker-image.png",
-  //           size: { width: 24, height: 35 },
-  //         }}
-  //         onClick={(marker) => map.panTo(marker.getPosition())}
-  //         onMouseOver={() => setIsVisible(true)}
-  //         onMouseOut={() => setIsVisible(false)}
-  //       >
-  //         {isVisible && content}
-  //       </MapMarker>
-  //     );
-  //   };
-
-  //   return (
-  //     <Map
-  //       center={{ lat: 33.450701, lng: 126.570667 }}
-  //       style={{ width: "100%", height: "450px" }}
-  //       level={3}
-  //       onCreate={setMap}
-  //     >
-  //       {/* Static Markers */}
-  //       {staticData.map((value, index) => (
-  //         <EventMarkerContainer
-  //           key={`static-${index}`}
-  //           position={value.latlng}
-  //           content={value.content}
-  //         />
-  //       ))}
-
-  //       {/* Dynamic Markers from Kakao API */}
-  //       {markers.map((marker, index) => (
-  //         <EventMarkerContainer
-  //           key={`dynamic-${index}`}
-  //           position={marker.position}
-  //           content={marker.content}
-  //         />
-  //       ))}
-  //     </Map>
-  //   );
-  // };
-
+  console.log("카카오맵에 plans : ", plans, date);
   const data = [
     {
       content: <div style={{ color: "#000" }}>카카오</div>,
@@ -298,7 +192,7 @@ export const KakaoEx = () => {
       ))}
     </Map>
   );
-};
+});
 
 export const SearchKakaoMap = ({
   searchKeyword,
