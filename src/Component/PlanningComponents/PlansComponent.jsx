@@ -460,14 +460,15 @@ export const PlansComponent = ({
     setEditPlans((prev) => prev.filter((p) => !(p === plan)));
   };
 
-  const handleSwapSeq = (planId, direction, date) => {
+  const handleSwapSeq = (planSeq, direction, date) => {
     // editPlans에서 해당 날짜의 플랜들만 가져오기
     const plansForDate = editPlans.filter(
       (plan) => plan.date.split("T")[0] === date
     );
+    plansForDate.sort((a, b) => a.seq - b.seq);
 
     // 해당 날짜의 플랜에서 planId에 해당하는 플랜의 인덱스 찾기
-    const planIndex = plansForDate.findIndex((plan) => plan.id === planId);
+    const planIndex = plansForDate.findIndex((plan) => plan.seq === planSeq);
 
     // 해당 planId가 존재하지 않으면 종료
     if (planIndex === -1) return;
@@ -482,6 +483,7 @@ export const PlansComponent = ({
       // 뒤의 요소와 seq 교환
       const temp = plansForDate[planIndex].seq;
       plansForDate[planIndex].seq = plansForDate[planIndex + 1].seq;
+      console.log(plansForDate[planIndex].seq);
       plansForDate[planIndex + 1].seq = temp;
     }
 
@@ -495,7 +497,6 @@ export const PlansComponent = ({
 
     // 새로운 상태로 업데이트
     setEditPlans(updatedPlans);
-    console.log("여기여기여깅겨ㅣ : ", updatedPlans);
   };
 
   useEffect(() => {
@@ -568,7 +569,9 @@ export const PlansComponent = ({
                                 fontSize: "24px",
                                 color: colors.colorB,
                               }}
-                              onClick={() => handleSwapSeq(plan.id, "up", date)} // up 아이콘 클릭 시
+                              onClick={() =>
+                                handleSwapSeq(plan.seq, "up", date)
+                              } // up 아이콘 클릭 시
                             />
                           )}
                           {planIndex < groupPlans[date].length - 1 && ( // 마지막 요소가 아닐 때만 아래쪽 화살표 버튼 표시
@@ -579,7 +582,7 @@ export const PlansComponent = ({
                                 color: colors.colorB,
                               }}
                               onClick={() =>
-                                handleSwapSeq(plan.id, "down", date)
+                                handleSwapSeq(plan.seq, "down", date)
                               } // down 아이콘 클릭 시
                             />
                           )}
