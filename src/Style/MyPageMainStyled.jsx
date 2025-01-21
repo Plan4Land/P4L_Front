@@ -59,7 +59,6 @@ export const UserInfo = styled.div`
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
   border-radius: 20px;
   margin-bottom: 15px;
-
   .ProfileImg {
     height: 100px;
     width: 100px;
@@ -202,4 +201,9 @@ export const InvitePlanning = styled.div`
     align-items: center;
     gap: 10px;
   }
+`;
+
+export const OtherUserInfo = styled.div`
+  width: 60%;
+  margin: auto;
 `;

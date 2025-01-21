@@ -1,5 +1,10 @@
 import { Header, Footer } from "../../Component/GlobalComponent";
-import { UserMain, UserInfo, UserPlanning } from "../../Style/MyPageMainStyled";
+import {
+  UserMain,
+  UserInfo,
+  UserPlanning,
+  OtherUserInfo,
+} from "../../Style/MyPageMainStyled";
 import { useState, useEffect } from "react";
 import { CheckModal, Modal } from "../../Util/Modal";
 import { Button } from "../../Component/ButtonComponent";
@@ -160,7 +165,7 @@ export const Otheruser = () => {
   return (
     <>
       <Header />
-      <div className="otheruser">
+      <OtherUserInfo>
         <UserMain>
           <UserInfo>
             <div className="user">
@@ -195,8 +200,8 @@ export const Otheruser = () => {
             {user.id !== userId && (
               <div className="Button">
                 <Button onClick={() => setShowReportModal(true)}>
-        신고하기
-      </Button>
+                  신고하기
+                </Button>
                 {isFollowed ? (
                   <Button
                     onClick={() => handleFollow(user.id, userInfo.id, false)}
@@ -289,7 +294,7 @@ export const Otheruser = () => {
             />
           )}
         </UserMain>
-      </div>
+      </OtherUserInfo>
       <CheckModal isOpen={isFollowModalOpen} onClose={closeFollowModal}>
         <FollowLoad
           followers={followers}

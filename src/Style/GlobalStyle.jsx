@@ -1,12 +1,11 @@
 import styled from "styled-components";
 
 export const colors = {
-
   colorA: "#4d2c0d",
   colorB: "#7a4b14",
   colorC: "#d4a76c",
   colorD: "#fff6e2",
-  colorE: "#ff7700"
+  colorE: "#ff7700",
 };
 
 export const HeaderSt = styled.div`
@@ -18,6 +17,7 @@ export const HeaderSt = styled.div`
   align-items: center;
   gap: 20px;
   padding: 0 10px 0 10px;
+
   .logo {
     display: inline-block;
     img {
@@ -133,11 +133,18 @@ export const HeaderSt = styled.div`
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 10;
     padding-left: 20px;
+    padding-right: 20px;
     border-radius: 10px;
   }
   .topItem {
     margin-bottom: 20px;
-
+    .truncated-text {
+      display: inline-block;
+      max-width: 200px; /* 원하는 너비 설정 */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     h3 {
       font-size: 20px;
       font-weight: bold;
@@ -162,7 +169,7 @@ export const HeaderSt = styled.div`
   }
   @media (max-width: 768px) {
     .dropdown-list {
-      top: 0;
+      top: -30px;
       right: -180px;
       scale: 0.7;
     }
@@ -205,7 +212,8 @@ export const NavSt = styled.div`
     background-color: white;
     font-size: 12px;
     z-index: 10;
-    .tag, p{
+    .tag,
+    p {
       color: ${colors.colorA};
     }
   }

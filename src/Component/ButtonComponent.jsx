@@ -1,5 +1,5 @@
 import { colors } from "../Style/GlobalStyle";
-import styled, {css} from "styled-components";
+import styled, { css } from "styled-components";
 import React from "react";
 
 const StyledButton = styled.button`
@@ -8,11 +8,11 @@ const StyledButton = styled.button`
   ${(props) => props.$height && `height: ${props.$height};`}
   padding: ${(props) => props.padding || "10px 20px"};
   font-size: ${(props) => props.fontSize || "16px"};
-  border: ${(props) => props.border || `1px solid ${colors.colorA}`};
+  border: ${(props) => props.border || `1px solid ${colors.colorB}`};
   border-radius: ${(props) => props.borderRadius || "8px"};
   background-color: ${(props) => props.bgColor || colors.colorB};
   color: ${(props) => props.color || "white"};
-white-space: nowrap;
+  white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
@@ -114,6 +114,6 @@ export const ScrollBar = css`
 
   /* 스크롤바 핸들에 마우스를 올렸을 때 */
   &::-webkit-scrollbar-thumb:hover {
-    background: #888; /* 더 진한 회색 */
+    background: #b68444;
   }
 `;
