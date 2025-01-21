@@ -27,6 +27,7 @@ export const SelectTourItem = styled.div`
     height: 30px;
     width: 120px;
     margin: 4px;
+
     &:hover {
       background-color: ${colors.colorB};
       color: white;
@@ -74,10 +75,17 @@ export const SelectTourItem = styled.div`
   }
   /* SelectTourItem 기본 상태 숨기기 (모바일 화면) */
   @media (max-width: 768px) {
-    display: none; /* 기본적으로 숨기기 */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: all 0.3s ease;
+
     &.open {
-      display: block; /* .open 클래스가 추가되면 보이게 설정 */
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(0);
     }
+
     position: absolute;
     z-index: 10;
     background-color: white;
