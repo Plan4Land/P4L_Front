@@ -198,7 +198,7 @@ export const Planning = () => {
               setReceivePlanner(null);
 
               // 비동기 호출 처리
-              if (editPlannerInfo && data.sender === user.nickname) {
+              if (editPlannerInfo && data.sender === user?.nickname) {
                 const plannerResult = await PlanningApi.editPlannerInfo(
                   editPlannerInfo,
                   plannerId
@@ -227,10 +227,10 @@ export const Planning = () => {
   useEffect(() => {
     if (plannerInfo) {
       const participant =
-        plannerInfo.ownerNickname === user.nickname ||
+        plannerInfo.ownerNickname === user?.nickname ||
         plannerInfo.participants.some(
           (participant) =>
-            participant.memberNickname === user.nickname &&
+            participant.memberNickname === user?.nickname &&
             participant.state === "ACCEPT"
         );
 
@@ -262,7 +262,7 @@ export const Planning = () => {
         console.log("페이지 이동으로 인해 소켓 연결 종료");
       }
     };
-  }, [plannerInfo?.id, user.nickname]);
+  }, [plannerInfo?.id, user?.nickname]);
 
   useEffect(() => {
     // 소켓이 연결된 상태에서 메시지 전송
@@ -304,7 +304,7 @@ export const Planning = () => {
     };
     const fetchIsBookmarked = async () => {
       try {
-        const response = await PlanningApi.getIsBookmarked(user.id, plannerId);
+        const response = await PlanningApi.getIsBookmarked(user?.id, plannerId);
         setIsBookmarked(response);
       } catch (e) {
         console.log("북마크 여부 조회 중 에러", e);
@@ -324,8 +324,8 @@ export const Planning = () => {
     fetchPlan();
     fetchIsBookmarked();
     fetchChatMsg();
-    setSender(user.nickname);
-  }, [plannerId, user.id, user.nickname]);
+    setSender(user?.nickname);
+  }, [plannerId, user?.id, user?.nickname]);
 
   const fetchMember = async () => {
     try {
@@ -406,7 +406,7 @@ export const Planning = () => {
           />
           <Info>
             {isEditting ? (
-              editor === user.nickname ? (
+              editor === user?.nickname ? (
                 <PlannerInfoEditComponent
                   ws={ws}
                   socketConnected={socketConnected}
@@ -529,7 +529,7 @@ export const Planning = () => {
               )}
             {isParticipant && (
               <>
-                {isEditting && editor === user.nickname ? (
+                {isEditting && editor === user?.nickname ? (
                   // 수정 완료 버튼
                   <Button
                     className="edit-button-complete"
@@ -537,7 +537,7 @@ export const Planning = () => {
                   >
                     편집 완료
                   </Button>
-                ) : isEditting && editor && editor !== user.nickname ? (
+                ) : isEditting && editor && editor !== user?.nickname ? (
                   // 다른 사용자가 수정 중이라는 문구
                   <p className="editing-info">
                     <span>{editor}</span> 님이 수정 중입니다.

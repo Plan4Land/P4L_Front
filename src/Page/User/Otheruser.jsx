@@ -51,7 +51,7 @@ export const Otheruser = () => {
   const handleConfirmationClose = () => {
     setShowConfirmationModal(false);
   };
-  const isMobile = useMediaQuery({ query: "(max-width: 454px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
@@ -138,7 +138,7 @@ export const Otheruser = () => {
         const data = await AxiosApi.loadFollow(userId);
         setFollowings(data?.followingInfo || []);
         setFollowers(data?.followerInfo || []);
-        if (data.followerInfo.some((member) => member.id === user.id)) {
+        if (data.followerInfo.some((member) => member.id === user?.id)) {
           setIsFollowed(true);
         }
       } catch (error) {
@@ -151,7 +151,7 @@ export const Otheruser = () => {
       fetchFollowInfo();
     }
 
-    console.log(user.id, " : ", userId);
+    console.log(user?.id, " : ", userId);
 
     closeFollowModal();
   }, [userId, isFollowed]);
@@ -197,20 +197,21 @@ export const Otheruser = () => {
                 </div>
               </div>
             </div>
-            {user.id !== userId && (
+            {user && user.id !== userId && (
               <div className="Button">
                 <Button onClick={() => setShowReportModal(true)}>
                   신고하기
                 </Button>
+
                 {isFollowed ? (
                   <Button
-                    onClick={() => handleFollow(user.id, userInfo.id, false)}
+                    onClick={() => handleFollow(user?.id, userInfo.id, false)}
                   >
                     팔로우 해제
                   </Button>
                 ) : (
                   <Button
-                    onClick={() => handleFollow(user.id, userInfo.id, true)}
+                    onClick={() => handleFollow(user?.id, userInfo.id, true)}
                   >
                     팔로우
                   </Button>
@@ -300,12 +301,12 @@ export const Otheruser = () => {
           followers={followers}
           followings={followings}
           isMyPage={false}
-          loginUser={user.id}
+          loginUser={user?.id}
         ></FollowLoad>
       </CheckModal>
 
       <CheckModal isOpen={isReportModalOpen} onClose={closeReportModal}>
-        <ReportModal reporter={user.id} reported={userId}></ReportModal>
+        <ReportModal reporter={user?.id} reported={userId}></ReportModal>
       </CheckModal>
       {/* 신고하기 모달 */}
       <Modal
