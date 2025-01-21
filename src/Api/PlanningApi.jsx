@@ -12,13 +12,6 @@ const PlanningApi = {
     thumbnail,
     isPublic
   ) => {
-    // const date = new Date(plan.date);
-    // date.setHours(10, 0, 0, 0);
-    // const startDateSetHour = startDate.setHours(10, 0, 0, 0);
-    // console.log(new Date(startDate.setHours(10, 0, 0, 0)));
-    // console.log(startDate);
-    // console.log(new Date(startDate));
-    // console.log(new Date(startDate).setHours(10, 0, 0, 0));
     const plannerInfo = {
       title: title,
       theme: theme,
@@ -54,8 +47,11 @@ const PlanningApi = {
     );
   },
   getPlan: async (plannerId) => {
-    return (await AxiosInstance.get(`/planner/getPlan?plannerId=${plannerId}`))
-      .data;
+    return (
+      await AxiosInstance.get(
+        `/planner/fetchData/getPlan?plannerId=${plannerId}`
+      )
+    ).data;
   },
   editPlan: async (plannerId, newPlans) => {
     const planInfo = newPlans.map((plan) => {
@@ -76,7 +72,7 @@ const PlanningApi = {
     });
   },
   getPlanning: async (plannerId) => {
-    return (await AxiosInstance.get(`/planner/${plannerId}`)).data;
+    return (await AxiosInstance.get(`/planner/fetchData/${plannerId}`)).data;
   },
   getIsBookmarked: async (memberId, plannerId) => {
     const params = {

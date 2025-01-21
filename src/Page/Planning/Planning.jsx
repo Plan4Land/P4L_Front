@@ -6,13 +6,17 @@ import {
   UserName,
   ContentContainer,
   KakaoMapContainer,
+  ChatContainer,
+  ChatMsgContainer,
+  Message,
 } from "../../Style/PlanningStyled";
+import { HiArrowCircleUp } from "react-icons/hi";
+import { FaTimes } from "react-icons/fa";
 import { KakaoMap } from "../../Component/KakaoMapComponent";
 import {
   PlannerInfoEditComponent,
   PlansComponent,
 } from "../../Component/PlanningComponents/PlansComponent";
-import { ChatComponent } from "../../Component/PlanningComponents/ChatComponent";
 import { useEffect, useRef, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { ProfileImg } from "../../Component/ProfileImg";
@@ -85,7 +89,35 @@ export const Planning = () => {
   const [socketConnected, setSocketConnected] = useState(false); // 웹소켓 연결 여부
   const [sender, setSender] = useState(""); // 메시지를 보낸 사람
   const ws = useRef(null); // 웹소켓 객체 생성, 소켓 연결 정보를 유지해야 하지만, 렌더링과는 무관
+  const ChatContainerRef = useRef(null);
   const [isParticipant, setIsParticipant] = useState(false);
+
+  const handleChatKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey && !event.ctrlKey) {
+      event.preventDefault(); // 기본 Enter 동작 막기
+      if (inputMsg?.trim()) {
+        handleChatButtonClick(); // 버튼 클릭 함수 호출
+      }
+    }
+
+    if (event.key === "Enter" && event.shiftKey) {
+    }
+  };
+
+  const handleChatButtonClick = (e) => {
+    alert("버튼이 눌렸습니다!");
+    // 메시지 전송
+    ws.current.send(
+      JSON.stringify({
+        type: "CHAT",
+        plannerId: plannerId,
+        sender: sender,
+        message: inputMsg.replace(/\n/g, "<br>"),
+      })
+    );
+    setInputMsg("");
+    console.log("전송");
+  };
 
   const closeChat = () => {
     setIsChatOpen(false); // "X" 버튼 클릭 시 채팅 창 닫기
@@ -217,6 +249,10 @@ export const Planning = () => {
             }
           }
 
+          if (data.type === "CHAT") {
+            setChatList((prev) => [...prev, data]);
+          }
+
           if (editor && data.type === "CLOSE" && editor === data.sender) {
             console.log("editor : ", editor);
             // 수정하던 사람이 새로고침하면
@@ -232,10 +268,6 @@ export const Planning = () => {
 
     fetchData(); // async 함수 호출
   }, [socketConnected, editPlannerInfo, editPlans]);
-
-  useEffect(() => {
-    console.log("editor 값이 변경됨:", editor);
-  }, [editor]);
 
   // 웹 소켓 연결하기
   useEffect(() => {
@@ -257,17 +289,6 @@ export const Planning = () => {
           console.log("소켓 연결 완료");
         };
       }
-      // ws.current.onmessage = (msg) => {
-      //   const data = JSON.parse(msg.data);
-
-      //   if (data.type === "PLANNER") {
-      //     setIsEditting(data.data.isEditting);
-      //     setEditor(data.sender);
-      //     console.log("여기서 editor 설정해줌 : ", editor);
-      //   } else if (data.type === "ENTER") {
-      //     console.log(`${data.sender} 님이 입장했습니다.`);
-      //   }
-      // };
     }
     const closeMessage = {
       type: "CLOSE",
@@ -299,6 +320,13 @@ export const Planning = () => {
       }
     };
   }, [plannerInfo?.id, user?.nickname]);
+
+  useEffect(() => {
+    if (ChatContainerRef.current) {
+      ChatContainerRef.current.scrollTop =
+        ChatContainerRef.current.scrollHeight;
+    }
+  }, [chatList, isChatOpen]);
 
   useEffect(() => {
     // 소켓이 연결된 상태에서 메시지 전송
@@ -343,7 +371,7 @@ export const Planning = () => {
         const response = await PlanningApi.getIsBookmarked(user?.id, plannerId);
         setIsBookmarked(response);
       } catch (e) {
-        console.log("북마크 여부 조회 중 에러", e);
+        console.log("북마크 여부 조회 중 에러");
       }
     };
     const fetchChatMsg = async () => {
@@ -351,9 +379,8 @@ export const Planning = () => {
         const response = await PlanningApi.getChatMsgs(plannerId);
         const reversedResponse = [...response].reverse();
         setChatList(reversedResponse);
-        console.log("fetchChatMsg : ", response);
       } catch (e) {
-        console.log("채팅 메시지 목록 불러오는 중 에러", e);
+        console.log("채팅 메시지 목록 불러오는 중 에러");
       }
     };
     fetchPlanner();
@@ -404,9 +431,7 @@ export const Planning = () => {
       currentAddedPlace.content &&
       Object.keys(currentAddedPlace.content).length > 0
     ) {
-      // setPlans((prevPlans) => [...prevPlans, currentAddedPlace]);
       setEditPlans((prevPlans) => [...prevPlans, currentAddedPlace]);
-      console.log("이게 추가될 일정", currentAddedPlace);
       setCurrentAddedPlace({});
       setSelectedPlan({});
     }
@@ -512,18 +537,46 @@ export const Planning = () => {
             )}
 
             {isChatOpen && (
-              <ChatComponent
-                closeChat={closeChat}
-                inputMsg={inputMsg}
-                setInputMsg={setInputMsg}
-                ws={ws}
-                plannerId={plannerId}
-                sender={sender}
-                socketConnected={socketConnected}
-                setSocketConnected={setSocketConnected}
-                chatList={chatList}
-                setChatList={setChatList}
-              />
+              <ChatContainer>
+                <div className="chat-header">
+                  <FaTimes className="close-chat" onClick={closeChat} />
+                </div>
+                <ChatMsgContainer
+                  ref={ChatContainerRef}
+                  className="chat-msg-container"
+                >
+                  {chatList.map((chat, index) => (
+                    <Message key={index} isSender={chat.sender === sender}>
+                      <p className="id">{`${chat.sender}`}</p>
+                      <p
+                        className="talk"
+                        dangerouslySetInnerHTML={{ __html: chat.message }}
+                      />
+                    </Message>
+                  ))}
+                </ChatMsgContainer>
+
+                <div className="sendChat">
+                  <textarea
+                    id="chatTyping"
+                    value={inputMsg ?? ""}
+                    onChange={(e) => setInputMsg(e.target.value)}
+                    onKeyDown={handleChatKeyDown}
+                    style={{
+                      height: `${Math.min(
+                        90,
+                        15 + inputMsg.split("\n").length * 15
+                      )}px`,
+                    }}
+                  />
+                  <button
+                    onClick={handleChatButtonClick}
+                    disabled={!inputMsg?.trim()}
+                  >
+                    <HiArrowCircleUp className="sendIcon" />
+                  </button>
+                </div>
+              </ChatContainer>
             )}
           </Info>
 
@@ -663,6 +716,14 @@ export const Planning = () => {
         )}
         <Footer />
       </div>
+    );
+  } else {
+    return (
+      <>
+        <Header />
+        <div>잘못된 접근입니다.</div>
+        <Footer />
+      </>
     );
   }
 };
