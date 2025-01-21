@@ -13,6 +13,7 @@ export const TourItemInfo = () => {
   const { id } = useParams();
   const { user } = useAuth(); // useAuth 훅을 통해 user 객체 가져오기
   const [spotDetails, setSpotDetails] = useState(null);
+  const [nearbySpots, setNearbySpots] = useState([]);
   const [bookmarkCount, setBookmarkCount] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -62,9 +63,11 @@ export const TourItemInfo = () => {
   useEffect(() => {
     const fetchSpotDetails = async () => {
       try {
+        // 여행지 상세 정보 조회
         const data = await TourItemApi.getSpotDetails(id);
         setSpotDetails(data);
 
+        // 북마크 상태 확인
         if (user?.id) {
           const bookmarkStatus = await BookmarkApi.getBookmarkStatus(
             user.id,
@@ -72,8 +75,14 @@ export const TourItemInfo = () => {
           );
           setIsBookmarked(bookmarkStatus);
         }
+
+        // 근처 관광지 목록 조회
+        if (data.mapX && data.mapY) {
+          const nearbyData = await TourItemApi.getNearbySpots(data.mapX, data.mapY, 5); // 5km 반경
+          setNearbySpots(nearbyData);
+        }
       } catch (error) {
-        console.error("여행지 상세 정보 조회 오류:", error);
+        console.error("여행지 상세 정보 조회 오류 또는 근처 관광지 조회 오류:", error);
       }
     };
 
