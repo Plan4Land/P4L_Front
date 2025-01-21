@@ -143,7 +143,11 @@ export const Login = () => {
 
   // 네이버 로그인
   const naverLogin = () => {
-
+    const naver_api_key = process.env.REACT_APP_NAVER_CLIENT_ID;
+    const naver_redirect_uri = process.env.REACT_APP_NAVER_REDIRECT_URI;
+    const state = Math.random().toString(36).substr(2, 15);
+    const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naver_api_key}&redirect_uri=${naver_redirect_uri}&state=${state}`;
+    window.location.href = naverURL;
   }
 
   // 비밀번호 보이기
