@@ -216,12 +216,26 @@ export const Planning = () => {
               setEditor(data.sender);
             }
           }
+
+          if (editor && data.type === "CLOSE" && editor === data.sender) {
+            console.log("editor : ", editor);
+            // 수정하던 사람이 새로고침하면
+            setPlannerInfo(plannerInfo);
+            setEditPlannerInfo(null);
+            setPlans(plans);
+            setEditPlans(null);
+            setEditor(null);
+          }
         };
       }
     };
 
     fetchData(); // async 함수 호출
   }, [socketConnected, editPlannerInfo, editPlans]);
+
+  useEffect(() => {
+    console.log("editor 값이 변경됨:", editor);
+  }, [editor]);
 
   // 웹 소켓 연결하기
   useEffect(() => {
@@ -242,20 +256,42 @@ export const Planning = () => {
           setSocketConnected(true);
           console.log("소켓 연결 완료");
         };
-        ws.current.onmessage = (msg) => {
-          const data = JSON.parse(msg.data);
-
-          if (data.type === "PLANNER") {
-            setIsEditting(data.data.isEditting);
-            setEditor(data.sender);
-          } else if (data.type === "ENTER") {
-            console.log(`${data.sender} 님이 입장했습니다.`);
-          }
-        };
       }
+      // ws.current.onmessage = (msg) => {
+      //   const data = JSON.parse(msg.data);
+
+      //   if (data.type === "PLANNER") {
+      //     setIsEditting(data.data.isEditting);
+      //     setEditor(data.sender);
+      //     console.log("여기서 editor 설정해줌 : ", editor);
+      //   } else if (data.type === "ENTER") {
+      //     console.log(`${data.sender} 님이 입장했습니다.`);
+      //   }
+      // };
     }
+    const closeMessage = {
+      type: "CLOSE",
+      plannerId: plannerId,
+      sender: sender,
+      message: editor,
+      data: {
+        plannerInfo: null,
+        plans: null,
+        isEditting: false,
+      },
+    };
+
+    const handleBeforeUnload = () => {
+      console.log("editor /////// ", editor);
+      if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+        ws.current.send(JSON.stringify(closeMessage));
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
       if (ws.current) {
         ws.current.close();
         ws.current = null;
