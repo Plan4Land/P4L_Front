@@ -4,27 +4,26 @@ import styled from "styled-components";
 import { ServiceCode } from "../Util/Service_code_final";
 
 const TourItemStyled = styled.div`
-  width: ${(props) => props.width || "70vw"};
-  height: ${(props) => props.height || "230px"};
+  width: ${(props) => props.width || "50vw"};
+  height: ${(props) => props.height || "200px"};
   margin: ${(props) => props.margin || "10px"};
   display: flex;
-
   cursor: pointer;
   background-color: #fff;
   align-items: center;
   overflow: hidden;
   position: relative;
-  border-radius: 10px;
-  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
   margin-bottom: 20px;
 
   .img {
-    min-width: 400px;
-    max-width: 400px;
-    height: 230px;
+    min-width: 300px;
+    max-width: 300px;
+    height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 5px;
   }
   .imgSearch {
     width: 120px;
@@ -97,14 +96,14 @@ const TourItemStyled = styled.div`
     width: 200px;
     position: absolute;
     bottom: 15px;
-    right: 0px;
+    right: -40px;
     display: flex;
     justify-content: left;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
     img {
-      width: 80px;
-      height: 80px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
     }
   }

@@ -1,24 +1,29 @@
-import {Header, Footer} from "../../Component/GlobalComponent";
-import {UserMain, UserInfo, UserPlanning} from "../../Style/MyPageMainStyled";
-import {useState, useEffect} from "react";
-import {CheckModal, Modal} from "../../Util/Modal";
-import {Button} from "../../Component/ButtonComponent";
-import {useNavigate, useParams} from "react-router-dom";
-import {UserPlannerApi} from "../../Api/ItemApi";
-import {areas} from "../../Util/Common";
-import {PlanItem} from "../../Component/ItemListComponent";
+import { Header, Footer } from "../../Component/GlobalComponent";
+import {
+  UserMain,
+  UserInfo,
+  UserPlanning,
+  OtherUserInfo,
+} from "../../Style/MyPageMainStyled";
+import { useState, useEffect } from "react";
+import { CheckModal, Modal } from "../../Util/Modal";
+import { Button } from "../../Component/ButtonComponent";
+import { useNavigate, useParams } from "react-router-dom";
+import { UserPlannerApi } from "../../Api/ItemApi";
+import { areas } from "../../Util/Common";
+import { PlanItem } from "../../Component/ItemListComponent";
 import AxiosApi from "../../Api/AxiosApi";
-import {Pagination} from "../../Component/Pagination";
+import { Pagination } from "../../Component/Pagination";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import {useMediaQuery} from "react-responsive";
-import {useAuth} from "../../Context/AuthContext";
+import { useMediaQuery } from "react-responsive";
+import { useAuth } from "../../Context/AuthContext";
 import FollowLoad from "../../Component/UserPageComponent/FollowLoad";
 import ReportModal from "../../Component/UserPageComponent/ReportModalComponent";
 
 export const Otheruser = () => {
-  const {userId} = useParams();
-  const {user} = useAuth();
+  const { userId } = useParams();
+  const { user } = useAuth();
   const [planners, setPlanners] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -46,7 +51,7 @@ export const Otheruser = () => {
   const handleConfirmationClose = () => {
     setShowConfirmationModal(false);
   };
-  const isMobile = useMediaQuery({query: "(max-width: 768px)"});
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
@@ -159,8 +164,8 @@ export const Otheruser = () => {
 
   return (
     <>
-      <Header/>
-      <div className="otheruser">
+      <Header />
+      <OtherUserInfo>
         <UserMain>
           <UserInfo>
             <div className="user">
@@ -197,6 +202,7 @@ export const Otheruser = () => {
                 <Button onClick={() => setShowReportModal(true)}>
                   신고하기
                 </Button>
+
                 {isFollowed ? (
                   <Button
                     onClick={() => handleFollow(user?.id, userInfo.id, false)}
@@ -231,8 +237,8 @@ export const Otheruser = () => {
                       areas
                         .find((area) => area.code === planner.area)
                         ?.subAreas.find(
-                        (subArea) => subArea.code === planner.subArea
-                      )?.name || "알 수 없는 하위 지역";
+                          (subArea) => subArea.code === planner.subArea
+                        )?.name || "알 수 없는 하위 지역";
                     return (
                       <PlanItem
                         key={planner.id}
@@ -262,8 +268,8 @@ export const Otheruser = () => {
                     areas
                       .find((area) => area.code === planner.area)
                       ?.subAreas.find(
-                      (subArea) => subArea.code === planner.subArea
-                    )?.name || "알 수 없는 하위 지역";
+                        (subArea) => subArea.code === planner.subArea
+                      )?.name || "알 수 없는 하위 지역";
                   return (
                     <PlanItem
                       key={planner.id}
@@ -289,7 +295,7 @@ export const Otheruser = () => {
             />
           )}
         </UserMain>
-      </div>
+      </OtherUserInfo>
       <CheckModal isOpen={isFollowModalOpen} onClose={closeFollowModal}>
         <FollowLoad
           followers={followers}
@@ -307,7 +313,7 @@ export const Otheruser = () => {
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
         onConfirm={handleReportConfirm}
-        buttonProps={{children: "확인"}}
+        buttonProps={{ children: "확인" }}
       >
         <h3>신고 내용을 입력해주세요</h3>
         <textarea
@@ -324,7 +330,7 @@ export const Otheruser = () => {
       >
         <p>신고가 완료되었습니다.</p>
       </CheckModal>
-      <Footer/>
+      <Footer />
     </>
   );
 };
