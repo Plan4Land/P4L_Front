@@ -41,50 +41,6 @@ export const Login = () => {
     setState(e.target.value);
   };
 
-  const LoginBox = styled.div`
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-bottom: 30px;
-    .login-icon {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 50px;
-      height: 50px;
-      padding: 0;
-      border-radius: 50%;
-      border: none;
-      cursor: pointer;
-      svg {
-        width: 50%;
-        height: 50%;
-      }
-    }
-    .kakao {
-      background-color: rgb(255, 255, 0);
-      &:hover {
-        background-color: rgb(240, 240, 0);
-      }
-    }
-    .google {
-      background-color: rgb(240, 240, 240);
-      &:hover {
-        background-color: rgb(220, 220, 220);
-      }
-      svg {
-        width: 60%;
-        height: 60%;
-      }
-    }
-    .naver {
-      background-color: rgb(3, 199, 90);
-      &:hover {
-        background-color: rgb(3, 184, 75);
-      }
-    }
-  `
-
   // 일반 로그인
   const onClickLogin = async () => {
     setTextMessage("");
@@ -106,7 +62,9 @@ export const Login = () => {
           || response.status === 200)
       ) {
         Common.setAccessToken(response.data.accessToken);
+        Common.SetAccessTokenExpiresIn(response.data.accessTokenExpiresIn);
         Common.setRefreshToken(response.data.refreshToken);
+        Common.setRefreshTokenExpiresIn(response.data.refreshTokenExpiresIn);
 
         const userData = await AxiosApi.memberInfo(inputUserId);
         login(userData);
@@ -232,7 +190,7 @@ export const Login = () => {
             </div>
           </div>
 
-          <LoginBox>
+          <div className="login-social-box">
             <button 
               className="login-icon kakao"
               onClick={kakaoLogin}
@@ -260,7 +218,7 @@ export const Login = () => {
                 <path fill="#fff" d="M9 32V480H181.366V255.862L331.358 480H504V32H331.358V255.862L181.366 32H9Z"/>
               </svg>
             </button>
-          </LoginBox>
+          </div>
 
           <Button onClick={onClickLogin}>
             로그인

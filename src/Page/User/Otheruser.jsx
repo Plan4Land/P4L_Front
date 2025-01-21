@@ -52,6 +52,7 @@ export const Otheruser = () => {
     setShowConfirmationModal(false);
   };
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };

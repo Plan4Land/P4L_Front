@@ -7,19 +7,29 @@ import { Button } from "../../../Component/ButtonComponent";
 
 export function NaverRedirect() {
   const navigate = useNavigate();
-  const code = new URL(window.location.href).searchParams.get("code");
-  const state = new URL(window.location.href).searchParams.get("state");
+  const [code, setCode] = useState(null);
+  const [state, setState] = useState(null);
   const { login } = useAuth();
   const [isSuccess, setIsSuccess] = useState(true);
 
-  useEffect(() => {
+  if (!code && !state) {
+    const urlParams = new URL(window.location.href).searchParams;
+    const codeParam = urlParams.get("code");
+    const stateParam = urlParams.get("state");
+
+    if (codeParam && stateParam) {
+      setCode(codeParam);
+      setState(stateParam);
+    } else {
+      console.log("code 또는 state가 존재하지 않습니다.");
+      setIsSuccess(false);
+      return;
+    }
+  }
+
+  if (code && state) {
     const fatchData = async () => {
       try {
-        if (!code) {
-          console.log("code가 존재하지 않습니다.");
-          return;
-        }
-
         // 1. 토큰 요청
         const tokenResponse = await axios.post(
           "http://localhost:8111/auth/naver/token",
@@ -27,7 +37,7 @@ export function NaverRedirect() {
           { headers: { "Content-Type": "application/json" } }
         );
         const { access_token } = tokenResponse.data;
-
+  
         // 2. 네이버 사용자 정보 조회
         const userResponse = await axios.post(
           "http://localhost:8111/auth/naver/userinfo", 
@@ -35,7 +45,7 @@ export function NaverRedirect() {
           { headers: { "Content-Type": "application/json" } }
         );
         const naverUser = userResponse.data.response;
-
+  
         // 3. 백엔드로 사용자 정보 전송
         try {
           const backendResponse = await axios.post(
@@ -46,7 +56,7 @@ export function NaverRedirect() {
             },
             { headers: { "Content-Type": "application/json" } }
           );
-
+  
           if (backendResponse.status === 200) {
             // 로그인 성공 -> 페이지 이동
             await loginFront("naver", naverUser.id);
@@ -58,7 +68,7 @@ export function NaverRedirect() {
             backendError.response.data.message === "회원가입이 필요합니다."
           ) {
             console.log("회원가입이 필요합니다. 404 에러 발생");
-
+  
             // 회원가입 페이지로 이동
             navigate("/signup", {
               state: {
@@ -75,9 +85,9 @@ export function NaverRedirect() {
         setIsSuccess(false);
       }
     };
-    
+  
     fatchData();
-  }, [code, state, navigate, login]);
+  }
 
   const loginFront = async (sso, socialId) => {
     const userData = await AxiosApi.memberInfoBySocialId(sso, socialId);

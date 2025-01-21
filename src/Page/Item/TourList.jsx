@@ -16,9 +16,12 @@ import { TravelSpotApi } from "../../Api/ItemApi";
 import { areas, types } from "../../Util/Common";
 import { Pagination } from "../../Component/Pagination";
 import { FaBars } from "react-icons/fa";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useMediaQuery } from "react-responsive";
 
 export const TourList = () => {
   const location = useLocation();
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   // Location 훅 사용
   const navigate = useNavigate();
@@ -72,7 +75,6 @@ export const TourList = () => {
         setLoading(false);
       }
     };
-
     const queryParams = new URLSearchParams();
     for (const [key, value] of Object.entries(filters)) {
       if (value) {
@@ -240,6 +242,14 @@ export const TourList = () => {
   };
   const handleToggleSelect = () => {
     setIsSelectOpen(!isSelectOpen);
+  };
+  const handleLoadMore = async () => {
+    if (filters.currentPage + 1 < totalPages) {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        currentPage: prevFilters.currentPage + 1,
+      }));
+    }
   };
 
   const selectedAreaData = areas.find((area) => area.code === filters.areaCode);
@@ -440,47 +450,82 @@ export const TourList = () => {
 
         <ItemList>
           {(loading || error) && <div>{loading ? "로딩 중..." : error}</div>}
-          {!loading && !error && (
-            <div className="tour-list">
-              {travelSpots.map((spot) => {
-                const cat3Name = ServiceCode.flatMap((cat) =>
-                  cat.cat2List.flatMap((cat2) =>
-                    cat2.cat3List.filter((cat3) => cat3.cat3 === spot.cat3)
-                  )
-                ).map((cat3) => cat3.cat3Name)[0];
-                const typeName = types.find(
-                  (type) => type.code === spot.typeId
-                )?.name;
 
-                return (
-                  <TourItem
-                    key={spot.id}
-                    id={spot.id}
-                    thumbnail={spot.thumbnail}
-                    title={spot.title}
-                    address={spot.addr1 || "정보 없음"}
-                    subCategory={cat3Name || "정보 없음"}
-                    type={typeName || "정보 없음"}
-                  />
-                );
-              })}
-            </div>
+          {!loading && !error && (
+            <>
+              {isMobile ? (
+                <InfiniteScroll
+                  dataLength={travelSpots.length}
+                  next={handleLoadMore}
+                  hasMore={filters.currentPage + 1 < totalPages}
+                  loader={<div>로딩 중...</div>}
+                  endMessage={<div>더 이상 불러올 데이터가 없습니다.</div>}
+                >
+                  <div className="tour-list">
+                    {travelSpots.map((spot) => {
+                      const cat3Name = ServiceCode.flatMap((cat) =>
+                        cat.cat2List.flatMap((cat2) =>
+                          cat2.cat3List.filter(
+                            (cat3) => cat3.cat3 === spot.cat3
+                          )
+                        )
+                      ).map((cat3) => cat3.cat3Name)[0];
+                      const typeName = types.find(
+                        (type) => type.code === spot.typeId
+                      )?.name;
+
+                      return (
+                        <TourItem
+                          key={spot.id}
+                          id={spot.id}
+                          thumbnail={spot.thumbnail}
+                          title={spot.title}
+                          address={spot.addr1 || "정보 없음"}
+                          subCategory={cat3Name || "정보 없음"}
+                          type={typeName || "정보 없음"}
+                        />
+                      );
+                    })}
+                  </div>
+                </InfiniteScroll>
+              ) : (
+                // 데스크탑 화면에서는 기존 페이지네이션 사용
+                <div className="tour-list">
+                  {travelSpots.map((spot) => {
+                    const cat3Name = ServiceCode.flatMap((cat) =>
+                      cat.cat2List.flatMap((cat2) =>
+                        cat2.cat3List.filter((cat3) => cat3.cat3 === spot.cat3)
+                      )
+                    ).map((cat3) => cat3.cat3Name)[0];
+                    const typeName = types.find(
+                      (type) => type.code === spot.typeId
+                    )?.name;
+
+                    return (
+                      <TourItem
+                        key={spot.id}
+                        id={spot.id}
+                        thumbnail={spot.thumbnail}
+                        title={spot.title}
+                        address={spot.addr1 || "정보 없음"}
+                        subCategory={cat3Name || "정보 없음"}
+                        type={typeName || "정보 없음"}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* 데스크탑에서는 페이지네이션 */}
+              {!isMobile && (
+                <Pagination
+                  currentPage={filters.currentPage}
+                  totalPages={totalPages}
+                  handlePageChange={handlePageChange}
+                />
+              )}
+            </>
           )}
-          <Pagination
-            currentPage={filters.currentPage}
-            totalPages={totalPages}
-            handlePageChange={handlePageChange}
-          />
-          {/*<div>*/}
-          {/*  <button*/}
-          {/*    onClick={() => handlePageChange(filters.currentPage - 1)}*/}
-          {/*    disabled={filters.currentPage === 0}*/}
-          {/*  >*/}
-          {/*    ◀*/}
-          {/*  </button>*/}
-          {/*  <span> {filters.currentPage + 1} 페이지 </span>*/}
-          {/*  <button onClick={() => handlePageChange(filters.currentPage + 1)}>▶</button>*/}
-          {/*</div>*/}
         </ItemList>
       </List>
       <Footer />
