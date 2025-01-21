@@ -100,7 +100,6 @@ export const PlannerInfoEditComponent = ({
       // Remove theme from selection
       const updatedThemes = selectedThemes.filter((t) => t !== theme);
       setSelectedThemes(updatedThemes);
-      console.log("여기서 출력한거임 : ", editPlannerInfo);
       setEditPlannerInfo((prev) => ({
         ...prev,
         theme: updatedThemes.join(", "),
@@ -121,8 +120,6 @@ export const PlannerInfoEditComponent = ({
       ...prev,
       startDate: date,
     }));
-    console.log("date >>>>>>> : ", date);
-    console.log("endDate >>>>>>>> : ", new Date(editPlannerInfo.endDate));
     if (editPlannerInfo.endDate && date > new Date(editPlannerInfo.endDate)) {
       setEditPlannerInfo((prev) => ({
         ...prev,
@@ -375,16 +372,16 @@ export const PlansComponent = ({
   useEffect(() => {
     const currentPlannerInfo = editPlannerInfo || plannerInfo;
     const currentPlans = editPlans || plans;
-    // if (editPlans) {
-    //   console.log("editPlans가 선택됨");
-    // } else if (plans) {
-    //   console.log("plans가 선택됨");
-    // }
-    // if (editPlannerInfo) {
-    //   console.log("editPlannerInfo 선택됨");
-    // } else if (plannerInfo) {
-    //   console.log("plannerInfo 선택됨");
-    // }
+    if (editPlans) {
+      console.log("editPlans가 선택됨");
+    } else if (plans) {
+      console.log("plans가 선택됨");
+    }
+    if (editPlannerInfo) {
+      console.log("editPlannerInfo 선택됨");
+    } else if (plannerInfo) {
+      console.log("plannerInfo 선택됨");
+    }
     const startDate = new Date(currentPlannerInfo.startDate);
     const endDate = new Date(currentPlannerInfo.endDate);
     const timeDiff = endDate.getTime() - startDate.getTime();
@@ -418,8 +415,6 @@ export const PlansComponent = ({
       ...prevState,
       dates: travelDates, // 여행 날짜 설정
     }));
-
-    console.log(editPlans);
 
     const groupPlansByDate = () => {
       // 1. 날짜별로 그룹화

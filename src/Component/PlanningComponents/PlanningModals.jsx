@@ -10,7 +10,7 @@ import {
   SearchBookmarkContainer,
 } from "../../Style/PlanningStyled";
 import { CloseModal, Modal } from "../../Util/Modal";
-import { Button} from "../ButtonComponent";
+import { Button } from "../ButtonComponent";
 import { colors } from "../../Style/GlobalStyle";
 import { SearchKakaoMap } from "../KakaoMapComponent";
 import { SearchTourItem } from "../ItemListComponent";
@@ -337,6 +337,34 @@ export const DeletePlanning = ({ modals, setModals, plannerInfo }) => {
       ) : (
         <p>플래닝을 나가시겠습니까?</p>
       )}
+    </Modal>
+  );
+};
+
+// 페이지 Unload 전 모달창
+export const BeforeUnload = ({
+  modals,
+  setModals,
+  acceptUnload,
+  setAcceptUnload,
+}) => {
+  const handleOnConfirm = () => {
+    if (acceptUnload) {
+      setAcceptUnload(); // 저장된 작업 실행
+    }
+    setModals((prev) => ({ ...prev, beforeUnload: false }));
+  };
+  const handleOnClose = () => {
+    setAcceptUnload(null);
+    setModals((prev) => ({ ...prev, beforeUnload: false }));
+  };
+  return (
+    <Modal
+      isOpen={modals.beforeUnload}
+      onClose={() => handleOnClose()}
+      onConfirm={() => handleOnConfirm()}
+    >
+      <p>변경사항이 저장되지 않을 수 있습니다. 괜찮으신가요?</p>
     </Modal>
   );
 };

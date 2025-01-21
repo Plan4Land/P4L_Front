@@ -181,7 +181,7 @@ export const Planning = () => {
             setEditPlans(data.data.plans);
             setIsEditting(data.data.isEditting);
             setEditor(data.sender);
-          } else if (data.type === "PLANNER") {
+          } else if (data.type === "PLANNER" || data.type === "CLOSE") {
             console.log("바뀐거 없음");
             setReceivePlanner(
               Array.isArray(data.data.plannerInfo) &&
@@ -193,24 +193,34 @@ export const Planning = () => {
             setIsEditting(data.data.isEditting);
 
             if (data.message === "편집완료") {
-              setPlannerInfo(editPlannerInfo);
-              setEditor(null);
-              setReceivePlanner(null);
-
-              // 비동기 호출 처리
-              if (editPlannerInfo && data.sender === user?.nickname) {
-                const plannerResult = await PlanningApi.editPlannerInfo(
-                  editPlannerInfo,
-                  plannerId
-                );
-                const planResult = await PlanningApi.editPlan(
-                  plannerId,
-                  editPlans
-                );
-                setPlannerInfo(plannerResult.data);
-                setPlans(editPlans);
+              if (data.type === "CLOSE") {
+                console.log("여기 편집 종료로 이동하는거임");
+                setEditor(null);
+                setReceivePlanner(null);
                 setEditPlannerInfo(null);
                 setEditPlans(null);
+                setPlans(plans);
+              } else {
+                setPlannerInfo(editPlannerInfo);
+                setEditor(null);
+                setReceivePlanner(null);
+
+                // 비동기 호출 처리
+                if (editPlannerInfo && data.sender === user?.nickname) {
+                  const plannerResult = await PlanningApi.editPlannerInfo(
+                    editPlannerInfo,
+                    plannerId
+                  );
+                  const planResult = await PlanningApi.editPlan(
+                    plannerId,
+                    editPlans
+                  );
+                  console.log("여기가 수정사항 저장");
+                  setPlannerInfo(plannerResult.data);
+                  setPlans(editPlans);
+                  setEditPlannerInfo(null);
+                  setEditPlans(null);
+                }
               }
             } else {
               setEditor(data.sender);
@@ -256,11 +266,36 @@ export const Planning = () => {
     }
 
     return () => {
-      if (ws.current) {
-        ws.current.close();
-        ws.current = null;
-        console.log("페이지 이동으로 인해 소켓 연결 종료");
-      }
+      const sendCloseMessage = () => {
+        if (ws.current) {
+          const message = {
+            type: "CLOSE",
+            plannerId: plannerId,
+            sender: sender,
+            message: "편집완료",
+            data: {
+              plannerInfo: null,
+              plans: null,
+              isEditting: false,
+            },
+          };
+          ws.current.send(JSON.stringify(message));
+          ws.current.close();
+          ws.current = null;
+          console.log("페이지 이동으로 인해 소켓 연결 종료");
+        }
+      };
+
+      // 새로고침 또는 페이지 이동 시 호출
+      window.addEventListener("beforeunload", sendCloseMessage);
+
+      return () => {
+        // 컴포넌트 언마운트 시에도 호출
+        if (editor && editor === user.nickname) {
+          sendCloseMessage();
+        }
+        window.removeEventListener("beforeunload", sendCloseMessage);
+      };
     };
   }, [plannerInfo?.id, user?.nickname]);
 
