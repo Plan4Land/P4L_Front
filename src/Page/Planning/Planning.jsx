@@ -705,6 +705,7 @@ export const Planning = () => {
             setModals={setModals}
             plannerInfo={plannerInfo}
             setPlannerInfo={setPlannerInfo}
+            plannerId={plannerId}
           />
         )}
         {modals.deletePlanning && (
@@ -712,6 +713,7 @@ export const Planning = () => {
             modals={modals}
             setModals={setModals}
             plannerInfo={plannerInfo}
+            plannerId={plannerId}
           />
         )}
         <Footer />

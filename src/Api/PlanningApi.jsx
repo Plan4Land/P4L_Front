@@ -46,6 +46,15 @@ const PlanningApi = {
       plannerInfo
     );
   },
+  editIsPublic: async (plannerId, isPublic) => {
+    const params = {
+      plannerId,
+      isPublic,
+    };
+    return (
+      await AxiosInstance.post(`/planner/update/isPublic`, null, { params })
+    ).data;
+  },
   getPlan: async (plannerId) => {
     return (
       await AxiosInstance.get(
@@ -74,6 +83,24 @@ const PlanningApi = {
   getPlanning: async (plannerId) => {
     return (await AxiosInstance.get(`/planner/fetchData/${plannerId}`)).data;
   },
+  deletePlanning: async (plannerId, userId) => {
+    const params = {
+      plannerId,
+      userId,
+    };
+    return await AxiosInstance.delete(`/planner/delete-planner`, {
+      params,
+    });
+  },
+  leavePlanning: async (plannerId, userId) => {
+    const params = {
+      plannerId,
+      userId,
+    };
+    return await AxiosInstance.delete(`/planner/delete-planner-member`, {
+      params,
+    });
+  },
   getIsBookmarked: async (memberId, plannerId) => {
     const params = {
       memberId,
@@ -98,9 +125,6 @@ const PlanningApi = {
   getChatMsgs: async (plannerId) => {
     return (await AxiosInstance.get(`/chat/msg/${plannerId}`)).data;
   },
-  // chatDetail: async (plannerId) => {
-  //   return (await AxiosInstance.get(`/chat/room/${plannerId}`)).data;
-  // },
   inviteMember: async (memberId, plannerId) => {
     const params = {
       memberId,

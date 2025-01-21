@@ -300,18 +300,22 @@ export const SetPublicModal = ({
   setModals,
   plannerInfo,
   setPlannerInfo,
+  plannerId,
 }) => {
+  const handleIsPublicConfirm = async () => {
+    const response = await PlanningApi.editIsPublic(
+      plannerId,
+      !plannerInfo.public
+    );
+    setPlannerInfo(response);
+    setModals((prev) => ({ ...prev, public: false }));
+  };
+
   return (
     <Modal
       isOpen={modals.public}
       onClose={() => setModals((prev) => ({ ...prev, public: false }))}
-      onConfirm={() => {
-        setPlannerInfo((prevInfo) => ({
-          ...prevInfo,
-          public: !prevInfo.public,
-        }));
-        setModals((prev) => ({ ...prev, public: false }));
-      }}
+      onConfirm={() => handleIsPublicConfirm()}
     >
       <p>
         {plannerInfo.public === true ? "비공개" : "공개"}로 전환하시겠습니까?
@@ -321,15 +325,32 @@ export const SetPublicModal = ({
 };
 
 // 플래닝 삭제 or 나가기
-export const DeletePlanning = ({ modals, setModals, plannerInfo }) => {
+export const DeletePlanning = ({
+  modals,
+  setModals,
+  plannerInfo,
+  plannerId,
+}) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleDeleteConfirm = async () => {
+    if (plannerInfo.ownerNickname === user.nickname) {
+      await PlanningApi.deletePlanning(plannerId, user.id);
+    } else {
+      await PlanningApi.leavePlanning(plannerId, user.id);
+    }
+
+    setModals((prev) => ({ ...prev, deletePlanning: false }));
+    navigate("/planninglist?pageSize=10");
+  };
 
   return (
     <Modal
       isOpen={modals.deletePlanning}
       onClose={() => setModals((prev) => ({ ...prev, deletePlanning: false }))}
       onConfirm={() => {
-        setModals((prev) => ({ ...prev, deletePlanning: false }));
+        handleDeleteConfirm();
       }}
     >
       {plannerInfo.ownerNickname === user.nickname ? (
@@ -341,30 +362,30 @@ export const DeletePlanning = ({ modals, setModals, plannerInfo }) => {
   );
 };
 
-// 페이지 Unload 전 모달창
-export const BeforeUnload = ({
-  modals,
-  setModals,
-  acceptUnload,
-  setAcceptUnload,
-}) => {
-  const handleOnConfirm = () => {
-    if (acceptUnload) {
-      setAcceptUnload(); // 저장된 작업 실행
-    }
-    setModals((prev) => ({ ...prev, beforeUnload: false }));
-  };
-  const handleOnClose = () => {
-    setAcceptUnload(null);
-    setModals((prev) => ({ ...prev, beforeUnload: false }));
-  };
-  return (
-    <Modal
-      isOpen={modals.beforeUnload}
-      onClose={() => handleOnClose()}
-      onConfirm={() => handleOnConfirm()}
-    >
-      <p>변경사항이 저장되지 않을 수 있습니다. 괜찮으신가요?</p>
-    </Modal>
-  );
-};
+// // 페이지 Unload 전 모달창
+// export const BeforeUnload = ({
+//   modals,
+//   setModals,
+//   acceptUnload,
+//   setAcceptUnload,
+// }) => {
+//   const handleOnConfirm = () => {
+//     if (acceptUnload) {
+//       setAcceptUnload(); // 저장된 작업 실행
+//     }
+//     setModals((prev) => ({ ...prev, beforeUnload: false }));
+//   };
+//   const handleOnClose = () => {
+//     setAcceptUnload(null);
+//     setModals((prev) => ({ ...prev, beforeUnload: false }));
+//   };
+//   return (
+//     <Modal
+//       isOpen={modals.beforeUnload}
+//       onClose={() => handleOnClose()}
+//       onConfirm={() => handleOnConfirm()}
+//     >
+//       <p>변경사항이 저장되지 않을 수 있습니다. 괜찮으신가요?</p>
+//     </Modal>
+//   );
+// };
