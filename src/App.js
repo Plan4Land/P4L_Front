@@ -20,6 +20,7 @@ import { KakaoRedirect } from "./Component/LoginRedirect/KakaoLoginRedirect";
 import { GoogleRedirect } from "./Component/LoginRedirect/GoogleLoginRedirect";
 import { Otheruser } from "./Page/User/Otheruser";
 import { AdminPage } from "./Page/AdminPage";
+import ExpressBus from "./Page/Traffic/ExpressBus";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
               <Route path="/otheruser/:userId" element={<Otheruser />} />
               <Route path="/test" element={<Test />} />
               <Route path="/Admin" element={<AdminPage />} />
+              <Route path="/ExpressBus" element={<ExpressBus />} />
 
               {/* 로그인 필요한 페이지 */}
               <Route

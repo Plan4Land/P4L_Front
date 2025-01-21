@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { KTXServiceCode } from '../../Util/Service_KTX_code'; // KTX 서비스 코드 가져오기
+import { KTXServiceCode } from '../../Util/Service_KTX_code'; 
 import { Header, Footer } from '../../Component/GlobalComponent';
 import { Button } from '../../Component/ButtonComponent';
 import { Table, TrafficBox, SelectTourItem, SearchSt } from '../../Style/ItemListStyled';
@@ -8,49 +8,48 @@ import { Vehiclekind } from '../../Util/Service_VehicleKind_code';
 import {Pagination} from "../../Component/Pagination";
 
 const KtxInquiry = () => {
-  const [schedule, setSchedule] = useState([]); // 조회된 시간표
-  const [displayedSchedule, setDisplayedSchedule] = useState([]); // 현재 페이지에 표시할 데이터
-  const [selectedDepCat1, setSelectedDepCat1] = useState(''); // 선택된 출발 지역
-  const [selectedDepCat2, setSelectedDepCat2] = useState(''); // 선택된 출발 세부 역
-  const [selectedArrCat1, setSelectedArrCat1] = useState(''); // 선택된 도착 지역
-  const [selectedArrCat2, setSelectedArrCat2] = useState(''); // 선택된 도착 세부 역
-  const [selectedVehicle, setSelectedVehicle] = useState([]); // 선택된 열차 종류
-  const [date, setDate] = useState(''); // 사용자 입력 날짜
-  const [loading, setLoading] = useState(false); // 로딩 상태
-  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지
+  const [schedule, setSchedule] = useState([]);
+  const [displayedSchedule, setDisplayedSchedule] = useState([]);
+  const [selectedDepCat1, setSelectedDepCat1] = useState(''); 
+  const [selectedDepCat2, setSelectedDepCat2] = useState('');
+  const [selectedArrCat1, setSelectedArrCat1] = useState(''); 
+  const [selectedArrCat2, setSelectedArrCat2] = useState('');
+  const [selectedVehicle, setSelectedVehicle] = useState([]);
+  const [date, setDate] = useState(''); 
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const itemsPerPage = 25; // 페이지당 항목 수
+  const itemsPerPage = 25; 
 
   useEffect(() => {
     if (schedule.length > 0) {
-      const startIndex = currentPage * itemsPerPage; // 0 페이지부터 시작
+      const startIndex = currentPage * itemsPerPage; 
       const endIndex = startIndex + itemsPerPage;
-      setDisplayedSchedule(schedule.slice(startIndex, endIndex)); // 페이지에 맞는 데이터 업데이트
+      setDisplayedSchedule(schedule.slice(startIndex, endIndex)); 
     }
   }, [schedule, currentPage]);
   
   useEffect(() => {
     if (schedule.length > 0) {
-      setDisplayedSchedule(schedule.slice(0, itemsPerPage)); // 데이터 로드 후 첫 페이지 데이터 설정
+      setDisplayedSchedule(schedule.slice(0, itemsPerPage));
     }
   }, [schedule]);
 
-  // 페이지네이션 계산을 위한 수정된 코드
+
   const calculateTotalPages = () => {
     const totalCount = schedule.length;
-    return Math.ceil(totalCount / itemsPerPage); // 전체 페이지 수 계산
+    return Math.ceil(totalCount / itemsPerPage);
   };
 
   const calculateDuration = (depTime, arrTime) => {
     const dep = new Date(`1970-01-01T${depTime}:00Z`);
     const arr = new Date(`1970-01-01T${arrTime}:00Z`);
     
-    // 도착 시간이 출발 시간보다 빠르면 날짜를 넘어갔다고 가정
     if (arr < dep) {
-      arr.setDate(arr.getDate() + 1); // 하루를 더해줌
+      arr.setDate(arr.getDate() + 1);
     }
   
-    const diff = arr - dep; // 소요시간 계산 (밀리초 단위)
+    const diff = arr - dep;
     
     if (diff < 0) {
       return '유효하지 않은 시간';
@@ -62,7 +61,6 @@ const KtxInquiry = () => {
     return `${hours}:${minutes}`;
   };
 
-  // 시간순으로 정렬하는 함수
   const sortByTime = (schedules) => {
     return schedules.sort((a, b) => {
       const timeA = new Date(`1970-01-01T${a.depTime}:00Z`);
@@ -71,7 +69,6 @@ const KtxInquiry = () => {
     });
   };
 
-  // 시간표 데이터 가져오는 함수
   const fetchSchedule = useCallback(async () => {
     if (!date || !selectedDepCat2 || !selectedArrCat2 ||  selectedVehicle.length === 0) {
       alert('날짜, 출발 세부 역, 도착 세부 역, 열차 종류를 모두 선택해주세요.');
@@ -122,7 +119,7 @@ const KtxInquiry = () => {
       );
 
       for (const vehicle of expandedVehicleCodes) {
-        params.trainGradeCode = vehicle; // 선택된 열차 종류마다 데이터 요청
+        params.trainGradeCode = vehicle;
         let currentPage = 1;
         while (true) {
           params.pageNo = currentPage;
@@ -137,13 +134,13 @@ const KtxInquiry = () => {
             const depTime = formatDateTime(item.getElementsByTagName('depplandtime')[0]?.textContent || '');
             const arrTime = formatDateTime(item.getElementsByTagName('arrplandtime')[0]?.textContent || '');
             return {
-              depStation: selectedDepCat2, // 출발역 추가
-              arrStation: selectedArrCat2, // 도착역 추가
+              depStation: selectedDepCat2, 
+              arrStation: selectedArrCat2,
               depTime,
               arrTime,
               trainGradeCode: item.getElementsByTagName('traingradename')[0]?.textContent || '',
               adultCharge: item.getElementsByTagName('adultcharge')[0]?.textContent || '',
-              duration: calculateDuration(depTime, arrTime), // 소요시간 추가
+              duration: calculateDuration(depTime, arrTime), 
             };
           });
 
@@ -157,11 +154,10 @@ const KtxInquiry = () => {
         }
       }
 
-      // 시간순으로 정렬
       const sortedSchedules = sortByTime(allSchedules);
       console.log(sortedSchedules);
       setSchedule(sortedSchedules);
-      setCurrentPage(1); // 1페이지로 초기화
+      setCurrentPage(1);
     } catch (error) {
       console.error('시간표 조회 오류:', error);
       alert('시간표 조회 중 오류가 발생했습니다.');
@@ -174,7 +170,6 @@ const KtxInquiry = () => {
     setCurrentPage(page);
   };
 
-  // 초기화 함수
   const handleResetSelections = () => {
     setSelectedDepCat1('');
     setSelectedDepCat2('');
@@ -186,7 +181,6 @@ const KtxInquiry = () => {
     setCurrentPage(1);
   };
 
-  // 선택된 cat1에 맞는 cat2List를 얻기 위한 함수
   const getCat2List = (selectedCat1) => {
     return KTXServiceCode.find((cat1) => cat1.cat1 === selectedCat1)?.cat2List || [];
   };
@@ -214,7 +208,7 @@ const KtxInquiry = () => {
           </SearchSt>
 
           {/* 출발 지역 선택 */}
-          <div className="mainarea">
+          <div className="mainastation">
             <h3>출발 지역 선택</h3>
             <div>
               {KTXServiceCode.map((cat1) => (
@@ -222,8 +216,8 @@ const KtxInquiry = () => {
                   key={cat1.cat1}
                   onClick={() => {
                     setSelectedDepCat1(cat1.cat1);
-                    setSelectedDepCat2(''); // 지역을 선택하면 세부 역을 초기화
-                    setSelectedVehicle(''); // 열차 선택 초기화
+                    setSelectedDepCat2('');
+                    setSelectedVehicle('');
                   }}
                   className={selectedDepCat1 === cat1.cat1 ? 'selected' : ''}
                 >
@@ -235,7 +229,7 @@ const KtxInquiry = () => {
 
           {/* 출발 세부 역 선택 */}
           {selectedDepCat1 && (
-            <div className="subarea">
+            <div className="substation">
               <h3>출발 세부 역 선택</h3>
               <div>
                 {getCat2List(selectedDepCat1).map((cat2) => (
@@ -243,7 +237,7 @@ const KtxInquiry = () => {
                     key={cat2.cat2}
                     onClick={() => {
                       setSelectedDepCat2(cat2.cat2);
-                      setSelectedVehicle(''); // 세부 역을 선택하면 열차 선택 초기화
+                      setSelectedVehicle(''); 
                     }}
                     className={selectedDepCat2 === cat2.cat2 ? 'selected' : ''}
                   >
@@ -255,7 +249,7 @@ const KtxInquiry = () => {
           )}
 
           {/* 도착 지역 선택 */}
-          <div className="mainarea">
+          <div className="mainastation">
             <h3>도착 지역 선택</h3>
             <div>
               {KTXServiceCode.map((cat1) => (
@@ -263,8 +257,8 @@ const KtxInquiry = () => {
                   key={cat1.cat1}
                   onClick={() => {
                     setSelectedArrCat1(cat1.cat1);
-                    setSelectedArrCat2(''); // 지역을 선택하면 세부 역을 초기화
-                    setSelectedVehicle(''); // 열차 선택 초기화
+                    setSelectedArrCat2(''); 
+                    setSelectedVehicle('');
                   }}
                   className={selectedArrCat1 === cat1.cat1 ? 'selected' : ''}
                 >
@@ -276,7 +270,7 @@ const KtxInquiry = () => {
 
           {/* 도착 세부 역 선택 */}
           {selectedArrCat1 && (
-            <div className="subarea">
+            <div className="substation">
               <h3>도착 세부 역 선택</h3>
               <div>
                 {getCat2List(selectedArrCat1).map((cat2) => (
@@ -303,8 +297,8 @@ const KtxInquiry = () => {
                   onClick={() => {
                     setSelectedVehicle((prev) =>
                       prev.includes(vehicle.VehicleKindCode)
-                        ? prev.filter((code) => code !== vehicle.VehicleKindCode) // 이미 선택된 열차는 해제
-                        : [...prev, vehicle.VehicleKindCode] // 새로 선택된 열차는 추가
+                        ? prev.filter((code) => code !== vehicle.VehicleKindCode) 
+                        : [...prev, vehicle.VehicleKindCode]
                     );
                   }}
                   className={selectedVehicle.includes(vehicle.VehicleKindCode) ? 'selected' : ''}
