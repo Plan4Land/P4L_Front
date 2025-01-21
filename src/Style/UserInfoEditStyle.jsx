@@ -104,12 +104,6 @@ export const Container = styled.div`
     }
   }
 
-  .userDeleteBtn {
-    font-size: 12px;
-    margin-top: 4px;
-    cursor: pointer;
-  }
-
   .back-button {
     display: flex;
     width: 30px;
@@ -329,7 +323,7 @@ export const EditBox = styled.div`
   }
   @media (max-width: 768px) {
     flex-direction: column;
-    max-width: 250px;
+    width: 250px;
     .iconBox {
       width: 80%;
     }
