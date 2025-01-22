@@ -23,8 +23,8 @@ export const AuthProvider = ({ children }) => {
 
   // const login = (userData) => setUser(userData.data);
   const login = (userData) => {
-    const { id, nickname, imgPath } = userData.data;
-    setUser({ id, nickname, imgPath });
+    const { id, nickname, imgPath, role } = userData.data;
+    setUser({ id, nickname, imgPath, role });
   };
   const logout = () => setUser(null);
 
