@@ -2,9 +2,7 @@ import {
   MainPlanning,
   DayToggleContainer,
   DatePickerContainer,
-  DateBox,
 } from "../../Style/PlanningStyled";
-import { Button } from "../ButtonComponent";
 import { colors } from "../../Style/GlobalStyle";
 import { themes, areas } from "../../Util/Common";
 import { ProfileImg } from "../ProfileImg";
@@ -612,6 +610,12 @@ export const PlansComponent = ({
                                 return;
                               }
                             }}
+                            disabled={!isEditting || editor !== user?.nickname}
+                            className={
+                              !isEditting || editor !== user?.nickname
+                                ? "textarea-disabled"
+                                : ""
+                            }
                           />
                         </div>
                       )}

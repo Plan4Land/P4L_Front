@@ -778,11 +778,17 @@ export const DayToggleContainer = styled.div`
       background-color: white;
       overflow-y: auto;
       z-index: 2;
+      ${ScrollBar}
 
       textarea {
         width: 100%;
         resize: none;
         padding: 6px;
+        line-height: 1.5;
+      }
+      textarea.textarea-disabled {
+        background-color: #fcfcfc;
+        cursor: default;
       }
     }
   }

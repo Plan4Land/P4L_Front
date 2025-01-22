@@ -228,6 +228,7 @@ export const Planning = () => {
               setPlannerInfo(editPlannerInfo);
               setEditor(null);
               setReceivePlanner(null);
+              closeMemo();
 
               // 비동기 호출 처리
               if (editPlannerInfo && data.sender === user?.nickname) {
@@ -261,6 +262,10 @@ export const Planning = () => {
             setPlans(plans);
             setEditPlans(null);
             setEditor(null);
+            closeMemo();
+          } else {
+            setPlannerInfo(plannerInfo);
+            setPlans(plans);
           }
         };
       }
@@ -447,6 +452,12 @@ export const Planning = () => {
       searchUsersRst: [],
     });
   }, [modals.searchUser]);
+
+  useEffect(() => {
+    if (memoState.isOpened === false && isEditting) {
+      setEditPlans(Object.values(groupPlans).flat());
+    }
+  }, [memoState]);
 
   if (plannerInfo) {
     return (

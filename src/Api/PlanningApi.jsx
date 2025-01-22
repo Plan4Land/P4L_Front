@@ -72,6 +72,7 @@ const PlanningApi = {
         date: date, // 수정된 Date 객체 사용
         latitude: plan.position?.lat || plan.latitude,
         longitude: plan.position?.lng || plan.longitude,
+        memo: plan.memo,
         seq: plan.seq,
         spotName: plan.content || plan.spotName,
       };
