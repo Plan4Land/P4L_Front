@@ -9,11 +9,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { ToggleSwitch } from "../../Component/ToggleSwitch";
-import { EditImg } from "../../Component/ProfileImg";
+// import { EditImg } from "../../Component/ProfileImg";
+import { PictureComponent } from "../../Component/PictureCommponent";
 import { CheckModal } from "../../Util/Modal";
 import { Button } from "../../Component/ButtonComponent";
 import PlanningApi from "../../Api/PlanningApi";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../Context/AuthContext";
 
 export const MakePlanning = () => {
   const [selectedArea, setSelectedArea] = useState("");
@@ -22,6 +24,9 @@ export const MakePlanning = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [title, setTitle] = useState("");
+  const [currentPic, setCurrentPic] = useState(
+    "/img/planning-pic/planningth1.jpg"
+  );
   const [selectedImage, setSelectedImage] = useState("");
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -32,6 +37,7 @@ export const MakePlanning = () => {
   const [isTitleVisible, setIsTitleVisible] = useState(false);
   const [isImageVisible, setIsImageVisible] = useState(false);
   const memberId = JSON.parse(localStorage.getItem("user")).id;
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   // 각 상태가 변경될 때마다 해당 컴포넌트를 보이게 함
@@ -255,9 +261,17 @@ export const MakePlanning = () => {
             <>
               <h2 className="question-title">플래닝 사진</h2>
               <div className="profile-container">
-                <EditImg
+                {/* <EditImg
                   basic={"/img/planning_thumbnail.jpg"}
                   setSelectedImage={setSelectedImage}
+                /> */}
+                <PictureComponent
+                  currentPic={currentPic}
+                  setCurrentPic={setCurrentPic}
+                  role={"ROLE_MEMBERSHIP"}
+                  type={"planner"}
+                  width={"200px"}
+                  height={"200px"}
                 />
               </div>
               <h2 className="question-title">공개 여부</h2>

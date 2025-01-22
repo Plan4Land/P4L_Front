@@ -428,6 +428,7 @@ export const MakePlanningContainer = styled.div`
   .profile-container {
     width: 200px;
     height: 200px;
+    margin: auto;
   }
 
   @media (max-width: 768px) {

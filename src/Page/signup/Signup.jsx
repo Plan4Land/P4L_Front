@@ -13,11 +13,7 @@ import {
 import { Button } from "../../Component/ButtonComponent";
 // import { ProfilePicModal } from "../../Component/PictureModalComponent";
 import { CheckModal } from "../../Util/Modal";
-import { EditImg } from "../../Component/ProfileImg";
-import {
-  PictureComponent,
-  ProfilePicModal,
-} from "../../Component/PictureCommponent";
+import { PictureComponent } from "../../Component/PictureCommponent";
 
 // icon
 import { VscAccount } from "react-icons/vsc";

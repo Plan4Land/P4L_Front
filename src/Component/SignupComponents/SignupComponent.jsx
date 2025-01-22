@@ -301,4 +301,4 @@ export const Terms = styled.div`
       line-height: 1.5;
     }
   }
-`
+`;

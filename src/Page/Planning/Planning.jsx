@@ -19,7 +19,6 @@ import {
 } from "../../Component/PlanningComponents/PlansComponent";
 import { useEffect, useRef, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
-// import { ProfileImg } from "../../Component/ProfileImg";
 import { ProfileImg } from "../../Component/PictureCommponent";
 import { Button } from "../../Component/ButtonComponent";
 import PlanningApi from "../../Api/PlanningApi";

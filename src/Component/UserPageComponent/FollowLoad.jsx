@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FollowList } from "../../Style/MyPageMainStyled";
-// import {ProfileImg} from "../ProfileImg";
 import { ProfileImg } from "../PictureCommponent";
 import styled from "styled-components";
 import AxiosApi from "../../Api/AxiosApi";
