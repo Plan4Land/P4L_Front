@@ -113,9 +113,9 @@ export const UserInfo = styled.div`
       scale: 0.7;
     }
     .Button {
-      margin: 0;
+      margin: -10px 0 10px 0;
       flex-direction: row;
-      scale: 0.7;
+      scale: 0.6;
     }
   }
 `;

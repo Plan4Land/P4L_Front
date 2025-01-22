@@ -14,6 +14,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { FaPenToSquare } from "react-icons/fa6";
 import { FaChevronCircleUp, FaChevronCircleDown } from "react-icons/fa";
+import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
 
 // import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -555,26 +556,18 @@ export const PlansComponent = ({
                     </div>
                     <div className="memo-container">
                       {isEditting && editor === user.nickname && (
-                        <div>
+                        <div className="seq-change">
                           {planIndex > 0 && ( // 첫 번째 요소가 아닐 때만 위쪽 화살표 버튼 표시
-                            <FaChevronCircleUp
-                              style={{
-                                marginRight: "4px",
-                                fontSize: "24px",
-                                color: colors.colorB,
-                              }}
+                            <IoMdArrowDropup
+                              className="seq-button"
                               onClick={() =>
                                 handleSwapSeq(plan.seq, "up", date)
                               } // up 아이콘 클릭 시
                             />
                           )}
                           {planIndex < groupPlans[date].length - 1 && ( // 마지막 요소가 아닐 때만 아래쪽 화살표 버튼 표시
-                            <FaChevronCircleDown
-                              style={{
-                                marginRight: "4px",
-                                fontSize: "24px",
-                                color: colors.colorB,
-                              }}
+                            <IoMdArrowDropdown
+                              className="seq-button"
                               onClick={() =>
                                 handleSwapSeq(plan.seq, "down", date)
                               } // down 아이콘 클릭 시

@@ -135,22 +135,17 @@ export const Main = () => {
           <div className="SearchBox">
             {selectedMenu === "지역" && (
               <div className="RegionSearch">
-                <div className="area-list">
-                  {areas.map((area) => (
-                    <Link
+                {areas.map((area) => (
+                  <Link key={area.code} to={`/tourlist?areaCode=${area.code}`}>
+                    <Button
                       key={area.code}
-                      to={`/tourlist?areaCode=${area.code}`}
+                      onClick={() => handleAreaClick(area.name)}
+                      className={selectedArea === area.name ? "selected" : ""}
                     >
-                      <Button
-                        key={area.code}
-                        onClick={() => handleAreaClick(area.name)}
-                        className={selectedArea === area.name ? "selected" : ""}
-                      >
-                        {area.name}
-                      </Button>
-                    </Link>
-                  ))}
-                </div>
+                      {area.name}
+                    </Button>
+                  </Link>
+                ))}
               </div>
             )}
             {selectedMenu === "카테고리" && (

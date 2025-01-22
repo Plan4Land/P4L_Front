@@ -7,7 +7,7 @@ export const List = styled.div`
   margin: auto;
   margin-top: 20px;
   margin-bottom: 50px;
-  gap: 50px;
+  /* gap: 50px; */
   @media (max-width: 768px) {
     width: 90%;
   }
@@ -17,6 +17,7 @@ export const SelectTourItem = styled.div`
   width: 400px;
   padding-top: 40px;
   position: relative;
+  margin-right: 30px;
   h3 {
     margin-bottom: 0;
   }
@@ -36,6 +37,15 @@ export const SelectTourItem = styled.div`
       background-color: ${colors.colorB};
       color: white;
     }
+    &:disabled {
+      background-color: #f0f0f0;
+      color: #b0b0b0;
+    }
+
+    /* &:disabled:hover {
+      background-color: #f0f0f0;
+      color: #b0b0b0;
+    } */
   }
   .reset-button {
     width: 80px;
@@ -55,6 +65,10 @@ export const SelectTourItem = styled.div`
       background-color: #f3f3f3;
       opacity: 0.7;
       color: gray;
+    }
+    @media (max-width: 768px) {
+      top: 4px;
+      scale: 80%;
     }
   }
   .toggle-button {
@@ -132,7 +146,9 @@ export const SearchSt = styled.div`
   flex-grow: 1;
   display: flex;
   align-items: center;
-
+  @media (max-width: 768px) {
+    margin-top: 20px;
+  }
   .search-wrapper {
     position: relative;
     flex-grow: 0.9;

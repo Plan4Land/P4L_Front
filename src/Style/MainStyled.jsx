@@ -56,17 +56,11 @@ export const QuickSearch = styled(GridItem)`
     justify-content: center;
     width: 100%;
     height: 100%;
+
     .RegionSearch {
       width: 100%;
-      display: flex;
       flex-direction: column;
-      place-items: center;
-      .area-list {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        place-items: center;
-      }
+
       a {
         width: 100%;
       }
@@ -74,13 +68,13 @@ export const QuickSearch = styled(GridItem)`
         background-color: white;
         color: ${colors.colorA};
         height: 40px;
-        width: 90%;
+        width: 30%;
         margin: 5px;
         transition: all 0.3s ease;
         &:hover {
           background-color: ${colors.colorB};
           color: white;
-          transform: translateY(-3px);
+          transform: translateY(-2px);
         }
       }
     }

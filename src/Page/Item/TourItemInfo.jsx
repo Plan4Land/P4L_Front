@@ -1,5 +1,8 @@
 import { Header, Footer } from "../../Component/GlobalComponent";
-import { TourItemInfoBox } from "../../Style/TourItemInfoStyled";
+import {
+  TourItemInfoBox,
+  NearTravelList,
+} from "../../Style/TourItemInfoStyled";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { TourItemApi, BookmarkApi } from "../../Api/ItemApi";
@@ -104,21 +107,6 @@ export const TourItemInfo = () => {
       <TourItemInfoBox>
         {spotDetails ? (
           <>
-            <img
-              src={
-                spotDetails.thumbnail ||
-                (spotDetails.typeId === "100"
-                  ? "/img/cateimg/type_200.png"
-                  : spotDetails.typeId === "200"
-                  ? "/img/cateimg/type_200.png"
-                  : spotDetails.typeId === "300"
-                  ? "/img/cateimg/type_300.png"
-                  : "/profile-pic/basic1.png") // 기본 이미지
-              }
-              alt="여행지 이미지"
-              className="tour-image"
-            />
-
             <div className="tour-details">
               <button className="bookmark" onClick={toggleBookmark}>
                 <FontAwesomeIcon
@@ -144,29 +132,44 @@ export const TourItemInfo = () => {
                   <span>{spotDetails.bookmark}</span>
                 </div>
               </div>
-
-              <h3>주변 관광지</h3>
-              {nearbySpots.length > 0 && (
-                <div className="nearby-travelspot">
-                  {nearbySpots.map((spot) => (
-                    <div key={spot.id}>
-                      <div className="nearbybox">
-                        <Link
-                          to={`/tourItemInfo/${spot.id}`}
-                          className="nearbyspot"
-                        >
-                          <h4>{spot.title}</h4>
-                          <p>주소: {spot.addr1}</p>
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
+            <img
+              src={
+                spotDetails.thumbnail ||
+                (spotDetails.typeId === "100"
+                  ? "/img/cateimg/type_200.png"
+                  : spotDetails.typeId === "200"
+                  ? "/img/cateimg/type_200.png"
+                  : spotDetails.typeId === "300"
+                  ? "/img/cateimg/type_300.png"
+                  : "/profile-pic/basic1.png") // 기본 이미지
+              }
+              alt="여행지 이미지"
+              className="tour-image"
+            />
 
             <div className="item-map">
               <KakaoMapSpot mapX={spotDetails.mapX} mapY={spotDetails.mapY} />
+              <NearTravelList>
+                <h3>주변 관광지</h3>
+                {nearbySpots.length > 0 && (
+                  <div className="nearby-travelspot">
+                    {nearbySpots.map((spot) => (
+                      <div key={spot.id}>
+                        <div className="nearbybox">
+                          <Link
+                            to={`/tourItemInfo/${spot.id}`}
+                            className="nearbyspot"
+                          >
+                            <h4>{spot.title}</h4>
+                            <p>주소: {spot.addr1}</p>
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </NearTravelList>
             </div>
           </>
         ) : (
