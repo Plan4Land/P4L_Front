@@ -7,8 +7,10 @@ export const MainBox = styled.div`
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr); // 2행
   row-gap: 20px;
-  margin: 20px;
+  margin: 40px auto 50px auto;
   height: 1000px;
+  width: 80%;
+
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
     height: 100%;
@@ -313,7 +315,7 @@ export const Festive = styled(GridItem)`
     border-radius: 50%;
     position: absolute;
     bottom: 8px;
-    left: 45%;
+    left: 47%;
   }
 
   .react-calendar__month-view__days__day {
