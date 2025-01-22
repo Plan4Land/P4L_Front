@@ -188,7 +188,7 @@ export const KakaoMap = React.memo(({ plans, date }) => {
       map.setLevel(4);
     };
     const markerImage = (category) => {
-      if (category?.includes("숙박")) {
+      if (category?.includes("숙박") || category?.includes("부동산")) {
         return "/img/cateimg/markerRoom.png";
       } else if (category?.includes("음식")) {
         return "/img/cateimg/markerFood.png";
