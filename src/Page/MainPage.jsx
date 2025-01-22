@@ -232,8 +232,11 @@ export const Main = () => {
                     src={plan.thumbnail || `/planning-pic/planningth1.jpg`}
                     alt={plan.title}
                   />
-                  <h3>{plan.title}</h3>
-                  <p>{`${areaName} - ${subAreaName}`}</p>
+                  <div className="planExplain">
+                    <h3>{plan.title}</h3>
+                    <p>{`${areaName} - ${subAreaName}`}</p>
+                    <p>{plan.theme}</p>
+                  </div>
                 </div>
               );
             })}
