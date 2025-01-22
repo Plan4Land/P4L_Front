@@ -11,6 +11,7 @@ import { faBookmark as solidBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons"; // 빈 북마크
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth } from "../../Context/AuthContext";
+import { Loading } from "../../Component/LoadingComponent";
 
 export const TourItemInfo = () => {
   const { id } = useParams();
@@ -98,7 +99,7 @@ export const TourItemInfo = () => {
   }, [id, user]);
 
   if (!spotDetails) {
-    return <div>Loading...</div>;
+    return <Loading> <p>정보를 불러오는 중 입니다.</p></Loading>;
   }
 
   return (
