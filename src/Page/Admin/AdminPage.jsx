@@ -5,6 +5,12 @@ import {Modal} from "../../Util/Modal";
 import AdminApi from "../../Api/AdminApi";
 import {FaSearch} from "react-icons/fa";
 import {SearchSt} from "../../Style/ItemListStyled";
+// 게시글 목록 불러와서 삭제하기
+// 정지 유저 풀어주기
+// 관리자 토큰으로 로그인하기
+// 유저 상세정보 모달 -> 바로 볼 수 있게
+// 신고도 검색 기능?
+
 
 export const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("report");
@@ -147,6 +153,10 @@ export const AdminPage = () => {
     }
   };
 
+  const handlePlannerClick= async () => {
+    setActiveTab("planner");
+  }
+
   return (
     <div>
       <div>
@@ -154,6 +164,7 @@ export const AdminPage = () => {
         <div className="tabNav">
           <Button onClick={handleReportTabClick}>신고 관리</Button>
           <Button onClick={handleUserTabClick}>유저 목록</Button>
+          <Button onClick={handlePlannerClick}>플래너 목록</Button>
         </div>
         {activeTab === "report" && (
           <div>
@@ -212,6 +223,9 @@ export const AdminPage = () => {
               </UserBox>
             ))}
           </div>
+        )}
+        {activeTab === "planner" && (
+          <></>
         )}
         {isModalOpen && selectedMember && (
           <Modal
