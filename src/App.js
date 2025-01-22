@@ -22,7 +22,7 @@ import NaverRedirect from "./Page/signup/LoginRedirect/NaverLoginRedirect";
 import { Otheruser } from "./Page/User/Otheruser";
 import { AdminPage } from "./Page/AdminPage";
 import ExpressBus from "./Page/Traffic/ExpressBus";
-import InterCityBus from "./Page/Traffic/InterCityBus";
+import IntercityBus from "./Page/Traffic/IntercityBus";
 
 function App() {
   return (
@@ -49,7 +49,7 @@ function App() {
               <Route path="/test" element={<Test />} />
               <Route path="/Admin" element={<AdminPage />} />
               <Route path="/ExpressBus" element={<ExpressBus />} />
-              <Route path="/InterCityBus" element={<InterCityBus />} />
+              <Route path="/IntercityBus" element={<IntercityBus />} />
 
               {/* 로그인 필요한 페이지 */}
               <Route

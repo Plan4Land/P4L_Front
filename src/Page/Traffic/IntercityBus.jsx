@@ -7,7 +7,7 @@ import { Pagination } from "../../Component/Pagination";
 import { InterCityService } from '../../Util/Service_InterCityBus_code';
 import { InterCityGradeService } from '../../Util/Service_InterCityGrade_code';
 
-const InterCityBus = () => {
+const IntercityBus = () => {
   const [schedule, setSchedule] = useState([]); 
   const [displayedSchedule, setDisplayedSchedule] = useState([]); 
   const [selectedDepCat1, setSelectedDepCat1] = useState(''); 
@@ -324,4 +324,4 @@ const InterCityBus = () => {
   );
 };
 
-export default InterCityBus;
+export default IntercityBus;
