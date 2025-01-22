@@ -451,7 +451,8 @@ export const TourList = () => {
 
         <ItemList>
           {(loading || error) && <div>{loading ? "로딩 중..." : error}</div>}
-          {loading && (
+
+          {!loading && !error && (
               <Loading>
                 <p>목록을 불러오는 중 입니다.</p>
               </Loading>
