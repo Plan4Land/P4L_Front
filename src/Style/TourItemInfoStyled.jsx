@@ -7,9 +7,21 @@ export const TourItemInfoBox = styled.div`
   margin: 50px auto;
   padding: 20px;
   border-radius: 10px;
-  display: grid;
+  /* display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr); */
+
+  .tour-title,
+  .info-item {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 15px;
+    strong {
+      margin-right: 5px;
+    }
+  }
   .tour-image {
     width: 100%;
     height: 450px;
@@ -36,6 +48,7 @@ export const TourItemInfoBox = styled.div`
     }
     h3 {
       margin-bottom: 10px;
+      margin-top: 0;
       color: ${colors.colorA};
     }
     .nearby-travelspot {
@@ -60,11 +73,17 @@ export const TourItemInfoBox = styled.div`
     }
     .nearbybox {
       border-bottom: 1px solid #ddd;
-      h4 {
-        margin: 10px 0 0 0;
-      }
+      h4,
       p {
-        margin: 10px 0 10px 0;
+        margin: 10px 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      p {
+        margin-bottom: 10px;
       }
     }
   }
@@ -73,5 +92,22 @@ export const TourItemInfoBox = styled.div`
     grid-column: span 2;
     width: 100%;
     height: 500px;
+  }
+  @media (max-width: 768px) {
+    .container {
+      grid-template-columns: 2fr; /* 한 열로 표시 */
+    }
+
+    .item:nth-child(1) {
+      order: 2;
+    }
+
+    .item:nth-child(2) {
+      order: 1; /* 두 번째 항목을 첫 번째로 배치 */
+    }
+
+    .item:nth-child(3) {
+      order: 3; /* 세 번째 항목은 그대로 */
+    }
   }
 `;

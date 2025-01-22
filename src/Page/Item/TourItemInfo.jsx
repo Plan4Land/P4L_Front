@@ -125,15 +125,26 @@ export const TourItemInfo = () => {
                   icon={isBookmarked ? solidBookmark : regularBookmark}
                 />
               </button>
-              <h1 className="tour-title">{spotDetails.title}</h1>
-              <strong>주소:</strong>
-              <span> {spotDetails.addr1 || "정보 없음"}</span>
-              <p></p>
-              <strong>연락처:</strong>
-              <span> {spotDetails.tel || "정보 없음"}</span>
-              <p></p>
-              <strong>북마크 수:</strong>
-              <span> {spotDetails.bookmark}</span>
+              <div className="info">
+                <h1 className="tour-title">{spotDetails.title}</h1>
+                <div className="info-item">
+                  <strong>주소:</strong>
+                  <span className="ellipsis">
+                    {spotDetails.addr1 || "정보 없음"}
+                  </span>
+                </div>
+                <div className="info-item">
+                  <strong>연락처:</strong>
+                  <span className="ellipsis">
+                    {spotDetails.tel || "정보 없음"}
+                  </span>
+                </div>
+                <div className="info-item">
+                  <strong>북마크 수:</strong>
+                  <span>{spotDetails.bookmark}</span>
+                </div>
+              </div>
+
               <h3>주변 관광지</h3>
               {nearbySpots.length > 0 && (
                 <div className="nearby-travelspot">
