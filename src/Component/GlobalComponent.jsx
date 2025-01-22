@@ -141,8 +141,12 @@ export const Header = () => {
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
+                onClick={() => {
+                  window.location.href = "/mypage";
+                }}
               />
             )}
+
             <div className="dropdown" onClick={(e) => e.stopPropagation()}>
               <Link to="/mypage" className="dropdown-item">
                 마이페이지

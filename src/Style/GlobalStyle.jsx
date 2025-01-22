@@ -9,15 +9,14 @@ export const colors = {
 };
 
 export const HeaderSt = styled.div`
-  height: 80px;
-  background-color: ${colors.colorB};
-  color: white;
+  height: 100px;
+  border-bottom: 7px solid ${colors.colorB};
+  color: ${colors.colorA};
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
   padding: 0 10px 0 10px;
-
   .logo {
     display: inline-block;
     img {
@@ -26,8 +25,8 @@ export const HeaderSt = styled.div`
     }
   }
   .profile-link {
-    height: 65px;
-    width: 65px;
+    height: 80px;
+    width: 80px;
     margin-right: 20px;
     border-radius: 50%;
     background-color: ${colors.colorC};
@@ -178,13 +177,14 @@ export const HeaderSt = styled.div`
 
 export const NavSt = styled.div`
   height: 50px;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-grow: 0.6;
-  .tag {
-    color: white;
+  .tag,
+  p {
+    color: ${colors.colorA};
+    font-size: 23px;
     font-weight: bold;
     text-decoration: none;
     flex: 0.8;
@@ -201,8 +201,12 @@ export const NavSt = styled.div`
     opacity: 0.7;
   }
   p {
-    color: white;
+    color: ${colors.colorA};
     margin: -10px;
+    &:hover {
+      opacity: 1;
+      cursor: default;
+    }
   }
   @media (max-width: 768px) {
     position: fixed;
@@ -214,6 +218,7 @@ export const NavSt = styled.div`
     z-index: 10;
     .tag,
     p {
+      font-size: 15px;
       color: ${colors.colorA};
     }
   }

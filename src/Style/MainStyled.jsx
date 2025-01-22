@@ -260,12 +260,16 @@ export const PlanBox = styled.div`
   height: 100%;
 
   .planitem {
-    border: 1px solid black;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     border-radius: 20px;
     margin: 10px;
     overflow: hidden;
     cursor: pointer;
+    .planExplain {
+      padding-left: 5%;
+    }
     img {
+      min-width: 100%;
       min-height: 75%;
     }
   }
@@ -273,6 +277,7 @@ export const PlanBox = styled.div`
     height: 300px;
   }
 `;
+
 //         {/* 미니 캘린더!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const Festive = styled(GridItem)`
   grid-column: span 1;

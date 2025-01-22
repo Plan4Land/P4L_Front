@@ -3,7 +3,7 @@ import { colors } from "./GlobalStyle";
 import { ScrollBar } from "../Component/ButtonComponent";
 
 export const MainContainer = styled.div`
-  min-height: 700px; /////이거는 고민
+  min-height: 700px;
   padding: 0 15vw;
   margin-bottom: 10vh;
   display: flex;
@@ -34,6 +34,8 @@ export const Info = styled.div`
   box-sizing: border-box;
   position: relative;
   margin-top: 80px;
+  margin: 80px auto 0 auto;
+
   .edit-box {
     width: 100%;
   }
@@ -150,13 +152,13 @@ export const Info = styled.div`
 `;
 
 export const Users = styled.div`
-  width: 100%;
+  width: 90%;
   height: 100px; // 이것도 고정으로 할지 고민
   display: flex;
   align-items: center;
   position: relative;
   /* background-color: bisque; */
-
+  margin: auto;
   .no-participants {
     border-radius: 50%;
     width: 40px;
@@ -298,11 +300,8 @@ export const MainPlanning = styled.div`
   min-width: 400px; // 이거도 고민
   min-height: 100px; // 이거 고민
   max-height: 600px; // 이것도 고민
-  /* display: flex;
-  flex-direction: column; */
   overflow-y: auto;
   overflow-x: hidden;
-  /* overflow-x: visible; */
   border-radius: 10px;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
   ${ScrollBar};
@@ -691,12 +690,18 @@ export const DayToggleContainer = styled.div`
   position: relative;
   flex-direction: column;
   align-items: center;
-
   width: 85%;
   margin: 0 auto;
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
+  .place-name,
+  .place-category {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .seq-change {
     margin-right: 15px;
     display: flex;
@@ -732,8 +737,10 @@ export const DayToggleContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     margin: 5px;
-    background-color: ${colors.colorD};
-
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 5px 0 5px 0;
     .plan-place {
       display: flex;
       position: relative;
@@ -763,12 +770,12 @@ export const DayToggleContainer = styled.div`
 
       .place-name {
         margin: 5px 5px 5px 20px;
-        font-size: 17px;
+        font-size: 16px;
         font-weight: bold;
       }
       .place-category {
         margin: 0 5px 5px 20px;
-        font-size: 13px;
+        font-size: 10px;
         color: #5f5f5f;
       }
     }

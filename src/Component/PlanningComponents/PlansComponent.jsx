@@ -522,8 +522,10 @@ export const PlansComponent = ({
               console.log(travelInfo);
             }}
           >
-            <span>{index + 1}일차</span>&nbsp;&nbsp;/&nbsp;&nbsp;
-            <span>{date}</span>
+            <span>
+              {index + 1}일차&nbsp;&nbsp;| &nbsp;&nbsp;{date}
+            </span>
+
             <span className="arrow">{travelInfo.arrowDirections[index]}</span>
           </div>
           {travelInfo.dayToggle[index] && (
