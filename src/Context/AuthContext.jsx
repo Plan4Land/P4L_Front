@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -48,7 +47,6 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
           console.log("토큰 재발급 실패:", error);
           logout();
-          navigate("/login");
         }
       } else {
         setIsAuthenticated(true);
