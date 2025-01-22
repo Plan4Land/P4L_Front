@@ -7,6 +7,7 @@ import { Button } from "../../Component/ButtonComponent";
 import { useAuth } from "../../Context/AuthContext";
 import { storage } from "../../Api/Firebase";
 import { PictureComponent } from "../../Component/PictureCommponent";
+import { Upload } from "../../Component/FirebaseUpload";
 import { CheckModal } from "../../Util/Modal";
 // icon
 import { IoIosArrowBack } from "react-icons/io";
@@ -107,25 +108,11 @@ const UserInfoEdit = () => {
     }
     setIsLoading(true);
     try {
-      let updatedPic = currentPic;
-
-      // 프로필 사진이 새로 추가된 경우 Firebase에 업로드
-      if (currentPic && currentPic.startsWith("blob:")) {
-        // Blob URL을 파일로 변환
-        const response = await fetch(currentPic);
-        const blob = await response.blob();
-
-        // Firebase Storage 참조
-        const storageRef = storage.ref(`/UserProfilePic/${user.id}/`);
-        const fileRef = storageRef.child("profile.png");
-
-        // 파일 업로드
-        await fileRef.put(blob);
-
-        // 업로드된 파일 URL 가져오기
-        updatedPic = await fileRef.getDownloadURL();
-        console.log("새 파일 업로드 성공:", updatedPic);
-      }
+      const updatedPic = await Upload({
+        currentPic,
+        type: "profile",
+        userId: user.id,
+      });
 
       // 회원 정보 수정 진행
       const rsp = await AxiosApi.memberUpdate(

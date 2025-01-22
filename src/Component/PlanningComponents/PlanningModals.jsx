@@ -14,7 +14,6 @@ import { Button } from "../ButtonComponent";
 import { colors } from "../../Style/GlobalStyle";
 import { SearchKakaoMap } from "../KakaoMapComponent";
 import { SearchTourItem } from "../ItemListComponent";
-// import { ProfileImg } from "../ProfileImg";
 import { ProfileImg } from "../PictureCommponent";
 import PlanningApi from "../../Api/PlanningApi";
 import { BookmarkedSpotsApi } from "../../Api/ItemApi";
