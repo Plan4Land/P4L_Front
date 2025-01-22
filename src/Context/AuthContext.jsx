@@ -37,29 +37,38 @@ export const AuthProvider = ({ children }) => {
 
   // 토큰 검증
   const TokenValidator = () => {
+    console.log("TokenValidator 실행");
     const location = useLocation();
-
+    const [isValidating, setIsValidating] = useState(false);
+    console.log("locaiton확인:", location);
     useEffect(() => {
+      console.log("TokenValidator useEffect 실행됨");
       const validateToken = async () => {
+        console.log("토큰 검증 시작");
         // 토큰 검증 건너뛰는 페이지 등록
-        const excludedPaths = ['/', '/login', '/signup', '/signup/terms', '/ktxinquiry/**', '/tourlist/**', '/planninglist/**'];
-
-        if (excludedPaths.includes(location.pathname)) {
+        const excludedPaths = [/^\/$/, /^\/login$/, /^\/signup$/, /^\/signup\/terms$/, /^\/ktxinquiry\/.*/, /^\/tourlist\/.*/, /^\/planninglist\/.*/];
+        console.log("1번");
+        if (excludedPaths.some((regex) => regex.test(location.pathname))) {
+          console.log("2번");
           return;
         }
+
+        if (isValidating) return;
+        setIsValidating(true);
   
         const valid = isAccessTokenValid();
-  
-        if (!valid) {
-          try {
+        try {
+          if (!valid) {
             await refreshToken(); // 리프레시 토큰 재발급
             setIsAuthenticated(true);
-          } catch (error) {
-            console.log("토큰 재발급 실패:", error);
-            logout();
+          } else {
+            setIsAuthenticated(true);
           }
-        } else {
-          setIsAuthenticated(true);
+        } catch (error) {
+          console.log("토큰 재발급 실패:", error);
+          logout();
+        } finally {
+          setIsValidating(false);
         }
       };
   

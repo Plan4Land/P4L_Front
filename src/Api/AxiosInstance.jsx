@@ -13,6 +13,7 @@ AxiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.log("AxiosInstance 요청 에러: ", error);
     return Promise.reject(error);
   }
 );
@@ -23,6 +24,7 @@ AxiosInstance.interceptors.response.use(
     return response;
   },
   async (error) => {
+    console.log("AxiosInstance 응답 에러: ", error);
     if (error.response && error.response.status === 401) {
       const newToken = await Common.handleUnauthorized();
       if (newToken) {

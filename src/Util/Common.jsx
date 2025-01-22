@@ -31,6 +31,7 @@ const Common = {
 
   // 401 에러 처리 함수
   handleUnauthorized: async () => {
+    console.log("401 에러 처리 함수 실행됨");
     const accessToken = Common.getAccessToken();
     const refreshToken = Common.getRefreshToken();
     const config = {
@@ -40,11 +41,11 @@ const Common = {
     };
     try {
       const rsp = await axios.post(
-        `${Common.PLAN_DOMAIN}/auth/refresh`,
+        `${Common.PLAN_DOMAIN}/auth/token/refresh`,
         refreshToken,
         config
       );
-      console.log(rsp.data);
+      console.log("rsp.data:", rsp.data);
       Common.setAccessToken(rsp.data);
       return true;
     } catch (e) {

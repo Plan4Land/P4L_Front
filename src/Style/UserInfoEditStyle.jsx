@@ -219,6 +219,26 @@ export const Container = styled.div`
       }
     }
   }
+
+  .center2 {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+    .deleteBox {
+      display: flex;
+      align-items: right;
+      justify-content: right;
+      width: 423px;
+      @media (max-width: 768px) {
+        width: 312px;
+      }
+    }
+    .userDeleteBtn {
+      font-size: 12px;
+      margin-top: 4px;
+      cursor: pointer;
+    }
+  }
 `;
 
 export const InputBox = styled.div`
