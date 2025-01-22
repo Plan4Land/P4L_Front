@@ -2,18 +2,29 @@ import AxiosInstance from "./AxiosInstance";
 
 const AdminApi = {
   // 유저 검색
-  userSearch: async (keyword, select)=>{
+  userSearch: async (keyword, select) => {
     const response = await AxiosInstance.get("/admin/member-search", {params: {keyword, select}});
     return response.data;
   },
   // 신고 목록 불러오기
   loadReports: async () => {
     const response = await AxiosInstance.get("/admin/report-list");
+    console.log(response.data);
     return response.data;
   },
-  reportCount: async (userId)=>{
+  reportCount: async (userId) => {
     const response = await AxiosInstance.get("/admin/report-count", {params: {userId: userId}});
     return response.data;
+  },
+  reportReject: async (reportId) => {
+    console.log("AdminAPI : ", reportId);
+    return await AxiosInstance.post(`/admin/report-manage?reportId=${reportId}&status=false`);
+  },
+  reportAccept: async (reportId, userId, day) => {
+    return await AxiosInstance.post(`/admin/report-manage?reportId=${reportId}&userId=${userId}&day=${day}&status=true`);
+  },
+  userBan: async (userId, day) => {
+    return await AxiosInstance.post(`/admin/member-ban?userId=${userId}&day=${day}`);
   }
 
 }
