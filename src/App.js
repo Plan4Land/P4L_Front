@@ -20,9 +20,10 @@ import KakaoRedirect from "./Page/signup/LoginRedirect/KakaoLoginRedirect";
 import GoogleRedirect from "./Page/signup/LoginRedirect/GoogleLoginRedirect";
 import NaverRedirect from "./Page/signup/LoginRedirect/NaverLoginRedirect";
 import { Otheruser } from "./Page/User/Otheruser";
-import { AdminPage } from "./Page/AdminPage";
+import { AdminPage } from "./Page/Admin/AdminPage";
 import ExpressBus from "./Page/Traffic/ExpressBus";
 import IntercityBus from "./Page/Traffic/IntercityBus";
+import AdminLogin from "./Page/Admin/AdminLogin";
 
 function App() {
   return (
@@ -47,7 +48,8 @@ function App() {
               <Route path="/signup/terms" element={<TermsOfService />} />
               <Route path="/otheruser/:userId" element={<Otheruser />} />
               <Route path="/test" element={<Test />} />
-              <Route path="/Admin" element={<AdminPage />} />
+              <Route path="/admin" element={<AdminLogin />} />
+              <Route path="/management" element={<AdminPage />} />
               <Route path="/ExpressBus" element={<ExpressBus />} />
               <Route path="/IntercityBus" element={<IntercityBus />} />
 
