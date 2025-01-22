@@ -1,23 +1,18 @@
-import { Header, Footer } from "../../Component/GlobalComponent";
-import {
-  UserMain,
-  UserInfo,
-  UserPlanning,
-  OtherUserInfo,
-} from "../../Style/MyPageMainStyled";
-import { useState, useEffect } from "react";
-import { CheckModal, Modal } from "../../Util/Modal";
-import { Button } from "../../Component/ButtonComponent";
-import { useNavigate, useParams } from "react-router-dom";
-import { UserPlannerApi } from "../../Api/ItemApi";
-import { areas } from "../../Util/Common";
-import { PlanItem } from "../../Component/ItemListComponent";
+import {Footer, Header} from "../../Component/GlobalComponent";
+import {OtherUserInfo, UserInfo, UserMain, UserPlanning,} from "../../Style/MyPageMainStyled";
+import {useEffect, useState} from "react";
+import {CheckModal, Modal} from "../../Util/Modal";
+import {Button} from "../../Component/ButtonComponent";
+import {useNavigate, useParams} from "react-router-dom";
+import {UserPlannerApi} from "../../Api/ItemApi";
+import {areas} from "../../Util/Common";
+import {PlanItem} from "../../Component/ItemListComponent";
 import AxiosApi from "../../Api/AxiosApi";
-import { Pagination } from "../../Component/Pagination";
+import {Pagination} from "../../Component/Pagination";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useMediaQuery } from "react-responsive";
-import { useAuth } from "../../Context/AuthContext";
+import {useMediaQuery} from "react-responsive";
+import {useAuth} from "../../Context/AuthContext";
 import FollowLoad from "../../Component/UserPageComponent/FollowLoad";
 import ReportModal from "../../Component/UserPageComponent/ReportModalComponent";
 
@@ -44,6 +39,7 @@ export const Otheruser = () => {
   // 신고하기 모달을 닫고 완료 모달을 열기
   const handleReportConfirm = () => {
     setShowReportModal(false); // 신고 모달 닫기
+    fetchReports();
     setShowConfirmationModal(true); // 신고 완료 모달 열기
   };
 
@@ -77,6 +73,14 @@ export const Otheruser = () => {
     const data = await AxiosApi.follow(follower, followed, isFollow);
     setIsFollowed(!isFollowed);
   };
+
+  const fetchReports = async () => {
+    try {
+      return await AxiosApi.report(user.id, userId, reportContent);
+    }catch (error) {
+      console.log(error);
+    }
+  }
 
   const fetchPlanners = async () => {
     try {
