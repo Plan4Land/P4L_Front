@@ -38,8 +38,9 @@ export const MakePlanning = () => {
   const [isTitleVisible, setIsTitleVisible] = useState(false);
   const [isImageVisible, setIsImageVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const memberId = JSON.parse(localStorage.getItem("user")).id;
   const { user } = useAuth();
+  // const memberId = JSON.parse(localStorage.getItem("user")).id;
+  const memberId = user?.id;
   const navigate = useNavigate();
 
   // 각 상태가 변경될 때마다 해당 컴포넌트를 보이게 함

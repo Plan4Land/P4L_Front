@@ -38,6 +38,7 @@ export const PlannerInfoEditComponent = ({
   const [selectedArea, setSelectedArea] = useState("");
   const [selectedSubArea, setSelectedSubArea] = useState("");
   const [currentPic, setCurrentPic] = useState(plannerInfo?.thumbnail);
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {

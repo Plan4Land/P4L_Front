@@ -8,6 +8,7 @@ import { useAuth } from "../../Context/AuthContext";
 import { storage } from "../../Api/Firebase";
 import { PictureComponent } from "../../Component/PictureCommponent";
 import { Upload } from "../../Component/FirebaseUpload";
+import { Loading } from "../../Component/LoadingComponent";
 import { CheckModal } from "../../Util/Modal";
 // icon
 import { IoIosArrowBack } from "react-icons/io";
@@ -226,10 +227,9 @@ const UserInfoEdit = () => {
         </CheckModal>
 
         {isLoading && (
-          <div className="loading-overlay">
-            <div className="spinner"></div>
+          <Loading>
             <p>변경중입니다. 잠시만 기다려주세요...</p>
-          </div>
+          </Loading>
         )}
       </Container>
     </Center>
