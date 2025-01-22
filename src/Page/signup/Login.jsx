@@ -62,7 +62,7 @@ export const Login = () => {
           || response.status === 200)
       ) {
         Common.setAccessToken(response.data.accessToken);
-        Common.SetAccessTokenExpiresIn(response.data.accessTokenExpiresIn);
+        Common.setAccessTokenExpiresIn(response.data.accessTokenExpiresIn);
         Common.setRefreshToken(response.data.refreshToken);
         Common.setRefreshTokenExpiresIn(response.data.refreshTokenExpiresIn);
 

@@ -10,10 +10,10 @@ const Common = {
   setAccessToken: (token) => {
     localStorage.setItem("accessToken", token);
   },
-  GetAccessTokenExpiresIn: () => {
+  getAccessTokenExpiresIn: () => {
     return localStorage.getItem("accessTokenExpiresIn");
   },
-  SetAccessTokenExpiresIn: (time) => {
+  setAccessTokenExpiresIn: (time) => {
     localStorage.setItem("accessTokenExpiresIn", time);
   },
   getRefreshToken: () => {
@@ -22,7 +22,7 @@ const Common = {
   setRefreshToken: (token) => {
     localStorage.setItem("refreshToken", token);
   },
-  GetRefreshTokenExpiresIn: () => {
+  getRefreshTokenExpiresIn: () => {
     return localStorage.getItem("refreshTokenExpiresIn");
   },
   setRefreshTokenExpiresIn: (time) => {

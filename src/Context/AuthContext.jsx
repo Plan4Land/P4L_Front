@@ -1,6 +1,7 @@
 import react, { createContext, useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Common from "../Util/Common";
-import { refreshToken } from "./RefreshToken";
+import { refreshToken } from "../Util/RefreshToken";
 
 const AuthContext = createContext();
 
@@ -58,7 +59,7 @@ export const AuthProvider = ({ children }) => {
   // 액세스 토큰 만료기간이 안 됐으면 true, 없거나 지났으면 false
   const isAccessTokenValid = () => {
     const tokenData = Common.getAccessToken();
-    const tokenExpire = Common.GetAccessTokenExpiresIn();
+    const tokenExpire = Common.getAccessTokenExpiresIn();
 
     if (!tokenData || !tokenExpire) {
       return false;
@@ -76,6 +77,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         updateUser,
         isAuthenticated,
+        isAccessTokenValid,
       }}
     >
       {children}
