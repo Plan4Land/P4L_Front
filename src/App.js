@@ -21,6 +21,7 @@ import { GoogleRedirect } from "./Component/LoginRedirect/GoogleLoginRedirect";
 import { Otheruser } from "./Page/User/Otheruser";
 import { AdminPage } from "./Page/AdminPage";
 import ExpressBus from "./Page/Traffic/ExpressBus";
+import InterCityBus from "./Page/Traffic/InterCityBus";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
               <Route path="/test" element={<Test />} />
               <Route path="/Admin" element={<AdminPage />} />
               <Route path="/ExpressBus" element={<ExpressBus />} />
+              <Route path="/InterCityBus" element={<InterCityBus />} />
 
               {/* 로그인 필요한 페이지 */}
               <Route

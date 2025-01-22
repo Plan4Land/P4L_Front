@@ -1,11 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { KTXServiceCode } from '../../Util/Service_KTX_code'; 
 import { Header, Footer } from '../../Component/GlobalComponent';
-import { Button } from '../../Component/ButtonComponent';
-import { Table, TrafficBox, SelectTourItem, SearchSt } from '../../Style/ItemListStyled';
+import { Button, ToggleButton } from '../../Component/ButtonComponent';
+import { Table, SelectTourItem, SearchSt, FilterButton, List } from '../../Style/ItemListStyled';
 import { FaUndo, FaSearch } from 'react-icons/fa';
 import { Vehiclekind } from '../../Util/Service_VehicleKind_code';
 import {Pagination} from "../../Component/Pagination";
+import { FaBars } from "react-icons/fa";
 
 const KtxInquiry = () => {
   const [schedule, setSchedule] = useState([]);
@@ -18,6 +19,8 @@ const KtxInquiry = () => {
   const [date, setDate] = useState(''); 
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const [isStationOpen, setIsStationOpen] = useState(true);
 
   const itemsPerPage = 25; 
 
@@ -185,11 +188,19 @@ const KtxInquiry = () => {
     return KTXServiceCode.find((cat1) => cat1.cat1 === selectedCat1)?.cat2List || [];
   };
 
+  const handleToggleSelect = () => {
+    setIsSelectOpen(!isSelectOpen);
+  };
+
   return (
     <>
       <Header />
-      <TrafficBox>
-        <SelectTourItem>
+      <FilterButton onClick={handleToggleSelect}>
+        <FaBars />
+      </FilterButton>
+      <List>
+      {/* <TrafficBox> */}
+        <SelectTourItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
             <FaUndo style={{ marginLeft: '6px' }} />
@@ -209,7 +220,13 @@ const KtxInquiry = () => {
 
           {/* 출발 지역 선택 */}
           <div className="mainastation">
-            <h3>출발 지역 선택</h3>
+            <h3>
+              출발 지역 선택
+              <ToggleButton
+                isOpen={isStationOpen}
+                onToggle={() => setIsSelectOpen(!isStationOpen)}
+                />
+              </h3>
             <div>
               {KTXServiceCode.map((cat1) => (
                 <Button
@@ -230,7 +247,13 @@ const KtxInquiry = () => {
           {/* 출발 세부 역 선택 */}
           {selectedDepCat1 && (
             <div className="substation">
-              <h3>출발 세부 역 선택</h3>
+              <h3>
+                출발 세부 역 선택
+                <ToggleButton
+                isOpen={isStationOpen}
+                onToggle={() => setIsSelectOpen(!isStationOpen)}
+                />
+                </h3>
               <div>
                 {getCat2List(selectedDepCat1).map((cat2) => (
                   <Button
@@ -250,7 +273,13 @@ const KtxInquiry = () => {
 
           {/* 도착 지역 선택 */}
           <div className="mainastation">
-            <h3>도착 지역 선택</h3>
+            <h3>
+              도착 지역 선택
+              <ToggleButton
+                isOpen={isStationOpen}
+                onToggle={() => setIsSelectOpen(!isStationOpen)}
+                />
+              </h3>
             <div>
               {KTXServiceCode.map((cat1) => (
                 <Button
@@ -271,7 +300,13 @@ const KtxInquiry = () => {
           {/* 도착 세부 역 선택 */}
           {selectedArrCat1 && (
             <div className="substation">
-              <h3>도착 세부 역 선택</h3>
+              <h3>
+                도착 세부 역 선택
+                <ToggleButton
+                isOpen={isStationOpen}
+                onToggle={() => setIsSelectOpen(!isStationOpen)}
+                />
+                </h3>
               <div>
                 {getCat2List(selectedArrCat1).map((cat2) => (
                   <Button
@@ -289,7 +324,13 @@ const KtxInquiry = () => {
           {/* 열차 선택 */}
           {selectedDepCat2 && selectedArrCat2 && (
             <div className="trainarea">
-              <h3>열차 종류 선택</h3>
+              <h3>
+                열차 종류 선택
+                <ToggleButton
+                isOpen={isStationOpen}
+                onToggle={() => setIsSelectOpen(!isStationOpen)}
+                />
+                </h3>
               <div>
                 {Vehiclekind.map((vehicle) => (
                   <Button
@@ -363,7 +404,8 @@ const KtxInquiry = () => {
             </div>
           )}
         </div>
-      </TrafficBox>
+      {/* </TrafficBox> */}
+      </List>
       <Footer />
     </>
   );
