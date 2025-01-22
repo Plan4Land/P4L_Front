@@ -496,7 +496,7 @@ export const Planning = () => {
               ) : editPlannerInfo !== null ? (
                 <>
                   <div className="planner-thumbnail">
-                    <ProfileImg file={"/img/planning-pic/planningth1.jpg"} />
+                    <ProfileImg file={editPlannerInfo.thumbnail} />
                   </div>
                   <div>
                     <h1>{editPlannerInfo.title}</h1>
@@ -514,7 +514,7 @@ export const Planning = () => {
               ) : (
                 <>
                   <div className="planner-thumbnail">
-                    <ProfileImg file={"/img/planning-pic/planningth1.jpg"} />
+                    <ProfileImg file={plannerInfo.thumbnail} />
                   </div>
                   <div>
                     <h1>{plannerInfo.title}</h1>
@@ -532,7 +532,7 @@ export const Planning = () => {
             ) : (
               <>
                 <div className="planner-thumbnail">
-                  <ProfileImg file={"/img/planning-pic/planningth1.jpg"} />
+                  <ProfileImg file={plannerInfo.thumbnail} />
                 </div>
                 <div>
                   <h1>{plannerInfo.title}</h1>

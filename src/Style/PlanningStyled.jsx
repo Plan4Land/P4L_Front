@@ -42,6 +42,9 @@ export const Info = styled.div`
   }
   .planner-thumbnail {
     margin-right: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   h1,
   h3 {

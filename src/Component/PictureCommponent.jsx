@@ -302,7 +302,7 @@ const ModalContainer = styled.div`
 const PictureModalBox = styled.div`
   width: 126px;
   height: 126px;
-  margin: 10px;
+  margin: 10px !important;
 
   img {
     width: 120px;

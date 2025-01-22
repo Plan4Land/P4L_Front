@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { ToggleSwitch } from "../../Component/ToggleSwitch";
 // import { EditImg } from "../../Component/ProfileImg";
+import { Upload } from "../../Component/FirebaseUpload";
 import { PictureComponent } from "../../Component/PictureCommponent";
 import { CheckModal } from "../../Util/Modal";
 import { Button } from "../../Component/ButtonComponent";
@@ -27,7 +28,7 @@ export const MakePlanning = () => {
   const [currentPic, setCurrentPic] = useState(
     "/img/planning-pic/planningth1.jpg"
   );
-  const [selectedImage, setSelectedImage] = useState("");
+  // const [selectedImage, setSelectedImage] = useState("");
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [isAreaVisible, setIsAreaVisible] = useState(false);
@@ -36,6 +37,7 @@ export const MakePlanning = () => {
   const [isDateVisible, setIsDateVisible] = useState(false);
   const [isTitleVisible, setIsTitleVisible] = useState(false);
   const [isImageVisible, setIsImageVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const memberId = JSON.parse(localStorage.getItem("user")).id;
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -62,8 +64,8 @@ export const MakePlanning = () => {
   }, [title]);
 
   useEffect(() => {
-    if (selectedImage) setIsImageVisible(true);
-  }, [selectedImage]);
+    if (currentPic) setIsImageVisible(true);
+  }, [currentPic]);
 
   const handleAreaChange = (e) => {
     setSelectedArea(e.target.value);
@@ -91,11 +93,20 @@ export const MakePlanning = () => {
 
   const isStepComplete =
     selectedSubArea && selectedThemes.length > 0 && endDate && title.trim();
+
   const handleSubmit = async () => {
+    setIsLoading(true);
+
     const areaCode = areas.find((area) => area.name === selectedArea)?.code;
     const subAreaCode = areas
       .find((area) => area.name === selectedArea)
       ?.subAreas.find((subArea) => subArea.name === selectedSubArea)?.code;
+
+    const updatedPic = await Upload({
+      currentPic,
+      type: "planner",
+      userId: user.id,
+    });
 
     try {
       const response = await PlanningApi.makePlanning(
@@ -106,7 +117,7 @@ export const MakePlanning = () => {
         endDate,
         areaCode,
         subAreaCode,
-        selectedImage.name,
+        updatedPic,
         isPublic
       );
       if (response.status === 200) {
@@ -261,10 +272,6 @@ export const MakePlanning = () => {
             <>
               <h2 className="question-title">플래닝 사진</h2>
               <div className="profile-container">
-                {/* <EditImg
-                  basic={"/img/planning_thumbnail.jpg"}
-                  setSelectedImage={setSelectedImage}
-                /> */}
                 <PictureComponent
                   currentPic={currentPic}
                   setCurrentPic={setCurrentPic}

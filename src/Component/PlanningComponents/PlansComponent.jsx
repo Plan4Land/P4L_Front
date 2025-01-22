@@ -6,6 +6,8 @@ import {
 import { colors } from "../../Style/GlobalStyle";
 import { themes, areas } from "../../Util/Common";
 import { ProfileImg } from "../PictureCommponent";
+import { PictureComponent } from "../PictureCommponent";
+import { Upload } from "../FirebaseUpload";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../Context/AuthContext";
 import DatePicker from "react-datepicker";
@@ -35,6 +37,8 @@ export const PlannerInfoEditComponent = ({
   const [editArea, setEditArea] = useState(false);
   const [selectedArea, setSelectedArea] = useState("");
   const [selectedSubArea, setSelectedSubArea] = useState("");
+  const [currentPic, setCurrentPic] = useState(plannerInfo?.thumbnail);
+  const { user } = useAuth();
 
   useEffect(() => {
     if (plannerInfo.area) {
@@ -144,12 +148,43 @@ export const PlannerInfoEditComponent = ({
     }
   }, [editPlannerInfo]);
 
+  useEffect(() => {
+    const uploadImg = async () => {
+      try {
+        const updatedPic = await Upload({
+          currentPic,
+          type: "planner",
+          userId: user.id,
+        });
+
+        setEditPlannerInfo((prev) => ({
+          ...prev,
+          thumbnail: updatedPic,
+        }));
+      } catch (error) {
+        console.error("이미지 업로드 중 에러 발생:", error);
+      }
+    };
+
+    if (currentPic) {
+      uploadImg(); // 비동기 함수 호출
+    }
+  }, [currentPic]);
+
   return (
     <>
       <div className="planner-thumbnail">
-        <ProfileImg
+        {/* <ProfileImg
           // file={`/img/${plannerInfo.thumbnail}`}
-          file={"/img/planning-pic/planningth1.jpg"}
+          file={currentPic}
+        /> */}
+        <PictureComponent
+          currentPic={currentPic}
+          setCurrentPic={setCurrentPic}
+          role={"ROLE_MEMBERSHIP"}
+          type={"planner"}
+          width={"200px"}
+          height={"200px"}
         />
       </div>
       <div className="edit-box">
