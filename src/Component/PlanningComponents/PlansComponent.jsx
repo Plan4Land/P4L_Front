@@ -5,7 +5,8 @@ import {
 } from "../../Style/PlanningStyled";
 import { colors } from "../../Style/GlobalStyle";
 import { themes, areas } from "../../Util/Common";
-import { ProfileImg } from "../ProfileImg";
+// import { ProfileImg } from "../ProfileImg";
+import { ProfileImg } from "../PictureCommponent";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../Context/AuthContext";
 import DatePicker from "react-datepicker";

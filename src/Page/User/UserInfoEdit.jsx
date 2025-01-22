@@ -224,6 +224,7 @@ const UserInfoEdit = () => {
           currentPic={currentPic}
           setCurrentPic={setCurrentPic}
           role={userRole}
+          type={"profile"}
         />
 
         <Button onClick={handleSave}>저장하기</Button>

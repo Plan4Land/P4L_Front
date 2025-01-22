@@ -19,7 +19,8 @@ import {
 } from "../../Component/PlanningComponents/PlansComponent";
 import { useEffect, useRef, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
-import { ProfileImg } from "../../Component/ProfileImg";
+// import { ProfileImg } from "../../Component/ProfileImg";
+import { ProfileImg } from "../../Component/PictureCommponent";
 import { Button } from "../../Component/ButtonComponent";
 import PlanningApi from "../../Api/PlanningApi";
 import AxiosApi from "../../Api/AxiosApi";
@@ -596,7 +597,7 @@ export const Planning = () => {
             <UserProfile
               onClick={() => navigate(`/otheruser/${plannerInfo.ownerId}`)}
             >
-              <ProfileImg file={plannerInfo.ownerProfileImg} />
+              <ProfileImg file={`/${plannerInfo.ownerProfileImg}`} />
             </UserProfile>
             <UserName>{plannerInfo.ownerNickname}</UserName>
             {plannerInfo.participants &&
