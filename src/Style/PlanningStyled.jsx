@@ -785,6 +785,7 @@ export const DayToggleContainer = styled.div`
         resize: none;
         padding: 6px;
         line-height: 1.5;
+        ${ScrollBar}
       }
       textarea.textarea-disabled {
         background-color: #fcfcfc;

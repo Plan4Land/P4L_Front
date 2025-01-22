@@ -241,10 +241,11 @@ export const Planning = () => {
                   editPlans
                 );
                 setPlannerInfo(plannerResult.data);
-                setPlans(editPlans);
+                setPlans(planResult.data);
                 setEditPlannerInfo(null);
                 setEditPlans(null);
               }
+              window.location.reload();
             } else {
               setEditor(data.sender);
             }
