@@ -16,6 +16,7 @@ import { PlannerItemApi } from "../../Api/ItemApi";
 import { PlanItem } from "../../Component/ItemListComponent";
 import { Pagination } from "../../Component/Pagination";
 import { FaBars } from "react-icons/fa";
+import { Loading } from "../../Component/LoadingComponent";
 
 export const PlanningList = () => {
   const location = useLocation();
@@ -294,7 +295,11 @@ export const PlanningList = () => {
           </div>
         </SelectTourItem>
         <ItemList>
-          {loading && <p>로딩 중...</p>}
+          {loading && (
+            <Loading>
+              <p>목록을 불러오는 중 입니다.</p>
+            </Loading>
+          )}
           {error && <p style={{ color: "red" }}>{error}</p>}
           <div className="selectMenu">
             <SortSelect value={filters.sortBy} onChange={handleSortChange}>

@@ -774,12 +774,12 @@ export const DayToggleContainer = styled.div`
 
       .place-name {
         margin: 5px 5px 5px 20px;
-        font-size: 16px;
+        font-size: 18px;
         font-weight: bold;
       }
       .place-category {
         margin: 0 5px 5px 20px;
-        font-size: 10px;
+        font-size: 13px;
         color: #5f5f5f;
       }
     }

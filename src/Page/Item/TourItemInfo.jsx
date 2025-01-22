@@ -133,21 +133,22 @@ export const TourItemInfo = () => {
                 </div>
               </div>
             </div>
-            <img
-              src={
-                spotDetails.thumbnail ||
-                (spotDetails.typeId === "100"
-                  ? "/img/cateimg/type_200.png"
-                  : spotDetails.typeId === "200"
-                  ? "/img/cateimg/type_200.png"
-                  : spotDetails.typeId === "300"
-                  ? "/img/cateimg/type_300.png"
-                  : "/profile-pic/basic1.png") // 기본 이미지
-              }
-              alt="여행지 이미지"
-              className="tour-image"
-            />
-
+            <div className="tourThumb">
+              <img
+                src={
+                  spotDetails.thumbnail ||
+                  (spotDetails.typeId === "100"
+                    ? "/img/cateimg/type_200.png"
+                    : spotDetails.typeId === "200"
+                    ? "/img/cateimg/type_200.png"
+                    : spotDetails.typeId === "300"
+                    ? "/img/cateimg/type_300.png"
+                    : "/profile-pic/basic1.png") // 기본 이미지
+                }
+                alt="여행지 이미지"
+                className="tour-image"
+              />
+            </div>
             <div className="item-map">
               <KakaoMapSpot mapX={spotDetails.mapX} mapY={spotDetails.mapY} />
               <NearTravelList>

@@ -23,13 +23,18 @@ export const TourItemInfoBox = styled.div`
       margin-right: 5px;
     }
   }
-  .tour-image {
+  .tourThumb {
     width: 100%;
-    height: 450px;
-    margin: auto;
-    border-radius: 10px;
-    object-fit: cover;
+    text-align: center;
+    .tour-image {
+      margin: auto;
+      width: 80%;
+      height: 450px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
   }
+
   .tour-details {
     padding: 30px;
     position: relative;

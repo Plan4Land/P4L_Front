@@ -18,6 +18,7 @@ import { Pagination } from "../../Component/Pagination";
 import { FaBars } from "react-icons/fa";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useMediaQuery } from "react-responsive";
+import { Loading } from "../../Component/LoadingComponent";
 
 export const TourList = () => {
   const location = useLocation();
@@ -450,49 +451,52 @@ export const TourList = () => {
 
         <ItemList>
           {(loading || error) && <div>{loading ? "로딩 중..." : error}</div>}
-
-          {!loading && !error && (
-            <>
-              {
-                <div className="tour-list">
-                  {travelSpots.length === 0 ? (
-                    <p>해당하는 조건의 관광지가 존재하지 않습니다.</p>
-                  ) : (
-                    travelSpots.map((spot) => {
-                      const cat3Name = ServiceCode.flatMap((cat) =>
-                        cat.cat2List.flatMap((cat2) =>
-                          cat2.cat3List.filter(
-                            (cat3) => cat3.cat3 === spot.cat3
+          {loading && (
+              <Loading>
+                <p>목록을 불러오는 중 입니다.</p>
+              </Loading>
+            ) && (
+              <>
+                {
+                  <div className="tour-list">
+                    {travelSpots.length === 0 ? (
+                      <p>해당하는 조건의 관광지가 존재하지 않습니다.</p>
+                    ) : (
+                      travelSpots.map((spot) => {
+                        const cat3Name = ServiceCode.flatMap((cat) =>
+                          cat.cat2List.flatMap((cat2) =>
+                            cat2.cat3List.filter(
+                              (cat3) => cat3.cat3 === spot.cat3
+                            )
                           )
-                        )
-                      ).map((cat3) => cat3.cat3Name)[0];
-                      const typeName = types.find(
-                        (type) => type.code === spot.typeId
-                      )?.name;
+                        ).map((cat3) => cat3.cat3Name)[0];
+                        const typeName = types.find(
+                          (type) => type.code === spot.typeId
+                        )?.name;
 
-                      return (
-                        <TourItem
-                          key={spot.id}
-                          id={spot.id}
-                          thumbnail={spot.thumbnail}
-                          title={spot.title}
-                          address={spot.addr1 || "정보 없음"}
-                          subCategory={cat3Name || "정보 없음"}
-                          type={typeName || "정보 없음"}
-                        />
-                      );
-                    })
-                  )}
-                </div>
-              }
+                        return (
+                          <TourItem
+                            key={spot.id}
+                            id={spot.id}
+                            thumbnail={spot.thumbnail}
+                            title={spot.title}
+                            address={spot.addr1 || "정보 없음"}
+                            subCategory={cat3Name || "정보 없음"}
+                            type={typeName || "정보 없음"}
+                          />
+                        );
+                      })
+                    )}
+                  </div>
+                }
 
-              <Pagination
-                currentPage={filters.currentPage}
-                totalPages={totalPages}
-                handlePageChange={handlePageChange}
-              />
-            </>
-          )}
+                <Pagination
+                  currentPage={filters.currentPage}
+                  totalPages={totalPages}
+                  handlePageChange={handlePageChange}
+                />
+              </>
+            )}
         </ItemList>
       </List>
       <Footer />

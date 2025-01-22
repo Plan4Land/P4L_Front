@@ -184,7 +184,7 @@ export const NavSt = styled.div`
   .tag,
   p {
     color: ${colors.colorA};
-    font-size: 23px;
+    font-size: 20px;
     font-weight: bold;
     text-decoration: none;
     flex: 0.8;

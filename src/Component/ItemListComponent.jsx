@@ -93,10 +93,10 @@ const TourItemStyled = styled.div`
     color: #888;
   }
   .owner {
-    width: 200px;
+    width: 180px;
     position: absolute;
     bottom: 15px;
-    right: -40px;
+    right: 5px;
     display: flex;
     justify-content: left;
     align-items: center;
@@ -104,7 +104,14 @@ const TourItemStyled = styled.div`
     img {
       width: 60px;
       height: 60px;
+      min-width: 60px;
       border-radius: 50%;
+    }
+    .ownernick {
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
   }
   @media (max-width: 768px) {
@@ -130,11 +137,18 @@ const TourItemStyled = styled.div`
       width: 20vw;
       font-size: 10px;
       right: 0px;
-      bottom: 5px;
+      bottom: 10px;
       gap: 10px;
-      img {
-        width: 40%;
-        height: 40%;
+
+      .ownerth {
+        width: 20%;
+        height: 20%;
+      }
+      .ownernick {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
     }
   }
