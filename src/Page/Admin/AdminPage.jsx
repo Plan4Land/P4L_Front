@@ -3,8 +3,8 @@ import {useState} from "react";
 import {Button} from "../../Component/ButtonComponent";
 import {Modal} from "../../Util/Modal";
 import AdminApi from "../../Api/AdminApi";
-
-
+import {FaSearch} from "react-icons/fa";
+import {SearchSt} from "../../Style/ItemListStyled";
 
 export const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("report");
@@ -17,6 +17,40 @@ export const AdminPage = () => {
   const [banDays, setBanDays] = useState(0);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
+  const [searchCategory, setSearchCategory] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
+
+  const category = [{
+    name: '전체',
+    value: ''
+  }, {
+    name: '아이디',
+    value: 'id'
+  }, {
+    name: '닉네임',
+    value: 'nickname'
+  }, {
+    name: '이름',
+    value: 'name'
+  }, {
+    name: '이메일',
+    value: 'email'
+  },]
+
+  const handleSearch = async () => {
+    try {
+      const data = await AdminApi.userSearch(searchKeyword, searchCategory);
+      setMembers(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   const handleUserTabClick = async () => {
     setActiveTab("user");
@@ -29,6 +63,7 @@ export const AdminPage = () => {
       }
     }
   };
+
 
   const handleReportReject = async (reportId) => {
     try {
@@ -58,7 +93,7 @@ export const AdminPage = () => {
     }
   }
 
-  const handleReportSelected = (e) =>{
+  const handleReportSelected = (e) => {
     setSelectedReport(e);
     setIsReportModalOpen(true);
   }
@@ -140,13 +175,40 @@ export const AdminPage = () => {
         {activeTab === "user" && (
           <div className="userlist">
             <h2>유저 목록</h2>
+            <SearchSt>
+              <div className="search-wrapper">
+
+                <select
+                  value={searchCategory}
+                  onChange={(e) => setSearchCategory(e.target.value)}
+                >
+                  {category.map((cat) => (
+                    <option key={cat.value} value={cat.value}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+
+                <input
+                  type="text"
+                  className="search"
+                  placeholder="유저 검색"
+                  value={searchKeyword}
+                  onChange={(e) => setSearchKeyword(e.target.value)} // 검색어 업데이트
+                  onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
+                />
+                <button className="search-button" onClick={handleSearch}>
+                  <FaSearch/> {/* 검색 아이콘 */}
+                </button>
+              </div>
+            </SearchSt>
             {members.map((member) => (
               <UserBox
                 key={member.id}
                 onClick={() => handleMemberClick(member.id)}
                 style={{cursor: "pointer"}}
               >
-                {member.name} ({member.id})
+                {member.nickname} ({member.id})
               </UserBox>
             ))}
           </div>
