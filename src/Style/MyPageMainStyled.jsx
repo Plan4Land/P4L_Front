@@ -101,7 +101,7 @@ export const UserInfo = styled.div`
   }
   @media (max-width: 768px) {
     flex-direction: column;
-    width: 80vw;
+    /* width: 80vw; */
     height: 20vh;
     justify-content: center;
     align-items: center;
@@ -124,6 +124,7 @@ export const UserPlanning = styled.div`
   height: 100%;
   width: 100%;
   .myPlanList {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;

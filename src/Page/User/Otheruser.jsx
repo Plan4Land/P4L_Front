@@ -166,8 +166,9 @@ export const Otheruser = () => {
   return (
     <>
       <Header />
-      <OtherUserInfo>
-        <UserMain>
+
+      <UserMain>
+        <OtherUserInfo>
           <UserInfo>
             <div className="user">
               <div
@@ -220,47 +221,17 @@ export const Otheruser = () => {
               </div>
             )}
           </UserInfo>
-          <UserPlanning>
-            {isMobile ? (
-              <InfiniteScroll
-                dataLength={planners.length}
-                next={loadMorePlanners}
-                hasMore={page + 1 < totalPages}
-                loader={<p>로딩 중...</p>}
-                endMessage={<p>모든 플래너를 불러왔습니다.</p>}
-              >
-                <div className="myPlanList">
-                  {planners.map((planner) => {
-                    const areaName =
-                      areas.find((area) => area.code === planner.area)?.name ||
-                      "알 수 없는 지역";
-                    const subAreaName =
-                      areas
-                        .find((area) => area.code === planner.area)
-                        ?.subAreas.find(
-                          (subArea) => subArea.code === planner.subArea
-                        )?.name || "알 수 없는 하위 지역";
-                    return (
-                      <PlanItem
-                        key={planner.id}
-                        id={planner.id}
-                        thumbnail={
-                          planner.thumbnail || "/default-thumbnail.png"
-                        }
-                        title={planner.title}
-                        address={`${areaName} - ${subAreaName}`}
-                        subCategory={planner.theme}
-                        type={planner.public ? "공개" : "비공개"}
-                        ownerprofile={planner.ownerProfileImg}
-                        ownernick={planner.ownerNickname}
-                      />
-                    );
-                  })}
-                </div>
-              </InfiniteScroll>
-            ) : (
+        </OtherUserInfo>
+        <UserPlanning>
+          {isMobile ? (
+            <InfiniteScroll
+              dataLength={planners.length}
+              next={loadMorePlanners}
+              hasMore={page + 1 < totalPages}
+              loader={<p>로딩 중...</p>}
+              endMessage={<p>모든 플래너를 불러왔습니다.</p>}
+            >
               <div className="myPlanList">
-                {loading && <p>로딩 중...</p>}
                 {planners.map((planner) => {
                   const areaName =
                     areas.find((area) => area.code === planner.area)?.name ||
@@ -280,23 +251,52 @@ export const Otheruser = () => {
                       address={`${areaName} - ${subAreaName}`}
                       subCategory={planner.theme}
                       type={planner.public ? "공개" : "비공개"}
-                      ownerprofile={`/${planner.ownerProfileImg}`}
+                      ownerprofile={planner.ownerProfileImg}
                       ownernick={planner.ownerNickname}
                     />
                   );
                 })}
               </div>
-            )}
-          </UserPlanning>
-          {!isMobile && (
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              handlePageChange={handlePageChange}
-            />
+            </InfiniteScroll>
+          ) : (
+            <div className="myPlanList">
+              {loading && <p>로딩 중...</p>}
+              {planners.map((planner) => {
+                const areaName =
+                  areas.find((area) => area.code === planner.area)?.name ||
+                  "알 수 없는 지역";
+                const subAreaName =
+                  areas
+                    .find((area) => area.code === planner.area)
+                    ?.subAreas.find(
+                      (subArea) => subArea.code === planner.subArea
+                    )?.name || "알 수 없는 하위 지역";
+                return (
+                  <PlanItem
+                    key={planner.id}
+                    id={planner.id}
+                    thumbnail={planner.thumbnail || "/default-thumbnail.png"}
+                    title={planner.title}
+                    address={`${areaName} - ${subAreaName}`}
+                    subCategory={planner.theme}
+                    type={planner.public ? "공개" : "비공개"}
+                    ownerprofile={`/${planner.ownerProfileImg}`}
+                    ownernick={planner.ownerNickname}
+                  />
+                );
+              })}
+            </div>
           )}
-        </UserMain>
-      </OtherUserInfo>
+        </UserPlanning>
+        {!isMobile && (
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        )}
+      </UserMain>
+
       <CheckModal isOpen={isFollowModalOpen} onClose={closeFollowModal}>
         <FollowLoad
           followers={followers}
