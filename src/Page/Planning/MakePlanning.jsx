@@ -17,6 +17,7 @@ import { Button } from "../../Component/ButtonComponent";
 import PlanningApi from "../../Api/PlanningApi";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
+import { Loading } from "../../Component/LoadingComponent";
 
 export const MakePlanning = () => {
   const [selectedArea, setSelectedArea] = useState("");
@@ -127,6 +128,8 @@ export const MakePlanning = () => {
       }
     } catch (e) {
       console.log("플래너 생성 중 에러", e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -311,6 +314,11 @@ export const MakePlanning = () => {
         >
           <h3>시작일을 먼저 선택해주세요.</h3>
         </CheckModal>
+      )}
+      {isLoading && (
+        <Loading>
+          <p>플래너 생성중입니다. 잠시만 기다려주세요...</p>
+        </Loading>
       )}
       <Footer />
     </>

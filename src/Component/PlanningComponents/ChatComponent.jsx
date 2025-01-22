@@ -36,7 +36,6 @@ export const ChatComponent = ({
   };
 
   const handleButtonClick = (e) => {
-    alert("버튼이 눌렸습니다!");
     // 메시지 전송
     ws.current.send(
       JSON.stringify({

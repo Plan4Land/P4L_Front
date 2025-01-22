@@ -20,6 +20,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { ProfileImg } from "../../Component/PictureCommponent";
+import { Loading } from "../../Component/LoadingComponent";
 import { Button } from "../../Component/ButtonComponent";
 import PlanningApi from "../../Api/PlanningApi";
 import AxiosApi from "../../Api/AxiosApi";
@@ -91,6 +92,7 @@ export const Planning = () => {
   const ws = useRef(null); // 웹소켓 객체 생성, 소켓 연결 정보를 유지해야 하지만, 렌더링과는 무관
   const ChatContainerRef = useRef(null);
   const [isParticipant, setIsParticipant] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChatKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey && !event.ctrlKey) {
@@ -105,7 +107,6 @@ export const Planning = () => {
   };
 
   const handleChatButtonClick = (e) => {
-    alert("버튼이 눌렸습니다!");
     // 메시지 전송
     ws.current.send(
       JSON.stringify({
@@ -492,6 +493,7 @@ export const Planning = () => {
                   plans={plans}
                   plannerId={plannerId}
                   sender={sender}
+                  setIsLoading={setIsLoading}
                 />
               ) : editPlannerInfo !== null ? (
                 <>
@@ -727,6 +729,11 @@ export const Planning = () => {
             plannerInfo={plannerInfo}
             plannerId={plannerId}
           />
+        )}
+        {isLoading && (
+          <Loading>
+            <p>이미지 업로드 중입니다. 잠시만 기다려주세요...</p>
+          </Loading>
         )}
         <Footer />
       </div>

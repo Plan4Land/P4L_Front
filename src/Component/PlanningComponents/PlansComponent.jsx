@@ -31,6 +31,7 @@ export const PlannerInfoEditComponent = ({
   plans,
   plannerId,
   sender,
+  setIsLoading,
 }) => {
   const [editTitle, setEditTitle] = useState(false);
   const [title, setTitle] = useState(plannerInfo.title);
@@ -38,7 +39,6 @@ export const PlannerInfoEditComponent = ({
   const [selectedArea, setSelectedArea] = useState("");
   const [selectedSubArea, setSelectedSubArea] = useState("");
   const [currentPic, setCurrentPic] = useState(plannerInfo?.thumbnail);
-  const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -151,6 +151,7 @@ export const PlannerInfoEditComponent = ({
 
   useEffect(() => {
     const uploadImg = async () => {
+      setIsLoading(true);
       try {
         const updatedPic = await Upload({
           currentPic,
@@ -164,6 +165,8 @@ export const PlannerInfoEditComponent = ({
         }));
       } catch (error) {
         console.error("이미지 업로드 중 에러 발생:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
