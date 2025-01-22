@@ -1,5 +1,5 @@
 import react, { createContext, useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Common from "../Util/Common";
 import { refreshToken } from "../Util/RefreshToken";
 
@@ -36,25 +36,39 @@ export const AuthProvider = ({ children }) => {
   };
 
   // 토큰 검증
-  useEffect(() => {
-    const validateToken = async () => {
-      const valid = isAccessTokenValid();
+  const TokenValidator = () => {
+    const location = useLocation();
 
-      if (!valid) {
-        try {
-          await refreshToken(); // 리프레시 토큰 재발급
-          setIsAuthenticated(true);
-        } catch (error) {
-          console.log("토큰 재발급 실패:", error);
-          logout();
+    useEffect(() => {
+      const validateToken = async () => {
+        // 토큰 검증 건너뛰는 페이지 등록
+        const excludedPaths = ['/', '/login', '/signup', '/signup/terms', '/ktxinquiry/**', '/tourlist/**', '/planninglist/**'];
+
+        if (excludedPaths.includes(location.pathname)) {
+          return;
         }
-      } else {
-        setIsAuthenticated(true);
-      }
-    };
+  
+        const valid = isAccessTokenValid();
+  
+        if (!valid) {
+          try {
+            await refreshToken(); // 리프레시 토큰 재발급
+            setIsAuthenticated(true);
+          } catch (error) {
+            console.log("토큰 재발급 실패:", error);
+            logout();
+          }
+        } else {
+          setIsAuthenticated(true);
+        }
+      };
+  
+      validateToken();
+    }, [location]);
 
-    validateToken();
-  }, []);
+    return null;
+  };
+  
 
   // 액세스 토큰 만료기간이 안 됐으면 true, 없거나 지났으면 false
   const isAccessTokenValid = () => {
