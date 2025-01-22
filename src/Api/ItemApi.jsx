@@ -33,14 +33,17 @@ export const TourItemApi = {
   },
 
   // 근처 관광지 조회
-  getNearbySpots: async (mapX, mapY, radius = 5) => {
+  getNearbySpots: async (mapX, mapY, radius = 5, spot_id) => {
     try {
-      console.log(`근처 관광지 요청 - X좌표: ${mapX}, Y좌표: ${mapY}, 반경: ${radius}km`);
+      console.log(
+        `근처 관광지 요청 - X좌표: ${mapX}, Y좌표: ${mapY}, 반경: ${radius}km`
+      );
       const response = await AxiosInstance.get(`/nearby`, {
         params: {
           mapX: mapX,
           mapY: mapY,
           radius: radius,
+          spotId: spot_id,
         },
       });
       console.log("근처 관광지 목록 응답 데이터:", response.data); // 응답 데이터 확인
