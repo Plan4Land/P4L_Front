@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 export const colors = {
-  colorA: "#4d2c0d",
-  colorB: "#7a4b14",
-  colorC: "#d4a76c",
+  colorA: "#922d04",
+  colorB: "#f8751e",
+  colorC: "#ff9d6f",
   colorD: "#fff6e2",
   colorE: "#ff7700",
 };
