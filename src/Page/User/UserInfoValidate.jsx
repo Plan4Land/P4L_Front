@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import AxiosApi from "../../Api/AxiosApi";
+import styled from "styled-components";
 
 import { Center, Container, InputBox, EditBox } from "../../Style/UserInfoEditStyle";
 import { Button } from "../../Component/ButtonComponent";
@@ -43,12 +44,33 @@ const UserInfoValidate = () => {
       const response = await AxiosApi.memberValidate(user.id, userPw);
       if (response.data) {
         setPassValidate(true);
+        setUserPw("");
       }
     } catch (error) {
       console.error("Error during validate: ", error);
       setMessage("비밀번호가 같지 않습니다.")
     }
   };
+
+  const Center2 = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+    .deleteBox {
+      display: flex;
+      align-items: right;
+      justify-content: right;
+      width: 423px;
+      @media (max-width: 768px) {
+        width: 312px;
+      }
+    }
+    .userDeleteBtn {
+      font-size: 12px;
+      margin-top: 4px;
+      cursor: pointer;
+    }
+  `
 
   return (
     <>
@@ -87,34 +109,36 @@ const UserInfoValidate = () => {
           <Container>
             <h2 className="title">내 정보 수정</h2>
             
-            <EditBox>
-              <div 
-                className="iconBox"
-                onClick={()=>setSelectedMenu("회원정보 수정")}
-              >
-                <p className="name">회원정보 수정</p>
-                <div className="icon">
-                  <FaUserEdit />
+            <Center2>
+              <EditBox>
+                <div 
+                  className="iconBox"
+                  onClick={()=>setSelectedMenu("회원정보 수정")}
+                >
+                  <p className="name">회원정보 수정</p>
+                  <div className="icon">
+                    <FaUserEdit />
+                  </div>
                 </div>
-              </div>
-              <div 
-                className="iconBox"
-                onClick={()=>setSelectedMenu("비밀번호 변경")}
-              >
-                <p className="name">비밀번호 변경</p>
-                <div className="icon">
-                  <BiSolidLock />
+                <div 
+                  className="iconBox"
+                  onClick={()=>setSelectedMenu("비밀번호 변경")}
+                >
+                  <p className="name">비밀번호 변경</p>
+                  <div className="icon">
+                    <BiSolidLock />
+                  </div>
                 </div>
+              </EditBox>
+              <div className="deleteBox">
+                <span 
+                  className="userDeleteBtn"
+                  onClick={()=>setSelectedMenu("회원 탈퇴")}
+                >
+                  회원 탈퇴
+                </span>
               </div>
-            </EditBox>
-            <div style={{display: "flex", justifyContent: "right"}}>
-              <span 
-                className="userDeleteBtn"
-                onClick={()=>setSelectedMenu("회원 탈퇴")}
-              >
-                회원 탈퇴
-              </span>
-            </div>
+            </Center2>
           </Container>
         </Center>
       )}

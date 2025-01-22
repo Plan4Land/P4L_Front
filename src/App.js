@@ -16,8 +16,9 @@ import RequestPayment from "./Page/Payment/RequestPayment";
 import Test from "./Page/test";
 import ProtectedRoute from "./Util/ProtectedRoute";
 import { TourItemInfo } from "./Page/Item/TourItemInfo";
-import { KakaoRedirect } from "./Component/LoginRedirect/KakaoLoginRedirect";
-import { GoogleRedirect } from "./Component/LoginRedirect/GoogleLoginRedirect";
+import KakaoRedirect from "./Page/signup/LoginRedirect/KakaoLoginRedirect";
+import GoogleRedirect from "./Page/signup/LoginRedirect/GoogleLoginRedirect";
+import NaverRedirect from "./Page/signup/LoginRedirect/NaverLoginRedirect";
 import { Otheruser } from "./Page/User/Otheruser";
 import { AdminPage } from "./Page/AdminPage";
 import ExpressBus from "./Page/Traffic/ExpressBus";
@@ -36,6 +37,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/login/oauth/kakao" element={<KakaoRedirect />} />
               <Route path="/login/oauth/google" element={<GoogleRedirect />} />
+              <Route path="/login/oauth/naver" element={<NaverRedirect />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/ktxInquiry" element={<KtxInquiry />} />
               <Route path="/tourlist" element={<TourList />} />

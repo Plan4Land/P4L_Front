@@ -51,63 +51,27 @@ export const ChatComponent = ({
   };
 
   // 채팅 종료
-  const onClickMsgClose = () => {
-    ws.current.send(
-      JSON.stringify({
-        type: "CLOSE",
-        plannerId: plannerId,
-        sender: sender,
-        message: inputMsg,
-      })
-    );
-    ws.current.close();
-    console.log("채팅 종료");
-  };
-
-  // 채팅방 정보 가져오기
-  // useEffect(() => {
-  //   const getChatRoom = async () => {
-  //     try {
-  //       const response = await PlanningApi.chatDetail(plannerId);
-  //       console.log("response가 아무것도 안오는거지??");
-  //       console.log(">>", response);
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   };
-  //   getChatRoom();
-  // }, []);
+  // const onClickMsgClose = () => {
+  //   ws.current.send(
+  //     JSON.stringify({
+  //       type: "CLOSE",
+  //       plannerId: plannerId,
+  //       sender: sender,
+  //       message: inputMsg,
+  //     })
+  //   );
+  //   ws.current.close();
+  //   console.log("채팅 종료");
+  // };
 
   // 웹 소켓 연결하기
   useEffect(() => {
-    // if (!ws.current) {
-    //   ws.current = new WebSocket("ws://localhost:8111/ws/planner");
-    //   ws.current.onopen = () => {
-    //     setSocketConnected(true);
-    //     console.log("소켓 연결 완료");
-    //   };
-    // }
-    // if (socketConnected && sender) {
-    //   ws.current.send(
-    //     JSON.stringify({
-    //       type: "ENTER",
-    //       plannerId: plannerId,
-    //       sender: sender,
-    //       message: "입장합니다.",
-    //     })
-    //   );
-    // }
     ws.current.onmessage = (msg) => {
       const data = JSON.parse(msg.data);
       console.log("data ::::: ", data);
       if (data.type === "CHAT") {
         setChatList((prev) => [...prev, data]); // 기존의 채팅 리스트에 새로운 메시지 추가
       }
-      // if (data.type === "PLANNER") {
-      //   setPlans(data.data.plans);
-      //   setIsEditting(data.data.isEditting);
-      //   setEditor(data.sender);
-      // }
     };
   }, [socketConnected, sender]);
 
@@ -119,15 +83,6 @@ export const ChatComponent = ({
         ChatContainerRef.current.scrollHeight;
     }
   }, [chatList]);
-
-  // const icons = [
-  //   // IoPaperPlaneOutline,
-  //   IoArrowForwardCircle,
-  //   HiArrowCircleRight,
-  //   HiArrowCircleUp,
-  //   FiSend,
-  //   FiArrowRight,
-  // ];
 
   return (
     <ChatContainer>

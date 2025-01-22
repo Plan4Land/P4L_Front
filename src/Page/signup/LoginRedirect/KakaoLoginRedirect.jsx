@@ -1,13 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import AxiosApi from "../../Api/AxiosApi";
-import { useAuth } from "../../Context/AuthContext";
+import AxiosApi from "../../../Api/AxiosApi";
+import { useAuth } from "../../../Context/AuthContext";
+import { Button } from "../../../Component/ButtonComponent";
 
 export function KakaoRedirect() {
   const navigate = useNavigate();
   const code = new URL(window.location.href).searchParams.get("code");
   const { login } = useAuth();
+  const [isSuccess, setIsSuccess] = useState(true);
 
   useEffect(() => {
     if (!code) {
@@ -84,6 +86,7 @@ export function KakaoRedirect() {
       })
       .catch((error) => {
         console.error("토큰 발급 실패:", error);
+        setIsSuccess(false);
       });
   }, [code, navigate]);
 
@@ -94,7 +97,14 @@ export function KakaoRedirect() {
 
   return (
     <div>
-      <h1>로그인 중입니다...</h1>
+      {isSuccess === true
+        ? (<h1>로그인 중입니다...</h1>)
+        : (<>
+          <h2>로그인에 실패했습니다.</h2>
+          <h2>다시 시도하거나 관리자에게 문의해주세요.</h2>
+          <Button onClick={() => navigate("/login")}>뒤로</Button>
+        </>)
+      }
     </div>
   );
 };

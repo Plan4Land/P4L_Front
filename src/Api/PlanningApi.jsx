@@ -12,13 +12,6 @@ const PlanningApi = {
     thumbnail,
     isPublic
   ) => {
-    // const date = new Date(plan.date);
-    // date.setHours(10, 0, 0, 0);
-    // const startDateSetHour = startDate.setHours(10, 0, 0, 0);
-    // console.log(new Date(startDate.setHours(10, 0, 0, 0)));
-    // console.log(startDate);
-    // console.log(new Date(startDate));
-    // console.log(new Date(startDate).setHours(10, 0, 0, 0));
     const plannerInfo = {
       title: title,
       theme: theme,
@@ -53,9 +46,21 @@ const PlanningApi = {
       plannerInfo
     );
   },
+  editIsPublic: async (plannerId, isPublic) => {
+    const params = {
+      plannerId,
+      isPublic,
+    };
+    return (
+      await AxiosInstance.post(`/planner/update/isPublic`, null, { params })
+    ).data;
+  },
   getPlan: async (plannerId) => {
-    return (await AxiosInstance.get(`/planner/getPlan?plannerId=${plannerId}`))
-      .data;
+    return (
+      await AxiosInstance.get(
+        `/planner/fetchData/getPlan?plannerId=${plannerId}`
+      )
+    ).data;
   },
   editPlan: async (plannerId, newPlans) => {
     const planInfo = newPlans.map((plan) => {
@@ -67,6 +72,7 @@ const PlanningApi = {
         date: date, // 수정된 Date 객체 사용
         latitude: plan.position?.lat || plan.latitude,
         longitude: plan.position?.lng || plan.longitude,
+        memo: plan.memo,
         seq: plan.seq,
         spotName: plan.content || plan.spotName,
       };
@@ -76,7 +82,25 @@ const PlanningApi = {
     });
   },
   getPlanning: async (plannerId) => {
-    return (await AxiosInstance.get(`/planner/${plannerId}`)).data;
+    return (await AxiosInstance.get(`/planner/fetchData/${plannerId}`)).data;
+  },
+  deletePlanning: async (plannerId, userId) => {
+    const params = {
+      plannerId,
+      userId,
+    };
+    return await AxiosInstance.delete(`/planner/delete-planner`, {
+      params,
+    });
+  },
+  leavePlanning: async (plannerId, userId) => {
+    const params = {
+      plannerId,
+      userId,
+    };
+    return await AxiosInstance.delete(`/planner/delete-planner-member`, {
+      params,
+    });
   },
   getIsBookmarked: async (memberId, plannerId) => {
     const params = {
@@ -102,9 +126,6 @@ const PlanningApi = {
   getChatMsgs: async (plannerId) => {
     return (await AxiosInstance.get(`/chat/msg/${plannerId}`)).data;
   },
-  // chatDetail: async (plannerId) => {
-  //   return (await AxiosInstance.get(`/chat/room/${plannerId}`)).data;
-  // },
   inviteMember: async (memberId, plannerId) => {
     const params = {
       memberId,

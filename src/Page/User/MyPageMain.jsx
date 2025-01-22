@@ -26,6 +26,8 @@ import AxiosApi from "../../Api/AxiosApi";
 import FollowLoad from "../../Component/UserPageComponent/FollowLoad";
 import { FilterButton } from "../../Style/ItemListStyled";
 import { FaBars } from "react-icons/fa";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { useMediaQuery } from "react-responsive";
 
 export const MyPageMain = () => {
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
@@ -44,6 +46,7 @@ export const MyPageMain = () => {
   const { user } = useAuth();
   const [invitedPlannings, setInvitedPlannings] = useState([]);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const handleToggleSelect = () => {
     setIsSelectOpen(!isSelectOpen);
@@ -124,17 +127,36 @@ export const MyPageMain = () => {
     fetchFollowInfo();
   }, [selectedMenu, navigate]);
 
-  const fetchPlanners = async (reset = false) => {
+  const fetchPlanners = async () => {
     try {
-      if (loading) return; // 중복 호출 방지
+      if (loading) return;
       setLoading(true);
-      const data = await MyPlannerApi.getPlannersByOwner(user.id, page, size);
 
-      // reset이 true면 새 리스트로 교체, false면 기존 리스트에 추가
-      setPlanners((prevPlanners) =>
-        reset ? data.content : [...prevPlanners, ...data.content]
+      const currentPage = page;
+
+      const data = await MyPlannerApi.getPlannersByOwner(
+        user.id,
+        currentPage,
+        size
       );
-      setTotalPages(data.totalPages);
+      console.log(data.content);
+
+      // 모바일에서 이전 데이터와 새 데이터의 중복을 피하도록 처리
+      if (isMobile) {
+        setPlanners((prevPlanners) => {
+          // 이미 로드된 데이터와 새 데이터가 중복되지 않도록 처리
+          const newPlanners = data.content.filter(
+            (newPlanner) =>
+              !prevPlanners.some((planner) => planner.id === newPlanner.id)
+          );
+          return [...prevPlanners, ...newPlanners]; // 기존 데이터에 새 데이터만 추가
+        });
+      } else {
+        // PC에서는 새로운 데이터로 덮어씌우기
+        setPlanners(data.content);
+      }
+
+      setTotalPages(data.totalPages); // 전체 페이지 수 설정
       setLoading(false);
     } catch (error) {
       console.error("플래너 조회 오류:", error);
@@ -143,8 +165,20 @@ export const MyPageMain = () => {
   };
 
   useEffect(() => {
-    fetchPlanners(true);
-  }, [page]);
+    if (!isMobile) {
+      // PC에서는 page가 변경될 때마다 데이터를 새로 고침
+      fetchPlanners();
+    } else {
+      // 모바일에서는 page가 변경될 때만 데이터를 추가
+      fetchPlanners();
+    }
+  }, [page, isMobile, user.id]);
+
+  const loadMorePlanners = () => {
+    if (page + 1 < totalPages) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
 
   // 가로 스크롤 끝에 도달했을 때 페이지를 증가시키는 함수
   // const handleScroll = () => {
@@ -211,45 +245,82 @@ export const MyPageMain = () => {
                 </div>
               </UserInfo>
               <UserPlanning>
-                <div
-                  // ref={scrollContainerRef}
-                  className="myPlanList"
-                  // onScroll={handleScroll}
-                >
-                  {loading && <p>로딩 중...</p>}
-                  {planners.map((planner) => {
-                    const areaName =
-                      areas.find((area) => area.code === planner.area)?.name ||
-                      "알 수 없는 지역";
-                    const subAreaName =
-                      areas
-                        .find((area) => area.code === planner.area)
-                        ?.subAreas.find(
-                          (subArea) => subArea.code === planner.subArea
-                        )?.name || "알 수 없는 하위 지역";
-                    return (
-                      <PlanItem
-                        key={planner.id}
-                        id={planner.id}
-                        thumbnail={
-                          planner.thumbnail || "/default-thumbnail.png"
-                        }
-                        title={planner.title}
-                        address={`${areaName} - ${subAreaName}`}
-                        subCategory={planner.theme}
-                        type={planner.public ? "공개" : "비공개"}
-                        ownerprofile={planner.ownerProfileImg}
-                        ownernick={planner.ownerNickname}
-                      />
-                    );
-                  })}
-                </div>
+                {isMobile ? (
+                  <InfiniteScroll
+                    dataLength={planners.length}
+                    next={loadMorePlanners}
+                    hasMore={page + 1 < totalPages}
+                    loader={<p>로딩 중...</p>}
+                    endMessage={<p>모든 플래너를 불러왔습니다.</p>}
+                  >
+                    <div className="myPlanList">
+                      {planners.map((planner) => {
+                        const areaName =
+                          areas.find((area) => area.code === planner.area)
+                            ?.name || "알 수 없는 지역";
+                        const subAreaName =
+                          areas
+                            .find((area) => area.code === planner.area)
+                            ?.subAreas.find(
+                              (subArea) => subArea.code === planner.subArea
+                            )?.name || "알 수 없는 하위 지역";
+                        return (
+                          <PlanItem
+                            key={planner.id}
+                            id={planner.id}
+                            thumbnail={
+                              planner.thumbnail || "/default-thumbnail.png"
+                            }
+                            title={planner.title}
+                            address={`${areaName} - ${subAreaName}`}
+                            subCategory={planner.theme}
+                            type={planner.public ? "공개" : "비공개"}
+                            ownerprofile={planner.ownerProfileImg}
+                            ownernick={planner.ownerNickname}
+                          />
+                        );
+                      })}
+                    </div>
+                  </InfiniteScroll>
+                ) : (
+                  <div className="myPlanList">
+                    {loading && <p>로딩 중...</p>}
+                    {planners.map((planner) => {
+                      const areaName =
+                        areas.find((area) => area.code === planner.area)
+                          ?.name || "알 수 없는 지역";
+                      const subAreaName =
+                        areas
+                          .find((area) => area.code === planner.area)
+                          ?.subAreas.find(
+                            (subArea) => subArea.code === planner.subArea
+                          )?.name || "알 수 없는 하위 지역";
+                      return (
+                        <PlanItem
+                          key={planner.id}
+                          id={planner.id}
+                          thumbnail={
+                            planner.thumbnail || "/default-thumbnail.png"
+                          }
+                          title={planner.title}
+                          address={`${areaName} - ${subAreaName}`}
+                          subCategory={planner.theme}
+                          type={planner.public ? "공개" : "비공개"}
+                          ownerprofile={`/${planner.ownerProfileImg}`}
+                          ownernick={planner.ownerNickname}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
+              </UserPlanning>
+              {!isMobile && (
                 <Pagination
                   currentPage={page}
                   totalPages={totalPages}
                   handlePageChange={handlePageChange}
                 />
-              </UserPlanning>
+              )}
             </UserMain>
           )}
           {selectedMenu === "내 플래닝" && <MyIncludePlans />}

@@ -1,13 +1,16 @@
 import styled from "styled-components";
 import { colors } from "./GlobalStyle";
+import { ScrollBar } from "../Component/ButtonComponent";
 
 export const MainBox = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr); // 2행
-  gap: 20px; // 상자 간 간격
-  margin: 20px;
+  row-gap: 20px;
+  margin: 40px auto 50px auto;
   height: 1000px;
+  width: 80%;
+
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
     height: 100%;
@@ -54,13 +57,24 @@ export const QuickSearch = styled(GridItem)`
     width: 100%;
     height: 100%;
     .RegionSearch {
+      width: 100%;
       display: flex;
       flex-direction: column;
+      place-items: center;
+      .area-list {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        place-items: center;
+      }
+      a {
+        width: 100%;
+      }
       button {
         background-color: white;
         color: ${colors.colorA};
         height: 40px;
-        width: 30%;
+        width: 90%;
         margin: 5px;
         transition: all 0.3s ease;
         &:hover {
@@ -78,7 +92,8 @@ export const QuickSearch = styled(GridItem)`
       justify-content: center;
       width: 100%;
       .catebuttons {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         width: 100%;
         height: 100%;
         padding: 20px;
@@ -95,9 +110,8 @@ export const QuickSearch = styled(GridItem)`
 `;
 
 export const CateButton = styled.button`
-  width: 180px;
+  width: 90%;
   position: relative;
-  flex-grow: 1;
   height: 100%;
   background-size: cover;
   background-position: center;
@@ -105,9 +119,6 @@ export const CateButton = styled.button`
   border-radius: 20px;
   cursor: pointer;
   overflow: hidden;
-  /* transition: background-color 0.3s ease; */
-
-  /* 배경 이미지 설정 */
   background-image: ${({ type }) => {
     switch (type) {
       case "100":
@@ -147,7 +158,7 @@ export const CateButton = styled.button`
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
-    font-size: 30px;
+    font-size: 25px;
     opacity: 0; /* 기본값은 숨김 */
     z-index: 2; /* 어두운 레이어 위 */
     transition: opacity 0.3s ease;
@@ -304,7 +315,7 @@ export const Festive = styled(GridItem)`
     border-radius: 50%;
     position: absolute;
     bottom: 8px;
-    left: 45%;
+    left: 47%;
   }
 
   .react-calendar__month-view__days__day {
@@ -330,23 +341,21 @@ export const Festive = styled(GridItem)`
 `;
 
 export const HolidayList = styled.div`
-  margin: 20px;
-  width: 100%;
+  margin: 10px;
+  width: 88%;
   height: 180px;
   overflow-y: auto;
   border: 1px solid #ddd;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 15px;
-
+  padding: 0 15px 0 15px;
+  ${ScrollBar}
   ul {
-    margin: 0;
-    padding-left: 20px;
+    padding-left: 10px;
   }
 
-  li {
-    padding: 5px 0;
+  p {
     font-size: 16px;
     line-height: 1.6;
     color: #555;

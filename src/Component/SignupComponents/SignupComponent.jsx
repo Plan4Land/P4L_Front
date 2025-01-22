@@ -128,6 +128,50 @@ export const SignupContainer = styled.div`
       cursor: default;
     }
   }
+
+  .login-social-box {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    .login-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      height: 50px;
+      padding: 0;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      svg {
+        width: 50%;
+        height: 50%;
+      }
+    }
+    .kakao {
+      background-color: rgb(255, 255, 0);
+      &:hover {
+        background-color: rgb(240, 240, 0);
+      }
+    }
+    .google {
+      background-color: rgb(240, 240, 240);
+      &:hover {
+        background-color: rgb(220, 220, 220);
+      }
+      svg {
+        width: 60%;
+        height: 60%;
+      }
+    }
+    .naver {
+      background-color: rgb(3, 199, 90);
+      &:hover {
+        background-color: rgb(3, 184, 75);
+      }
+    }
+  }
 `;
 
 export const InputBox = styled.div`

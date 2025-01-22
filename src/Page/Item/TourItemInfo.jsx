@@ -1,7 +1,7 @@
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { TourItemInfoBox } from "../../Style/TourItemInfoStyled";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { TourItemApi, BookmarkApi } from "../../Api/ItemApi";
 import { KakaoMapSpot } from "../../Component/KakaoMapComponent";
 import { faBookmark as solidBookmark } from "@fortawesome/free-solid-svg-icons"; // 채워진 북마크
@@ -13,6 +13,7 @@ export const TourItemInfo = () => {
   const { id } = useParams();
   const { user } = useAuth(); // useAuth 훅을 통해 user 객체 가져오기
   const [spotDetails, setSpotDetails] = useState(null);
+  const [nearbySpots, setNearbySpots] = useState([]);
   const [bookmarkCount, setBookmarkCount] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -23,9 +24,6 @@ export const TourItemInfo = () => {
         console.error("사용자 ID가 없습니다");
         return;
       }
-
-      console.log("memberId:", user.id);
-      console.log("spotId:", spotDetails.id);
 
       if (isBookmarked) {
         // 북마크 삭제
@@ -62,9 +60,11 @@ export const TourItemInfo = () => {
   useEffect(() => {
     const fetchSpotDetails = async () => {
       try {
+        // 여행지 상세 정보 조회
         const data = await TourItemApi.getSpotDetails(id);
         setSpotDetails(data);
 
+        // 북마크 상태 확인
         if (user?.id) {
           const bookmarkStatus = await BookmarkApi.getBookmarkStatus(
             user.id,
@@ -72,8 +72,22 @@ export const TourItemInfo = () => {
           );
           setIsBookmarked(bookmarkStatus);
         }
+
+        // 근처 관광지 목록 조회
+        if (data.mapX && data.mapY) {
+          const nearbyData = await TourItemApi.getNearbySpots(
+            data.mapX,
+            data.mapY,
+            5,
+            id
+          ); // 5km 반경
+          setNearbySpots(nearbyData);
+        }
       } catch (error) {
-        console.error("여행지 상세 정보 조회 오류:", error);
+        console.error(
+          "여행지 상세 정보 조회 오류 또는 근처 관광지 조회 오류:",
+          error
+        );
       }
     };
 
@@ -112,10 +126,34 @@ export const TourItemInfo = () => {
                 />
               </button>
               <h1 className="tour-title">{spotDetails.title}</h1>
-              <p>주소: {spotDetails.addr1 || "정보 없음"}</p>
-              <p>연락처: {spotDetails.tel || "정보 없음"}</p>
-              <p>북마크 수: {spotDetails.bookmark}</p>
+              <strong>주소:</strong>
+              <span> {spotDetails.addr1 || "정보 없음"}</span>
+              <p></p>
+              <strong>연락처:</strong>
+              <span> {spotDetails.tel || "정보 없음"}</span>
+              <p></p>
+              <strong>북마크 수:</strong>
+              <span> {spotDetails.bookmark}</span>
+              <h3>주변 관광지</h3>
+              {nearbySpots.length > 0 && (
+                <div className="nearby-travelspot">
+                  {nearbySpots.map((spot) => (
+                    <div key={spot.id}>
+                      <div className="nearbybox">
+                        <Link
+                          to={`/tourItemInfo/${spot.id}`}
+                          className="nearbyspot"
+                        >
+                          <h4>{spot.title}</h4>
+                          <p>주소: {spot.addr1}</p>
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
+
             <div className="item-map">
               <KakaoMapSpot mapX={spotDetails.mapX} mapY={spotDetails.mapY} />
             </div>

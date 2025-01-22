@@ -1,18 +1,18 @@
-import { Header, Footer } from "../../Component/GlobalComponent";
-import { UserMain, UserInfo, UserPlanning } from "../../Style/MyPageMainStyled";
-import { useState, useEffect } from "react";
-import { CheckModal, Modal } from "../../Util/Modal";
-import { Button } from "../../Component/ButtonComponent";
-import { useNavigate, useParams } from "react-router-dom";
-import { UserPlannerApi } from "../../Api/ItemApi";
-import { areas } from "../../Util/Common";
-import { PlanItem } from "../../Component/ItemListComponent";
+import {Footer, Header} from "../../Component/GlobalComponent";
+import {OtherUserInfo, UserInfo, UserMain, UserPlanning,} from "../../Style/MyPageMainStyled";
+import {useEffect, useState} from "react";
+import {CheckModal, Modal} from "../../Util/Modal";
+import {Button} from "../../Component/ButtonComponent";
+import {useNavigate, useParams} from "react-router-dom";
+import {UserPlannerApi} from "../../Api/ItemApi";
+import {areas} from "../../Util/Common";
+import {PlanItem} from "../../Component/ItemListComponent";
 import AxiosApi from "../../Api/AxiosApi";
-import { Pagination } from "../../Component/Pagination";
+import {Pagination} from "../../Component/Pagination";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useMediaQuery } from "react-responsive";
-import { useAuth } from "../../Context/AuthContext";
+import {useMediaQuery} from "react-responsive";
+import {useAuth} from "../../Context/AuthContext";
 import FollowLoad from "../../Component/UserPageComponent/FollowLoad";
 import ReportModal from "../../Component/UserPageComponent/ReportModalComponent";
 
@@ -39,6 +39,7 @@ export const Otheruser = () => {
   // 신고하기 모달을 닫고 완료 모달을 열기
   const handleReportConfirm = () => {
     setShowReportModal(false); // 신고 모달 닫기
+    fetchReports();
     setShowConfirmationModal(true); // 신고 완료 모달 열기
   };
 
@@ -46,7 +47,8 @@ export const Otheruser = () => {
   const handleConfirmationClose = () => {
     setShowConfirmationModal(false);
   };
-  const isMobile = useMediaQuery({ query: "(max-width: 454px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
@@ -71,6 +73,14 @@ export const Otheruser = () => {
     const data = await AxiosApi.follow(follower, followed, isFollow);
     setIsFollowed(!isFollowed);
   };
+
+  const fetchReports = async () => {
+    try {
+      return await AxiosApi.report(user.id, userId, reportContent);
+    }catch (error) {
+      console.log(error);
+    }
+  }
 
   const fetchPlanners = async () => {
     try {
@@ -133,7 +143,7 @@ export const Otheruser = () => {
         const data = await AxiosApi.loadFollow(userId);
         setFollowings(data?.followingInfo || []);
         setFollowers(data?.followerInfo || []);
-        if (data.followerInfo.some((member) => member.id === user.id)) {
+        if (data.followerInfo.some((member) => member.id === user?.id)) {
           setIsFollowed(true);
         }
       } catch (error) {
@@ -146,7 +156,7 @@ export const Otheruser = () => {
       fetchFollowInfo();
     }
 
-    console.log(user.id, " : ", userId);
+    console.log(user?.id, " : ", userId);
 
     closeFollowModal();
   }, [userId, isFollowed]);
@@ -160,8 +170,9 @@ export const Otheruser = () => {
   return (
     <>
       <Header />
-      <div className="otheruser">
-        <UserMain>
+
+      <UserMain>
+        <OtherUserInfo>
           <UserInfo>
             <div className="user">
               <div
@@ -192,20 +203,21 @@ export const Otheruser = () => {
                 </div>
               </div>
             </div>
-            {user.id !== userId && (
+            {user && user.id !== userId && (
               <div className="Button">
                 <Button onClick={() => setShowReportModal(true)}>
-        신고하기
-      </Button>
+                  신고하기
+                </Button>
+
                 {isFollowed ? (
                   <Button
-                    onClick={() => handleFollow(user.id, userInfo.id, false)}
+                    onClick={() => handleFollow(user?.id, userInfo.id, false)}
                   >
                     팔로우 해제
                   </Button>
                 ) : (
                   <Button
-                    onClick={() => handleFollow(user.id, userInfo.id, true)}
+                    onClick={() => handleFollow(user?.id, userInfo.id, true)}
                   >
                     팔로우
                   </Button>
@@ -213,47 +225,17 @@ export const Otheruser = () => {
               </div>
             )}
           </UserInfo>
-          <UserPlanning>
-            {isMobile ? (
-              <InfiniteScroll
-                dataLength={planners.length}
-                next={loadMorePlanners}
-                hasMore={page + 1 < totalPages}
-                loader={<p>로딩 중...</p>}
-                endMessage={<p>모든 플래너를 불러왔습니다.</p>}
-              >
-                <div className="myPlanList">
-                  {planners.map((planner) => {
-                    const areaName =
-                      areas.find((area) => area.code === planner.area)?.name ||
-                      "알 수 없는 지역";
-                    const subAreaName =
-                      areas
-                        .find((area) => area.code === planner.area)
-                        ?.subAreas.find(
-                          (subArea) => subArea.code === planner.subArea
-                        )?.name || "알 수 없는 하위 지역";
-                    return (
-                      <PlanItem
-                        key={planner.id}
-                        id={planner.id}
-                        thumbnail={
-                          planner.thumbnail || "/default-thumbnail.png"
-                        }
-                        title={planner.title}
-                        address={`${areaName} - ${subAreaName}`}
-                        subCategory={planner.theme}
-                        type={planner.public ? "공개" : "비공개"}
-                        ownerprofile={planner.ownerProfileImg}
-                        ownernick={planner.ownerNickname}
-                      />
-                    );
-                  })}
-                </div>
-              </InfiniteScroll>
-            ) : (
+        </OtherUserInfo>
+        <UserPlanning>
+          {isMobile ? (
+            <InfiniteScroll
+              dataLength={planners.length}
+              next={loadMorePlanners}
+              hasMore={page + 1 < totalPages}
+              loader={<p>로딩 중...</p>}
+              endMessage={<p>모든 플래너를 불러왔습니다.</p>}
+            >
               <div className="myPlanList">
-                {loading && <p>로딩 중...</p>}
                 {planners.map((planner) => {
                   const areaName =
                     areas.find((area) => area.code === planner.area)?.name ||
@@ -273,34 +255,63 @@ export const Otheruser = () => {
                       address={`${areaName} - ${subAreaName}`}
                       subCategory={planner.theme}
                       type={planner.public ? "공개" : "비공개"}
-                      ownerprofile={`/${planner.ownerProfileImg}`}
+                      ownerprofile={planner.ownerProfileImg}
                       ownernick={planner.ownerNickname}
                     />
                   );
                 })}
               </div>
-            )}
-          </UserPlanning>
-          {!isMobile && (
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              handlePageChange={handlePageChange}
-            />
+            </InfiniteScroll>
+          ) : (
+            <div className="myPlanList">
+              {loading && <p>로딩 중...</p>}
+              {planners.map((planner) => {
+                const areaName =
+                  areas.find((area) => area.code === planner.area)?.name ||
+                  "알 수 없는 지역";
+                const subAreaName =
+                  areas
+                    .find((area) => area.code === planner.area)
+                    ?.subAreas.find(
+                      (subArea) => subArea.code === planner.subArea
+                    )?.name || "알 수 없는 하위 지역";
+                return (
+                  <PlanItem
+                    key={planner.id}
+                    id={planner.id}
+                    thumbnail={planner.thumbnail || "/default-thumbnail.png"}
+                    title={planner.title}
+                    address={`${areaName} - ${subAreaName}`}
+                    subCategory={planner.theme}
+                    type={planner.public ? "공개" : "비공개"}
+                    ownerprofile={`/${planner.ownerProfileImg}`}
+                    ownernick={planner.ownerNickname}
+                  />
+                );
+              })}
+            </div>
           )}
-        </UserMain>
-      </div>
+        </UserPlanning>
+        {!isMobile && (
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
+        )}
+      </UserMain>
+
       <CheckModal isOpen={isFollowModalOpen} onClose={closeFollowModal}>
         <FollowLoad
           followers={followers}
           followings={followings}
           isMyPage={false}
-          loginUser={user.id}
+          loginUser={user?.id}
         ></FollowLoad>
       </CheckModal>
 
       <CheckModal isOpen={isReportModalOpen} onClose={closeReportModal}>
-        <ReportModal reporter={user.id} reported={userId}></ReportModal>
+        <ReportModal reporter={user?.id} reported={userId}></ReportModal>
       </CheckModal>
       {/* 신고하기 모달 */}
       <Modal

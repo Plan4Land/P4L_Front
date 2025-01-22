@@ -3,74 +3,31 @@ import { colors } from "./GlobalStyle";
 
 export const List = styled.div`
   display: flex;
-  width: 90%;
+  width: 80%;
   margin: auto;
   margin-top: 20px;
   margin-bottom: 50px;
-  gap: 20px;
+  gap: 50px;
   @media (max-width: 768px) {
     width: 90%;
-  }
-`;
-
-export const Table = styled.table`
-  width: 90vh;
-  border-collapse: collapse;
-  text-align: center;
-
-  th,
-  td {
-    padding: 10px;
-    border: 1px solid #ddd;
-  }
-
-  th {
-    background-color: #f4f4f4;
-  }
-`;
-
-export const TrafficBox = styled.div`
-  display: flex;
-  width: 100%;
-  margin: 20px;
-  margin-bottom: 50px;
-`;
-
-export const SortSelect = styled.select`
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: white;
-  color: #333;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 200px;
-
-  &:focus {
-    outline: none;
-    border-color: ${colors.colorA};
-  }
-
-  option {
-    padding: 10px;
-    background-color: white;
-    color: #333;
   }
 `;
 
 export const SelectTourItem = styled.div`
   width: 400px;
   padding-top: 40px;
-
   position: relative;
+  h3 {
+    margin-bottom: 0;
+  }
   button {
     font-size: 12px;
     background-color: white;
     color: ${colors.colorA};
-    height: 35px;
-    width: 130px;
+    height: 30px;
+    width: 120px;
     margin: 4px;
+
     &:hover {
       background-color: ${colors.colorB};
       color: white;
@@ -118,10 +75,17 @@ export const SelectTourItem = styled.div`
   }
   /* SelectTourItem 기본 상태 숨기기 (모바일 화면) */
   @media (max-width: 768px) {
-    display: none; /* 기본적으로 숨기기 */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: all 0.3s ease;
+
     &.open {
-      display: block; /* .open 클래스가 추가되면 보이게 설정 */
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(0);
     }
+
     position: absolute;
     z-index: 10;
     background-color: white;
@@ -218,16 +182,65 @@ export const SearchSt = styled.div`
 export const ItemList = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  height: 100%;
 
   .tour-list,
   .plannerList {
     padding: 0;
   }
   .selectMenu {
-    width: 90%;
+    width: 95%;
     display: flex;
     justify-content: space-between;
+    button {
+      height: 35px;
+    }
   }
+`;
+
+export const SortSelect = styled.select`
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 150px;
+  height: 30px;
+  &:focus {
+    outline: none;
+    border-color: ${colors.colorA};
+  }
+
+  option {
+    padding: 10px;
+    background-color: white;
+    color: #333;
+  }
+`;
+
+export const Table = styled.table`
+  width: 90vh;
+  border-collapse: collapse;
+  text-align: center;
+
+  th,
+  td {
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f4f4f4;
+  }
+`;
+
+export const TrafficBox = styled.div`
+  display: flex;
+  width: 100%;
+  margin: 20px;
+  margin-bottom: 50px;
 `;

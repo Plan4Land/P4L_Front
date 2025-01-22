@@ -6,13 +6,17 @@ import {
   UserName,
   ContentContainer,
   KakaoMapContainer,
+  ChatContainer,
+  ChatMsgContainer,
+  Message,
 } from "../../Style/PlanningStyled";
+import { HiArrowCircleUp } from "react-icons/hi";
+import { FaTimes } from "react-icons/fa";
 import { KakaoMap } from "../../Component/KakaoMapComponent";
 import {
   PlannerInfoEditComponent,
   PlansComponent,
 } from "../../Component/PlanningComponents/PlansComponent";
-import { ChatComponent } from "../../Component/PlanningComponents/ChatComponent";
 import { useEffect, useRef, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { ProfileImg } from "../../Component/ProfileImg";
@@ -85,7 +89,35 @@ export const Planning = () => {
   const [socketConnected, setSocketConnected] = useState(false); // 웹소켓 연결 여부
   const [sender, setSender] = useState(""); // 메시지를 보낸 사람
   const ws = useRef(null); // 웹소켓 객체 생성, 소켓 연결 정보를 유지해야 하지만, 렌더링과는 무관
+  const ChatContainerRef = useRef(null);
   const [isParticipant, setIsParticipant] = useState(false);
+
+  const handleChatKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey && !event.ctrlKey) {
+      event.preventDefault(); // 기본 Enter 동작 막기
+      if (inputMsg?.trim()) {
+        handleChatButtonClick(); // 버튼 클릭 함수 호출
+      }
+    }
+
+    if (event.key === "Enter" && event.shiftKey) {
+    }
+  };
+
+  const handleChatButtonClick = (e) => {
+    alert("버튼이 눌렸습니다!");
+    // 메시지 전송
+    ws.current.send(
+      JSON.stringify({
+        type: "CHAT",
+        plannerId: plannerId,
+        sender: sender,
+        message: inputMsg.replace(/\n/g, "<br>"),
+      })
+    );
+    setInputMsg("");
+    console.log("전송");
+  };
 
   const closeChat = () => {
     setIsChatOpen(false); // "X" 버튼 클릭 시 채팅 창 닫기
@@ -196,9 +228,10 @@ export const Planning = () => {
               setPlannerInfo(editPlannerInfo);
               setEditor(null);
               setReceivePlanner(null);
+              closeMemo();
 
               // 비동기 호출 처리
-              if (editPlannerInfo && data.sender === user.nickname) {
+              if (editPlannerInfo && data.sender === user?.nickname) {
                 const plannerResult = await PlanningApi.editPlannerInfo(
                   editPlannerInfo,
                   plannerId
@@ -208,13 +241,32 @@ export const Planning = () => {
                   editPlans
                 );
                 setPlannerInfo(plannerResult.data);
-                setPlans(editPlans);
+                setPlans(planResult.data);
                 setEditPlannerInfo(null);
                 setEditPlans(null);
               }
+              window.location.reload();
             } else {
               setEditor(data.sender);
             }
+          }
+
+          if (data.type === "CHAT") {
+            setChatList((prev) => [...prev, data]);
+          }
+
+          if (editor && data.type === "CLOSE" && editor === data.sender) {
+            console.log("editor : ", editor);
+            // 수정하던 사람이 새로고침하면
+            setPlannerInfo(plannerInfo);
+            setEditPlannerInfo(null);
+            setPlans(plans);
+            setEditPlans(null);
+            setEditor(null);
+            closeMemo();
+          } else {
+            setPlannerInfo(plannerInfo);
+            setPlans(plans);
           }
         };
       }
@@ -227,10 +279,10 @@ export const Planning = () => {
   useEffect(() => {
     if (plannerInfo) {
       const participant =
-        plannerInfo.ownerNickname === user.nickname ||
+        plannerInfo.ownerNickname === user?.nickname ||
         plannerInfo.participants.some(
           (participant) =>
-            participant.memberNickname === user.nickname &&
+            participant.memberNickname === user?.nickname &&
             participant.state === "ACCEPT"
         );
 
@@ -242,27 +294,45 @@ export const Planning = () => {
           setSocketConnected(true);
           console.log("소켓 연결 완료");
         };
-        ws.current.onmessage = (msg) => {
-          const data = JSON.parse(msg.data);
-
-          if (data.type === "PLANNER") {
-            setIsEditting(data.data.isEditting);
-            setEditor(data.sender);
-          } else if (data.type === "ENTER") {
-            console.log(`${data.sender} 님이 입장했습니다.`);
-          }
-        };
       }
     }
+    const closeMessage = {
+      type: "CLOSE",
+      plannerId: plannerId,
+      sender: sender,
+      message: editor,
+      data: {
+        plannerInfo: null,
+        plans: null,
+        isEditting: false,
+      },
+    };
+
+    const handleBeforeUnload = () => {
+      console.log("editor /////// ", editor);
+      if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+        ws.current.send(JSON.stringify(closeMessage));
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
       if (ws.current) {
         ws.current.close();
         ws.current = null;
         console.log("페이지 이동으로 인해 소켓 연결 종료");
       }
     };
-  }, [plannerInfo?.id, user.nickname]);
+  }, [plannerInfo?.id, user?.nickname]);
+
+  useEffect(() => {
+    if (ChatContainerRef.current) {
+      ChatContainerRef.current.scrollTop =
+        ChatContainerRef.current.scrollHeight;
+    }
+  }, [chatList, isChatOpen]);
 
   useEffect(() => {
     // 소켓이 연결된 상태에서 메시지 전송
@@ -304,10 +374,10 @@ export const Planning = () => {
     };
     const fetchIsBookmarked = async () => {
       try {
-        const response = await PlanningApi.getIsBookmarked(user.id, plannerId);
+        const response = await PlanningApi.getIsBookmarked(user?.id, plannerId);
         setIsBookmarked(response);
       } catch (e) {
-        console.log("북마크 여부 조회 중 에러", e);
+        console.log("북마크 여부 조회 중 에러");
       }
     };
     const fetchChatMsg = async () => {
@@ -315,17 +385,16 @@ export const Planning = () => {
         const response = await PlanningApi.getChatMsgs(plannerId);
         const reversedResponse = [...response].reverse();
         setChatList(reversedResponse);
-        console.log("fetchChatMsg : ", response);
       } catch (e) {
-        console.log("채팅 메시지 목록 불러오는 중 에러", e);
+        console.log("채팅 메시지 목록 불러오는 중 에러");
       }
     };
     fetchPlanner();
     fetchPlan();
     fetchIsBookmarked();
     fetchChatMsg();
-    setSender(user.nickname);
-  }, [plannerId, user.id, user.nickname]);
+    setSender(user?.nickname);
+  }, [plannerId, user?.id, user?.nickname]);
 
   const fetchMember = async () => {
     try {
@@ -368,9 +437,7 @@ export const Planning = () => {
       currentAddedPlace.content &&
       Object.keys(currentAddedPlace.content).length > 0
     ) {
-      // setPlans((prevPlans) => [...prevPlans, currentAddedPlace]);
       setEditPlans((prevPlans) => [...prevPlans, currentAddedPlace]);
-      console.log("이게 추가될 일정", currentAddedPlace);
       setCurrentAddedPlace({});
       setSelectedPlan({});
     }
@@ -386,6 +453,12 @@ export const Planning = () => {
       searchUsersRst: [],
     });
   }, [modals.searchUser]);
+
+  useEffect(() => {
+    if (memoState.isOpened === false && isEditting) {
+      setEditPlans(Object.values(groupPlans).flat());
+    }
+  }, [memoState]);
 
   if (plannerInfo) {
     return (
@@ -406,7 +479,7 @@ export const Planning = () => {
           />
           <Info>
             {isEditting ? (
-              editor === user.nickname ? (
+              editor === user?.nickname ? (
                 <PlannerInfoEditComponent
                   ws={ws}
                   socketConnected={socketConnected}
@@ -476,18 +549,46 @@ export const Planning = () => {
             )}
 
             {isChatOpen && (
-              <ChatComponent
-                closeChat={closeChat}
-                inputMsg={inputMsg}
-                setInputMsg={setInputMsg}
-                ws={ws}
-                plannerId={plannerId}
-                sender={sender}
-                socketConnected={socketConnected}
-                setSocketConnected={setSocketConnected}
-                chatList={chatList}
-                setChatList={setChatList}
-              />
+              <ChatContainer>
+                <div className="chat-header">
+                  <FaTimes className="close-chat" onClick={closeChat} />
+                </div>
+                <ChatMsgContainer
+                  ref={ChatContainerRef}
+                  className="chat-msg-container"
+                >
+                  {chatList.map((chat, index) => (
+                    <Message key={index} isSender={chat.sender === sender}>
+                      <p className="id">{`${chat.sender}`}</p>
+                      <p
+                        className="talk"
+                        dangerouslySetInnerHTML={{ __html: chat.message }}
+                      />
+                    </Message>
+                  ))}
+                </ChatMsgContainer>
+
+                <div className="sendChat">
+                  <textarea
+                    id="chatTyping"
+                    value={inputMsg ?? ""}
+                    onChange={(e) => setInputMsg(e.target.value)}
+                    onKeyDown={handleChatKeyDown}
+                    style={{
+                      height: `${Math.min(
+                        90,
+                        15 + inputMsg.split("\n").length * 15
+                      )}px`,
+                    }}
+                  />
+                  <button
+                    onClick={handleChatButtonClick}
+                    disabled={!inputMsg?.trim()}
+                  >
+                    <HiArrowCircleUp className="sendIcon" />
+                  </button>
+                </div>
+              </ChatContainer>
             )}
           </Info>
 
@@ -529,7 +630,7 @@ export const Planning = () => {
               )}
             {isParticipant && (
               <>
-                {isEditting && editor === user.nickname ? (
+                {isEditting && editor === user?.nickname ? (
                   // 수정 완료 버튼
                   <Button
                     className="edit-button-complete"
@@ -537,7 +638,7 @@ export const Planning = () => {
                   >
                     편집 완료
                   </Button>
-                ) : isEditting && editor && editor !== user.nickname ? (
+                ) : isEditting && editor && editor !== user?.nickname ? (
                   // 다른 사용자가 수정 중이라는 문구
                   <p className="editing-info">
                     <span>{editor}</span> 님이 수정 중입니다.
@@ -616,6 +717,7 @@ export const Planning = () => {
             setModals={setModals}
             plannerInfo={plannerInfo}
             setPlannerInfo={setPlannerInfo}
+            plannerId={plannerId}
           />
         )}
         {modals.deletePlanning && (
@@ -623,10 +725,19 @@ export const Planning = () => {
             modals={modals}
             setModals={setModals}
             plannerInfo={plannerInfo}
+            plannerId={plannerId}
           />
         )}
         <Footer />
       </div>
+    );
+  } else {
+    return (
+      <>
+        <Header />
+        <div>잘못된 접근입니다.</div>
+        <Footer />
+      </>
     );
   }
 };

@@ -141,10 +141,10 @@ const AxiosApi = {
   },
   // 팔로우 정보 로드
   loadFollow: async (userId) => {
-    try{
+    try {
       const response = await AxiosInstance.get(`/member/follow-info/${userId}`);
       return response.data;
-    }catch(error){
+    } catch (error) {
       console.log(error);
       return null;
     }
@@ -162,6 +162,19 @@ const AxiosApi = {
       return response.data;
     } catch (error) {
       console.error("팔로우 요청 실패 : ", error);
+      throw error;
+    }
+  },
+  // 신고하기
+  report: async (reporter, reported, content) => {
+    try {
+      const response = await AxiosInstance.post(`/member/report`, {
+        reporter: reporter,
+        reported: reported,
+        content: content,
+      })
+    } catch (error) {
+      console.log(error);
       throw error;
     }
   }

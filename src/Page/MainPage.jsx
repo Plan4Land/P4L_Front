@@ -155,63 +155,64 @@ export const Main = () => {
             )}
             {selectedMenu === "카테고리" && (
               <div className="SelectCategory">
-              <div className="catebuttons">
-                {types.map((type) => (
-                  <Link key={type.code} to={`/tourlist?category=${type.code}`}>
-                    <CateButton type={type.code} typeName={type.name}/>
-                  </Link>
-                ))}
+                <div className="catebuttons">
+                  {types.map((type) => (
+                    <Link
+                      key={type.code}
+                      to={`/tourlist?category=${type.code}`}
+                    >
+                      <CateButton type={type.code} typeName={type.name} />
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-            
             )}
           </div>
         </QuickSearch>
 
         {/* 상위 관광지 n개 */}
         <RecommItem className="GridItem">
-  <Swiper
-    modules={[Navigation, Pagination]}
-    spaceBetween={50}
-    slidesPerView={1}
-    navigation
-    pagination={{ clickable: true }}
-    scrollbar={{ draggable: true }}
-  >
-    {topTourList.map((tour, index) => {
-      // 기본 이미지 결정 함수
-      const getDefaultImage = (typeId) => {
-        switch (typeId) {
-          case "100":
-            return "/img/cateimg/type_200.png";
-          case "200":
-            return "/img/cateimg/type_300.png";
-          case "300":
-            return "/img/cateimg/type_300.png";
-          default:
-            return "/profile-pic/basic1.png"; 
-        }
-      };
-
-      return (
-        <SwiperSlide key={index}>
-          <div
-            className="topTourItem"
-            onClick={() => tourHandleClick(tour.id)}
+          <Swiper
+            modules={[Navigation, Pagination]}
+            spaceBetween={50}
+            slidesPerView={1}
+            navigation
+            pagination={{ clickable: true }}
+            scrollbar={{ draggable: true }}
           >
-            <img
-              src={tour.thumbnail || getDefaultImage(tour.typeId)}
-              alt={tour.title}
-            />
-            <h3>{tour.title}</h3>
-            <p>{tour.addr1}</p>
-          </div>
-        </SwiperSlide>
-      );
-    })}
-  </Swiper>
-</RecommItem>
+            {topTourList.map((tour, index) => {
+              // 기본 이미지 결정 함수
+              const getDefaultImage = (typeId) => {
+                switch (typeId) {
+                  case "100":
+                    return "/img/cateimg/type_200.png";
+                  case "200":
+                    return "/img/cateimg/type_100.png";
+                  case "300":
+                    return "/img/cateimg/type_300.png";
+                  default:
+                    return "/profile-pic/basic1.png";
+                }
+              };
 
+              return (
+                <SwiperSlide key={index}>
+                  <div
+                    className="topTourItem"
+                    onClick={() => tourHandleClick(tour.id)}
+                  >
+                    <img
+                      src={tour.thumbnail || getDefaultImage(tour.typeId)}
+                      alt={tour.title}
+                    />
+                    <h3>{tour.title}</h3>
+                    <p>{tour.addr1}</p>
+                  </div>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+        </RecommItem>
 
         {/* 상위 플래닝 3개 */}
         <RecommPlan className="GridItem">
@@ -271,14 +272,14 @@ export const Main = () => {
           <HolidayList>
             <ul>
               {holidays.length === 0 ? (
-                <li>일정이 존재하지 않습니다.</li>
+                <p>일정이 존재하지 않습니다.</p>
               ) : (
                 holidays.map((holiday) => (
-                  <li key={holiday.seq}>
-                    {parseInt(holiday.holidayDate.toString().slice(5, 7))}월{" "}
-                    {parseInt(holiday.holidayDate.toString().slice(8, 10))}일 -{" "}
+                  <p key={holiday.seq}>
+                    ∘ {parseInt(holiday.holidayDate.toString().slice(5, 7))}월{" "}
+                    {parseInt(holiday.holidayDate.toString().slice(8, 10))}일 :{" "}
                     {holiday.holidayName}
-                  </li>
+                  </p>
                 ))
               )}
             </ul>

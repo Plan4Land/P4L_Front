@@ -59,7 +59,6 @@ export const UserInfo = styled.div`
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
   border-radius: 20px;
   margin-bottom: 15px;
-
   .ProfileImg {
     height: 100px;
     width: 100px;
@@ -102,7 +101,7 @@ export const UserInfo = styled.div`
   }
   @media (max-width: 768px) {
     flex-direction: column;
-    width: 80vw;
+    /* width: 80vw; */
     height: 20vh;
     justify-content: center;
     align-items: center;
@@ -125,6 +124,7 @@ export const UserPlanning = styled.div`
   height: 100%;
   width: 100%;
   .myPlanList {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -202,4 +202,9 @@ export const InvitePlanning = styled.div`
     align-items: center;
     gap: 10px;
   }
+`;
+
+export const OtherUserInfo = styled.div`
+  width: 60%;
+  margin: auto;
 `;

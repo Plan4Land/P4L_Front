@@ -4,6 +4,7 @@ import { LuUserRoundPlus } from "react-icons/lu";
 import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
 import PlanningApi from "../../Api/PlanningApi";
 import { useAuth } from "../../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export const MenuIcons = ({
   plannerId,
@@ -16,13 +17,16 @@ export const MenuIcons = ({
   setIsChatOpen,
 }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleBookmarked = async () => {
     console.log("북마크 상태 : ", isBookmarked);
-    if (isBookmarked) {
+    if (isBookmarked && user) {
       await PlanningApi.deleteBookmarked(user.id, plannerId);
-    } else {
+    } else if (user) {
       await PlanningApi.putBookmarked(user.id, plannerId);
+    } else {
+      navigate("/login");
     }
     setIsBookmarked(!isBookmarked);
   };

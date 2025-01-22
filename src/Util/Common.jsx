@@ -10,11 +10,23 @@ const Common = {
   setAccessToken: (token) => {
     localStorage.setItem("accessToken", token);
   },
+  getAccessTokenExpiresIn: () => {
+    return localStorage.getItem("accessTokenExpiresIn");
+  },
+  setAccessTokenExpiresIn: (time) => {
+    localStorage.setItem("accessTokenExpiresIn", time);
+  },
   getRefreshToken: () => {
     return localStorage.getItem("refreshToken");
   },
   setRefreshToken: (token) => {
     localStorage.setItem("refreshToken", token);
+  },
+  getRefreshTokenExpiresIn: () => {
+    return localStorage.getItem("refreshTokenExpiresIn");
+  },
+  setRefreshTokenExpiresIn: (time) => {
+    localStorage.setItem("refreshTokenExpiresIn", time);
   },
 
   // 401 에러 처리 함수

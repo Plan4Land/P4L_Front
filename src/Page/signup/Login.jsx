@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AxiosApi from "../../Api/AxiosApi";
 
@@ -41,7 +41,7 @@ export const Login = () => {
     setState(e.target.value);
   };
 
-  // 로그인 기능
+  // 일반 로그인
   const onClickLogin = async () => {
     setTextMessage("");
     if(!inputUserId.trim()) {
@@ -62,7 +62,9 @@ export const Login = () => {
           || response.status === 200)
       ) {
         Common.setAccessToken(response.data.accessToken);
+        Common.setAccessTokenExpiresIn(response.data.accessTokenExpiresIn);
         Common.setRefreshToken(response.data.refreshToken);
+        Common.setRefreshTokenExpiresIn(response.data.refreshTokenExpiresIn);
 
         const userData = await AxiosApi.memberInfo(inputUserId);
         login(userData);
@@ -81,22 +83,30 @@ export const Login = () => {
   };
 
   // 카카오 로그인
-  const kakao_api_key = process.env.REACT_APP_KAKAO_API_KEY;
-  const kakao_redirect_uri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
-  // oauth 요청 url
-  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao_api_key}&redirect_uri=${kakao_redirect_uri}&response_type=code`;
   const kakaoLogin = () => {
+    const kakao_api_key = process.env.REACT_APP_KAKAO_API_KEY;
+    const kakao_redirect_uri = process.env.REACT_APP_KAKAO_REDIRECT_URI;
+    // oauth 요청 url
+    const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao_api_key}&redirect_uri=${kakao_redirect_uri}&response_type=code`;
     window.location.href = kakaoURL;
   };
 
   // 구글 로그인
-  const google_api_key = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-  const google_redirect_uri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
-  const googleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_api_key}&redirect_uri=${google_redirect_uri}&response_type=code&scope=email+profile`;
-  // const googleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=833604730211-ihphu6ve5pq1ork6dnia79qvl829n71m.apps.googleusercontent.com&redirect_uri=http://localhost:3000/login/oauth/google&response_type=code&scope=email+profile`
   const googleLogin = () => {
+    const google_api_key = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const google_redirect_uri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
+    const googleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_api_key}&redirect_uri=${google_redirect_uri}&response_type=code&scope=email+profile`;
     window.location.href = googleURL;
   };
+
+  // 네이버 로그인
+  const naverLogin = () => {
+    const naver_api_key = process.env.REACT_APP_NAVER_CLIENT_ID;
+    const naver_redirect_uri = process.env.REACT_APP_NAVER_REDIRECT_URI;
+    const state = Math.random().toString(36).substr(2, 15);
+    const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naver_api_key}&redirect_uri=${naver_redirect_uri}&state=${state}`;
+    window.location.href = naverURL;
+  }
 
   // 비밀번호 보이기
   const onClickPwEye = () => {
@@ -180,27 +190,40 @@ export const Login = () => {
             </div>
           </div>
 
+          <div className="login-social-box">
+            <button 
+              className="login-icon kakao"
+              onClick={kakaoLogin}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 512 512" version="1.1">
+                <path fill="#000000" d="M255.5 48C299.345 48 339.897 56.5332 377.156 73.5996C414.415 90.666 443.871 113.873 465.522 143.22C487.174 172.566 498 204.577 498 239.252C498 273.926 487.174 305.982 465.522 335.42C443.871 364.857 414.46 388.109 377.291 405.175C340.122 422.241 299.525 430.775 255.5 430.775C241.607 430.775 227.262 429.781 212.467 427.795C148.233 472.402 114.042 494.977 109.892 495.518C107.907 496.241 106.012 496.15 104.208 495.248C103.486 494.706 102.945 493.983 102.584 493.08C102.223 492.177 102.043 491.365 102.043 490.642V489.559C103.126 482.515 111.335 453.169 126.672 401.518C91.8486 384.181 64.1974 361.2 43.7185 332.575C23.2395 303.951 13 272.843 13 239.252C13 204.577 23.8259 172.566 45.4777 143.22C67.1295 113.873 96.5849 90.666 133.844 73.5996C171.103 56.5332 211.655 48 255.5 48Z"/>
+              </svg>
+            </button>
+            <button 
+              className="login-icon google"
+              onClick={googleLogin}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48">
+                <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path>
+                <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path>
+                <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path>
+                <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
+              </svg>
+            </button>
+            <button 
+              className="login-icon naver"
+              onClick={naverLogin}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 512 512" version="1.1">
+                <path fill="#fff" d="M9 32V480H181.366V255.862L331.358 480H504V32H331.358V255.862L181.366 32H9Z"/>
+              </svg>
+            </button>
+          </div>
+
           <Button onClick={onClickLogin}>
             로그인
           </Button>
-          <div style={{margin: "15px"}} />
-          <Button 
-            onClick={kakaoLogin}
-            bgcolor={"rgb(255, 255, 0)"}
-            hoverBgColor={"rgb(240, 240, 0)"}
-            border={"1px solid rgb(240, 240, 0)"}
-          >
-            <span style={{color: "rgb(0,0,0)"}}>카카오 로그인</span>
-          </Button>
-          <div style={{margin: "15px"}} />
-          <Button 
-            onClick={googleLogin}
-            bgcolor={"rgb(70, 135, 255)"}
-            hoverBgColor={"rgb(50, 100, 220)"}
-            border={"1px solid rgb(50, 100, 220)"}
-          >
-            <span style={{color: "rgb(0,0,0)"}}>구글 로그인</span>
-          </Button>
+          <div style={{ margin: "30px" }} />
 
           {/* 아이디 찾기 모달 */}
           <FindUserIdModal

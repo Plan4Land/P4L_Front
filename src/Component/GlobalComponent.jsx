@@ -94,7 +94,8 @@ export const Header = () => {
               <h3>인기 관광지</h3>
               {topSpots.map((spot, index) => (
                 <p key={`spot-${index}`} onClick={() => topTourClick(spot.id)}>
-                  <strong>{spot.title}</strong> - {spot.addr1}
+                  <strong className="truncated-text">{spot.title}</strong> -
+                  <span className="truncated-text">{spot.addr1}</span>
                 </p>
               ))}
             </div>
@@ -104,7 +105,6 @@ export const Header = () => {
                 const areaName =
                   areas.find((area) => area.code === plan.area)?.name ||
                   "알 수 없는 지역";
-
                 const subAreaName =
                   areas
                     .find((area) => area.code === plan.area)
@@ -116,9 +116,12 @@ export const Header = () => {
                     key={`plan-${index}`}
                     onClick={() => topPlanClick(plan.id)}
                   >
-                    <strong>{plan.title}</strong> - {areaName} {subAreaName}
+                    <strong className="truncated-text">{plan.title}</strong> -
+                    <span className="truncated-text">
+                      {areaName} {subAreaName}
+                    </span>
                     <span>||</span>
-                    {plan.theme}
+                    <span className="truncated-text">{plan.theme}</span>
                   </p>
                 );
               })}

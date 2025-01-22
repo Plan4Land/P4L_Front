@@ -156,8 +156,8 @@ export const KakaoMap = React.memo(({ plans, date }) => {
       };
     } else {
       return {
-        lat: plans[Object.keys(plans)[0]]?.[0].latitude,
-        lng: plans[Object.keys(plans)[0]]?.[0].longitude,
+        lat: plans[Object.keys(plans)[0]]?.[0].latitude || 37.5563,
+        lng: plans[Object.keys(plans)[0]]?.[0].longitude || 126.9723,
       };
     }
   }, [plans, date]);

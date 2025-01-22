@@ -778,11 +778,18 @@ export const DayToggleContainer = styled.div`
       background-color: white;
       overflow-y: auto;
       z-index: 2;
+      ${ScrollBar}
 
       textarea {
         width: 100%;
         resize: none;
         padding: 6px;
+        line-height: 1.5;
+        ${ScrollBar}
+      }
+      textarea.textarea-disabled {
+        background-color: #fcfcfc;
+        cursor: default;
       }
     }
   }
@@ -790,6 +797,7 @@ export const DayToggleContainer = styled.div`
 
 export const ChatContainer = styled.div`
   display: flex;
+  flex-direction: column;
   position: fixed;
   right: 10px;
   top: 130px;
@@ -799,7 +807,7 @@ export const ChatContainer = styled.div`
   border-radius: 10px;
   z-index: 99;
   background-color: #fffbf5;
-  padding: 10px;
+  padding: 10px 10px 0.5vh;
   .chat-header {
     width: 100%;
     display: flex;
@@ -816,8 +824,9 @@ export const ChatContainer = styled.div`
   .sendChat {
     width: 100%;
     display: flex;
-    position: absolute;
+    position: relative;
     justify-content: space-between;
+    align-items: center;
     bottom: 0;
     margin-bottom: 8px;
     margin-left: 5px;
@@ -862,7 +871,8 @@ export const ChatMsgContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 95%;
-  height: 83%;
+  /* height: 83%; */
+  height: calc(100% - 100px);
   overflow-y: scroll;
   gap: 10px;
   position: absolute;
