@@ -142,10 +142,6 @@ export const PlanningList = () => {
   };
 
   const handleSearch = () => {
-    if (searchQuery.length < 2) {
-      alert("검색어는 2자리 이상 입력해 주세요.");
-      return;
-    }
     updateFilters("searchQuery", searchQuery);
   };
 
@@ -175,7 +171,7 @@ export const PlanningList = () => {
         newSelectedThemes = newSelectedThemes.filter((item) => item !== theme);
       } else {
         if (newSelectedThemes.length >= 3) {
-          alert("최대 3개의 테마만 선택할 수 있습니다.");
+          // alert("최대 3개의 테마만 선택할 수 있습니다.");
           return prev;
         }
         newSelectedThemes.push(theme);
@@ -285,6 +281,10 @@ export const PlanningList = () => {
                         ? "selected"
                         : ""
                     }`}
+                    disabled={
+                      filters.themeList.split(",").length >= 3 &&
+                      !filters.themeList.split(",").includes(theme)
+                    }
                   >
                     {theme}
                   </Button>
@@ -309,30 +309,35 @@ export const PlanningList = () => {
             </Link>
           </div>
           <div className="plannerList">
-            {planners.map((planner) => {
-              const areaName =
-                areas.find((area) => area.code === planner.area)?.name ||
-                "알 수 없는 지역";
-              const subAreaName =
-                areas
-                  .find((area) => area.code === planner.area)
-                  ?.subAreas.find((subArea) => subArea.code === planner.subArea)
-                  ?.name || "알 수 없는 하위 지역";
+            {planners.length === 0 ? (
+              <p>해당 조건의 플래닝이 없습니다.</p>
+            ) : (
+              planners.map((planner) => {
+                const areaName =
+                  areas.find((area) => area.code === planner.area)?.name ||
+                  "알 수 없는 지역";
+                const subAreaName =
+                  areas
+                    .find((area) => area.code === planner.area)
+                    ?.subAreas.find(
+                      (subArea) => subArea.code === planner.subArea
+                    )?.name || "알 수 없는 하위 지역";
 
-              return (
-                <PlanItem
-                  key={planner.id}
-                  id={planner.id}
-                  thumbnail={planner.thumbnail || "/default-thumbnail.png"}
-                  title={planner.title}
-                  address={`${areaName} - ${subAreaName}`}
-                  subCategory={planner.theme}
-                  type={planner.public ? "공개" : "비공개"}
-                  ownerprofile={planner.ownerProfileImg}
-                  ownernick={planner.ownerNickname}
-                />
-              );
-            })}
+                return (
+                  <PlanItem
+                    key={planner.id}
+                    id={planner.id}
+                    thumbnail={planner.thumbnail || "/default-thumbnail.png"}
+                    title={planner.title}
+                    address={`${areaName} - ${subAreaName}`}
+                    subCategory={planner.theme}
+                    type={planner.public ? "공개" : "비공개"}
+                    ownerprofile={planner.ownerProfileImg}
+                    ownernick={planner.ownerNickname}
+                  />
+                );
+              })
+            )}
           </div>
           <Pagination
             currentPage={filters.currentPage}

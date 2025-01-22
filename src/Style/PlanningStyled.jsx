@@ -692,12 +692,28 @@ export const DayToggleContainer = styled.div`
   position: relative;
   flex-direction: column;
   align-items: center;
+
   width: 85%;
   margin: 0 auto;
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
+  .seq-change {
+    margin-right: 15px;
+    display: flex;
+    flex-direction: column;
 
+    .seq-button {
+      margin: -3px;
+      color: ${colors.colorA};
+      font-size: 25px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
   button {
     background-color: #ececec;
     border: none;
@@ -729,16 +745,17 @@ export const DayToggleContainer = styled.div`
         position: absolute;
         left: -5px;
         top: 35%;
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         justify-content: center;
         align-items: center;
         border-radius: 50%;
         color: white;
         border: none;
+        font-size: 10px;
       }
       .delete-btn {
-        background-color: red;
+        background-color: #db5454;
         cursor: pointer;
       }
       .seq-div {
@@ -760,6 +777,7 @@ export const DayToggleContainer = styled.div`
   .memo-container {
     display: flex;
     position: relative;
+    align-items: center;
     .memo-icon {
       cursor: pointer;
       width: 20px;
