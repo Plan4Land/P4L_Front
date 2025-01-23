@@ -20,7 +20,7 @@ export const SelectTourItem = styled.div`
   padding-top: 40px;
   position: relative;
   margin-right: 30px;
-  width: 350px;
+  width: 450px;
   .title{
     width: 100%;
     border-bottom: 1px solid #ddd;
@@ -31,7 +31,6 @@ export const SelectTourItem = styled.div`
     margin-left: 10px;
   }
   }
-  
   .buttons {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -58,11 +57,6 @@ export const SelectTourItem = styled.div`
       background-color: #f0f0f0;
       color: #b0b0b0;
     }
-
-    /* &:disabled:hover {
-      background-color: #f0f0f0;
-      color: #b0b0b0;
-    } */
   }
   .reset-button {
     width: 80px;
@@ -99,7 +93,10 @@ export const SelectTourItem = styled.div`
   .toggle-button:hover {
     color: ${colors.colorB};
   }
-
+  @media (max-width: 1024px) {
+    width: 300px;
+     .buttons{ grid-template-columns: repeat(2, 1fr);}
+    }
   /* SelectTourItem 기본 상태 숨기기 (모바일 화면) */
   @media (max-width: 768px) {
     visibility: hidden;
@@ -123,6 +120,7 @@ export const SelectTourItem = styled.div`
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     .buttons {
       width: 80%;
+      grid-template-columns: repeat(3, 1fr);
     }
     button {
       font-size: 9px;

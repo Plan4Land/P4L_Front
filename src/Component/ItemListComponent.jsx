@@ -132,6 +132,9 @@ const TourItemStyled = styled.div`
       max-width: 40%;
       min-width: 40%;
     }
+    .profile-img{
+      
+    }
     .thumbnail {
     }
     .title {

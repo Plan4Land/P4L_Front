@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 export const colors = {
   colorA: "rgb(105, 39, 13)",
-  colorB: "rgb(253, 112, 18)",
-  colorC: "rgb(255, 179, 149)",
+  colorB: "rgb(255, 115, 22)",
+  colorC: "rgb(255, 170, 131)",
   colorD: "rgb(255, 238, 226)",
   colorE: "rgb(255, 119, 0)",
 };
@@ -16,12 +16,13 @@ export const HeaderSt = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  padding: 0 10% 0 10%;
+  padding: 0 5% 0 10%;
   .logo {
     display: inline-block;
     img {
       width: 200px;
       cursor: pointer;
+      scale: 110%;
     }
   }
   .profile-link {
@@ -193,6 +194,11 @@ export const HeaderSt = styled.div`
     }
   }
   @media (max-width: 768px) {
+    height: 60px;
+    padding: 0 3% 0 8%;
+    .profile-link{
+      scale: 70%;
+    }
     .dropdown-list {
       top: -30px;
       right: -180px;
@@ -240,11 +246,12 @@ export const NavSt = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
+    height: 40px;
     background-color: white;
     font-size: 12px;
     z-index: 10;
     padding: 0 8% 0 8%;
-    box-shadow: 1px -1px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px -1px 4px rgba(0, 0, 0, 0.1);
     .tag,
     p {
       font-size: 15px;
