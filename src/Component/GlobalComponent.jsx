@@ -71,7 +71,7 @@ export const Header = () => {
     };
 
     fetchData();
-  }, [user.id]);
+  }, [user?.id]);
 
   return (
     <HeaderSt>
