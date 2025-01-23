@@ -17,7 +17,8 @@ import { Swiper, SwiperSlide } from "swiper/react"; // 추천 관광지 스와�
 import "swiper/css"; // 추천 관광지 스와이퍼
 import "swiper/css/navigation"; // 추천 관광지 스와이퍼
 import "swiper/css/pagination"; // 추천 관광지 스와이퍼
-import { Navigation, Pagination } from "swiper/modules"; // 추천 관광지 스와이퍼
+import "swiper/css/autoplay";
+import { Navigation, Pagination, Autoplay } from "swiper/modules"; // 추천 관광지 스와이퍼
 import Calendar from "react-calendar"; // 축제 캘린더
 import "react-calendar/dist/Calendar.css"; // 캘린더
 import { TopTourApi, TopPlanApi, HolidayApi } from "../Api/ItemApi";
@@ -121,12 +122,16 @@ export const Main = () => {
         <RecommPlan className="GridItem">
           <PlanBox>
             <Swiper
-              modules={[Navigation, Pagination]}
+              modules={[Navigation, Pagination, Autoplay]}
               spaceBetween={20} // 슬라이드 간 간격
               slidesPerView={1} // 한 번에 보여주는 슬라이드 수 (1개만 보이도록 설정)
               loop={true}
               navigation
               pagination={{ clickable: true }}
+              // autoplay={{
+              //   delay: 4000,
+              //   disableOnInteraction: false,
+              // }}
             >
               {topPlans.map((plan, index) => {
                 const areaName =
@@ -156,7 +161,7 @@ export const Main = () => {
                           })`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
-                          filter: "brightness(130%) blur(8px)",
+                          filter: "brightness(85%) blur(8px)",
                           zIndex: -1, // 배경은 콘텐츠 뒤에 위치하도록 설정
                         }}
                       />
@@ -166,7 +171,7 @@ export const Main = () => {
                       />
                       <div className="planExplain">
                         <h3>{plan.title}</h3>
-                        <p>{`${areaName} - ${subAreaName}`}</p>
+                        <p>플래너 지역: {`${areaName} > ${subAreaName}`}</p>
                         <p>{plan.theme}</p>
                       </div>
                     </div>
@@ -233,12 +238,17 @@ export const Main = () => {
         {/* 상위 관광지 n개 */}
         <RecommItem className="GridItem">
           <Swiper
-            modules={[Navigation, Pagination]}
+            modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={50}
             slidesPerView={1}
             navigation
+            loop={true}
             pagination={{ clickable: true }}
             scrollbar={{ draggable: true }}
+            // autoplay={{
+            //   delay: 4000, // 3초마다 슬라이드 변경
+            //   disableOnInteraction: false, // 사용자가 슬라이드를 클릭해도 자동 재생 유지
+            // }}
           >
             {topTourList.map((tour, index) => {
               // 기본 이미지 결정 함수
