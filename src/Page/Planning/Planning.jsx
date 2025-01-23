@@ -2,6 +2,7 @@ import {
   MainContainer,
   Info,
   Users,
+  PlannerOwner,
   UserProfile,
   UserName,
   ContentContainer,
@@ -479,40 +480,84 @@ export const Planning = () => {
             setIsEditting={setIsEditting}
           />
           <Info>
-            {isEditting ? (
-              editor === user?.nickname ? (
-                <PlannerInfoEditComponent
-                  ws={ws}
-                  socketConnected={socketConnected}
-                  plannerInfo={plannerInfo}
-                  editPlannerInfo={editPlannerInfo}
-                  setEditPlannerInfo={setEditPlannerInfo}
-                  selectedThemes={selectedThemes}
-                  setSelectedThemes={setSelectedThemes}
-                  isEditting={isEditting}
-                  plans={plans}
-                  plannerId={plannerId}
-                  sender={sender}
-                  setIsLoading={setIsLoading}
-                />
-              ) : editPlannerInfo !== null ? (
-                <>
-                  <div className="planner-thumbnail">
-                    <ProfileImg file={editPlannerInfo.thumbnail} />
-                  </div>
-                  <div>
-                    <h1>{editPlannerInfo.title}</h1>
-                    <h3>
-                      {areaState.area} {areaState.subArea} /{" "}
-                      {editPlannerInfo.theme}
-                    </h3>
-                    <h3>
-                      {new Date(editPlannerInfo.startDate).toLocaleDateString()}
-                      &nbsp;&nbsp;~&nbsp;&nbsp;
-                      {new Date(editPlannerInfo.endDate).toLocaleDateString()}
-                    </h3>
-                  </div>
-                </>
+            <div
+              className="info-background"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundImage: `url(${
+                  isEditting
+                    ? editPlannerInfo?.thumbnail || plannerInfo?.thumbnail
+                    : plannerInfo?.thumbnail
+                })`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                filter: "brightness(50%)  blur(3px)", // 배경 이미지 밝기 조정
+                zIndex: 1,
+              }}
+            />
+            <div className="planner-info-content">
+              {isEditting ? (
+                editor === user?.nickname ? (
+                  <PlannerInfoEditComponent
+                    ws={ws}
+                    socketConnected={socketConnected}
+                    plannerInfo={plannerInfo}
+                    editPlannerInfo={editPlannerInfo}
+                    setEditPlannerInfo={setEditPlannerInfo}
+                    selectedThemes={selectedThemes}
+                    setSelectedThemes={setSelectedThemes}
+                    isEditting={isEditting}
+                    plans={plans}
+                    plannerId={plannerId}
+                    sender={sender}
+                    setIsLoading={setIsLoading}
+                  />
+                ) : editPlannerInfo !== null ? (
+                  <>
+                    <div className="planner-thumbnail">
+                      <ProfileImg file={editPlannerInfo.thumbnail} />
+                    </div>
+                    <div>
+                      <h1>{editPlannerInfo.title}</h1>
+                      <h3>
+                        <h3>{editPlannerInfo.theme}</h3>
+                        {areaState.area} {areaState.subArea}
+                        &nbsp;/&nbsp;&nbsp;
+                        {editPlannerInfo.theme}
+                      </h3>
+                      <h3>
+                        {new Date(
+                          editPlannerInfo.startDate
+                        ).toLocaleDateString()}
+                        &nbsp;&nbsp;~&nbsp;&nbsp;
+                        {new Date(editPlannerInfo.endDate).toLocaleDateString()}
+                      </h3>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="planner-thumbnail">
+                      <ProfileImg file={plannerInfo.thumbnail} />
+                    </div>
+                    <div>
+                      <h1>{plannerInfo.title}</h1>
+                      <h3>
+                        {areaState.area} {areaState.subArea} &nbsp;/&nbsp;&nbsp;
+                        {plannerInfo.theme}
+                      </h3>
+                      <h3>
+                        {new Date(plannerInfo.startDate).toLocaleDateString()}
+                        &nbsp;&nbsp;~&nbsp;&nbsp;
+                        {new Date(plannerInfo.endDate).toLocaleDateString()}
+                      </h3>
+                    </div>
+                  </>
+                )
               ) : (
                 <>
                   <div className="planner-thumbnail">
@@ -521,7 +566,13 @@ export const Planning = () => {
                   <div>
                     <h1>{plannerInfo.title}</h1>
                     <h3>
-                      {areaState.area} {areaState.subArea} / {plannerInfo.theme}
+                      {areaState.area} {areaState.subArea}
+                    </h3>
+                    <h3>
+                      {plannerInfo.theme
+                        .split(",")
+                        .map((theme) => `#${theme.trim()}`)
+                        .join(" ")}
                     </h3>
                     <h3>
                       {new Date(plannerInfo.startDate).toLocaleDateString()}
@@ -530,106 +581,61 @@ export const Planning = () => {
                     </h3>
                   </div>
                 </>
-              )
-            ) : (
-              <>
-                <div className="planner-thumbnail">
-                  <ProfileImg file={plannerInfo.thumbnail} />
-                </div>
-                <div>
-                  <h1>{plannerInfo.title}</h1>
-                  <h3>
-                    {areaState.area} {areaState.subArea} / {plannerInfo.theme}
-                  </h3>
-                  <h3>
-                    {new Date(plannerInfo.startDate).toLocaleDateString()}
-                    &nbsp;&nbsp;~&nbsp;&nbsp;
-                    {new Date(plannerInfo.endDate).toLocaleDateString()}
-                  </h3>
-                </div>
-              </>
-            )}
-
-            {isChatOpen && (
-              <ChatContainer>
-                <div className="chat-header">
-                  <FaTimes className="close-chat" onClick={closeChat} />
-                </div>
-                <ChatMsgContainer
-                  ref={ChatContainerRef}
-                  className="chat-msg-container"
-                >
-                  {chatList.map((chat, index) => (
-                    <Message key={index} isSender={chat.sender === sender}>
-                      <p className="id">{`${chat.sender}`}</p>
-                      <p
-                        className="talk"
-                        dangerouslySetInnerHTML={{ __html: chat.message }}
-                      />
-                    </Message>
-                  ))}
-                </ChatMsgContainer>
-
-                <div className="sendChat">
-                  <textarea
-                    id="chatTyping"
-                    value={inputMsg ?? ""}
-                    onChange={(e) => setInputMsg(e.target.value)}
-                    onKeyDown={handleChatKeyDown}
-                    style={{
-                      height: `${Math.min(
-                        90,
-                        15 + inputMsg.split("\n").length * 15
-                      )}px`,
-                    }}
-                  />
-                  <button
-                    onClick={handleChatButtonClick}
-                    disabled={!inputMsg?.trim()}
-                  >
-                    <HiArrowCircleUp className="sendIcon" />
-                  </button>
-                </div>
-              </ChatContainer>
-            )}
-          </Info>
-
-          <Users>
-            <UserProfile
-              onClick={() => navigate(`/otheruser/${plannerInfo.ownerId}`)}
-            >
-              <ProfileImg file={`/${plannerInfo.ownerProfileImg}`} />
-            </UserProfile>
-            <UserName>{plannerInfo.ownerNickname}</UserName>
-            {plannerInfo.participants &&
-              plannerInfo.participants.map(
-                (participant, index) =>
-                  participant.state === "ACCEPT" && (
-                    <UserProfile
-                      key={index}
-                      id={participant.id}
-                      // nickname={participant.nickname}
-                      // profileImg={participant.profileImg}
-                      onClick={() =>
-                        setModals((prevModals) => ({
-                          ...prevModals,
-                          userModal: true,
-                        }))
-                      }
-                    >
-                      <img
-                        src={`/${participant.memberProfileImg}`}
-                        alt={`/${participant.memberProfileImg}`}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          borderRadius: "50%",
-                        }}
-                      />
-                    </UserProfile>
-                  )
               )}
+
+              {isChatOpen && (
+                <ChatContainer>
+                  <div className="chat-header">
+                    <FaTimes className="close-chat" onClick={closeChat} />
+                  </div>
+                  <ChatMsgContainer
+                    ref={ChatContainerRef}
+                    className="chat-msg-container"
+                  >
+                    {chatList.map((chat, index) => (
+                      <Message key={index} isSender={chat.sender === sender}>
+                        <p className="id">{`${chat.sender}`}</p>
+                        <p
+                          className="talk"
+                          dangerouslySetInnerHTML={{ __html: chat.message }}
+                        />
+                      </Message>
+                    ))}
+                  </ChatMsgContainer>
+
+                  <div className="sendChat">
+                    <textarea
+                      id="chatTyping"
+                      value={inputMsg ?? ""}
+                      onChange={(e) => setInputMsg(e.target.value)}
+                      onKeyDown={handleChatKeyDown}
+                      style={{
+                        height: `${Math.min(
+                          90,
+                          15 + inputMsg.split("\n").length * 15
+                        )}px`,
+                      }}
+                    />
+                    <button
+                      onClick={handleChatButtonClick}
+                      disabled={!inputMsg?.trim()}
+                    >
+                      <HiArrowCircleUp className="sendIcon" />
+                    </button>
+                  </div>
+                </ChatContainer>
+              )}
+            </div>
+            {!isEditting && (
+              <PlannerOwner
+                onClick={() => navigate(`/otheruser/${plannerInfo.ownerId}`)}
+              >
+                <UserProfile>
+                  <ProfileImg file={`${plannerInfo.ownerProfileImg}`} />
+                </UserProfile>
+                <UserName>{plannerInfo.ownerNickname}</UserName>
+              </PlannerOwner>
+            )}
             {isParticipant && (
               <>
                 {isEditting && editor === user?.nickname ? (
@@ -656,6 +662,37 @@ export const Planning = () => {
                 )}
               </>
             )}
+          </Info>
+          <Users>
+            {plannerInfo.participants &&
+              plannerInfo.participants.map(
+                (participant, index) =>
+                  participant.state === "ACCEPT" && (
+                    <UserProfile
+                      key={index}
+                      id={participant.id}
+                      // nickname={participant.nickname}
+                      // profileImg={participant.profileImg}
+                      onClick={() =>
+                        setModals((prevModals) => ({
+                          ...prevModals,
+                          userModal: true,
+                        }))
+                      }
+                    >
+                      <img
+                        src={`${participant.memberProfileImg}`}
+                        alt={`${participant.memberProfileImg}`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </UserProfile>
+                  )
+              )}
           </Users>
           <ContentContainer>
             <PlansComponent
@@ -700,7 +737,7 @@ export const Planning = () => {
             searchState={searchState}
             setSearchState={setSearchState}
             setCurrentAddedPlace={setCurrentAddedPlace}
-            setPlans={setPlans}
+            // setPlans={setPlans}
           />
         )}
         {modals.searchUser && (

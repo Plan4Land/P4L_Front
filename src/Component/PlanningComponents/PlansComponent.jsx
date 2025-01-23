@@ -62,7 +62,7 @@ export const PlannerInfoEditComponent = ({
     // const byteLength = new TextEncoder().encode(e.target.value).length;
 
     // // 한글 기준 20글자 제한 (20자 * 2바이트 = 40바이트 이하)
-    // if (byteLength <= 40) {
+    // if (byteLength <= 40) { // 한글 13자  소문자 40자
     //   setTitle(e.target.value);
     // }
     if (e.target.value.length <= 20) {
@@ -202,12 +202,15 @@ export const PlannerInfoEditComponent = ({
             disabled={!editTitle}
           />
           {editTitle ? (
-            <button className="edit-button" onClick={() => handleSaveTitle()}>
+            <button
+              className="editInfo-button"
+              onClick={() => handleSaveTitle()}
+            >
               수정 완료
             </button>
           ) : (
             <button
-              className="edit-button"
+              className="editInfo-button"
               onClick={() => setEditTitle(!editTitle)}
             >
               제목 수정
@@ -245,12 +248,15 @@ export const PlannerInfoEditComponent = ({
           )}
 
           {editArea ? (
-            <button className="edit-button" onClick={() => handleSaveArea()}>
+            <button
+              className="editInfo-button"
+              onClick={() => handleSaveArea()}
+            >
               수정 완료
             </button>
           ) : (
             <button
-              className="edit-button"
+              className="editInfo-button"
               onClick={() => setEditArea(!editArea)}
             >
               지역 수정
@@ -276,7 +282,7 @@ export const PlannerInfoEditComponent = ({
         <div>
           <DatePickerContainer>
             <DatePicker
-              className="input-date-picker"
+              className="input-date-picker planner-date-picker"
               locale={ko}
               dateFormat="yyyy-MM-dd"
               dateFormatCalendar="yyyy년 MM월"
@@ -292,7 +298,7 @@ export const PlannerInfoEditComponent = ({
             <span>~</span>
             {editPlannerInfo.startDate ? (
               <DatePicker
-                className="input-date-picker"
+                className="input-date-picker planner-date-picker"
                 locale={ko}
                 dateFormat="yyyy-MM-dd"
                 dateFormatCalendar="yyyy년 MM월"

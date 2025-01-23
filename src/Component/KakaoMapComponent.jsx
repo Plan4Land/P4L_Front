@@ -1,12 +1,5 @@
-import {
-  Map,
-  MapTypeControl,
-  ZoomControl,
-  MapMarker,
-  Roadview,
-  RoadviewMarker,
-} from "react-kakao-maps-sdk";
-import { useKakaoLoader, useMap } from "react-kakao-maps-sdk";
+import { Map, MapMarker, Roadview, RoadviewMarker } from "react-kakao-maps-sdk";
+import { useMap } from "react-kakao-maps-sdk";
 import React, { useState, useEffect, useMemo } from "react";
 
 const { kakao } = window;
@@ -73,48 +66,9 @@ export const KakaoMapSpot = ({ mapX, mapY }) => {
   );
 };
 
-// export const KakaoMapEx = () => {
-//   useKakaoLoader();
-//   const [result, setResult] = useState("");
-//   const [state, setState] = useState({
-//     // 지도의 초기 위치
-//     center: { lat: 37.5563, lng: 126.9723 },
-//     // 지도 위치 변경시 panto를 이용할지에 대해서 정의
-//     isPanto: false,
-//   });
-//   // https://react-kakao-maps-sdk.jaeseokim.dev/docs/sample/overlay/basicMarker
-
-//   return (
-//     <>
-//       <Map // 지도를 표시할 Container
-//         id="map"
-//         center={{
-//           // 지도의 중심좌표
-//           lat: 37.5563,
-//           lng: 126.9723,
-//         }}
-//         style={{
-//           width: "100%",
-//           height: "100%",
-//         }}
-//         level={5} // 지도의 확대 레벨
-//         onClick={(_, mouseEvent) => {
-//           const latlng = mouseEvent.latLng;
-//           console.log(
-//             `클릭한 위치의 위도는 ${latlng.getLat()} 이고, 경도는 ${latlng.getLng()} 입니다`
-//           );
-//         }}
-//       >
-//         <MapTypeControl position={"TOPRIGHT"} />
-//         <ZoomControl position={"RIGHT"} />
-//       </Map>
-//     </>
-//   );
-// };
-
 // 플래너 페이지에 사용되는 지도
 export const KakaoMap = React.memo(({ plans, date }) => {
-  console.log("카카오지도 호출");
+  console.log("카카오지도 호출", plans);
   // Rest API
   // https://developers.kakao.com/docs/latest/ko/local/dev-guide#address-coord
   // https://react-kakao-maps-sdk.jaeseokim.dev/docs/sample/library/keywordBasic
@@ -126,22 +80,16 @@ export const KakaoMap = React.memo(({ plans, date }) => {
   //   lng: plans[Object.keys(plans)[0]]?.[0].longitude,
   // });
   const firstPlan = plans[date]?.[0];
+  console.log(firstPlan);
 
   const allPlans = Object.values(plans).flat();
+  const sortedPlans = allPlans.sort((a, b) => {
+    const dateComparison = new Date(a.date) - new Date(b.date);
+    if (dateComparison !== 0) return dateComparison;
 
-  // useEffect(() => {
-  //   if (firstPlan) {
-  //     setCenterLatLng({
-  //       lat: parseFloat(firstPlan.latitude || firstPlan.position.lat),
-  //       lng: parseFloat(firstPlan.longitude || firstPlan.position.lng),
-  //     });
-  //   } else {
-  //     setCenterLatLng({
-  //       lat: allPlans[0]?.latitude,
-  //       lng: allPlans[0]?.longitude,
-  //     });
-  //   }
-  // }, [plans, date]);
+    // date가 같을 경우 seq 순으로 정렬 (오름차순)
+    return a.seq - b.seq;
+  });
 
   const centerLatLng = useMemo(() => {
     if (firstPlan) {
@@ -149,10 +97,15 @@ export const KakaoMap = React.memo(({ plans, date }) => {
         lat: parseFloat(firstPlan.latitude || firstPlan.position.lat),
         lng: parseFloat(firstPlan.longitude || firstPlan.position.lng),
       };
-    } else if (allPlans.length > 0) {
+    } else if (sortedPlans.length > 0) {
+      console.log(">>>> : ", sortedPlans);
       return {
-        lat: parseFloat(allPlans[0]?.latitude || allPlans[0]?.position.lat),
-        lng: parseFloat(allPlans[0]?.longitude || allPlans[0]?.position.lng),
+        lat: parseFloat(
+          sortedPlans[0]?.latitude || sortedPlans[0]?.position.lat
+        ),
+        lng: parseFloat(
+          sortedPlans[0]?.longitude || sortedPlans[0]?.position.lng
+        ),
       };
     } else {
       return {
@@ -223,7 +176,7 @@ export const KakaoMap = React.memo(({ plans, date }) => {
       style={{
         // 지도의 크기
         width: "100%",
-        height: "450px",
+        height: "100%",
       }}
       level={4} // 지도의 확대 레벨
     >

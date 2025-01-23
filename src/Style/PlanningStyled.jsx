@@ -8,11 +8,17 @@ export const MainContainer = styled.div`
   margin-bottom: 10vh;
   display: flex;
   flex-direction: column;
+  @media (max-width: 757px) {
+    padding: 0 10vw;
+  }
+  @media (max-width: 400px) {
+    padding: 0;
+  }
   .menu-icons {
     display: flex;
     position: absolute;
     right: 15vw;
-    top: 110px;
+    top: 130px;
 
     .menu-icon {
       font-size: 2rem;
@@ -29,48 +35,89 @@ export const MainContainer = styled.div`
 `;
 
 export const Info = styled.div`
-  height: 300px; // 이것도 고정으로 할지 고민
+  height: 370px; // 이것도 고정으로 할지 고민
   display: flex;
   box-sizing: border-box;
   position: relative;
-  margin-top: 80px;
-  margin: 80px auto 0 auto;
+  margin: 80px 0 20px;
+
+  @media (max-width: 757px) {
+    height: 230px;
+  }
+
+  .planner-info-content {
+    display: flex;
+    position: relative;
+    align-items: center;
+    width: 100%;
+    z-index: 2;
+    color: #fff;
+  }
 
   .edit-box {
-    width: 100%;
+    width: 60%;
+    @media (max-width: 757px) {
+      width: 80%;
+    }
+    @media (max-width: 400px) {
+      width: 90%;
+    }
   }
   div {
     margin: auto 0 auto 0;
   }
   .planner-thumbnail {
-    margin-right: 2%;
+    margin: 0 2%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  h1,
+  h1 {
+    margin: 7% 3px;
+    @media (max-width: 1250px) {
+      font-size: 24px;
+      margin: 6% 3px;
+    }
+    @media (max-width: 757px) {
+      font-size: 20px;
+      margin: 5% 3px;
+    }
+    @media (max-width: 400px) {
+      font-size: 16px;
+      margin: 4% 3px;
+    }
+  }
   h3 {
-    margin: 3px;
+    margin: 2% 0 2% 3px;
+    font-weight: normal;
+    font-size: 16px;
+    @media (max-width: 1250px) {
+      font-size: 14px;
+    }
+    @media (max-width: 757px) {
+      font-size: 13px;
+    }
+    @media (max-width: 400px) {
+      font-size: 12px;
+    }
   }
 
   .planner-thumbnail {
-    width: 250px;
-    height: 250px;
+    width: 20%;
+    height: 20%;
     flex-shrink: 0;
-    @media (max-width: 1370px) {
-      width: 200px;
-      height: 200px;
-    }
-
-    @media (max-width: 768px) {
-      width: 150px;
-      height: 150px;
-    }
   }
 
   .editTitle {
     display: flex;
     align-items: center;
+  }
+  .planner-edit-title {
+    border-radius: 5px;
+  }
+  .planner-edit-title:disabled {
+    background-color: #f0f0f0;
+    color: #555;
   }
   .planner-edit-title {
     width: 400px;
@@ -82,11 +129,11 @@ export const Info = styled.div`
     border-bottom: 1px solid #ccc;
   }
 
-  .edit-button {
+  .editInfo-button {
     font-size: 12px;
     width: 80px;
     height: 25px;
-    margin-left: 3%;
+    margin-left: 2%;
     padding: 2px 8px;
     border-radius: 10px;
     border: 1px solid ${colors.colorB};
@@ -99,6 +146,26 @@ export const Info = styled.div`
     &:hover {
       opacity: 0.7;
     }
+  }
+
+  .edit-button,
+  .edit-button-complete {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    border: none;
+    color: black;
+    width: 80px;
+    height: 25px;
+    font-size: 13px;
+    white-space: nowrap;
+    z-index: 2;
+  }
+  .edit-button {
+    background-color: #ddd;
+  }
+  .edit-button-complete {
+    background-color: #89bafa;
   }
 
   .location-select {
@@ -115,6 +182,10 @@ export const Info = styled.div`
   }
   .location-select:first-of-type {
     margin-bottom: 10px;
+  }
+  .location-select:disabled {
+    background-color: #ffffff; /* 연한 회색 배경 */
+    color: #333; /* 연한 회색 텍스트 */
   }
 
   .location-select option {
@@ -152,11 +223,15 @@ export const Info = styled.div`
     background-color: #f0f1f0;
     cursor: default;
   }
+
+  .planner-date-picker {
+    color: #f0f0f0 !important;
+  }
 `;
 
 export const Users = styled.div`
   width: 90%;
-  height: 100px; // 이것도 고정으로 할지 고민
+  max-height: 100px; // 이것도 고정으로 할지 고민
   display: flex;
   align-items: center;
   position: relative;
@@ -179,23 +254,18 @@ export const Users = styled.div`
     right: 0;
     bottom: 0;
   }
-  .edit-button,
-  .edit-button-complete {
-    position: absolute;
-    right: 0;
-    bottom: -5px;
-    border: none;
-    color: black;
-    width: 80px;
-    height: 25px;
-    font-size: 13px;
-    white-space: nowrap;
-  }
-  .edit-button {
-    background-color: #ddd;
-  }
-  .edit-button-complete {
-    background-color: #89bafa;
+`;
+
+export const PlannerOwner = styled.div`
+  z-index: 2;
+  display: flex;
+  position: absolute;
+  right: 0;
+  bottom: 20px;
+  color: #fff;
+  @media (max-width: 757px) {
+    bottom: 10px;
+    right: 10px;
   }
 `;
 
@@ -210,9 +280,28 @@ export const UserProfile = styled.div`
   transition: all 0.3s ease;
   &:first-of-type {
     margin-left: 0;
+    margin-right: 10px;
+    @media (max-width: 1250px) {
+      margin-right: 3px;
+    }
   }
   &:hover {
     scale: 1.05;
+  }
+  @media (max-width: 1250px) {
+    width: 50px;
+    height: 50px;
+    margin-left: -25px;
+  }
+  @media (max-width: 757px) {
+    width: 38px;
+    height: 38px;
+    margin-left: -18px;
+  }
+  @media (max-width: 400px) {
+    width: 30px;
+    height: 30px;
+    margin-left: -15px;
   }
 `;
 
@@ -280,34 +369,46 @@ export const SearchedUserHr = styled.hr`
 `;
 
 export const UserName = styled.div`
-  width: 120px;
+  /* width: 120px; */
   height: 40px;
-  margin-right: 70px;
+  padding-right: 20px;
   padding-left: 10px;
   display: flex;
   align-items: center;
+  cursor: pointer;
+  @media (max-width: 757px) {
+    display: none;
+  }
 `;
 
 export const ContentContainer = styled.div`
   width: 100%;
-  height: 600px; // 이것도 고정으로 할지 고민
   display: flex;
   justify-content: center;
   padding: 2%;
   box-sizing: border-box;
-  /* background-color: skyblue; */
+  @media (max-width: 990px) {
+    flex-direction: column;
+  }
 `;
 
 export const MainPlanning = styled.div`
   width: 50%;
-  min-width: 400px; // 이거도 고민
+  min-width: 300px; // 이거도 고민
   min-height: 100px; // 이거 고민
   max-height: 600px; // 이것도 고민
+  padding-bottom: 20px;
   overflow-y: auto;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   border-radius: 10px;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
   ${ScrollBar};
+  @media (max-width: 1250px) {
+    width: 100%;
+    margin: 0 auto;
+    min-height: 300px;
+  }
+
   .planning-day {
     display: flex;
     position: relative;
@@ -334,12 +435,21 @@ export const MainPlanning = styled.div`
 `;
 
 export const KakaoMapContainer = styled.div`
-  min-width: 400px;
+  display: flex;
+  position: relative;
+  min-width: 350px;
   width: 40%;
   height: 400px;
   margin-left: 1%;
   z-index: 1;
-  background-color: antiquewhite;
+  @media (max-width: 990px) {
+    width: 100%;
+    margin: 20px auto;
+    min-width: 300px;
+  }
+  @media (max-width: 757px) {
+    height: 300px;
+  }
 `;
 
 // 플래닝 생성 페이지!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -776,11 +886,23 @@ export const DayToggleContainer = styled.div`
         margin: 5px 5px 5px 20px;
         font-size: 18px;
         font-weight: bold;
+        @media (max-width: 757px) {
+          font-size: 16px;
+        }
+        @media (max-width: 400px) {
+          font-size: 14px;
+        }
       }
       .place-category {
         margin: 0 5px 5px 20px;
         font-size: 13px;
         color: #5f5f5f;
+        @media (max-width: 757px) {
+          font-size: 12px;
+        }
+        @media (max-width: 400px) {
+          font-size: 10.5px;
+        }
       }
     }
   }
