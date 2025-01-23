@@ -785,9 +785,11 @@ export const Planning = () => {
     return (
       <>
         <Header />
-        <Loading>
-          <p>플래닝 정보를 불러오는 중입니다. 잠시만 기다려주세요...</p>
-        </Loading>
+        <div style={{ width: "100%", height: "800px" }}>
+          <Loading>
+            <p>플래닝 정보를 불러오는 중입니다. 잠시만 기다려주세요...</p>
+          </Loading>
+        </div>
         <Footer />
       </>
     );
