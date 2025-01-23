@@ -19,7 +19,7 @@ const Test = () => {
   }, []);
 
   return (
-    userInfo && (
+    user && (
       <div>
         <p>{userInfo}</p>
         <H4>아이디 : JSON.parse(localStorage.getItem("user")).id</H4>
@@ -36,6 +36,12 @@ const Test = () => {
         <P>{JSON.parse(userInfo).role}</P>
         <p>refreshToken : {localStorage.getItem("refreshToken")}</p>
         <p>accessToken : {localStorage.getItem("accessToken")}</p>
+        <br />
+        <h3>useAuth</h3>
+        <p>user.id : {user.id}</p>
+        <p>user.nickname : {user.nickname}</p>
+        <p>user.imgPath : {user.imgPath}</p>
+        <p>user.role : {user.role}</p>
       </div>
     )
   );

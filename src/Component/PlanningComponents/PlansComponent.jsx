@@ -187,8 +187,8 @@ export const PlannerInfoEditComponent = ({
           setCurrentPic={setCurrentPic}
           role={"ROLE_MEMBERSHIP"}
           type={"planner"}
-          width={"200px"}
-          height={"200px"}
+          width={"100%"}
+          height={"100%"}
         />
       </div>
       <div className="edit-box">
@@ -327,6 +327,7 @@ export const PlannerInfoEditComponent = ({
 };
 
 export const PlansComponent = ({
+  isPlanMenuToggleOpen,
   socketConnected,
   ws,
   plannerId,
@@ -556,7 +557,7 @@ export const PlansComponent = ({
   }, [editPlans]);
 
   return (
-    <MainPlanning>
+    <MainPlanning className={isPlanMenuToggleOpen ? "open" : ""}>
       {travelInfo.dates.map((date, index) => (
         <div key={index}>
           <div

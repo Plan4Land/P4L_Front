@@ -94,6 +94,7 @@ export const Planning = () => {
   const ChatContainerRef = useRef(null);
   const [isParticipant, setIsParticipant] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPlanMenuToggleOpen, setIsPlanMenuToggleOpen] = useState(false);
 
   const handleChatKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey && !event.ctrlKey) {
@@ -467,7 +468,6 @@ export const Planning = () => {
       <div>
         <Header />
         <MainContainer onClick={() => closeMemo()}>
-          <FaBars className="plans-toggle-icon" />
           <MenuIcons
             plannerId={plannerId}
             plannerInfo={plannerInfo}
@@ -663,6 +663,10 @@ export const Planning = () => {
                 )}
               </>
             )}
+            <FaBars
+              className="plans-toggle-icon"
+              onClick={() => setIsPlanMenuToggleOpen(!isPlanMenuToggleOpen)}
+            />
           </Info>
           <Users>
             {plannerInfo.participants &&
@@ -697,6 +701,7 @@ export const Planning = () => {
           </Users>
           <ContentContainer>
             <PlansComponent
+              isPlanMenuToggleOpen={isPlanMenuToggleOpen}
               socketConnected={socketConnected}
               ws={ws}
               plannerId={plannerId}
@@ -780,7 +785,9 @@ export const Planning = () => {
     return (
       <>
         <Header />
-        <div>잘못된 접근입니다.</div>
+        <Loading>
+          <p>플래닝 정보를 불러오는 중입니다. 잠시만 기다려주세요...</p>
+        </Loading>
         <Footer />
       </>
     );

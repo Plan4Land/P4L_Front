@@ -14,15 +14,6 @@ export const MainContainer = styled.div`
   @media (max-width: 768px) {
     padding: 0;
   }
-  .plans-toggle-icon {
-    display: flex;
-    position: absolute;
-    left: 8vw;
-    top: 115px;
-    font-size: 1.6rem;
-    color: #666666;
-    cursor: pointer;
-  }
   .menu-icons {
     display: flex;
     position: absolute;
@@ -33,6 +24,7 @@ export const MainContainer = styled.div`
       top: 120px;
     }
     @media (max-width: 768px) {
+      right: 2vw;
       top: 115px;
     }
     .menu-icon {
@@ -101,12 +93,7 @@ export const Info = styled.div`
   div {
     margin: auto 0 auto 0;
   }
-  .planner-thumbnail {
-    margin: 0 2%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+
   h1 {
     margin: 7% 3px;
     @media (max-width: 1250px) {
@@ -141,14 +128,15 @@ export const Info = styled.div`
     width: 20%;
     height: 20%;
     flex-shrink: 0;
+    margin: 0 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .editTitle {
     display: flex;
     align-items: center;
-  }
-  .planner-edit-title {
-    border-radius: 5px;
   }
   .planner-edit-title:disabled {
     background-color: #f0f0f0;
@@ -156,11 +144,13 @@ export const Info = styled.div`
   }
   .planner-edit-title {
     width: 400px;
+    height: 20px;
     padding: 10px;
     margin: 0 0 10px 5px;
     font-size: 18px;
     font-weight: bold;
     border: none;
+    border-radius: 5px;
     border-bottom: 1px solid #ccc;
   }
 
@@ -196,7 +186,10 @@ export const Info = styled.div`
     white-space: nowrap;
     z-index: 2;
     @media (max-width: 768px) {
-      width: 65px;
+      left: 52px;
+      top: -33px;
+      width: 70px;
+      height: 23px;
     }
   }
   .edit-button {
@@ -204,6 +197,24 @@ export const Info = styled.div`
   }
   .edit-button-complete {
     background-color: #89bafa;
+  }
+
+  .plans-toggle-icon {
+    display: none; /* 기본적으로 숨김 */
+
+    @media (max-width: 768px) {
+      display: flex; /* 768px 이하에서는 보이도록 설정 */
+      position: absolute;
+      left: 20px;
+      top: 10px;
+      font-size: 1.3rem;
+      color: #555;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
   }
 
   .location-select {
@@ -316,6 +327,7 @@ export const UserProfile = styled.div`
   margin-left: -35px;
   cursor: pointer;
   transition: all 0.3s ease;
+  background-color: #fff;
   &:first-of-type {
     margin-left: 0;
     margin-right: 10px;
@@ -436,7 +448,7 @@ export const MainPlanning = styled.div`
   width: 50%;
   min-width: 300px; // 이거도 고민
   min-height: 100px; // 이거 고민
-  max-height: 600px; // 이것도 고민
+  max-height: 60vh; // 이것도 고민
   padding-bottom: 20px;
   overflow-y: auto;
   /* overflow-x: hidden; */
@@ -479,6 +491,9 @@ export const KakaoMapContainer = styled.div`
   z-index: 1;
   @media (max-width: 990px) {
     min-width: 300px;
+  }
+  @media (max-width: 768px) {
+    width: 90%;
   }
 `;
 
