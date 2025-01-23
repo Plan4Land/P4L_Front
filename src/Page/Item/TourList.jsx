@@ -268,11 +268,6 @@ export const TourList = () => {
             .filter((theme) => theme !== code)
             .join(",");
         }
-      } else if (key === "themeList") {
-        newFilters[key] = newFilters[key]
-          .split(",")
-          .filter((theme) => theme !== name)
-          .join(",");
       } else {
         newFilters[key] = "";
       }
