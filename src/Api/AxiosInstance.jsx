@@ -18,20 +18,55 @@ AxiosInstance.interceptors.request.use(
   }
 );
 
+let isRefreshing = false;
+let refreshSubscribers = [];
+
+// 토큰 재발급이 끝난 후 대기 중인 요청 처리
+const onRrefreshed = (newToken) => {
+  refreshSubscribers.forEach((callback) => callback(newToken));
+  refreshSubscribers = [];
+};
+
+// 실패한 요청 큐에 등록
+const addSubscriber = (callback) => {
+  refreshSubscribers.push(callback);
+};
+
 // 응답 인터셉터 추가
 AxiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   async (error) => {
     console.log("AxiosInstance 응답 에러: ", error);
+
+    const originalRequest = error.config;
+
     if (error.response && error.response.status === 401) {
-      const newToken = await Common.handleUnauthorized();
-      if (newToken) {
-        // 원래 하고자 했던 요청을 다시 시도
-        error.config.headers.Authorization = `Bearer ${Common.getAccessToken()}`;
-        return AxiosInstance.request(error.config);
+      if(!isRefreshing) {
+        isRefreshing = true;
+
+        try {
+          const newToken = await Common.handleUnauthorized();
+          isRefreshing = false;
+          if (newToken) {
+            onRrefreshed(newToken);
+            return AxiosInstance.request(originalRequest);
+          }
+        } catch (e) {
+          console.error("토큰 재발급 실패, 로그아웃 처리:", e);
+          isRefreshing = false;
+          localStorage.setItem("user", null);
+          window.location.href = "/login";
+          return Promise.reject(e);
+        }
       }
+
+      // 재발급 요청중이면 대기
+      return new Promise((resolve) => {
+        addSubscriber((newToken) => {
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+          resolve(AxiosInstance.request(originalRequest));
+        });
+      });
     }
     return Promise.reject(error);
   }

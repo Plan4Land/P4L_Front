@@ -1,5 +1,5 @@
 import Common from "./Common";
-import AxiosApi from "../Api/AxiosApi";
+import axios from "axios";
 
 export const refreshToken = async () => {
   const refreshToken = Common.getRefreshToken();
@@ -17,7 +17,7 @@ export const refreshToken = async () => {
 
   try {
     // 리프레시 토큰을 이용한 액세스 토큰 재발급 요청
-    const response = await AxiosApi.post("/auth/token/refresh", {
+    const response = await axios.post(`${Common.PLAN_DOMAIN}/auth/token/refresh`, {
       refreshToken: Common.getRefreshToken(),
     });
 
