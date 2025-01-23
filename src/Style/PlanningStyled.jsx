@@ -82,9 +82,13 @@ export const Info = styled.div`
   }
 
   .edit-box {
+    display: flex;
+    position: relative;
+    flex-direction: column;
     width: 60%;
     @media (max-width: 768px) {
       width: 80%;
+      padding-bottom: 30px;
     }
     @media (max-width: 400px) {
       width: 90%;
@@ -93,7 +97,6 @@ export const Info = styled.div`
   div {
     margin: auto 0 auto 0;
   }
-
   h1 {
     margin: 7% 3px;
     @media (max-width: 1250px) {
@@ -125,40 +128,59 @@ export const Info = styled.div`
   }
 
   .planner-thumbnail {
-    width: 20%;
-    height: 20%;
-    flex-shrink: 0;
     margin: 0 2%;
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 20%;
+    height: 20%;
+    flex-shrink: 0;
   }
-
   .editTitle {
     display: flex;
     align-items: center;
+    margin-bottom: 12.5px;
+    @media (max-width: 768px) {
+      margin-bottom: 7px;
+    }
   }
   .planner-edit-title:disabled {
     background-color: #f0f0f0;
     color: #555;
   }
   .planner-edit-title {
-    width: 400px;
-    height: 20px;
+    width: 80%;
     padding: 10px;
-    margin: 0 0 10px 5px;
+    margin-left: 5px;
     font-size: 18px;
     font-weight: bold;
     border: none;
     border-radius: 5px;
     border-bottom: 1px solid #ccc;
+    @media (max-width: 1250px) {
+      font-size: 17px;
+      padding: 8px;
+    }
+    @media (max-width: 990px) {
+      font-size: 16px;
+      padding: 6px;
+    }
+    @media (max-width: 768px) {
+      font-size: 16px;
+      padding: 5px;
+      width: 65%;
+    }
+    @media (max-width: 400px) {
+      font-size: 14px;
+      padding: 4px;
+    }
   }
 
   .editInfo-button {
     font-size: 12px;
     width: 80px;
     height: 25px;
-    margin-left: 2%;
+    margin: auto 0 auto 2%;
     padding: 2px 8px;
     border-radius: 10px;
     border: 1px solid ${colors.colorB};
@@ -170,6 +192,22 @@ export const Info = styled.div`
 
     &:hover {
       opacity: 0.7;
+    }
+
+    @media (max-width: 990px) {
+      width: 70px;
+      height: 23px;
+    }
+    @media (max-width: 768px) {
+      font-size: 11px;
+      width: 65px;
+      height: 22px;
+      padding: 1px 4px;
+    }
+    @media (max-width: 400px) {
+      font-size: 10px;
+      width: 58px;
+      height: 18px;
     }
   }
 
@@ -185,11 +223,14 @@ export const Info = styled.div`
     font-size: 13px;
     white-space: nowrap;
     z-index: 2;
+    @media (max-width: 990px) {
+      width: 65px;
+      top: 10px;
+    }
     @media (max-width: 768px) {
-      left: 52px;
-      top: -33px;
-      width: 70px;
-      height: 23px;
+      width: 65px;
+      left: 60px;
+      top: -32px;
     }
   }
   .edit-button {
@@ -200,19 +241,31 @@ export const Info = styled.div`
   }
 
   .plans-toggle-icon {
-    display: none; /* 기본적으로 숨김 */
+    display: none; /* 기본적으로 숨김 (768px 이상에서도 숨기기) */
 
     @media (max-width: 768px) {
       display: flex; /* 768px 이하에서는 보이도록 설정 */
       position: absolute;
-      left: 20px;
-      top: 10px;
+      left: 10px;
+      top: -40px;
       font-size: 1.3rem;
       color: #555;
       cursor: pointer;
+      padding: 10px;
+      background-color: transparent;
+      border-radius: 10px;
+      z-index: 10;
+      transition: all 0.3s ease;
 
       &:hover {
         opacity: 0.7;
+      }
+
+      /* .open 클래스를 가진 경우 */
+      &.open {
+        visibility: visible;
+        opacity: 1;
+        transform: translateX(0);
       }
     }
   }
@@ -228,6 +281,20 @@ export const Info = styled.div`
     width: 25%;
     background-color: #f9f9f9;
     cursor: pointer;
+    @media (max-width: 1250px) {
+      font-size: 13px;
+    }
+    @media (max-width: 990px) {
+      padding: 4px;
+    }
+    @media (max-width: 768px) {
+      font-size: 12px;
+      padding: 3.5px;
+    }
+    @media (max-width: 400px) {
+      font-size: 11px;
+      padding: 3px;
+    }
   }
   .location-select:first-of-type {
     margin-bottom: 10px;
@@ -239,6 +306,9 @@ export const Info = styled.div`
 
   .location-select option {
     padding: 10px;
+    @media (max-width: 768px) {
+      padding: 7px;
+    }
   }
 
   .theme-buttons {
@@ -246,6 +316,11 @@ export const Info = styled.div`
     grid-template-columns: repeat(5, 1fr);
     margin-bottom: 10px;
     place-items: center;
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(3, 1fr);
+      margin-bottom: 5px;
+      max-width: 80%;
+    }
   }
 
   .theme-button {
@@ -261,6 +336,11 @@ export const Info = styled.div`
     &:hover {
       opacity: 0.7;
     }
+    @media (max-width: 768px) {
+      padding: 3px;
+      margin: 4px;
+      font-size: 12px;
+    }
   }
 
   .theme-button.selected {
@@ -272,9 +352,39 @@ export const Info = styled.div`
     background-color: #f0f1f0;
     cursor: default;
   }
+  .planner-datepicker-container {
+    /* display: flex !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    width: 70% !important;
+    margin: 0 0 0 10px !important;
+    border: 1px solid #aaa !important;
+    border-radius: 20px !important;
+    position: relative !important;
+    z-index: 2 !important; */
 
-  .planner-date-picker {
-    color: #f0f0f0 !important;
+    @media (max-width: 768px) {
+      display: flex;
+      position: absolute;
+      left: -8vw;
+      bottom: 0;
+      font-size: 17px;
+      span {
+        margin: 0;
+      }
+    }
+    @media (max-width: 540px) {
+      left: -15vw;
+      scale: 0.9;
+    }
+    @media (max-width: 470px) {
+      left: -18vw;
+      scale: 0.9;
+    }
+    @media (max-width: 400px) {
+      left: -23vw;
+      scale: 0.9;
+    }
   }
 `;
 
@@ -327,7 +437,6 @@ export const UserProfile = styled.div`
   margin-left: -35px;
   cursor: pointer;
   transition: all 0.3s ease;
-  background-color: #fff;
   &:first-of-type {
     margin-left: 0;
     margin-right: 10px;
@@ -455,6 +564,31 @@ export const MainPlanning = styled.div`
   border-radius: 10px;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
   ${ScrollBar};
+
+  @media (max-width: 768px) {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: all 0.3s ease;
+
+    &.open {
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    position: absolute;
+    z-index: 10;
+    background-color: white;
+    top: 135px;
+    left: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  @media (max-width: 400px) {
+    left: 8px;
+  }
 
   .planning-day {
     display: flex;
@@ -658,6 +792,9 @@ export const DatePickerContainer = styled.div`
     background-color: transparent;
     cursor: pointer;
     caret-color: transparent;
+  }
+  .planner-date-picker {
+    color: #f0f0f0;
   }
 
   .input-date-picker:hover::placeholder {
@@ -996,7 +1133,7 @@ export const ChatContainer = styled.div`
   flex-direction: column;
   position: fixed;
   right: 10px;
-  top: 130px;
+  top: 150px;
   width: 350px;
   height: 60vh;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
@@ -1004,6 +1141,16 @@ export const ChatContainer = styled.div`
   z-index: 99;
   background-color: #fffbf5;
   padding: 10px 10px 0.5vh;
+  @media (max-width: 990px) {
+    width: 280px;
+    top: 140px;
+  }
+  @media (max-width: 768px) {
+    top: 130px;
+  }
+  @media (max-width: 400px) {
+    width: 240px;
+  }
   .chat-header {
     width: 100%;
     display: flex;

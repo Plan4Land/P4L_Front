@@ -279,7 +279,7 @@ export const PlannerInfoEditComponent = ({
             </button>
           ))}
         </div>
-        <div>
+        <div className="planner-datepicker-container">
           <DatePickerContainer>
             <DatePicker
               className="input-date-picker planner-date-picker"
