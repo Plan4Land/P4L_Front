@@ -89,6 +89,11 @@ export const QuickSearch = styled(GridItem)`
           transform: translateY(-2px);
         }
       }
+      @media (max-width: 1024px) {
+        .buttons {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
       @media (max-width: 768px) {
         .buttons {
           grid-template-columns: repeat(3, 1fr);
