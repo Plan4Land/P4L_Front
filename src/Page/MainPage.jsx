@@ -128,10 +128,10 @@ export const Main = () => {
               loop={true}
               navigation
               pagination={{ clickable: true }}
-              // autoplay={{
-              //   delay: 4000,
-              //   disableOnInteraction: false,
-              // }}
+              autoplay={{
+                delay: 4000,
+                disableOnInteraction: false,
+              }}
             >
               {topPlans.map((plan, index) => {
                 const areaName =
@@ -250,10 +250,10 @@ export const Main = () => {
             loop={true}
             pagination={{ clickable: true }}
             scrollbar={{ draggable: true }}
-            // autoplay={{
-            //   delay: 4000, // 3초마다 슬라이드 변경
-            //   disableOnInteraction: false, // 사용자가 슬라이드를 클릭해도 자동 재생 유지
-            // }}
+            autoplay={{
+              delay: 4000, // 3초마다 슬라이드 변경
+              disableOnInteraction: false, // 사용자가 슬라이드를 클릭해도 자동 재생 유지
+            }}
           >
             {topTourList.map((tour, index) => {
               // 기본 이미지 결정 함수
