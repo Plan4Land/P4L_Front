@@ -62,6 +62,7 @@ export const Main = () => {
     const fetchTopPlans = async () => {
       try {
         const response = await TopPlanApi.getTop3Plans();
+        // console.log(response);
         setTopPlans(response);
       } catch (error) {
         console.error("상위 3개 플래닝 데이터를 가져오는 데 실패:", error);
@@ -114,7 +115,51 @@ export const Main = () => {
   return (
     <>
       <Header />
+
       <MainBox>
+        {/* 상위 플래닝 4개 */}
+        <RecommPlan className="GridItem">
+          <PlanBox>
+            <Swiper
+              modules={[Navigation, Pagination]}
+              spaceBetween={20} // 슬라이드 간 간격
+              slidesPerView={1} // 한 번에 보여주는 슬라이드 수 (1개만 보이도록 설정)
+              loop={true}
+              navigation
+              pagination={{ clickable: true }}
+            >
+              {topPlans.map((plan, index) => {
+                const areaName =
+                  areas.find((area) => area.code === plan.area)?.name ||
+                  "알 수 없는 지역";
+                const subAreaName =
+                  areas
+                    .find((area) => area.code === plan.area)
+                    ?.subAreas.find((subArea) => subArea.code === plan.subArea)
+                    ?.name || "알 수 없는 하위 지역";
+
+                return (
+                  <SwiperSlide key={index}>
+                    <div
+                      className="planitem"
+                      onClick={() => planHandleClick(plan.id)}
+                    >
+                      <img
+                        src={plan.thumbnail || `/planning-pic/planningth1.jpg`}
+                        alt={plan.title}
+                      />
+                      <div className="planExplain">
+                        <h3>{plan.title}</h3>
+                        <p>{`${areaName} - ${subAreaName}`}</p>
+                        <p>{plan.theme}</p>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          </PlanBox>
+        </RecommPlan>
         {/* 미니 검색창 */}
         <QuickSearch>
           <div className="QuickSelect">
@@ -135,17 +180,22 @@ export const Main = () => {
           <div className="SearchBox">
             {selectedMenu === "지역" && (
               <div className="RegionSearch">
-                {areas.map((area) => (
-                  <Link key={area.code} to={`/tourlist?areaCode=${area.code}`}>
-                    <Button
+                <div className="buttons">
+                  {areas.map((area) => (
+                    <Link
                       key={area.code}
-                      onClick={() => handleAreaClick(area.name)}
-                      className={selectedArea === area.name ? "selected" : ""}
+                      to={`/tourlist?areaCode=${area.code}`}
                     >
-                      {area.name}
-                    </Button>
-                  </Link>
-                ))}
+                      <Button
+                        key={area.code}
+                        onClick={() => handleAreaClick(area.name)}
+                        className={selectedArea === area.name ? "selected" : ""}
+                      >
+                        {area.name}
+                      </Button>
+                    </Link>
+                  ))}
+                </div>
               </div>
             )}
             {selectedMenu === "카테고리" && (
@@ -164,7 +214,6 @@ export const Main = () => {
             )}
           </div>
         </QuickSearch>
-
         {/* 상위 관광지 n개 */}
         <RecommItem className="GridItem">
           <Swiper
@@ -208,41 +257,6 @@ export const Main = () => {
             })}
           </Swiper>
         </RecommItem>
-
-        {/* 상위 플래닝 3개 */}
-        <RecommPlan className="GridItem">
-          <PlanBox>
-            {topPlans.map((plan, index) => {
-              const areaName =
-                areas.find((area) => area.code === plan.area)?.name ||
-                "알 수 없는 지역";
-              const subAreaName =
-                areas
-                  .find((area) => area.code === plan.area)
-                  ?.subAreas.find((subArea) => subArea.code === plan.subArea)
-                  ?.name || "알 수 없는 하위 지역";
-
-              return (
-                <div
-                  key={index}
-                  className="planitem"
-                  onClick={() => planHandleClick(plan.id)}
-                >
-                  <img
-                    src={plan.thumbnail || `/planning-pic/planningth1.jpg`}
-                    alt={plan.title}
-                  />
-                  <div className="planExplain">
-                    <h3>{plan.title}</h3>
-                    <p>{`${areaName} - ${subAreaName}`}</p>
-                    <p>{plan.theme}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </PlanBox>
-        </RecommPlan>
-
         <Festive className="GridItem">
           <Calendar
             calendarType="hebrew"

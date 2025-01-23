@@ -5,10 +5,10 @@ import { ScrollBar } from "../Component/ButtonComponent";
 export const MainBox = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr); // 2행
+  grid-template-rows: repeat(2, 1fr);
   row-gap: 20px;
   margin: 40px auto 50px auto;
-  height: 1000px;
+  height: 100%;
   width: 80%;
 
   @media (max-width: 768px) {
@@ -23,7 +23,7 @@ export const GridItem = styled.div`
 `;
 //         {/* 미니 검색창!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const QuickSearch = styled(GridItem)`
-  grid-column: span 2;
+  grid-column: span 4;
   display: flex;
   flex-direction: column;
 
@@ -59,16 +59,14 @@ export const QuickSearch = styled(GridItem)`
 
     .RegionSearch {
       width: 100%;
-      flex-direction: column;
+      display: flex;
+      justify-content: center;
 
-      a {
-        width: 100%;
-      }
       button {
         background-color: white;
         color: ${colors.colorA};
-        height: 40px;
-        width: 30%;
+        height: 65px;
+        width: 23%;
         margin: 5px;
         transition: all 0.3s ease;
         &:hover {
@@ -165,7 +163,7 @@ export const CateButton = styled.button`
 
 //         {/* 상위 관광지 n개 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const RecommItem = styled(GridItem)`
-  grid-column: span 2;
+  grid-column: span 3;
   height: 500px;
 
   .topTourItem {
@@ -243,38 +241,56 @@ export const RecommItem = styled(GridItem)`
 
 //         {/* 상위 플래닝 3개!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const RecommPlan = styled(GridItem)`
-  grid-column: span 3;
+  grid-column: span 4;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 500px;
   h3 {
     margin: 0;
     color: ${colors.colorA};
   }
 `;
 export const PlanBox = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
   width: 100%;
   height: 100%;
-
+  display: flex;
+  justify-content: center;
+  background-color: #fff7f3;
+  border: 1px solid red;
   .planitem {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    border-radius: 20px;
+    border: 1px solid blue;
+    height: 95%;
     margin: 10px;
     overflow: hidden;
+    display: flex;
+
     cursor: pointer;
     .planExplain {
       padding-left: 5%;
     }
     img {
-      min-width: 100%;
-      min-height: 75%;
+      min-width: 50%;
+      max-width: 50%;
+      min-height: 90%;
+      border: 1px solid black;
     }
   }
-  @media (max-width: 768px) {
-    height: 300px;
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: white !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+
+  .swiper-button-next:after,
+  .swiper-button-prev:after {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: ${colors.colorB};
   }
 `;
 
@@ -291,7 +307,7 @@ export const Festive = styled(GridItem)`
 
   .react-calendar {
     width: 100%;
-    height: 400px;
+    height: 330px;
     border-radius: 10px;
     border: 1px solid #ddd;
   }
