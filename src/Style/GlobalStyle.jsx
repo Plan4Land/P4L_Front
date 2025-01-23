@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
 export const colors = {
-  colorA: "#69270d",
-  colorB: "#fd7012",
-  colorC: "#ffb395",
-  colorD: "#ffeee2",
-  colorE: "#ff7700",
+  colorA: "rgb(105, 39, 13)",
+  colorB: "rgb(253, 112, 18)",
+  colorC: "rgb(255, 179, 149)",
+  colorD: "rgb(255, 238, 226)",
+  colorE: "rgb(255, 119, 0)",
 };
 
 export const HeaderSt = styled.div`

@@ -76,10 +76,11 @@ export const QuickSearch = styled(GridItem)`
       button {
         background-color: white;
         color: ${colors.colorA};
-        border: 1px solid ${colors.colorC};
+        border: none;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); 
         height: 100%;
         width: 100%;
-        border-radius: 20px;
+        border-radius: 10px;
         transition: all 0.3s ease;
         font-size: 18px;
         &:hover {
@@ -274,6 +275,27 @@ export const PlanBox = styled.div`
   justify-content: center;
   position: relative;
   overflow: hidden;
+  .owner{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    img{
+      min-width: 50px;
+      max-width: 50px;
+      max-height: 50px;
+      min-height: 50px;
+      background-color: white;
+      border-radius: 50%;
+    }
+    span{
+      margin-left: 5px;
+      white-space: nowrap;
+      color: white;
+      text-shadow: 3px 3px 2px rgba(0, 0, 0, 1);
+    }
+  }
   .planitem {
     height: 95%;
     margin: 10px;

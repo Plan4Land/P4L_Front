@@ -230,6 +230,7 @@ export const PlanningList = () => {
             </div>
           </SearchSt>
           <div className="mainarea">
+            <div className="title">
             <h3>
               지역 선택
               <ToggleButton
@@ -237,6 +238,7 @@ export const PlanningList = () => {
                 onToggle={() => setIsAreaOpen(!isAreaOpen)}
               />
             </h3>
+            </div>
             {isAreaOpen && (
               <div className="buttons">
                 {areas.map((area) => (
@@ -255,6 +257,7 @@ export const PlanningList = () => {
           </div>
           {selectedAreaData && (
             <div className="subarea">
+              <div className="title">
               <h3>
                 세부 지역 선택{" "}
                 <ToggleButton
@@ -262,6 +265,7 @@ export const PlanningList = () => {
                   onToggle={() => setIsSubAreaOpen(!isSubAreaOpen)}
                 />
               </h3>
+              </div>
               {isSubAreaOpen && (
                 <div className="buttons">
                   {selectedAreaData.subAreas.map((subArea) => (
@@ -280,6 +284,7 @@ export const PlanningList = () => {
             </div>
           )}
           <div className="theme">
+            <div className="title">
             <h3>
               테마 선택
               <ToggleButton
@@ -287,6 +292,7 @@ export const PlanningList = () => {
                 onToggle={() => setIsThemeOpen(!isThemeOpen)}
               />
             </h3>
+            </div>
             {isThemeOpen && (
               <div className="buttons">
                 {themes.map((theme) => (
@@ -363,7 +369,10 @@ export const PlanningList = () => {
                       thumbnail={planner.thumbnail || "/default-thumbnail.png"}
                       title={planner.title}
                       address={`${areaName} - ${subAreaName}`}
-                      subCategory={planner.theme}
+                      subCategory={planner.theme
+                        .split(",")
+                        .map((theme) => `#${theme.trim()}`)
+                        .join(" ")}
                       type={planner.public ? "공개" : "비공개"}
                       ownerprofile={planner.ownerProfileImg}
                       ownernick={planner.ownerNickname}

@@ -113,9 +113,9 @@ export const Header = () => {
       </Link>
       <NavSt>
         <div className="recomm" onClick={toggleDropdown}>
-          <Link className={`tag ${isActive("/ktxinquiry") ? "" : "active"}`}>
+          {/* <Link className={`tag ${isActive("/ktxinquiry") ? "" : "active"}`}> */}
             교통
-          </Link>
+          {/* </Link> */}
           {dropdownVisible && (
             <div className="dropdown-Trafficlist">
               <div className="topItem">
@@ -145,7 +145,7 @@ export const Header = () => {
         <div className="recomm">
           <Link
             to="/planninglist"
-            className={`tag ${isActive("/planninglist") ? "active" : ""}`}
+            className={`tag ${isActive("/planninglist") || isActive("/planning")? "active" : ""}`}
           >
             플래닝
           </Link>

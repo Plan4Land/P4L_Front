@@ -307,6 +307,7 @@ export const TourList = () => {
           </SearchSt>
 
           <div className="mainarea">
+            <div className="title">
             <h3>
               지역 선택
               <ToggleButton
@@ -314,6 +315,7 @@ export const TourList = () => {
                 onToggle={() => setIsAreaOpen(!isAreaOpen)}
               />
             </h3>
+            </div>
             {isAreaOpen && (
               <div className="buttons">
                 {areas.map((area) => (
@@ -333,6 +335,7 @@ export const TourList = () => {
 
           {selectedAreaData && (
             <div className="subarea">
+              <div className="title">
               <h3>
                 세부 지역 선택
                 <ToggleButton
@@ -340,6 +343,7 @@ export const TourList = () => {
                   onToggle={() => setIsSubAreaOpen(!isSubAreaOpen)}
                 />
               </h3>
+              </div>
               {isSubAreaOpen && (
                 <div className="buttons">
                   {selectedAreaData.subAreas.map((subArea) => (
@@ -359,6 +363,7 @@ export const TourList = () => {
           )}
 
           <div className="top">
+            <div className="title">
             <h3>
               대분류
               <ToggleButton
@@ -366,6 +371,7 @@ export const TourList = () => {
                 onToggle={() => setIsTopThemeOpen(!isTopThemeOpen)}
               />
             </h3>
+            </div>
             {isTopThemeOpen && (
               <div className="buttons">
                 {ServiceCode.map((cat) => (
@@ -385,6 +391,7 @@ export const TourList = () => {
 
           {filters.topTheme && (
             <div className="middle">
+              <div className="title">
               <h3>
                 중분류
                 <ToggleButton
@@ -392,6 +399,7 @@ export const TourList = () => {
                   onToggle={() => setIsMiddleThemeOpen(!isMiddleThemeOpen)}
                 />
               </h3>
+              </div>
               {isMiddleThemeOpen && (
                 <div className="buttons">
                   {ServiceCode.find(
@@ -414,6 +422,7 @@ export const TourList = () => {
 
           {filters.middleTheme && (
             <div className="bottom">
+              <div className="title">
               <h3>
                 소분류
                 <ToggleButton
@@ -421,6 +430,7 @@ export const TourList = () => {
                   onToggle={() => setIsBottomThemeOpen(!isBottomThemeOpen)}
                 />
               </h3>
+              </div>
               {isBottomThemeOpen && (
                 <div className="buttons">
                   {filters.middleTheme &&
@@ -451,13 +461,16 @@ export const TourList = () => {
           )}
 
           <div className="category">
+            <div className="title">
             <h3>
               카테고리 선택
               <ToggleButton
                 isOpen={isCategoryOpen}
                 onToggle={() => setIsCategoryOpen(!isCategoryOpen)}
               />
+              
             </h3>
+            </div>
             {isCategoryOpen && (
               <div className="buttons">
                 {types.map((type) => (

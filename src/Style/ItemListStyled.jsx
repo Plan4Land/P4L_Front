@@ -20,9 +20,18 @@ export const SelectTourItem = styled.div`
   padding-top: 40px;
   position: relative;
   margin-right: 30px;
-  h3 {
-    margin-bottom: 0;
+  width: 350px;
+  .title{
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+    h3 {
+      font-size: 15px;
+    margin-bottom: 5px;
+    margin-left: 10px;
   }
+  }
+  
   .buttons {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -39,8 +48,7 @@ export const SelectTourItem = styled.div`
     border: 1px solid ${colors.colorC};
 
     &:hover {
-      background-color: ${colors.colorB};
-      color: white;
+     opacity: 0.7;
     }
     &.selected {
       background-color: ${colors.colorB};
