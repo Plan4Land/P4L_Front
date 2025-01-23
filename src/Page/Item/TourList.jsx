@@ -19,6 +19,7 @@ import { FaBars } from "react-icons/fa";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useMediaQuery } from "react-responsive";
 import { Loading } from "../../Component/LoadingComponent";
+import { SelectedFilters } from "../../Component/SelectedFilterComponent";
 
 export const TourList = () => {
   const location = useLocation();
@@ -235,8 +236,11 @@ export const TourList = () => {
 
   // 카테고리
   const handleCategoryChange = (category) => {
-    updateFilters("category", category);
+    const isSameCategory = filters.category === category;
+    const newCategory = isSameCategory ? "" : category;
+    updateFilters("category", newCategory);
   };
+
   const handleToggleSelect = () => {
     setIsSelectOpen(!isSelectOpen);
   };
@@ -247,6 +251,34 @@ export const TourList = () => {
         currentPage: prevFilters.currentPage + 1,
       }));
     }
+  };
+
+  const handleTopFilterChange = (key, name) => {
+    setFilters((prev) => {
+      const newFilters = { ...prev };
+
+      if (key === "bottomTheme") {
+        const code = ServiceCode.flatMap((cat) =>
+          cat.cat2List.flatMap((cat2) => cat2.cat3List)
+        ).find((cat3) => cat3.cat3Name === name)?.cat3;
+
+        if (code) {
+          newFilters[key] = newFilters[key]
+            .split(",")
+            .filter((theme) => theme !== code)
+            .join(",");
+        }
+      } else if (key === "themeList") {
+        newFilters[key] = newFilters[key]
+          .split(",")
+          .filter((theme) => theme !== name)
+          .join(",");
+      } else {
+        newFilters[key] = "";
+      }
+
+      return newFilters;
+    });
   };
 
   const selectedAreaData = areas.find((area) => area.code === filters.areaCode);
@@ -448,16 +480,18 @@ export const TourList = () => {
             )}
           </div>
         </SelectTourItem>
-
         <ItemList>
+          <div className="totalCount">총 {totalItems}건</div>
+          <SelectedFilters
+            filters={filters}
+            onRemoveFilter={handleTopFilterChange}
+          ></SelectedFilters>
           {loading && (
             <Loading>
               <p>목록을 불러오는 중 입니다.</p>
             </Loading>
           )}
-
           {error && <div>{error}</div>}
-
           {!loading && !error && (
             <>
               <div className="tour-list">

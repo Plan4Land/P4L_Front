@@ -26,7 +26,6 @@ export const QuickSearch = styled(GridItem)`
   grid-column: span 4;
   display: flex;
   flex-direction: column;
-
   .QuickSelect {
     display: flex;
     padding: 10px;
@@ -41,12 +40,15 @@ export const QuickSearch = styled(GridItem)`
       margin: 0 20px 20px;
       transition: all 0.3s ease;
       font-size: 16px;
+      border-radius: 10px;
       color: ${colors.colorA};
       &:hover {
         opacity: 0.7;
       }
       &.active {
-        background-color: ${colors.colorC};
+        background-color: ${colors.colorB};
+        color: white;
+        opacity: 0.9;
       }
     }
   }
@@ -59,15 +61,23 @@ export const QuickSearch = styled(GridItem)`
 
     .RegionSearch {
       width: 100%;
-      display: flex;
-      justify-content: center;
-
+      .buttons {
+        display: grid;
+        height: 80%;
+        grid-template-columns: repeat(5, 1fr);
+      }
+      a {
+        margin: 10px;
+        display: flex;
+        text-decoration: none;
+        justify-content: center;
+        align-items: center;
+      }
       button {
         background-color: white;
         color: ${colors.colorA};
-        height: 65px;
-        width: 23%;
-        margin: 5px;
+        height: 100%;
+        width: 100%;
         transition: all 0.3s ease;
         &:hover {
           background-color: ${colors.colorB};
@@ -75,28 +85,33 @@ export const QuickSearch = styled(GridItem)`
           transform: translateY(-2px);
         }
       }
+      @media (max-width: 768px) {
+        .buttons {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        a {
+          margin: 5px;
+        }
+        button {
+          font-size: 11px;
+          padding: 0;
+        }
+      }
     }
 
     .SelectCategory {
       display: flex;
       text-align: center;
-      align-items: center;
-      justify-content: center;
       width: 100%;
       .catebuttons {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         width: 100%;
         height: 100%;
-        padding: 20px;
-        justify-content: space-around;
+        @media (max-width: 768px) {
+          height: 80%;
+        }
       }
-    }
-  }
-  @media (max-width: 768px) {
-    button {
-      font-size: 12px;
-      padding: 5px;
     }
   }
 `;
@@ -165,6 +180,7 @@ export const CateButton = styled.button`
 export const RecommItem = styled(GridItem)`
   grid-column: span 3;
   height: 500px;
+  margin-right: 20px;
 
   .topTourItem {
     overflow: hidden;
@@ -270,24 +286,43 @@ export const PlanBox = styled.div`
     transform: translateX(-100%);
     opacity: 0;
     animation: slideInImage 1.5s forwards;
+    @media (max-width: 768px) {
+      min-width: 100%;
+      max-width: 100%;
+    }
   }
 
   .planExplain {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    margin: 0 0 10px 20px;
+    margin: 0 0 30px 20px;
     opacity: 0;
     transform: translateX(100%);
     animation: slideInText 1.5s forwards;
     animation-delay: 0.5s;
+    @media (max-width: 768px) {
+      h3 {
+        font-size: 40px;
+      }
+      p {
+        font-size: 15px;
+      }
+      position: absolute;
+      bottom: 5px;
+      left: 0;
+    }
   }
 
   h3 {
-    font-size: 100px;
+    font-size: 50px;
     margin: 0 0 0 10px;
     color: ${colors.colorD};
     text-shadow: 3px 3px 2px rgba(0, 0, 0, 1);
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   p {
@@ -349,7 +384,7 @@ export const Festive = styled(GridItem)`
 
   .react-calendar {
     width: 100%;
-    height: 330px;
+    height: 360px;
     border-radius: 10px;
     border: 1px solid #ddd;
   }
@@ -399,8 +434,8 @@ export const Festive = styled(GridItem)`
 
 export const HolidayList = styled.div`
   margin: 10px;
-  width: 88%;
-  height: 180px;
+  width: 80%;
+  height: 120px;
   overflow-y: auto;
   border: 1px solid #ddd;
   background-color: #ffffff;
@@ -416,5 +451,8 @@ export const HolidayList = styled.div`
     font-size: 16px;
     line-height: 1.6;
     color: #555;
+  }
+  @media (max-width: 768px) {
+    width: 93%;
   }
 `;

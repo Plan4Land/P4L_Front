@@ -1,15 +1,15 @@
 import styled from "styled-components";
 
 export const colors = {
-  colorA: "#922d04",
-  colorB: "#f8751e",
-  colorC: "#ff9d6f",
-  colorD: "#fff6e2",
+  colorA: "#69270d",
+  colorB: "#fd7012",
+  colorC: "#ffa784",
+  colorD: "#ffeee2",
   colorE: "#ff7700",
 };
 
 export const HeaderSt = styled.div`
-  height: 100px;
+  height: 90px;
   border-bottom: 7px solid ${colors.colorB};
   color: ${colors.colorA};
   display: flex;
@@ -190,6 +190,7 @@ export const NavSt = styled.div`
     flex: 0.8;
     text-align: center;
     transition: all 0.3s ease;
+    white-space: nowrap;
     &:hover {
       text-decoration: underline;
       opacity: 0.7;
@@ -216,10 +217,11 @@ export const NavSt = styled.div`
     background-color: white;
     font-size: 12px;
     z-index: 10;
+    padding: 0 8% 0 8%;
+    box-shadow: 1px -1px 5px rgba(0, 0, 0, 0.3);
     .tag,
     p {
       font-size: 15px;
-      color: ${colors.colorA};
     }
   }
 `;

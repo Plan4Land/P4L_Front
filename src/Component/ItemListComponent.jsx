@@ -13,7 +13,7 @@ const TourItemStyled = styled.div`
   align-items: center;
   overflow: hidden;
   position: relative;
-  margin-bottom: 20px;
+  /* border: 1px solid black; */
   p {
     margin: 0 0 5px 0;
   }
@@ -101,7 +101,7 @@ const TourItemStyled = styled.div`
     color: #888;
   }
   .owner {
-    width: 100px;
+    width: 150px;
     position: absolute;
     bottom: 10px;
     left: 10px;

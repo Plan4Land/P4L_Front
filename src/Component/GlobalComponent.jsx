@@ -6,10 +6,13 @@ import { useAuth } from "../Context/AuthContext";
 import AxiosApi from "../Api/AxiosApi";
 import { TopTourApi, TopPlanApi } from "../Api/ItemApi";
 import { areas } from "../Util/Common";
+import { MyPlannerApi, BookmarkedSpotsApi } from "../Api/ItemApi";
 
 export const Header = () => {
   const [topSpots, setTopSpots] = useState([]);
   const [topPlans, setTopPlans] = useState([]);
+  const [planners, setPlanners] = useState([]);
+  const [bookmarkedSpots, setBookmarkedSpots] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
@@ -43,19 +46,32 @@ export const Header = () => {
   };
 
   useEffect(() => {
-    const fetchTopData = async () => {
+    const fetchData = async () => {
       try {
-        const topSpotsData = await TopTourApi.getTop5Travelspots();
-        const topPlansData = await TopPlanApi.getTop3Plans();
+        const [topSpotsData, topPlansData, plannersData, bookmarkedSpotsData] =
+          await Promise.all([
+            TopTourApi.getTop5Travelspots(),
+            TopPlanApi.getTop3Plans(),
+            MyPlannerApi.getPlannersByOwner(user.id),
+            BookmarkedSpotsApi.getBookmarkedSpots(user.id),
+          ]);
+
+        console.log("북마크된 관광지:", bookmarkedSpotsData);
+
+        // 각 데이터에서 3개씩만 추출하여 상태 설정
         setTopSpots(topSpotsData.slice(0, 3));
         setTopPlans(topPlansData.slice(0, 3));
+        setPlanners(plannersData.slice(0, 3));
+        setBookmarkedSpots(bookmarkedSpotsData.slice(0, 3));
+
+        console.log(plannersData);
       } catch (error) {
         console.error("데이터 가져오기 실패: ", error);
       }
     };
 
-    fetchTopData();
-  }, []);
+    fetchData();
+  }, [user.id]);
 
   return (
     <HeaderSt>
@@ -87,20 +103,26 @@ export const Header = () => {
         </Link>
       </NavSt>
       <div className="recomm">
-        인기탭
+        바로가기
         <div className="dropdown-list">
           <div className="topList">
+            {/* 북마크 관광지 */}
             <div className="topItem">
-              <h3>인기 관광지</h3>
-              {topSpots.map((spot, index) => (
-                <p key={`spot-${index}`} onClick={() => topTourClick(spot.id)}>
+              <h3>북마크 관광지</h3>
+              {bookmarkedSpots.map((spot, index) => (
+                <p
+                  key={`bookmarked-spot-${index}`}
+                  onClick={() => topTourClick(spot.id)}
+                >
                   <strong className="truncated-text">{spot.title}</strong> -
                   <span className="truncated-text">{spot.addr1}</span>
                 </p>
               ))}
             </div>
+
+            {/* 내 플래닝 */}
             <div className="topItem">
-              <h3>인기 플래닝</h3>
+              <h3>내 플래닝</h3>
               {topPlans.map((plan, index) => {
                 const areaName =
                   areas.find((area) => area.code === plan.area)?.name ||
@@ -137,7 +159,7 @@ export const Header = () => {
                 className="profile-img"
                 style={{
                   backgroundColor: "white",
-                  backgroundImage: `url(/${user.imgPath})`,
+                  backgroundImage: `url(${user.imgPath})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
