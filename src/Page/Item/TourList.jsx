@@ -71,7 +71,6 @@ export const TourList = () => {
         setTotalItems(data.totalElements);
         setTotalPages(data.totalPages);
         setTravelSpots(data.content);
-        console.log(data.totalElements);
       } catch (error) {
         setError("여행지 데이터를 가져오는 데 실패했습니다.");
       } finally {
@@ -236,7 +235,6 @@ export const TourList = () => {
   };
 
   // 카테고리
-  // 카테고리
   const handleCategoryChange = (category) => {
     const isSameCategory = filters.category === category;
     const newCategory = isSameCategory ? "" : category;
@@ -258,14 +256,30 @@ export const TourList = () => {
   const handleTopFilterChange = (key, name) => {
     setFilters((prev) => {
       const newFilters = {...prev};
-      if (key === "themeList") {
-        newFilters[key] = newFilters[key].split(",").filter((theme) => theme !== name).join(",");
+
+      if (key === "bottomTheme") {
+        const code = ServiceCode.flatMap(cat => cat.cat2List.flatMap(cat2 => cat2.cat3List))
+          .find(cat3 => cat3.cat3Name === name)?.cat3;
+
+        if (code) {
+          newFilters[key] = newFilters[key]
+            .split(",")
+            .filter((theme) => theme !== code)
+            .join(",");
+        }
+      } else if (key === "themeList") {
+        newFilters[key] = newFilters[key]
+          .split(",")
+          .filter((theme) => theme !== name)
+          .join(",");
       } else {
         newFilters[key] = "";
       }
+
       return newFilters;
     });
   };
+
 
   const selectedAreaData = areas.find((area) => area.code === filters.areaCode);
 
