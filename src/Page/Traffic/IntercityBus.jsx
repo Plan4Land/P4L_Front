@@ -1,11 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Header, Footer } from '../../Component/GlobalComponent';
-import { Button } from '../../Component/ButtonComponent';
-import { Table, TrafficBox, SelectTourItem, SearchSt } from '../../Style/ItemListStyled';
+import { Button, ToggleButton } from '../../Component/ButtonComponent';
+import { Table, SelectTourItem, SearchSt, List, FilterButton } from '../../Style/ItemListStyled';
 import { FaUndo, FaSearch } from 'react-icons/fa';
 import { Pagination } from "../../Component/Pagination";
 import { InterCityService } from '../../Util/Service_InterCityBus_code';
 import { InterCityGradeService } from '../../Util/Service_InterCityGrade_code';
+import { FaBars } from "react-icons/fa";
 
 const IntercityBus = () => {
   const [schedule, setSchedule] = useState([]); 
@@ -18,6 +19,14 @@ const IntercityBus = () => {
   const [loading, setLoading] = useState(false); 
   const [currentPage, setCurrentPage] = useState(0); 
   const [selectedBusGrade, setSelectedBusGrade] = useState('');
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+
+    // 토글 상태 관리
+    const [isDepCat1Open, setIsDepCat1Open] = useState(true);
+    const [isDepCat2Open, setIsDepCat2Open] = useState(true);
+    const [isArrCat1Open, setIsArrCat1Open] = useState(true);
+    const [isArrCat2Open, setIsArrCat2Open] = useState(true);
+    const [isGradeOpen, setIsGradeOpen] = useState(true);
 
   const itemsPerPage = 25;
 
@@ -34,11 +43,6 @@ const IntercityBus = () => {
       setDisplayedSchedule(schedule.slice(0, itemsPerPage));
     }
   }, [schedule]);
-
-  const calculateTotalPages = () => {
-    const totalCount = schedule.length;
-    return Math.ceil(totalCount / itemsPerPage); 
-  };
 
   const fetchSchedule = useCallback(async () => {
     if (!date || !selectedDepCat2 || !selectedArrCat2) {
@@ -69,15 +73,11 @@ const IntercityBus = () => {
       depTerminalId: depTerminalId,
       arrTerminalId: arrTerminalId,
       depPlandTime: formattedDate,
+      numOfRows: 100, // 최대 데이터 개수 요청
+      pageNo: 1,
     };
 
     const url = 'http://apis.data.go.kr/1613000/SuburbsBusInfoService/getStrtpntAlocFndSuberbsBusInfo';
-
-    console.log('출발 터미널 ID:', depTerminalId);
-    console.log('도착 터미널 ID:', arrTerminalId); 
-    console.log('API 요청 파라미터:', params);
-    console.log('API 요청 URL:', `${url}?${new URLSearchParams(params)}`);
-
 
     setLoading(true);
     try {
@@ -91,46 +91,34 @@ const IntercityBus = () => {
       const items = xmlDoc.getElementsByTagName('item');
 
       if (items.length > 0) {
-        const schedules = Array.from(items).map((item) => ({
-          depStation: item.getElementsByTagName('depPlaceNm')[0]?.textContent, 
-          arrStation: item.getElementsByTagName('arrPlaceNm')[0]?.textContent, 
-          depTime: item.getElementsByTagName('depPlandTime')[0]?.textContent, 
-          arrTime: item.getElementsByTagName('arrPlandTime')[0]?.textContent, 
-          busGrade: item.getElementsByTagName('gradeNm')[0]?.textContent, 
-          charge: item.getElementsByTagName('charge')[0]?.textContent,
-        }));
+        const schedules = Array.from(items).map((item) => {
+          const formatTime = (timeStr) => {
+            const hour = timeStr.substring(8, 10);
+            const minute = timeStr.substring(10, 12);
+            return `${hour}:${minute}`;
+          };
+  
+          return {
+            depStation: item.getElementsByTagName('depPlaceNm')[0]?.textContent || '',
+            arrStation: item.getElementsByTagName('arrPlaceNm')[0]?.textContent || '',
+            depTime: formatTime(item.getElementsByTagName('depPlandTime')[0]?.textContent || ''),
+            arrTime: formatTime(item.getElementsByTagName('arrPlandTime')[0]?.textContent || ''),
+            busGrade: item.getElementsByTagName('gradeNm')[0]?.textContent || '',
+            charge: item.getElementsByTagName('charge')[0]?.textContent || '',
+          };
+        });
         setSchedule(schedules);
         setCurrentPage(0);
       } else {
-        alert('조회된 고속버스 시간이 없습니다.');
+        alert('조회된 시외버스 시간이 없습니다.');
       }
     } catch (error) {
-      console.error('고속버스 조회 오류:', error);
-      alert('고속버스 조회 중 오류가 발생했습니다.');
+      console.error('시외버스 조회 오류:', error);
+      alert('시외버스 조회 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);
     }
   }, [date, selectedDepCat2, selectedArrCat2]);
-    
-  const isMetropolitanCity = (cityName) => {
-    const metropolitanCities = [
-      "서울특별시", "인천광역시", "세종특별시",
-      "대구광역시", "부산광역시", "울산광역시", "광주광역시"
-    ];
-    return metropolitanCities.includes(cityName);
-  };
-
-  const handleRegionSelection = (selectedCity, selectedSubRegion) => {
-    if (isMetropolitanCity(selectedCity)) {
-      const selectedCat2 = InterCityService.flatMap((cat1) => cat1.cat2List)
-        .find((cat2) => cat2.cat2 === selectedCity)?.cat2;
-      setSelectedDepCat2(selectedCat2);
-      setSelectedArrCat2(selectedCat2);
-    } else {
-      console.log(`${selectedCity}는 일반 지역입니다. 세부 지역을 선택할 필요 없습니다.`);
-    }
-  };
-  
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -151,17 +139,24 @@ const IntercityBus = () => {
     return InterCityService.find((cat1) => cat1.cat1 === selectedCat1)?.cat2List || [];
   };
 
-  const isBusGradeVisible = () => {
-    const visible = selectedDepCat1 && selectedDepCat2 && selectedArrCat2;
-    return visible;
+  const handleToggleSelect = () => {
+    setIsSelectOpen(!isSelectOpen);
   };
 
+  const toggleDepCat1 = () => setIsDepCat1Open(!isDepCat1Open);
+  const toggleDepCat2 = () => setIsDepCat2Open((prev) => !prev);
+  const toggleArrCat1 = () => setIsArrCat1Open(!isArrCat1Open);
+  const toggleArrCat2 = () => setIsArrCat2Open((prev) => !prev);
+  const toggleGrade = () => setIsGradeOpen((prev) => !prev);
 
   return (
     <>
       <Header />
-      <TrafficBox>
-        <SelectTourItem>
+      <FilterButton onClick={handleToggleSelect}>
+        <FaBars />
+      </FilterButton>
+      <List>
+        <SelectTourItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
             <FaUndo style={{ marginLeft: '6px' }} />
@@ -180,105 +175,156 @@ const IntercityBus = () => {
           </SearchSt>
 
           <div className="mainarea">
-            <h3>출발 지역 선택</h3>
-            <div>
-              {InterCityService.map((cat1) => (
-                <Button
-                  key={`dep-cat1-${cat1.cat1}`}
-                  onClick={() => {
-                    setSelectedDepCat1(cat1.cat1);
-                    setSelectedDepCat2('');
-                  }}
-                  className={selectedDepCat1 === cat1.cat1 ? 'selected' : ''}
-                >
-                  {cat1.cat1}
-                </Button>
-              ))}
-            </div>
+            <h3>
+              출발 지역 선택
+              <ToggleButton
+                isOpen={isDepCat1Open}
+                onToggle={toggleDepCat1}
+                />
+            </h3>
+            {isDepCat1Open && (
+              <div>
+                {InterCityService.map((cat1) => (
+                  <Button
+                    key={`dep-cat1-${cat1.cat1}`}
+                    onClick={() => {
+                      setSelectedDepCat1(cat1.cat1);
+                      setSelectedDepCat2('');
+                    }}
+                    className={selectedDepCat1 === cat1.cat1 ? 'selected' : ''}
+                  >
+                    {cat1.cat1}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
 
           {selectedDepCat1 && (
             <div className="details-area">
-              <h3>출발 세부 지역 선택</h3>
-              <div>
-                {getCat2List(selectedDepCat1).map((cat2) => (
-                  <Button
-                    key={`dep-cat2-${cat2.cat2Code}`}
-                    onClick={() => {
-                      setSelectedDepCat2(cat2.cat2);
-                    }}
-                    className={selectedDepCat2 === cat2.cat2 ? 'selected' : ''}
-                  >
-                    {cat2.cat2}
-                  </Button>
-                ))}
-              </div>
+              <h3>
+                출발 세부 지역 선택
+                <ToggleButton isOpen={isDepCat2Open} 
+                onToggle={toggleDepCat2} 
+                />
+              </h3>
+              {isDepCat2Open && (
+                <div>
+                  {getCat2List(selectedDepCat1).map((cat2) => (
+                    <Button
+                      key={`dep-cat2-${cat2.cat2Code}`}
+                      onClick={() => {
+                        setSelectedDepCat2(cat2.cat2);
+                      }}
+                      className={selectedDepCat2 === cat2.cat2 ? 'selected' : ''}
+                    >
+                      {cat2.cat2}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
           {/* 도착지 설정 */}
           <div className="mainarea">
-            <h3>도착 지역 선택</h3>
-            <div>
-              {InterCityService.map((cat1) => (
-                <Button
-                  key={`dep-cat1-${cat1.cat1}`}
-                  onClick={() => {
-                    setSelectedArrCat1(cat1.cat1);
-                    setSelectedArrCat2('');
-                  }}
-                  className={selectedArrCat1 === cat1.cat1 ? 'selected' : ''}
-                >
-                  {cat1.cat1}
-                </Button>
-              ))}
-            </div>
+            <h3>
+              도착 지역 선택
+              <ToggleButton
+                isOpen={isArrCat1Open}
+                onToggle={toggleArrCat1}
+              />
+            </h3>
+            {isArrCat1Open && (
+              <div>
+                {InterCityService.map((cat1) => (
+                  <Button
+                    key={`dep-cat1-${cat1.cat1}`}
+                    onClick={() => {
+                      setSelectedArrCat1(cat1.cat1);
+                      setSelectedArrCat2('');
+                    }}
+                    className={selectedArrCat1 === cat1.cat1 ? 'selected' : ''}
+                  >
+                    {cat1.cat1}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
 
           {selectedArrCat1 && (
             <div className="details-area">
-              <h3>도착 세부 지역 선택</h3>
-              <div>
-                {getCat2List(selectedArrCat1).map((cat2) => (
-                  <Button
-                    key={`dep-cat2-${cat2.cat2Code}`}
-                    onClick={() => {
-                      setSelectedArrCat2(cat2.cat2);
-                    }}
-                    className={selectedArrCat2 === cat2.cat2 ? 'selected' : ''}>
-                    {cat2.cat2}
-                  </Button>
-                ))}
-              </div>
+              <h3>
+                도착 세부 지역 선택
+                <ToggleButton 
+                isOpen={isArrCat2Open} 
+                onToggle={toggleArrCat2} 
+                />
+              </h3>
+              {isArrCat2Open && (
+                <div>
+                  {getCat2List(selectedArrCat1).map((cat2) => (
+                    <Button
+                      key={`dep-cat2-${cat2.cat2Code}`}
+                      onClick={() => {
+                        setSelectedArrCat2(cat2.cat2);
+                      }}
+                      className={selectedArrCat2 === cat2.cat2 ? 'selected' : ''}>
+                      {cat2.cat2}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
-          {(selectedDepCat2 && selectedArrCat2) && (
+          {/* 버스 등급 선택 */}
+          {selectedDepCat2 && selectedArrCat2 && (
             <div className="bus-grade-section">
-              <h3>버스 등급 선택</h3>
-              <div>
-                {InterCityGradeService.map((grade) => (
-                  <Button
-                    key={grade.GradeId}  
-                    onClick={() => setSelectedBusGrade(grade.GradeId === "" ? "" : grade.GradeId)} 
-                    className={selectedBusGrade === grade.GradeId ? 'selected' : ''}
-                  >
-                    {grade.GradeNm}
-                  </Button>
-                ))}
-              </div>
+              <h3>
+                버스 등급 선택
+                <ToggleButton isOpen={isGradeOpen} onToggle={toggleGrade} />
+              </h3>
+              {isGradeOpen && (
+                <div>
+                  {InterCityGradeService.map((grade) => (
+                    <Button
+                      key={grade.GradeId}
+                      onClick={() => {
+                        setSelectedBusGrade((prev) => {
+                          if (grade.GradeId === '') {
+                            return [''];
+                          }
+                          if (prev.includes('')) {
+                            return [grade.GradeId];
+                          }
+                          if (prev.includes(grade.GradeId)) {
+                            return prev.filter((id) => id !== grade.GradeId);
+                          }
+                          return [...prev, grade.GradeId];
+                        });
+                      }}
+                      className={selectedBusGrade.includes(grade.GradeId) ? 'selected' : ''}
+                    >
+                      {grade.GradeNm}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
-          {(selectedBusGrade || selectedBusGrade === "") && (
+
+          <div>
             <Button onClick={fetchSchedule} disabled={loading}>
               {loading ? '로딩 중...' : '조회'}
               <FaSearch style={{ marginLeft: '6px' }} />
             </Button>
-          )}
+          </div>
         </SelectTourItem>
 
         <div className="schedule-results">
-          <h3>고속버스 조회</h3>
+          <h3>시외버스 조회</h3>
           {displayedSchedule.length === 0 ? (
             <p>조회된 시간표가 없습니다.</p>
           ) : (
@@ -317,11 +363,9 @@ const IntercityBus = () => {
             </div>
           )}
         </div>
-      </TrafficBox>
+      </List>
       <Footer />
-
     </>
   );
 };
-
 export default IntercityBus;

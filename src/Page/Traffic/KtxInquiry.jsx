@@ -20,9 +20,15 @@ const KtxInquiry = () => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
-  const [isStationOpen, setIsStationOpen] = useState(true);
 
-  const itemsPerPage = 25; 
+  // 토글 상태 관리
+  const [isDepCat1Open, setIsDepCat1Open] = useState(true);
+  const [isDepCat2Open, setIsDepCat2Open] = useState(true);
+  const [isArrCat1Open, setIsArrCat1Open] = useState(true);
+  const [isArrCat2Open, setIsArrCat2Open] = useState(true);
+  const [isVehicleOpen, setIsVehicleOpen] = useState(true);
+
+  const itemsPerPage = 22; 
 
   useEffect(() => {
     if (schedule.length > 0) {
@@ -37,12 +43,6 @@ const KtxInquiry = () => {
       setDisplayedSchedule(schedule.slice(0, itemsPerPage));
     }
   }, [schedule]);
-
-
-  const calculateTotalPages = () => {
-    const totalCount = schedule.length;
-    return Math.ceil(totalCount / itemsPerPage);
-  };
 
   const calculateDuration = (depTime, arrTime) => {
     const dep = new Date(`1970-01-01T${depTime}:00Z`);
@@ -160,7 +160,7 @@ const KtxInquiry = () => {
       const sortedSchedules = sortByTime(allSchedules);
       console.log(sortedSchedules);
       setSchedule(sortedSchedules);
-      setCurrentPage(1);
+      setCurrentPage(0);
     } catch (error) {
       console.error('시간표 조회 오류:', error);
       alert('시간표 조회 중 오류가 발생했습니다.');
@@ -192,6 +192,12 @@ const KtxInquiry = () => {
     setIsSelectOpen(!isSelectOpen);
   };
 
+  const toggleDepCat1 = () => setIsDepCat1Open(!isDepCat1Open);
+  const toggleDepCat2 = () => setIsDepCat2Open((prev) => !prev);
+  const toggleArrCat1 = () => setIsArrCat1Open(!isArrCat1Open);
+  const toggleArrCat2 = () => setIsArrCat2Open((prev) => !prev);
+  const toggleVehicle = () => setIsVehicleOpen((prev) => !prev);
+
   return (
     <>
       <Header />
@@ -199,7 +205,6 @@ const KtxInquiry = () => {
         <FaBars />
       </FilterButton>
       <List>
-      {/* <TrafficBox> */}
         <SelectTourItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
@@ -223,25 +228,27 @@ const KtxInquiry = () => {
             <h3>
               출발 지역 선택
               <ToggleButton
-                isOpen={isStationOpen}
-                onToggle={() => setIsSelectOpen(!isStationOpen)}
+                isOpen={isDepCat1Open}
+                onToggle={toggleDepCat1}
                 />
-              </h3>
-            <div>
-              {KTXServiceCode.map((cat1) => (
-                <Button
-                  key={cat1.cat1}
-                  onClick={() => {
-                    setSelectedDepCat1(cat1.cat1);
-                    setSelectedDepCat2('');
-                    setSelectedVehicle('');
-                  }}
-                  className={selectedDepCat1 === cat1.cat1 ? 'selected' : ''}
-                >
-                  {cat1.cat1}
-                </Button>
-              ))}
-            </div>
+            </h3>
+            {isDepCat1Open  && ( // isStationOpen 상태에 따라 조건부 렌더링
+              <div>
+                {KTXServiceCode.map((cat1) => (
+                  <Button
+                    key={cat1.cat1}
+                    onClick={() => {
+                      setSelectedDepCat1(cat1.cat1);
+                      setSelectedDepCat2('');
+                      setSelectedVehicle('');
+                    }}
+                    className={selectedDepCat1 === cat1.cat1 ? 'selected' : ''}
+                  >
+                    {cat1.cat1}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* 출발 세부 역 선택 */}
@@ -249,52 +256,53 @@ const KtxInquiry = () => {
             <div className="substation">
               <h3>
                 출발 세부 역 선택
-                <ToggleButton
-                isOpen={isStationOpen}
-                onToggle={() => setIsSelectOpen(!isStationOpen)}
+                <ToggleButton isOpen={isDepCat2Open} 
+                onToggle={toggleDepCat2} 
                 />
-                </h3>
-              <div>
-                {getCat2List(selectedDepCat1).map((cat2) => (
-                  <Button
-                    key={cat2.cat2}
-                    onClick={() => {
-                      setSelectedDepCat2(cat2.cat2);
-                      setSelectedVehicle(''); 
-                    }}
-                    className={selectedDepCat2 === cat2.cat2 ? 'selected' : ''}
-                  >
-                    {cat2.cat2}
-                  </Button>
-                ))}
-              </div>
+              </h3>
+              {isDepCat2Open && (
+                <div>
+                  {getCat2List(selectedDepCat1).map((cat2) => (
+                    <Button
+                      key={cat2.cat2}
+                      onClick={() => setSelectedDepCat2(cat2.cat2)}
+                      className={selectedDepCat2 === cat2.cat2 ? 'selected' : ''}
+                    >
+                      {cat2.cat2}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
+
 
           {/* 도착 지역 선택 */}
           <div className="mainastation">
             <h3>
               도착 지역 선택
               <ToggleButton
-                isOpen={isStationOpen}
-                onToggle={() => setIsSelectOpen(!isStationOpen)}
-                />
-              </h3>
-            <div>
-              {KTXServiceCode.map((cat1) => (
-                <Button
-                  key={cat1.cat1}
-                  onClick={() => {
-                    setSelectedArrCat1(cat1.cat1);
-                    setSelectedArrCat2(''); 
-                    setSelectedVehicle('');
-                  }}
-                  className={selectedArrCat1 === cat1.cat1 ? 'selected' : ''}
-                >
-                  {cat1.cat1}
-                </Button>
-              ))}
-            </div>
+                isOpen={isArrCat1Open}
+                onToggle={toggleArrCat1}
+              />
+            </h3>
+            {isArrCat1Open  && ( // isStationOpen 상태에 따라 조건부 렌더링
+              <div>
+                {KTXServiceCode.map((cat1) => (
+                  <Button
+                    key={cat1.cat1}
+                    onClick={() => {
+                      setSelectedArrCat1(cat1.cat1);
+                      setSelectedArrCat2('');
+                      setSelectedVehicle('');
+                    }}
+                    className={selectedArrCat1 === cat1.cat1 ? 'selected' : ''}
+                  >
+                    {cat1.cat1}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* 도착 세부 역 선택 */}
@@ -302,52 +310,66 @@ const KtxInquiry = () => {
             <div className="substation">
               <h3>
                 도착 세부 역 선택
-                <ToggleButton
-                isOpen={isStationOpen}
-                onToggle={() => setIsSelectOpen(!isStationOpen)}
+                <ToggleButton 
+                isOpen={isArrCat2Open} 
+                onToggle={toggleArrCat2} 
                 />
-                </h3>
-              <div>
-                {getCat2List(selectedArrCat1).map((cat2) => (
-                  <Button
-                    key={cat2.cat2}
-                    onClick={() => setSelectedArrCat2(cat2.cat2)}
-                    className={selectedArrCat2 === cat2.cat2 ? 'selected' : ''}
-                  >
-                    {cat2.cat2}
-                  </Button>
-                ))}
-              </div>
+              </h3>
+              {isArrCat2Open && (
+                <div>
+                  {getCat2List(selectedArrCat1).map((cat2) => (
+                    <Button
+                      key={cat2.cat2}
+                      onClick={() => setSelectedArrCat2(cat2.cat2)}
+                      className={selectedArrCat2 === cat2.cat2 ? 'selected' : ''}
+                    >
+                      {cat2.cat2}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
-          {/* 열차 선택 */}
+          {/* 열차 종류 선택 */}
           {selectedDepCat2 && selectedArrCat2 && (
             <div className="trainarea">
               <h3>
                 열차 종류 선택
-                <ToggleButton
-                isOpen={isStationOpen}
-                onToggle={() => setIsSelectOpen(!isStationOpen)}
-                />
-                </h3>
-              <div>
-                {Vehiclekind.map((vehicle) => (
-                  <Button
-                  key={vehicle.VehicleKindCode}
-                  onClick={() => {
-                    setSelectedVehicle((prev) =>
-                      prev.includes(vehicle.VehicleKindCode)
-                        ? prev.filter((code) => code !== vehicle.VehicleKindCode) 
-                        : [...prev, vehicle.VehicleKindCode]
-                    );
-                  }}
-                  className={selectedVehicle.includes(vehicle.VehicleKindCode) ? 'selected' : ''}
-                >
-                  {vehicle.VehicleKindName}
-                </Button>
-                ))}
-              </div>
+                <ToggleButton 
+                  isOpen={isVehicleOpen} 
+                  onToggle={toggleVehicle} />
+              </h3>
+              {isVehicleOpen && (
+                <div>
+                  {Vehiclekind.map((vehicle) => (
+                    <Button
+                      key={vehicle.VehicleKindCode}
+                      onClick={() => {
+                        setSelectedVehicle((prev) => {
+                          if (vehicle.VehicleKindCode === '') {
+                            // '전체' 선택 시 모든 선택 해제하고 '전체'만 선택
+                            return [''];
+                          }
+                          // '전체'가 선택된 상태에서 특정 열차 선택 시 '전체' 제거
+                          if (prev.includes('')) {
+                            return [vehicle.VehicleKindCode];
+                          }
+                          // 이미 선택된 경우 해제
+                          if (prev.includes(vehicle.VehicleKindCode)) {
+                            return prev.filter((code) => code !== vehicle.VehicleKindCode);
+                          }
+                          // 선택 추가
+                          return [...prev, vehicle.VehicleKindCode];
+                        });
+                      }}
+                      className={selectedVehicle.includes(vehicle.VehicleKindCode) ? 'selected' : ''}
+                    >
+                      {vehicle.VehicleKindName}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -359,7 +381,6 @@ const KtxInquiry = () => {
             </Button>
           </div>
         </SelectTourItem>
-        <div style={{width: "150px"}}></div>
 
         {/* 시간표 결과 */}
         <div className="schedule-results">

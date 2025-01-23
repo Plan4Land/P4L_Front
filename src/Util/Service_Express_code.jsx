@@ -8,10 +8,6 @@ export const ExpressServiceCode = [
         cat2Code: "31190",
         cat3List: [
           {
-            cat3: "죽전",
-            cat3Code: "NAEK118",
-          },
-          {
             cat3: "신갈영덕",
             cat3Code: "NAEK119",
           },
@@ -29,10 +25,6 @@ export const ExpressServiceCode = [
         cat2: "수원시",
         cat2Code: "31010",
         cat3List: [
-          {
-            cat3: "서수원",
-            cat3Code: "NAEK109",
-          },
           {
             cat3: "수원",
             cat3Code: "NAEK110",
@@ -52,10 +44,6 @@ export const ExpressServiceCode = [
         cat2Code: "31100",
         cat3List: [
           {
-            cat3: "고양화정",
-            cat3Code: "NAEK115",
-          },
-          {
             cat3: "고양백석",
             cat3Code: "NAEK116",
           },
@@ -68,20 +56,6 @@ export const ExpressServiceCode = [
           {
             cat3: "성남(분당)",
             cat3Code: "NAEK120",
-          },
-        ],
-      },
-      {
-        cat2: "광명시",
-        cat2Code: "31060",
-        cat3List: [
-          {
-            cat3: "광명(KTX역)",
-            cat3Code: "NAEK125",
-          },
-          {
-            cat3: "광명(철산역)",
-            cat3Code: "NAEK126",
           },
         ],
       },
@@ -144,44 +118,12 @@ export const ExpressServiceCode = [
         ]
       },
       {
-        cat2: "포천시",
-        cat2Code: "31270",
-        cat3List: [
-          {
-            cat3: "포천",
-            cat3Code: "NAEK146"
-          },
-          {
-            cat3: "운천",
-            cat3Code: "NAEK186"
-          }
-        ]
-      },
-      {
-        cat2: "철원군",
-        cat2Code: "32360",
-        cat3List: [
-          {
-            cat3: "신철원",
-            cat3Code: "NAEK147"
-          },
-          {
-            cat3: "철원",
-            cat3Code: "NAEK148"
-          }
-        ]
-      },
-      {
         cat2: "이천시",
         cat2Code: "31210",
         cat3List: [
           {
             cat3: "이천",
             cat3Code: "NAEK160"
-          },
-          {
-            cat3: "이천마장",
-            cat3Code: "NAEK171"
           },
           {
             cat3: "이천부발(신하리)",
@@ -262,7 +204,7 @@ export const ExpressServiceCode = [
     ],
   },
   {
-    cat1: "서울특별시",
+    cat1: "서울",
     cat1Code: "11",
     cat2List: [
       {
@@ -292,16 +234,12 @@ export const ExpressServiceCode = [
     ]
   },
   {
-    cat1: "인천광역시",
+    cat1: "인천",
     cat1Code: "23",
     cat2List: [
       {
         cat2: "인천",
         cat2Code: "NAEK100"
-      },
-      {
-        cat2: "부천",
-        cat2Code: "NAEK101"
       },
       {
         cat2: "인천공항T1",
@@ -341,10 +279,6 @@ export const ExpressServiceCode = [
         cat2: "삼척시",
         cat2Code: "32070",
         cat3List: [
-          {
-            cat3: "강원대(삼척)",
-            cat3Code: "NAEK219"
-          },
           {
             cat3: "삼척",
             cat3Code: "NAEK220"
@@ -430,7 +364,7 @@ export const ExpressServiceCode = [
     ]
   },
   {
-    cat1: "충청남도",
+    cat1: "충남",
     cat1Code: "34",
     cat2List: [
       {
@@ -609,29 +543,15 @@ export const ExpressServiceCode = [
           }
         ]
       },
-      {
-        cat2: "보령시",
-        cat2Code: "34030",
-        cat3List: [
-          {
-            cat3: "보령",
-            cat3Code: "NAEK395"
-          }
-        ]
-      }
     ]
   },
   {
-    cat1: "세종특별시",
+    cat1: "세종",
     cat1Code: "12",
     cat2List: [
       {
         cat2: "조치원",
         cat2Code: "NAEK350"
-      },
-      {
-        cat2: "세종연구단지",
-        cat2Code: "NAEK351"
       },
       {
         cat2: "세종시",
@@ -664,7 +584,7 @@ export const ExpressServiceCode = [
     ]
   },
   {
-    cat1: "충청북도",
+    cat1: "충북",
     cat1Code: "33",
     cat2List: [
       {
@@ -680,30 +600,8 @@ export const ExpressServiceCode = [
             cat3Code: "NAEK401"
           },
           {
-            cat3: "북청주",
-            cat3Code: "NAEK405"
-          },
-          {
-            cat3: "북부오창",
-            cat3Code: "NAEK406"
-          },
-          {
             cat3: "청주공항",
             cat3Code: "NAEK407"
-          }
-        ]
-      },
-      {
-        cat2: "보은군",
-        cat2Code: "33320",
-        cat3List: [
-          {
-            cat3: "속리산",
-            cat3Code: "NAEK408"
-          },
-          {
-            cat3: "보은",
-            cat3Code: "NAEK409"
           }
         ]
       },
@@ -711,10 +609,6 @@ export const ExpressServiceCode = [
         cat2: "충주시",
         cat2Code: "33020",
         cat3List: [
-          {
-            cat3: "중앙탑면",
-            cat3Code: "NAEK419"
-          },
           {
             cat3: "충주",
             cat3Code: "NAEK420"
@@ -749,30 +643,10 @@ export const ExpressServiceCode = [
           }
         ]
       },
-      {
-        cat2: "증평군",
-        cat2Code: "33390",
-        cat3List: [
-          {
-            cat3: "증평",
-            cat3Code: "NAEK455"
-          }
-        ]
-      },
-      {
-        cat2: "괴산군",
-        cat2Code: "33360",
-        cat3List: [
-          {
-            cat3: "괴산",
-            cat3Code: "NAEK457"
-          }
-        ]
-      }
     ]
   },
   {
-    cat1: "광주광역시",
+    cat1: "광주",
     cat1Code: "24",
     cat2List: [
       {
@@ -786,7 +660,7 @@ export const ExpressServiceCode = [
     ]
   },
   {
-    cat1: "전라남도",
+    cat1: "전남",
     cat1Code: "36",
     cat2List: [
       {
@@ -871,10 +745,6 @@ export const ExpressServiceCode = [
             cat3: "나주",
             cat3Code: "NAEK530"
           },
-          {
-            cat3: "영산포",
-            cat3Code: "NAEK565"
-          }
         ]
       },
       {
@@ -913,10 +783,6 @@ export const ExpressServiceCode = [
             cat3: "해제",
             cat3Code: "NAEK552"
           },
-          {
-            cat3: "남악",
-            cat3Code: "NAEK592"
-          }
         ]
       },
       {
@@ -972,14 +838,6 @@ export const ExpressServiceCode = [
         cat2Code: "36380",
         cat3List: [
           {
-            cat3: "관산",
-            cat3Code: "NAEK576"
-          },
-          {
-            cat3: "회진",
-            cat3Code: "NAEK577"
-          },
-          {
             cat3: "장흥",
             cat3Code: "NAEK580"
           }
@@ -993,10 +851,6 @@ export const ExpressServiceCode = [
             cat3: "함평",
             cat3Code: "NAEK581"
           },
-          {
-            cat3: "문장",
-            cat3Code: "NAEK584"
-          }
         ]
       },
       {
@@ -1027,14 +881,6 @@ export const ExpressServiceCode = [
             cat3: "지도",
             cat3Code: "NAEK585"
           },
-          {
-            cat3: "임자대광",
-            cat3Code: "NAEK593"
-          },
-          {
-            cat3: "임자진리",
-            cat3Code: "NAEK594"
-          }
         ]
       },
       {
@@ -1059,10 +905,6 @@ export const ExpressServiceCode = [
             cat3: "옥과",
             cat3Code: "NAEK588"
           },
-          {
-            cat3: "곡성",
-            cat3Code: "NAEK589"
-          }
         ]
       },
       {
@@ -1098,7 +940,7 @@ export const ExpressServiceCode = [
     ]
   },
   {
-    cat1: "전라북도",
+    cat1: "전북",
     cat1Code: "35",
     cat2List: [
       {
@@ -1157,10 +999,6 @@ export const ExpressServiceCode = [
             cat3: "자치인재원",
             cat3Code: "NAEK622"
           },
-          {
-            cat3: "봉동",
-            cat3Code: "NAEK649"
-          }
         ]
       },
       {
@@ -1171,20 +1009,12 @@ export const ExpressServiceCode = [
             cat3: "남원",
             cat3Code: "NAEK625"
           },
-          {
-            cat3: "덕과",
-            cat3Code: "NAEK626"
-          }
         ]
       },
       {
         cat2: "정읍시",
         cat2Code: "35040",
         cat3List: [
-          {
-            cat3: "태인",
-            cat3Code: "NAEK629"
-          },
           {
             cat3: "정읍",
             cat3Code: "NAEK630"
@@ -1202,16 +1032,6 @@ export const ExpressServiceCode = [
           {
             cat3: "고창",
             cat3Code: "NAEK635"
-          }
-        ]
-      },
-      {
-        cat2: "부안군",
-        cat2Code: "35380",
-        cat3List: [
-          {
-            cat3: "부안",
-            cat3Code: "NAEK640"
           }
         ]
       },
@@ -1235,20 +1055,10 @@ export const ExpressServiceCode = [
           }
         ]
       },
-      {
-        cat2: "진안군",
-        cat2Code: "35320",
-        cat3List: [
-          {
-            cat3: "진안",
-            cat3Code: "NAEK650"
-          }
-        ]
-      }
     ]
   },
   {
-    cat1: "경상남도",
+    cat1: "경남",
     cat1Code: "38",
     cat2List: [
       {
@@ -1322,7 +1132,7 @@ export const ExpressServiceCode = [
     ]
   },
   {
-    cat1: "경상북도",
+    cat1: "경북",
     cat1Code: "37",
     cat2List: [
       {
@@ -1362,20 +1172,6 @@ export const ExpressServiceCode = [
         ]
       },
       {
-        cat2: "김천시",
-        cat2Code: "37030",
-        cat3List: [
-          {
-            cat3: "김천",
-            cat3Code: "NAEK820"
-          },
-          {
-            cat3: "김천혁신",
-            cat3Code: "NAEK821"
-          }
-        ]
-      },
-      {
         cat2: "상주시",
         cat2Code: "37080",
         cat3List: [
@@ -1411,14 +1207,6 @@ export const ExpressServiceCode = [
             cat3: "영주",
             cat3Code: "NAEK835"
           },
-          {
-            cat3: "영주장수",
-            cat3Code: "NAEK862"
-          },
-          {
-            cat3: "영주꽃동산",
-            cat3Code: "NAEK863"
-          }
         ]
       },
       {
@@ -1472,7 +1260,7 @@ export const ExpressServiceCode = [
     ]
   },
   {
-    cat1: "부산광역시",
+    cat1: "부산",
     cat1Code: "21",
     cat2List: [
       {
@@ -1486,7 +1274,7 @@ export const ExpressServiceCode = [
     ]
   },
   {
-    cat1: "울산광역시",
+    cat1: "울산",
     cat1Code: "26",
     cat2List: [
       {
@@ -1500,7 +1288,7 @@ export const ExpressServiceCode = [
     ]
   },
   {
-    cat1: "대구광역시",
+    cat1: "대구",
     cat1Code: "22",
     cat2List: [
       {

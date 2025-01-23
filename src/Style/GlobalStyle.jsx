@@ -136,6 +136,27 @@ export const HeaderSt = styled.div`
     padding-right: 20px;
     border-radius: 10px;
   }
+
+  .dropdown-Trafficlist {
+    display: block;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    right: 0;
+    width: auto; /* 자동 너비 */
+    min-width: 100px; /* 최소 너비 설정 */
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 30px;
+    align-items: center; /* 수직 중앙 정렬 */
+    margin-top: 5px; /* 드롭다운 상단에 간격 추가 */
+  }
   .topItem {
     margin-bottom: 20px;
     .truncated-text {

@@ -1,11 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Header, Footer } from '../../Component/GlobalComponent';
-import { Button } from '../../Component/ButtonComponent';
-import { Table, TrafficBox, SelectTourItem, SearchSt } from '../../Style/ItemListStyled';
+import { Button, ToggleButton } from '../../Component/ButtonComponent';
+import { Table, SelectTourItem, SearchSt, List, FilterButton } from '../../Style/ItemListStyled';
 import { FaUndo, FaSearch } from 'react-icons/fa';
 import { Pagination } from "../../Component/Pagination";
 import { ExpressServiceCode } from '../../Util/Service_Express_code';
 import { ExpressGradeService } from '../../Util/Service_ExpressGrade_code';
+import { FaBars } from "react-icons/fa";
 
 const ExpressBus = () => {
   const [schedule, setSchedule] = useState([]); 
@@ -20,6 +21,16 @@ const ExpressBus = () => {
   const [loading, setLoading] = useState(false); 
   const [currentPage, setCurrentPage] = useState(0); 
   const [selectedBusGrade, setSelectedBusGrade] = useState('');
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+
+  // 토글 상태 관리
+  const [isDepCat1Open, setIsDepCat1Open] = useState(true);
+  const [isDepCat2Open, setIsDepCat2Open] = useState(true);
+  const [isDepCat3Open, setIsDepCat3Open] = useState(true);
+  const [isArrCat1Open, setIsArrCat1Open] = useState(true);
+  const [isArrCat2Open, setIsArrCat2Open] = useState(true);
+  const [isArrCat3Open, setIsArrCat3Open] = useState(true);
+  const [isGradeOpen, setIsGradeOpen] = useState(true);
 
   const itemsPerPage = 25;
 
@@ -36,11 +47,6 @@ const ExpressBus = () => {
       setDisplayedSchedule(schedule.slice(0, itemsPerPage));
     }
   }, [schedule]);
-
-  const calculateTotalPages = () => {
-    const totalCount = schedule.length;
-    return Math.ceil(totalCount / itemsPerPage); 
-  };
 
   const fetchSchedule = useCallback(async () => {
     if (!date || !selectedDepCat2 || !selectedArrCat2) {
@@ -78,6 +84,8 @@ const ExpressBus = () => {
       depTerminalId: depTerminalId,
       arrTerminalId: arrTerminalId,
       depPlandTime: formattedDate,
+      numOfRows: 100, // 최대 데이터 개수 요청
+      pageNo: 1,
     };
 
     const url = 'http://apis.data.go.kr/1613000/ExpBusInfoService/getStrtpntAlocFndExpbusInfo';
@@ -86,7 +94,6 @@ const ExpressBus = () => {
     console.log('도착 터미널 ID:', arrTerminalId); 
     console.log('API 요청 파라미터:', params);
     console.log('API 요청 URL:', `${url}?${new URLSearchParams(params)}`);
-
 
     setLoading(true);
     try {
@@ -100,14 +107,22 @@ const ExpressBus = () => {
       const items = xmlDoc.getElementsByTagName('item');
 
       if (items.length > 0) {
-        const schedules = Array.from(items).map((item) => ({
-          depStation: item.getElementsByTagName('depPlaceNm')[0]?.textContent, 
-          arrStation: item.getElementsByTagName('arrPlaceNm')[0]?.textContent, 
-          depTime: item.getElementsByTagName('depPlandTime')[0]?.textContent, 
-          arrTime: item.getElementsByTagName('arrPlandTime')[0]?.textContent, 
-          busGrade: item.getElementsByTagName('gradeNm')[0]?.textContent, 
-          charge: item.getElementsByTagName('charge')[0]?.textContent,
-        }));
+        const schedules = Array.from(items).map((item) => {
+          const formatTime = (timeStr) => {
+            const hour = timeStr.substring(8, 10);
+            const minute = timeStr.substring(10, 12);
+            return `${hour}:${minute}`;
+          };
+  
+          return {
+            depStation: item.getElementsByTagName('depPlaceNm')[0]?.textContent || '',
+            arrStation: item.getElementsByTagName('arrPlaceNm')[0]?.textContent || '',
+            depTime: formatTime(item.getElementsByTagName('depPlandTime')[0]?.textContent || ''),
+            arrTime: formatTime(item.getElementsByTagName('arrPlandTime')[0]?.textContent || ''),
+            busGrade: item.getElementsByTagName('gradeNm')[0]?.textContent || '',
+            charge: item.getElementsByTagName('charge')[0]?.textContent || '',
+          };
+        });
         setSchedule(schedules);
         setCurrentPage(0);
       } else {
@@ -128,21 +143,7 @@ const ExpressBus = () => {
     ];
     return metropolitanCities.includes(cityName);
   };
-
-  const handleRegionSelection = (selectedCity, selectedSubRegion) => {
-    if (isMetropolitanCity(selectedCity)) {
-      const selectedCat2 = ExpressServiceCode.flatMap((cat1) => cat1.cat2List)
-        .find((cat2) => cat2.cat2 === selectedCity)?.cat2;
-      setSelectedDepCat2(selectedCat2);
-      setSelectedArrCat2(selectedCat2);
-      setSelectedDepCat3('');
-      setSelectedArrCat3('');
-    } else {
-      console.log(`${selectedCity}는 일반 지역입니다. 세부 지역을 선택할 필요 없습니다.`);
-    }
-  };
   
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -171,21 +172,26 @@ const ExpressBus = () => {
     return selectedCat2?.cat3List || [];
   };
 
-  const isBusGradeVisible = () => {
-    const visible = (selectedDepCat1 && selectedDepCat2 && (selectedDepCat3 || selectedArrCat3));
-    return visible;
+  const handleToggleSelect = () => {
+    setIsSelectOpen(!isSelectOpen);
   };
 
-  const handleRegionClick = (selectedCity) => {
-    handleRegionSelection(selectedCity, selectedDepCat2);
-    handleRegionSelection(selectedCity, selectedArrCat2);
-  };
+  const toggleDepCat1 = () => setIsDepCat1Open(!isDepCat1Open);
+  const toggleDepCat2 = () => setIsDepCat2Open((prev) => !prev);
+  const toggleDepCat3 = () => setIsDepCat3Open((prev) => !prev);
+  const toggleArrCat1 = () => setIsArrCat1Open(!isArrCat1Open);
+  const toggleArrCat2 = () => setIsArrCat2Open((prev) => !prev);
+  const toggleArrCat3 = () => setIsArrCat3Open((prev) => !prev);
+  const toggleGrade = () => setIsGradeOpen((prev) => !prev);
 
   return (
     <>
       <Header />
-      <TrafficBox>
-        <SelectTourItem>
+      <FilterButton onClick={handleToggleSelect}>
+        <FaBars />
+      </FilterButton>
+      <List>
+        <SelectTourItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
             <FaUndo style={{ marginLeft: '6px' }} />
@@ -204,135 +210,199 @@ const ExpressBus = () => {
           </SearchSt>
 
           <div className="mainarea">
-            <h3>출발 지역 선택</h3>
-            <div>
-              {ExpressServiceCode.map((cat1) => (
-                <Button
-                  key={`dep-cat1-${cat1.cat1}`}
-                  onClick={() => {
-                    setSelectedDepCat1(cat1.cat1);
-                    setSelectedDepCat2('');
-                    setSelectedDepCat3('');
-                  }}
-                  className={selectedDepCat1 === cat1.cat1 ? 'selected' : ''}
-                >
-                  {cat1.cat1}
-                </Button>
-              ))}
-            </div>
+            <h3>
+              출발 지역 선택
+              <ToggleButton
+                isOpen={isDepCat1Open}
+                onToggle={toggleDepCat1}
+              />
+            </h3>
+            {isDepCat1Open && (
+              <div>
+                {ExpressServiceCode.map((cat1) => (
+                  <Button
+                    key={`dep-cat1-${cat1.cat1}`}
+                    onClick={() => {
+                      setSelectedDepCat1(cat1.cat1);
+                      setSelectedDepCat2('');
+                      setSelectedDepCat3('');
+                    }}
+                    className={selectedDepCat1 === cat1.cat1 ? 'selected' : ''}
+                  >
+                    {cat1.cat1}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
 
           {selectedDepCat1 && (
             <div className="details-area">
-              <h3>출발 세부 지역 선택</h3>
-              <div>
-                {getCat2List(selectedDepCat1).map((cat2) => (
-                  <Button
-                    key={`dep-cat2-${cat2.cat2Code}`}
-                    onClick={() => {
-                      setSelectedDepCat2(cat2.cat2);
-                      setSelectedDepCat3('');
-                    }}
-                    className={selectedDepCat2 === cat2.cat2 ? 'selected' : ''}
-                  >
-                    {cat2.cat2}
-                  </Button>
-                ))}
-              </div>
+              <h3>
+                출발 세부 지역 선택
+                <ToggleButton isOpen={isDepCat2Open} 
+                  onToggle={toggleDepCat2} 
+                />
+              </h3>
+              {isDepCat2Open && (
+                <div>
+                  {getCat2List(selectedDepCat1).map((cat2) => (
+                    <Button
+                      key={`dep-cat2-${cat2.cat2Code}`}
+                      onClick={() => {
+                        setSelectedDepCat2(cat2.cat2);
+                        setSelectedDepCat3('');
+                      }}
+                      className={selectedDepCat2 === cat2.cat2 ? 'selected' : ''}
+                    >
+                      {cat2.cat2}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
           {selectedDepCat2 && !isMetropolitanCity(selectedDepCat1) && (
             <div className="subcategory-area">
-              <h3>출발 소분류 지역 선택</h3>
-              <div>
-                {getCat3List(
-                  getCat2List(selectedDepCat1).find((cat2) => cat2.cat2 === selectedDepCat2)
-                ).map((cat3) => (
-                  <Button
-                    key={`dep-cat3-${cat3.cat3Code}`}
-                    onClick={() => setSelectedDepCat3(cat3.cat3Code)}
-                    className={selectedDepCat3 === cat3.cat3Code ? 'selected' : ''}
-                  >
-                    {cat3.cat3}
-                  </Button>
-                ))}
-              </div>
+              <h3>
+                출발 소분류 지역 선택
+                <ToggleButton isOpen={isDepCat3Open} 
+                  onToggle={toggleDepCat3} 
+                />
+              </h3>
+              {isDepCat3Open && (
+                <div>
+                  {getCat3List(
+                    getCat2List(selectedDepCat1).find((cat2) => cat2.cat2 === selectedDepCat2)
+                  ).map((cat3) => (
+                    <Button
+                      key={`dep-cat3-${cat3.cat3Code}`}
+                      onClick={() => setSelectedDepCat3(cat3.cat3Code)}
+                      className={selectedDepCat3 === cat3.cat3Code ? 'selected' : ''}
+                    >
+                      {cat3.cat3}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
           {/* 도착지 설정 */}
           <div className="mainarea">
-            <h3>도착 지역 선택</h3>
-            <div>
-              {ExpressServiceCode.map((cat1) => (
-                <Button
-                  key={`dep-cat1-${cat1.cat1}`}
-                  onClick={() => {
-                    setSelectedArrCat1(cat1.cat1);
-                    setSelectedArrCat2('');
-                    setSelectedArrCat3('');
-                  }}
-                  className={selectedArrCat1 === cat1.cat1 ? 'selected' : ''}
-                >
-                  {cat1.cat1}
-                </Button>
-              ))}
-            </div>
+            <h3>
+              도착 지역 선택
+              <ToggleButton
+                isOpen={isArrCat1Open}
+                onToggle={toggleArrCat1}
+              />
+            </h3>
+            {isArrCat1Open && (
+              <div>
+                {ExpressServiceCode.map((cat1) => (
+                  <Button
+                    key={`dep-cat1-${cat1.cat1}`}
+                    onClick={() => {
+                      setSelectedArrCat1(cat1.cat1);
+                      setSelectedArrCat2('');
+                      setSelectedArrCat3('');
+                    }}
+                    className={selectedArrCat1 === cat1.cat1 ? 'selected' : ''}
+                  >
+                    {cat1.cat1}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
 
           {selectedArrCat1 && (
             <div className="details-area">
-              <h3>도착 세부 지역 선택</h3>
-              <div>
-                {getCat2List(selectedArrCat1).map((cat2) => (
-                  <Button
-                    key={`dep-cat2-${cat2.cat2Code}`}
-                    onClick={() => {
-                      setSelectedArrCat2(cat2.cat2);
-                      setSelectedArrCat3('');
-                    }}
-                    className={selectedArrCat2 === cat2.cat2 ? 'selected' : ''}>
-                    {cat2.cat2}
-                  </Button>
-                ))}
-              </div>
+              <h3>
+                도착 세부 지역 선택
+                <ToggleButton 
+                  isOpen={isArrCat2Open} 
+                  onToggle={toggleArrCat2} 
+                />
+              </h3>
+              {isArrCat2Open && (
+                <div>
+                  {getCat2List(selectedArrCat1).map((cat2) => (
+                    <Button
+                      key={`dep-cat2-${cat2.cat2Code}`}
+                      onClick={() => {
+                        setSelectedArrCat2(cat2.cat2);
+                        setSelectedArrCat3('');
+                      }}
+                      className={selectedArrCat2 === cat2.cat2 ? 'selected' : ''}>
+                      {cat2.cat2}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
           {selectedArrCat2 && !isMetropolitanCity(selectedArrCat1) && (
             <div className="subcategoryarea">
-              <h3>도착 소분류 지역 선택</h3>
-              <div>
-                {getCat3List(
-                  getCat2List(selectedArrCat1).find((cat2) => cat2.cat2 === selectedArrCat2)
-                ).map((cat3) => (
-                  <Button
-                    key={`arr-cat3-${cat3.cat3Code}`}
-                    onClick={() => setSelectedArrCat3(cat3.cat3Code)}
-                    className={selectedArrCat3 === cat3.cat3Code ? 'selected' : ''}
-                  >
-                    {cat3.cat3}
-                  </Button>
-                ))}
-              </div>
+              <h3>
+                도착 소분류 지역 선택
+                <ToggleButton 
+                  isOpen={isArrCat3Open} 
+                  onToggle={toggleArrCat3} 
+                />
+              </h3>
+              {isArrCat2Open && (
+                <div>
+                  {getCat3List(
+                    getCat2List(selectedArrCat1).find((cat2) => cat2.cat2 === selectedArrCat2)
+                  ).map((cat3) => (
+                    <Button
+                      key={`arr-cat3-${cat3.cat3Code}`}
+                      onClick={() => setSelectedArrCat3(cat3.cat3Code)}
+                      className={selectedArrCat3 === cat3.cat3Code ? 'selected' : ''}
+                    >
+                      {cat3.cat3}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
           {(selectedDepCat2 || selectedDepCat3) && selectedArrCat1 && selectedArrCat2 && (
             <div className="bus-grade-section">
-              <h3>버스 등급 선택</h3>
-              <div>
-                {ExpressGradeService.map((grade) => (
-                  <Button
-                    key={grade.GradeId}  
-                    onClick={() => setSelectedBusGrade(grade.GradeId === "" ? "" : grade.GradeId)} 
-                    className={selectedBusGrade === grade.GradeId ? 'selected' : ''}
-                  >
-                    {grade.GradeNm}
-                  </Button>
-                ))}
-              </div>
+              <h3>
+                버스 등급 선택
+                <ToggleButton isOpen={isGradeOpen} onToggle={toggleGrade} />
+              </h3>
+              {isGradeOpen && (
+                <div>
+                  {ExpressGradeService.map((grade) => (
+                    <Button
+                      key={grade.GradeId}
+                      onClick={() => {
+                        setSelectedBusGrade((prev) => {
+                          if (grade.GradeId === '') {
+                            return [''];
+                          }
+                          if (prev.includes('')) {
+                            return [grade.GradeId];
+                          }
+                          if (prev.includes(grade.GradeId)) {
+                            return prev.filter((id) => id !== grade.GradeId);
+                          }
+                          return [...prev, grade.GradeId];
+                        });
+                      }}
+                      className={selectedBusGrade.includes(grade.GradeId) ? 'selected' : ''}
+                    >
+                      {grade.GradeNm}
+                    </Button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
           {(selectedBusGrade || selectedBusGrade === "") && (
@@ -342,7 +412,6 @@ const ExpressBus = () => {
             </Button>
           )}
         </SelectTourItem>
-        <div style={{width: "150px"}}></div>
 
         <div className="schedule-results">
           <h3>고속버스 조회</h3>
@@ -384,9 +453,8 @@ const ExpressBus = () => {
             </div>
           )}
         </div>
-      </TrafficBox>
+      </List>
       <Footer />
-
     </>
   );
 };

@@ -1,6 +1,6 @@
 export const InterCityService = [
   {
-    cat1: "서울특별시",
+    cat1: "서울",
     cat1Code: "11",
     cat2List: [
       {
@@ -22,7 +22,7 @@ export const InterCityService = [
     ],
   },
   {
-    cat1: "세종특별시",
+    cat1: "세종",
     cat1Code: "12",
     cat2List: [
       {
@@ -40,7 +40,7 @@ export const InterCityService = [
     ],
   },
   {
-    cat1: "부산광역시",
+    cat1: "부산",
     cat1Code: "21",
     cat2List: [
       {
@@ -70,7 +70,7 @@ export const InterCityService = [
     ],
   },
   {
-    cat1: "대구광역시",
+    cat1: "대구",
     cat1Code: "22",
     cat2List: [
       {
@@ -104,7 +104,7 @@ export const InterCityService = [
     ],
   },
   {
-    cat1: "인천광역시",
+    cat1: "인천",
     cat1Code: "23",
     cat2List: [
       {
@@ -126,7 +126,7 @@ export const InterCityService = [
     ],
   },
   {
-    cat1: "광주광역시",
+    cat1: "광주",
     cat1Code: "24",
     cat2List: [
       {
@@ -144,7 +144,7 @@ export const InterCityService = [
     ],
   },
   {
-    cat1: "대전광역시",
+    cat1: "대전",
     cat1Code: "25",
     cat2List: [
       {
@@ -178,7 +178,7 @@ export const InterCityService = [
     ],
   },
   {
-    cat1: "울산광역시",
+    cat1: "울산",
     cat1Code: "26",
     cat2List: [
       {
@@ -536,7 +536,7 @@ export const InterCityService = [
     ],
   },
   {
-    cat1: "충청북도",
+    cat1: "충북",
     cat1Code: "33",
     cat2List: [
       {
@@ -626,7 +626,7 @@ export const InterCityService = [
     ],
   },
   {
-    cat1: "충청남도",
+    cat1: "충남",
     cat1Code: "34",
     cat2List: [
       {
@@ -820,7 +820,7 @@ export const InterCityService = [
     ]
   },
   {
-    cat1: "전라북도",
+    cat1: "전북",
     cat1Code: "35",
     cat2List: [
       {
@@ -927,7 +927,7 @@ export const InterCityService = [
     ]
   },
   {
-    cat1: "전라남도",
+    cat1: "전남",
     cat1Code: "36",
     cat2List: [
       {
@@ -1109,7 +1109,7 @@ export const InterCityService = [
     ]
   },
   {
-    cat1: "경상북도",
+    cat1: "경북",
     cat1Code: "37",
     cat2List: [
       {
@@ -1279,7 +1279,7 @@ export const InterCityService = [
     ]
   },
   {
-    cat1: "경상남도",
+    cat1: "경남",
     cat1Code: "38",
     cat2List: [
       {
