@@ -8,18 +8,33 @@ export const MainContainer = styled.div`
   margin-bottom: 10vh;
   display: flex;
   flex-direction: column;
-  @media (max-width: 757px) {
-    padding: 0 10vw;
+  @media (max-width: 990px) {
+    padding: 0 8vw;
   }
-  @media (max-width: 400px) {
+  @media (max-width: 768px) {
     padding: 0;
+  }
+  .plans-toggle-icon {
+    display: flex;
+    position: absolute;
+    left: 8vw;
+    top: 115px;
+    font-size: 1.6rem;
+    color: #666666;
+    cursor: pointer;
   }
   .menu-icons {
     display: flex;
     position: absolute;
     right: 15vw;
     top: 130px;
-
+    @media (max-width: 990px) {
+      right: 8vw;
+      top: 120px;
+    }
+    @media (max-width: 768px) {
+      top: 115px;
+    }
     .menu-icon {
       font-size: 2rem;
       color: #666666;
@@ -29,6 +44,18 @@ export const MainContainer = styled.div`
       transition: all 0.3s ease;
       &:hover {
         opacity: 0.7;
+      }
+      @media (max-width: 1250px) {
+        font-size: 1.7rem;
+        margin-left: 0.6vw;
+      }
+      @media (max-width: 990px) {
+        font-size: 1.5rem;
+        margin-left: 0.5vw;
+      }
+      @media (max-width: 768px) {
+        font-size: 1.3rem;
+        margin-left: 0.4vw;
       }
     }
   }
@@ -40,9 +67,17 @@ export const Info = styled.div`
   box-sizing: border-box;
   position: relative;
   margin: 80px 0 20px;
-
-  @media (max-width: 757px) {
-    height: 230px;
+  @media (max-width: 1250px) {
+    height: 300px;
+    margin: 75px 0 20px;
+  }
+  @media (max-width: 990px) {
+    height: 270px;
+    margin: 60px 0 20px;
+  }
+  @media (max-width: 768px) {
+    height: 220px;
+    margin: 50px 0 20px;
   }
 
   .planner-info-content {
@@ -50,13 +85,13 @@ export const Info = styled.div`
     position: relative;
     align-items: center;
     width: 100%;
-    z-index: 2;
+    z-index: 3;
     color: #fff;
   }
 
   .edit-box {
     width: 60%;
-    @media (max-width: 757px) {
+    @media (max-width: 768px) {
       width: 80%;
     }
     @media (max-width: 400px) {
@@ -78,7 +113,7 @@ export const Info = styled.div`
       font-size: 24px;
       margin: 6% 3px;
     }
-    @media (max-width: 757px) {
+    @media (max-width: 768px) {
       font-size: 20px;
       margin: 5% 3px;
     }
@@ -94,7 +129,7 @@ export const Info = styled.div`
     @media (max-width: 1250px) {
       font-size: 14px;
     }
-    @media (max-width: 757px) {
+    @media (max-width: 768px) {
       font-size: 13px;
     }
     @media (max-width: 400px) {
@@ -160,6 +195,9 @@ export const Info = styled.div`
     font-size: 13px;
     white-space: nowrap;
     z-index: 2;
+    @media (max-width: 768px) {
+      width: 65px;
+    }
   }
   .edit-button {
     background-color: #ddd;
@@ -263,7 +301,7 @@ export const PlannerOwner = styled.div`
   right: 0;
   bottom: 20px;
   color: #fff;
-  @media (max-width: 757px) {
+  @media (max-width: 768px) {
     bottom: 10px;
     right: 10px;
   }
@@ -293,7 +331,7 @@ export const UserProfile = styled.div`
     height: 50px;
     margin-left: -25px;
   }
-  @media (max-width: 757px) {
+  @media (max-width: 768px) {
     width: 38px;
     height: 38px;
     margin-left: -18px;
@@ -376,7 +414,12 @@ export const UserName = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
-  @media (max-width: 757px) {
+  @media (max-width: 768px) {
+    font-size: 13px;
+    padding-right: 10px;
+    padding-left: 5px;
+  }
+  @media (max-width: 400px) {
     display: none;
   }
 `;
@@ -387,9 +430,6 @@ export const ContentContainer = styled.div`
   justify-content: center;
   padding: 2%;
   box-sizing: border-box;
-  @media (max-width: 990px) {
-    flex-direction: column;
-  }
 `;
 
 export const MainPlanning = styled.div`
@@ -403,11 +443,6 @@ export const MainPlanning = styled.div`
   border-radius: 10px;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
   ${ScrollBar};
-  @media (max-width: 1250px) {
-    width: 100%;
-    margin: 0 auto;
-    min-height: 300px;
-  }
 
   .planning-day {
     display: flex;
@@ -443,12 +478,7 @@ export const KakaoMapContainer = styled.div`
   margin-left: 1%;
   z-index: 1;
   @media (max-width: 990px) {
-    width: 100%;
-    margin: 20px auto;
     min-width: 300px;
-  }
-  @media (max-width: 757px) {
-    height: 300px;
   }
 `;
 
@@ -886,7 +916,7 @@ export const DayToggleContainer = styled.div`
         margin: 5px 5px 5px 20px;
         font-size: 18px;
         font-weight: bold;
-        @media (max-width: 757px) {
+        @media (max-width: 768px) {
           font-size: 16px;
         }
         @media (max-width: 400px) {
@@ -897,7 +927,7 @@ export const DayToggleContainer = styled.div`
         margin: 0 5px 5px 20px;
         font-size: 13px;
         color: #5f5f5f;
-        @media (max-width: 757px) {
+        @media (max-width: 768px) {
           font-size: 12px;
         }
         @media (max-width: 400px) {

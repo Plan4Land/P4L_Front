@@ -12,7 +12,7 @@ import {
   Message,
 } from "../../Style/PlanningStyled";
 import { HiArrowCircleUp } from "react-icons/hi";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaBars } from "react-icons/fa";
 import { KakaoMap } from "../../Component/KakaoMapComponent";
 import {
   PlannerInfoEditComponent,
@@ -467,6 +467,7 @@ export const Planning = () => {
       <div>
         <Header />
         <MainContainer onClick={() => closeMemo()}>
+          <FaBars className="plans-toggle-icon" />
           <MenuIcons
             plannerId={plannerId}
             plannerInfo={plannerInfo}
