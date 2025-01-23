@@ -308,13 +308,13 @@ export const TourList = () => {
 
           <div className="mainarea">
             <div className="title">
-            <h3>
-              지역 선택
-              <ToggleButton
-                isOpen={isAreaOpen}
-                onToggle={() => setIsAreaOpen(!isAreaOpen)}
-              />
-            </h3>
+              <h3>
+                지역 선택
+                <ToggleButton
+                  isOpen={isAreaOpen}
+                  onToggle={() => setIsAreaOpen(!isAreaOpen)}
+                />
+              </h3>
             </div>
             {isAreaOpen && (
               <div className="buttons">
@@ -336,13 +336,13 @@ export const TourList = () => {
           {selectedAreaData && (
             <div className="subarea">
               <div className="title">
-              <h3>
-                세부 지역 선택
-                <ToggleButton
-                  isOpen={isSubAreaOpen}
-                  onToggle={() => setIsSubAreaOpen(!isSubAreaOpen)}
-                />
-              </h3>
+                <h3>
+                  세부 지역 선택
+                  <ToggleButton
+                    isOpen={isSubAreaOpen}
+                    onToggle={() => setIsSubAreaOpen(!isSubAreaOpen)}
+                  />
+                </h3>
               </div>
               {isSubAreaOpen && (
                 <div className="buttons">
@@ -364,13 +364,13 @@ export const TourList = () => {
 
           <div className="top">
             <div className="title">
-            <h3>
-              대분류
-              <ToggleButton
-                isOpen={isTopThemeOpen}
-                onToggle={() => setIsTopThemeOpen(!isTopThemeOpen)}
-              />
-            </h3>
+              <h3>
+                대분류
+                <ToggleButton
+                  isOpen={isTopThemeOpen}
+                  onToggle={() => setIsTopThemeOpen(!isTopThemeOpen)}
+                />
+              </h3>
             </div>
             {isTopThemeOpen && (
               <div className="buttons">
@@ -392,13 +392,13 @@ export const TourList = () => {
           {filters.topTheme && (
             <div className="middle">
               <div className="title">
-              <h3>
-                중분류
-                <ToggleButton
-                  isOpen={isMiddleThemeOpen}
-                  onToggle={() => setIsMiddleThemeOpen(!isMiddleThemeOpen)}
-                />
-              </h3>
+                <h3>
+                  중분류
+                  <ToggleButton
+                    isOpen={isMiddleThemeOpen}
+                    onToggle={() => setIsMiddleThemeOpen(!isMiddleThemeOpen)}
+                  />
+                </h3>
               </div>
               {isMiddleThemeOpen && (
                 <div className="buttons">
@@ -423,13 +423,13 @@ export const TourList = () => {
           {filters.middleTheme && (
             <div className="bottom">
               <div className="title">
-              <h3>
-                소분류
-                <ToggleButton
-                  isOpen={isBottomThemeOpen}
-                  onToggle={() => setIsBottomThemeOpen(!isBottomThemeOpen)}
-                />
-              </h3>
+                <h3>
+                  소분류
+                  <ToggleButton
+                    isOpen={isBottomThemeOpen}
+                    onToggle={() => setIsBottomThemeOpen(!isBottomThemeOpen)}
+                  />
+                </h3>
               </div>
               {isBottomThemeOpen && (
                 <div className="buttons">
@@ -462,14 +462,13 @@ export const TourList = () => {
 
           <div className="category">
             <div className="title">
-            <h3>
-              카테고리 선택
-              <ToggleButton
-                isOpen={isCategoryOpen}
-                onToggle={() => setIsCategoryOpen(!isCategoryOpen)}
-              />
-              
-            </h3>
+              <h3>
+                카테고리 선택
+                <ToggleButton
+                  isOpen={isCategoryOpen}
+                  onToggle={() => setIsCategoryOpen(!isCategoryOpen)}
+                />
+              </h3>
             </div>
             {isCategoryOpen && (
               <div className="buttons">
@@ -520,12 +519,13 @@ export const TourList = () => {
                       <div className="itemBox">
                         <TourItem
                           key={spot.id}
-                          id={spot.id}
-                          thumbnail={spot.thumbnail}
-                          title={spot.title}
-                          address={spot.addr1 || "정보 없음"}
-                          subCategory={cat3Name || "정보 없음"}
-                          type={typeName || "정보 없음"}
+                          data={spot}
+                          // id={spot.id}
+                          // thumbnail={spot.thumbnail}
+                          // title={spot.title}
+                          // address={spot.addr1 || "정보 없음"}
+                          // subCategory={cat3Name || "정보 없음"}
+                          // type={typeName || "정보 없음"}
                         />
                       </div>
                     );

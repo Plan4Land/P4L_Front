@@ -132,8 +132,7 @@ const TourItemStyled = styled.div`
       max-width: 40%;
       min-width: 40%;
     }
-    .profile-img{
-      
+    .profile-img {
     }
     .thumbnail {
     }
@@ -169,20 +168,25 @@ const TourItemStyled = styled.div`
 `;
 
 export const TourItem = ({
-  thumbnail,
-  title,
-  address,
-  subCategory,
-  type,
-  id,
+  // thumbnail,
+  // title,
+  // address,
+  // subCategory,
+  // type,
+  // id,
+  data,
   width,
   height,
   margin,
 }) => {
   const navigate = useNavigate();
+  const title = data.title;
+  const address = data.addr1;
+  const type = data.typeName;
+  const thumbnail = data.thumbnail;
 
   const handleOnClick = () => {
-    navigate(`/tourItemInfo/${id}`, {
+    navigate(`/tourItemInfo/${data.id}`, {
       state: { title, address, subCategory, type, thumbnail },
     });
   };
@@ -202,6 +206,18 @@ export const TourItem = ({
   };
 
   const imageUrl = thumbnail ? thumbnail : getDefaultImage(type);
+
+  const getCategoryPath = () => {
+    const cat1Item = ServiceCode.find((item) => item.cat1 === data.cat1);
+    const cat2Item = cat1Item?.cat2List.find((item) => item.cat2 === data.cat2);
+    const cat3Item = cat2Item?.cat3List.find((item) => item.cat3 === data.cat3);
+
+    return [cat1Item?.cat1Name, cat2Item?.cat2Name, cat3Item?.cat3Name]
+      .filter(Boolean)
+      .join(" > ");
+  };
+
+  const subCategory = getCategoryPath();
 
   return (
     <TourItemStyled
