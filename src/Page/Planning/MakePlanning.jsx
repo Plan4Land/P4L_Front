@@ -9,11 +9,15 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { ToggleSwitch } from "../../Component/ToggleSwitch";
-import { EditImg } from "../../Component/ProfileImg";
+// import { EditImg } from "../../Component/ProfileImg";
+import { Upload } from "../../Component/FirebaseUpload";
+import { PictureComponent } from "../../Component/PictureCommponent";
 import { CheckModal } from "../../Util/Modal";
 import { Button } from "../../Component/ButtonComponent";
 import PlanningApi from "../../Api/PlanningApi";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../Context/AuthContext";
+import { Loading } from "../../Component/LoadingComponent";
 
 export const MakePlanning = () => {
   const [selectedArea, setSelectedArea] = useState("");
@@ -22,7 +26,10 @@ export const MakePlanning = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [title, setTitle] = useState("");
-  const [selectedImage, setSelectedImage] = useState("");
+  const [currentPic, setCurrentPic] = useState(
+    "/img/planning-pic/planningth1.jpg"
+  );
+  // const [selectedImage, setSelectedImage] = useState("");
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [isAreaVisible, setIsAreaVisible] = useState(false);
@@ -31,7 +38,10 @@ export const MakePlanning = () => {
   const [isDateVisible, setIsDateVisible] = useState(false);
   const [isTitleVisible, setIsTitleVisible] = useState(false);
   const [isImageVisible, setIsImageVisible] = useState(false);
-  const memberId = JSON.parse(localStorage.getItem("user")).id;
+  const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuth();
+  // const memberId = JSON.parse(localStorage.getItem("user")).id;
+  const memberId = user?.id;
   const navigate = useNavigate();
 
   // 각 상태가 변경될 때마다 해당 컴포넌트를 보이게 함
@@ -56,8 +66,8 @@ export const MakePlanning = () => {
   }, [title]);
 
   useEffect(() => {
-    if (selectedImage) setIsImageVisible(true);
-  }, [selectedImage]);
+    if (currentPic) setIsImageVisible(true);
+  }, [currentPic]);
 
   const handleAreaChange = (e) => {
     setSelectedArea(e.target.value);
@@ -85,11 +95,20 @@ export const MakePlanning = () => {
 
   const isStepComplete =
     selectedSubArea && selectedThemes.length > 0 && endDate && title.trim();
+
   const handleSubmit = async () => {
+    setIsLoading(true);
+
     const areaCode = areas.find((area) => area.name === selectedArea)?.code;
     const subAreaCode = areas
       .find((area) => area.name === selectedArea)
       ?.subAreas.find((subArea) => subArea.name === selectedSubArea)?.code;
+
+    const updatedPic = await Upload({
+      currentPic,
+      type: "planner",
+      userId: user.id,
+    });
 
     try {
       const response = await PlanningApi.makePlanning(
@@ -100,7 +119,7 @@ export const MakePlanning = () => {
         endDate,
         areaCode,
         subAreaCode,
-        selectedImage.name,
+        updatedPic,
         isPublic
       );
       if (response.status === 200) {
@@ -109,6 +128,8 @@ export const MakePlanning = () => {
       }
     } catch (e) {
       console.log("플래너 생성 중 에러", e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -255,9 +276,13 @@ export const MakePlanning = () => {
             <>
               <h2 className="question-title">플래닝 사진</h2>
               <div className="profile-container">
-                <EditImg
-                  basic={"/img/planning_thumbnail.jpg"}
-                  setSelectedImage={setSelectedImage}
+                <PictureComponent
+                  currentPic={currentPic}
+                  setCurrentPic={setCurrentPic}
+                  role={"ROLE_MEMBERSHIP"}
+                  type={"planner"}
+                  width={"200px"}
+                  height={"200px"}
                 />
               </div>
               <h2 className="question-title">공개 여부</h2>
@@ -289,6 +314,11 @@ export const MakePlanning = () => {
         >
           <h3>시작일을 먼저 선택해주세요.</h3>
         </CheckModal>
+      )}
+      {isLoading && (
+        <Loading>
+          <p>플래너 생성중입니다. 잠시만 기다려주세요...</p>
+        </Loading>
       )}
       <Footer />
     </>

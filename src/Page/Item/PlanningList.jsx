@@ -16,6 +16,8 @@ import { PlannerItemApi } from "../../Api/ItemApi";
 import { PlanItem } from "../../Component/ItemListComponent";
 import { Pagination } from "../../Component/Pagination";
 import { FaBars } from "react-icons/fa";
+import { Loading } from "../../Component/LoadingComponent";
+import { SelectedFilters } from "../../Component/SelectedFilterComponent";
 
 export const PlanningList = () => {
   const location = useLocation();
@@ -97,7 +99,7 @@ export const PlanningList = () => {
       if (value) {
         queryParams.set(
           key,
-          key === "themeList" ? encodeURIComponent(value) : value
+          value // url 인코딩 key === "themeList" ? encodeURIComponent(value) : value
         );
       }
     }
@@ -142,10 +144,6 @@ export const PlanningList = () => {
   };
 
   const handleSearch = () => {
-    if (searchQuery.length < 2) {
-      alert("검색어는 2자리 이상 입력해 주세요.");
-      return;
-    }
     updateFilters("searchQuery", searchQuery);
   };
 
@@ -175,7 +173,7 @@ export const PlanningList = () => {
         newSelectedThemes = newSelectedThemes.filter((item) => item !== theme);
       } else {
         if (newSelectedThemes.length >= 3) {
-          alert("최대 3개의 테마만 선택할 수 있습니다.");
+          // alert("최대 3개의 테마만 선택할 수 있습니다.");
           return prev;
         }
         newSelectedThemes.push(theme);
@@ -185,6 +183,21 @@ export const PlanningList = () => {
   };
   const handleToggleSelect = () => {
     setIsSelectOpen(!isSelectOpen);
+  };
+
+  const handleTopFilterChange = (key, name) => {
+    setFilters((prev) => {
+      const newFilters = { ...prev };
+      if (key === "themeList") {
+        newFilters[key] = newFilters[key]
+          .split(",")
+          .filter((theme) => theme !== name)
+          .join(",");
+      } else {
+        newFilters[key] = "";
+      }
+      return newFilters;
+    });
   };
 
   const selectedAreaData = areas.find((area) => area.code === filters.areaCode);
@@ -285,8 +298,12 @@ export const PlanningList = () => {
                         ? "selected"
                         : ""
                     }`}
+                    disabled={
+                      filters.themeList.split(",").length >= 3 &&
+                      !filters.themeList.split(",").includes(theme)
+                    }
                   >
-                    {theme}
+                    #{theme}
                   </Button>
                 ))}
               </div>
@@ -294,7 +311,22 @@ export const PlanningList = () => {
           </div>
         </SelectTourItem>
         <ItemList>
-          {loading && <p>로딩 중...</p>}
+          <div className="totalCount">
+            총 {totalItems.toLocaleString()}건
+            <Link to={"/makeplanning"}>
+              <Button>플래닝 만들기</Button>
+            </Link>
+          </div>
+          <SelectedFilters
+            filters={filters}
+            onRemoveFilter={handleTopFilterChange}
+          ></SelectedFilters>
+
+          {loading && (
+            <Loading>
+              <p>목록을 불러오는 중 입니다.</p>
+            </Loading>
+          )}
           {error && <p style={{ color: "red" }}>{error}</p>}
           <div className="selectMenu">
             <SortSelect value={filters.sortBy} onChange={handleSortChange}>
@@ -304,35 +336,42 @@ export const PlanningList = () => {
                 </option>
               ))}
             </SortSelect>
-            <Link to={"/makeplanning"}>
+            {/* <Link to={"/makeplanning"}>
               <Button>플래닝 만들기</Button>
-            </Link>
+            </Link> */}
           </div>
           <div className="plannerList">
-            {planners.map((planner) => {
-              const areaName =
-                areas.find((area) => area.code === planner.area)?.name ||
-                "알 수 없는 지역";
-              const subAreaName =
-                areas
-                  .find((area) => area.code === planner.area)
-                  ?.subAreas.find((subArea) => subArea.code === planner.subArea)
-                  ?.name || "알 수 없는 하위 지역";
+            {planners.length === 0 ? (
+              <p>해당 조건의 플래닝이 없습니다.</p>
+            ) : (
+              planners.map((planner) => {
+                const areaName =
+                  areas.find((area) => area.code === planner.area)?.name ||
+                  "알 수 없는 지역";
+                const subAreaName =
+                  areas
+                    .find((area) => area.code === planner.area)
+                    ?.subAreas.find(
+                      (subArea) => subArea.code === planner.subArea
+                    )?.name || "알 수 없는 하위 지역";
 
-              return (
-                <PlanItem
-                  key={planner.id}
-                  id={planner.id}
-                  thumbnail={planner.thumbnail || "/default-thumbnail.png"}
-                  title={planner.title}
-                  address={`${areaName} - ${subAreaName}`}
-                  subCategory={planner.theme}
-                  type={planner.public ? "공개" : "비공개"}
-                  ownerprofile={planner.ownerProfileImg}
-                  ownernick={planner.ownerNickname}
-                />
-              );
-            })}
+                return (
+                  <div className="itemBox">
+                    <PlanItem
+                      key={planner.id}
+                      id={planner.id}
+                      thumbnail={planner.thumbnail || "/default-thumbnail.png"}
+                      title={planner.title}
+                      address={`${areaName} - ${subAreaName}`}
+                      subCategory={planner.theme}
+                      type={planner.public ? "공개" : "비공개"}
+                      ownerprofile={planner.ownerProfileImg}
+                      ownernick={planner.ownerNickname}
+                    />
+                  </div>
+                );
+              })
+            )}
           </div>
           <Pagination
             currentPage={filters.currentPage}

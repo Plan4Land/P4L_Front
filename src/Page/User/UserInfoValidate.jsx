@@ -52,26 +52,6 @@ const UserInfoValidate = () => {
     }
   };
 
-  const Center2 = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-    .deleteBox {
-      display: flex;
-      align-items: right;
-      justify-content: right;
-      width: 423px;
-      @media (max-width: 768px) {
-        width: 312px;
-      }
-    }
-    .userDeleteBtn {
-      font-size: 12px;
-      margin-top: 4px;
-      cursor: pointer;
-    }
-  `
-
   return (
     <>
       {/* 비밀번호 체크 */}
@@ -109,7 +89,7 @@ const UserInfoValidate = () => {
           <Container>
             <h2 className="title">내 정보 수정</h2>
             
-            <Center2>
+            <div className="center2">
               <EditBox>
                 <div 
                   className="iconBox"
@@ -138,7 +118,7 @@ const UserInfoValidate = () => {
                   회원 탈퇴
                 </span>
               </div>
-            </Center2>
+            </div>
           </Container>
         </Center>
       )}

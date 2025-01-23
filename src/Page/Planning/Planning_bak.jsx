@@ -13,7 +13,7 @@ import {
 import { KakaoMap, SearchKakaoMap } from "../../Component/KakaoMapComponent";
 import { useEffect, useRef, useState } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
-import { ProfileImg } from "../../Component/ProfileImg";
+import { ProfileImg } from "../../Component/PictureCommponent";
 import { Button } from "../../Component/ButtonComponent";
 import { Modal, CloseModal, DraggableModal } from "../../Util/Modal";
 import MemoIcon from "../../Img/memo-icon.png";

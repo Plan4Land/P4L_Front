@@ -5,7 +5,9 @@ import {
 } from "../../Style/PlanningStyled";
 import { colors } from "../../Style/GlobalStyle";
 import { themes, areas } from "../../Util/Common";
-import { ProfileImg } from "../ProfileImg";
+import { ProfileImg } from "../PictureCommponent";
+import { PictureComponent } from "../PictureCommponent";
+import { Upload } from "../FirebaseUpload";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../Context/AuthContext";
 import DatePicker from "react-datepicker";
@@ -13,6 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { FaPenToSquare } from "react-icons/fa6";
 import { FaChevronCircleUp, FaChevronCircleDown } from "react-icons/fa";
+import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
 
 // import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -28,12 +31,15 @@ export const PlannerInfoEditComponent = ({
   plans,
   plannerId,
   sender,
+  setIsLoading,
 }) => {
   const [editTitle, setEditTitle] = useState(false);
   const [title, setTitle] = useState(plannerInfo.title);
   const [editArea, setEditArea] = useState(false);
   const [selectedArea, setSelectedArea] = useState("");
   const [selectedSubArea, setSelectedSubArea] = useState("");
+  const [currentPic, setCurrentPic] = useState(plannerInfo?.thumbnail);
+  const { user } = useAuth();
 
   useEffect(() => {
     if (plannerInfo.area) {
@@ -56,7 +62,7 @@ export const PlannerInfoEditComponent = ({
     // const byteLength = new TextEncoder().encode(e.target.value).length;
 
     // // 한글 기준 20글자 제한 (20자 * 2바이트 = 40바이트 이하)
-    // if (byteLength <= 40) {
+    // if (byteLength <= 40) { // 한글 13자  소문자 40자
     //   setTitle(e.target.value);
     // }
     if (e.target.value.length <= 20) {
@@ -143,12 +149,46 @@ export const PlannerInfoEditComponent = ({
     }
   }, [editPlannerInfo]);
 
+  useEffect(() => {
+    const uploadImg = async () => {
+      setIsLoading(true);
+      try {
+        const updatedPic = await Upload({
+          currentPic,
+          type: "planner",
+          userId: user.id,
+        });
+
+        setEditPlannerInfo((prev) => ({
+          ...prev,
+          thumbnail: updatedPic,
+        }));
+      } catch (error) {
+        console.error("이미지 업로드 중 에러 발생:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (currentPic) {
+      uploadImg(); // 비동기 함수 호출
+    }
+  }, [currentPic]);
+
   return (
     <>
       <div className="planner-thumbnail">
-        <ProfileImg
+        {/* <ProfileImg
           // file={`/img/${plannerInfo.thumbnail}`}
-          file={"/img/planning-pic/planningth1.jpg"}
+          file={currentPic}
+        /> */}
+        <PictureComponent
+          currentPic={currentPic}
+          setCurrentPic={setCurrentPic}
+          role={"ROLE_MEMBERSHIP"}
+          type={"planner"}
+          width={"200px"}
+          height={"200px"}
         />
       </div>
       <div className="edit-box">
@@ -162,12 +202,15 @@ export const PlannerInfoEditComponent = ({
             disabled={!editTitle}
           />
           {editTitle ? (
-            <button className="edit-button" onClick={() => handleSaveTitle()}>
+            <button
+              className="editInfo-button"
+              onClick={() => handleSaveTitle()}
+            >
               수정 완료
             </button>
           ) : (
             <button
-              className="edit-button"
+              className="editInfo-button"
               onClick={() => setEditTitle(!editTitle)}
             >
               제목 수정
@@ -205,12 +248,15 @@ export const PlannerInfoEditComponent = ({
           )}
 
           {editArea ? (
-            <button className="edit-button" onClick={() => handleSaveArea()}>
+            <button
+              className="editInfo-button"
+              onClick={() => handleSaveArea()}
+            >
               수정 완료
             </button>
           ) : (
             <button
-              className="edit-button"
+              className="editInfo-button"
               onClick={() => setEditArea(!editArea)}
             >
               지역 수정
@@ -236,7 +282,7 @@ export const PlannerInfoEditComponent = ({
         <div>
           <DatePickerContainer>
             <DatePicker
-              className="input-date-picker"
+              className="input-date-picker planner-date-picker"
               locale={ko}
               dateFormat="yyyy-MM-dd"
               dateFormatCalendar="yyyy년 MM월"
@@ -252,7 +298,7 @@ export const PlannerInfoEditComponent = ({
             <span>~</span>
             {editPlannerInfo.startDate ? (
               <DatePicker
-                className="input-date-picker"
+                className="input-date-picker planner-date-picker"
                 locale={ko}
                 dateFormat="yyyy-MM-dd"
                 dateFormatCalendar="yyyy년 MM월"
@@ -520,8 +566,10 @@ export const PlansComponent = ({
               console.log(travelInfo);
             }}
           >
-            <span>{index + 1}일차</span>&nbsp;&nbsp;/&nbsp;&nbsp;
-            <span>{date}</span>
+            <span>
+              {index + 1}일차&nbsp;&nbsp;| &nbsp;&nbsp;{date}
+            </span>
+
             <span className="arrow">{travelInfo.arrowDirections[index]}</span>
           </div>
           {travelInfo.dayToggle[index] && (
@@ -554,26 +602,18 @@ export const PlansComponent = ({
                     </div>
                     <div className="memo-container">
                       {isEditting && editor === user.nickname && (
-                        <div>
+                        <div className="seq-change">
                           {planIndex > 0 && ( // 첫 번째 요소가 아닐 때만 위쪽 화살표 버튼 표시
-                            <FaChevronCircleUp
-                              style={{
-                                marginRight: "4px",
-                                fontSize: "24px",
-                                color: colors.colorB,
-                              }}
+                            <IoMdArrowDropup
+                              className="seq-button"
                               onClick={() =>
                                 handleSwapSeq(plan.seq, "up", date)
                               } // up 아이콘 클릭 시
                             />
                           )}
                           {planIndex < groupPlans[date].length - 1 && ( // 마지막 요소가 아닐 때만 아래쪽 화살표 버튼 표시
-                            <FaChevronCircleDown
-                              style={{
-                                marginRight: "4px",
-                                fontSize: "24px",
-                                color: colors.colorB,
-                              }}
+                            <IoMdArrowDropdown
+                              className="seq-button"
                               onClick={() =>
                                 handleSwapSeq(plan.seq, "down", date)
                               } // down 아이콘 클릭 시

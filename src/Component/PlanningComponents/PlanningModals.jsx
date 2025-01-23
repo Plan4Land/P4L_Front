@@ -14,7 +14,7 @@ import { Button } from "../ButtonComponent";
 import { colors } from "../../Style/GlobalStyle";
 import { SearchKakaoMap } from "../KakaoMapComponent";
 import { SearchTourItem } from "../ItemListComponent";
-import { ProfileImg } from "../ProfileImg";
+import { ProfileImg } from "../PictureCommponent";
 import PlanningApi from "../../Api/PlanningApi";
 import { BookmarkedSpotsApi } from "../../Api/ItemApi";
 import { useEffect, useState } from "react";
@@ -46,7 +46,7 @@ export const UserModal = ({ plannerInfo, modals, setModals }) => {
               onClick={() => navigate(`/otheruser/${participant.id}`)}
             >
               <div className="participantsInfo">
-                <img src={`/${participant.memberProfileImg}`} alt="Profile" />
+                <img src={`${participant.memberProfileImg}`} alt="Profile" />
                 <p>{participant.memberNickname}</p>
               </div>
             </div>
@@ -63,7 +63,7 @@ export const AddPlaceModal = ({
   searchState,
   setSearchState,
   setCurrentAddedPlace,
-  setPlans,
+  // setPlans,
 }) => {
   const { user } = useAuth();
   const [selectedMenu, setSelectedMenu] = useState("장소 검색");

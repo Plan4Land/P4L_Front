@@ -1,23 +1,22 @@
 import styled from "styled-components";
 
 export const colors = {
-  colorA: "#4d2c0d",
-  colorB: "#7a4b14",
-  colorC: "#d4a76c",
-  colorD: "#fff6e2",
+  colorA: "#69270d",
+  colorB: "#fd7012",
+  colorC: "#ffb395",
+  colorD: "#ffeee2",
   colorE: "#ff7700",
 };
 
 export const HeaderSt = styled.div`
-  height: 80px;
-  background-color: ${colors.colorB};
-  color: white;
+  height: 90px;
+  border-bottom: 7px solid ${colors.colorB};
+  color: ${colors.colorA};
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  padding: 0 10px 0 10px;
-
+  padding: 0 10% 0 10%;
   .logo {
     display: inline-block;
     img {
@@ -26,8 +25,8 @@ export const HeaderSt = styled.div`
     }
   }
   .profile-link {
-    height: 65px;
-    width: 65px;
+    height: 80px;
+    width: 80px;
     margin-right: 20px;
     border-radius: 50%;
     background-color: ${colors.colorC};
@@ -118,6 +117,7 @@ export const HeaderSt = styled.div`
   .recomm {
     position: relative;
     cursor: pointer;
+    white-space: nowrap;
   }
 
   .recomm:hover .dropdown-list {
@@ -161,16 +161,20 @@ export const HeaderSt = styled.div`
     margin-bottom: 20px;
     .truncated-text {
       display: inline-block;
-      max-width: 200px; /* 원하는 너비 설정 */
+      max-width: 150px; /* 원하는 너비 설정 */
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+    .title {
+      width: 100%;
+      border-bottom: 1px solid #ddd;
     }
     h3 {
       font-size: 20px;
       font-weight: bold;
       margin-bottom: 10px;
-      color: ${colors.colorA};
+      color: black;
       cursor: default;
     }
     span {
@@ -199,18 +203,20 @@ export const HeaderSt = styled.div`
 
 export const NavSt = styled.div`
   height: 50px;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-grow: 0.6;
-  .tag {
-    color: white;
+  .tag,
+  p {
+    color: ${colors.colorA};
+    font-size: 20px;
     font-weight: bold;
     text-decoration: none;
     flex: 0.8;
     text-align: center;
     transition: all 0.3s ease;
+    white-space: nowrap;
     &:hover {
       text-decoration: underline;
       opacity: 0.7;
@@ -222,8 +228,12 @@ export const NavSt = styled.div`
     opacity: 0.7;
   }
   p {
-    color: white;
+    color: ${colors.colorA};
     margin: -10px;
+    &:hover {
+      opacity: 1;
+      cursor: default;
+    }
   }
   @media (max-width: 768px) {
     position: fixed;
@@ -233,9 +243,11 @@ export const NavSt = styled.div`
     background-color: white;
     font-size: 12px;
     z-index: 10;
+    padding: 0 8% 0 8%;
+    box-shadow: 1px -1px 5px rgba(0, 0, 0, 0.3);
     .tag,
     p {
-      color: ${colors.colorA};
+      font-size: 15px;
     }
   }
 `;

@@ -5,10 +5,10 @@ import { ScrollBar } from "../Component/ButtonComponent";
 export const MainBox = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr); // 2행
+  grid-template-rows: repeat(2, 1fr);
   row-gap: 20px;
   margin: 40px auto 50px auto;
-  height: 1000px;
+  height: 100%;
   width: 80%;
 
   @media (max-width: 768px) {
@@ -23,10 +23,9 @@ export const GridItem = styled.div`
 `;
 //         {/* 미니 검색창!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const QuickSearch = styled(GridItem)`
-  grid-column: span 2;
+  grid-column: span 4;
   display: flex;
   flex-direction: column;
-
   .QuickSelect {
     display: flex;
     padding: 10px;
@@ -41,12 +40,15 @@ export const QuickSearch = styled(GridItem)`
       margin: 0 20px 20px;
       transition: all 0.3s ease;
       font-size: 16px;
+      border-radius: 10px;
       color: ${colors.colorA};
       &:hover {
         opacity: 0.7;
       }
       &.active {
-        background-color: ${colors.colorC};
+        background-color: ${colors.colorB};
+        color: white;
+        opacity: 0.9;
       }
     }
   }
@@ -56,31 +58,46 @@ export const QuickSearch = styled(GridItem)`
     justify-content: center;
     width: 100%;
     height: 100%;
+
     .RegionSearch {
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      place-items: center;
-      .area-list {
-        width: 100%;
+      .buttons {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        place-items: center;
+        height: 80%;
+        grid-template-columns: repeat(5, 1fr);
       }
       a {
-        width: 100%;
+        margin: 10px;
+        display: flex;
+        text-decoration: none;
+        justify-content: center;
+        align-items: center;
       }
       button {
         background-color: white;
         color: ${colors.colorA};
-        height: 40px;
-        width: 90%;
-        margin: 5px;
+        border: 1px solid ${colors.colorC};
+        height: 100%;
+        width: 100%;
+        border-radius: 20px;
         transition: all 0.3s ease;
+        font-size: 18px;
         &:hover {
           background-color: ${colors.colorB};
           color: white;
-          transform: translateY(-3px);
+          transform: translateY(-2px);
+        }
+      }
+      @media (max-width: 768px) {
+        .buttons {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        a {
+          margin: 5px;
+        }
+        button {
+          font-size: 14px;
+          padding: 0;
         }
       }
     }
@@ -88,23 +105,16 @@ export const QuickSearch = styled(GridItem)`
     .SelectCategory {
       display: flex;
       text-align: center;
-      align-items: center;
-      justify-content: center;
       width: 100%;
       .catebuttons {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         width: 100%;
         height: 100%;
-        padding: 20px;
-        justify-content: space-around;
+        @media (max-width: 768px) {
+          height: 80%;
+        }
       }
-    }
-  }
-  @media (max-width: 768px) {
-    button {
-      font-size: 12px;
-      padding: 5px;
     }
   }
 `;
@@ -171,8 +181,9 @@ export const CateButton = styled.button`
 
 //         {/* 상위 관광지 n개 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const RecommItem = styled(GridItem)`
-  grid-column: span 2;
+  grid-column: span 3;
   height: 500px;
+  margin-right: 20px;
 
   .topTourItem {
     overflow: hidden;
@@ -249,36 +260,120 @@ export const RecommItem = styled(GridItem)`
 
 //         {/* 상위 플래닝 3개!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const RecommPlan = styled(GridItem)`
-  grid-column: span 3;
+  grid-column: span 4;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  h3 {
-    margin: 0;
-    color: ${colors.colorA};
-  }
+  height: 500px;
 `;
 export const PlanBox = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
   width: 100%;
   height: 100%;
-
+  display: flex;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
   .planitem {
-    border: 1px solid black;
-    border-radius: 20px;
+    height: 95%;
     margin: 10px;
     overflow: hidden;
+    display: flex;
     cursor: pointer;
-    img {
-      min-height: 75%;
+  }
+  img {
+    min-width: 50%;
+    max-width: 50%;
+    min-height: 90%;
+    object-fit: cover;
+    transform: translateX(-100%);
+    opacity: 0;
+    animation: slideInImage 1.5s forwards;
+    @media (max-width: 768px) {
+      min-width: 100%;
+      max-width: 100%;
     }
   }
-  @media (max-width: 768px) {
-    height: 300px;
+
+  .planExplain {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin: 0 0 30px 20px;
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideInText 1.5s forwards;
+    animation-delay: 0.5s;
+    @media (max-width: 768px) {
+      h3 {
+        font-size: 40px;
+      }
+      p {
+        font-size: 15px;
+      }
+      position: absolute;
+      bottom: 5px;
+      left: 0;
+    }
+  }
+
+  h3 {
+    font-size: 50px;
+    margin: 0 0 0 10px;
+    color: ${colors.colorD};
+    text-shadow: 3px 3px 2px rgba(0, 0, 0, 1);
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  p {
+    margin: 10px 0 0 20px;
+    font-size: 20px;
+    color: white;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
+  }
+
+  @keyframes slideInImage {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideInText {
+    0% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: white !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+
+  .swiper-button-next:after,
+  .swiper-button-prev:after {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: ${colors.colorB};
   }
 `;
+
 //         {/* 미니 캘린더!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
 export const Festive = styled(GridItem)`
   grid-column: span 1;
@@ -292,7 +387,7 @@ export const Festive = styled(GridItem)`
 
   .react-calendar {
     width: 100%;
-    height: 400px;
+    height: 360px;
     border-radius: 10px;
     border: 1px solid #ddd;
   }
@@ -342,8 +437,8 @@ export const Festive = styled(GridItem)`
 
 export const HolidayList = styled.div`
   margin: 10px;
-  width: 88%;
-  height: 180px;
+  width: 80%;
+  height: 120px;
   overflow-y: auto;
   border: 1px solid #ddd;
   background-color: #ffffff;
@@ -359,5 +454,8 @@ export const HolidayList = styled.div`
     font-size: 16px;
     line-height: 1.6;
     color: #555;
+  }
+  @media (max-width: 768px) {
+    width: 93%;
   }
 `;

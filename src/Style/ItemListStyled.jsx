@@ -4,29 +4,39 @@ import { colors } from "./GlobalStyle";
 export const List = styled.div`
   display: flex;
   width: 80%;
+  min-height: 1000px;
   margin: auto;
   margin-top: 20px;
   margin-bottom: 50px;
-  gap: 50px;
+  /* gap: 50px; */
+  justify-content: center;
   @media (max-width: 768px) {
     width: 90%;
   }
 `;
 
 export const SelectTourItem = styled.div`
-  width: 400px;
+  /* width: 350px; */
   padding-top: 40px;
   position: relative;
+  margin-right: 30px;
   h3 {
     margin-bottom: 0;
   }
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    place-items: center;
+  }
   button {
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: bold;
     background-color: white;
     color: ${colors.colorA};
     height: 30px;
-    width: 120px;
-    margin: 4px;
+    width: 90%;
+    margin: 3px;
+    border: 1px solid ${colors.colorC};
 
     &:hover {
       background-color: ${colors.colorB};
@@ -36,6 +46,15 @@ export const SelectTourItem = styled.div`
       background-color: ${colors.colorB};
       color: white;
     }
+    &:disabled {
+      background-color: #f0f0f0;
+      color: #b0b0b0;
+    }
+
+    /* &:disabled:hover {
+      background-color: #f0f0f0;
+      color: #b0b0b0;
+    } */
   }
   .reset-button {
     width: 80px;
@@ -56,6 +75,10 @@ export const SelectTourItem = styled.div`
       opacity: 0.7;
       color: gray;
     }
+    @media (max-width: 768px) {
+      top: 4px;
+      scale: 80%;
+    }
   }
   .toggle-button {
     font-size: 16px;
@@ -68,11 +91,7 @@ export const SelectTourItem = styled.div`
   .toggle-button:hover {
     color: ${colors.colorB};
   }
-  .buttons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    place-items: center;
-  }
+
   /* SelectTourItem 기본 상태 숨기기 (모바일 화면) */
   @media (max-width: 768px) {
     visibility: hidden;
@@ -96,15 +115,14 @@ export const SelectTourItem = styled.div`
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     .buttons {
       width: 80%;
-      margin: auto;
     }
     button {
-      font-size: 10px;
-      width: 100px;
-      height: 30px;
+      font-size: 9px;
+      width: 90px;
+      height: 28px;
     }
     h3 {
-      font-size: 18px;
+      font-size: 15px;
       margin: 15px 0 5px 10px;
     }
   }
@@ -132,7 +150,6 @@ export const SearchSt = styled.div`
   flex-grow: 1;
   display: flex;
   align-items: center;
-
   .search-wrapper {
     position: relative;
     flex-grow: 0.9;
@@ -144,7 +161,7 @@ export const SearchSt = styled.div`
     font-size: 14px;
     height: 40px;
     border-radius: 50px;
-    border: 2.5px solid ${colors.colorA};
+    border: 2px solid ${colors.colorB};
     padding-left: 20px;
     outline: none;
     width: 100%;
@@ -154,13 +171,12 @@ export const SearchSt = styled.div`
   .search-button {
     position: absolute;
     right: 15px;
-    top: 5%;
-    scale: 110%;
+    top: 10%;
     background: transparent;
     border: none;
     cursor: pointer;
     font-size: 20px;
-    color: ${colors.colorA};
+    color: ${colors.colorB};
     width: 20px;
 
     &:hover {
@@ -170,12 +186,22 @@ export const SearchSt = styled.div`
       transform: none;
     }
   }
-
   button.search-button:hover {
     background: transparent;
     color: ${colors.colorA};
     border: none;
     transform: none;
+  }
+  @media (max-width: 768px) {
+    margin-top: 20px;
+    .search {
+      height: 30px;
+      font-size: 10px;
+    }
+    .search-button {
+      top: 0%;
+      scale: 0.8;
+    }
   }
 `;
 
@@ -184,7 +210,25 @@ export const ItemList = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100%;
-
+  width: 40vw;
+  .totalCount {
+    align-self: flex-start;
+    font-size: 25px;
+    font-weight: bolder;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    color: ${colors.colorA};
+    padding: 10px 0 15px 0;
+    position: relative;
+    button {
+      position: absolute;
+      right: 0;
+      height: 35px;
+    }
+  }
+  .itemBox {
+    border-bottom: 1px solid #ddd;
+  }
   .tour-list,
   .plannerList {
     padding: 0;
@@ -193,9 +237,9 @@ export const ItemList = styled.div`
     width: 95%;
     display: flex;
     justify-content: space-between;
-    button {
-      height: 35px;
-    }
+  }
+  @media (max-width: 768px) {
+    width: 80%;
   }
 `;
 

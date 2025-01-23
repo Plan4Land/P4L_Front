@@ -1,12 +1,11 @@
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {FollowList} from "../../Style/MyPageMainStyled";
-import {ProfileImg} from "../ProfileImg";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FollowList } from "../../Style/MyPageMainStyled";
+import { ProfileImg } from "../PictureCommponent";
 import styled from "styled-components";
 import AxiosApi from "../../Api/AxiosApi";
-import {Button} from "../ButtonComponent";
-import {colors} from "../../Style/GlobalStyle";
-
+import { Button } from "../ButtonComponent";
+import { colors } from "../../Style/GlobalStyle";
 
 /*
 email
@@ -21,71 +20,86 @@ uid
 * */
 
 const FollowListItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+
+  & .user-info {
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    
-    & .user-info{
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        flex-grow: 0.7;
-    }
+    justify-content: space-evenly;
+    flex-grow: 0.7;
+  }
 
-    & .user-info p {
-        flex-grow: 0.2;
-        text-align: left;
-    }
+  & .user-info p {
+    flex-grow: 0.2;
+    text-align: left;
+  }
 
-    &:hover {
-        cursor: pointer;
-        background-color: #eee;
-    }
-    
-    & button {
-        font-size: 0.7em;
-        background-color: ${(props) => (props.isFollowed ? colors.colorB : "#ccc")};
-        padding: 1px;
-        width: 80px;
-        flex-grow: 1;
-        margin: 0 10px;
-    }
+  &:hover {
+    cursor: pointer;
+    background-color: #eee;
+  }
 
-`
+  & button {
+    font-size: 0.7em;
+    background-color: ${(props) => (props.isFollowed ? colors.colorB : "#ccc")};
+    padding: 1px;
+    width: 80px;
+    flex-grow: 1;
+    margin: 0 10px;
+  }
+`;
 
-
-const Tab = ({isSelected, onClick, children}) => (
+const Tab = ({ isSelected, onClick, children }) => (
   <button onClick={onClick} className={isSelected ? "active" : ""}>
     {children}
   </button>
 );
 
-export const List = ({items, onItemClick, loginUser, isMyPage, isFollower}) => {
+export const List = ({
+  items,
+  onItemClick,
+  loginUser,
+  isMyPage,
+  isFollower,
+}) => {
   const [followState, setFollowState] = useState(items.map(() => false));
 
   const handleFollow = async (index, follower, followed, isFollow) => {
     const data = await AxiosApi.follow(follower, followed, isFollow);
-    setFollowState(prevState => {
+    setFollowState((prevState) => {
       const newState = [...prevState];
       newState[index] = !newState[index];
       return newState;
-    })
-  }
+    });
+  };
 
   return (
     <div className="list">
       {items.map((item, index) => (
         <FollowListItem key={index} isFollowed={followState[index]}>
-          <div className="user-info" onClick={() => onItemClick(item.id, loginUser)}>
-            <ProfileImg className={"image"} file={item.imgPath} width={"40px"} height={"40px"}/>
+          <div
+            className="user-info"
+            onClick={() => onItemClick(item.id, loginUser)}
+          >
+            <ProfileImg
+              className={"image"}
+              file={item.imgPath}
+              width={"40px"}
+              height={"40px"}
+            />
             <p>{item.nickname}</p>
             <p>{item.id}</p>
           </div>
           {isMyPage && !isFollower && (
             <Button
-              onClick={() => handleFollow(index, loginUser, item.id, followState[index])}>
+              onClick={() =>
+                handleFollow(index, loginUser, item.id, followState[index])
+              }
+            >
               {followState[index] ? "팔로우" : "팔로우 해제"}
             </Button>
           )}
@@ -95,7 +109,7 @@ export const List = ({items, onItemClick, loginUser, isMyPage, isFollower}) => {
   );
 };
 
-const FollowLoad = ({followings, followers, loginUser, isMyPage}) => {
+const FollowLoad = ({ followings, followers, loginUser, isMyPage }) => {
   const [selectedTab, setSelectedTab] = useState("followings");
   const navigate = useNavigate();
 
@@ -116,21 +130,37 @@ const FollowLoad = ({followings, followers, loginUser, isMyPage}) => {
     <FollowList>
       <div className="tabs-component">
         <div className="tabs">
-          <Tab isSelected={selectedTab === "followings"} onClick={() => handleTabClick("followings")}>
+          <Tab
+            isSelected={selectedTab === "followings"}
+            onClick={() => handleTabClick("followings")}
+          >
             팔로잉
           </Tab>
-          <Tab isSelected={selectedTab === "followers"} onClick={() => handleTabClick("followers")}>
+          <Tab
+            isSelected={selectedTab === "followers"}
+            onClick={() => handleTabClick("followers")}
+          >
             팔로워
           </Tab>
         </div>
         <div className="tab-content">
           {selectedTab === "followings" && (
-            <List items={followings} onItemClick={handleItemClick} loginUser={loginUser} isMyPage={isMyPage}
-                  isFollower={false}/>
+            <List
+              items={followings}
+              onItemClick={handleItemClick}
+              loginUser={loginUser}
+              isMyPage={isMyPage}
+              isFollower={false}
+            />
           )}
           {selectedTab === "followers" && (
-            <List items={followers} onItemClick={handleItemClick} loginUser={loginUser} isMyPage={isMyPage}
-                  isFollower={true}/>
+            <List
+              items={followers}
+              onItemClick={handleItemClick}
+              loginUser={loginUser}
+              isMyPage={isMyPage}
+              isFollower={true}
+            />
           )}
         </div>
       </div>

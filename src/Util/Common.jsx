@@ -31,24 +31,24 @@ const Common = {
 
   // 401 에러 처리 함수
   handleUnauthorized: async () => {
-    const accessToken = Common.getAccessToken();
+    console.log("401 에러 처리 함수 실행됨");
     const refreshToken = Common.getRefreshToken();
-    const config = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
     try {
       const rsp = await axios.post(
-        `${Common.PLAN_DOMAIN}/auth/refresh`,
+        `${Common.PLAN_DOMAIN}/auth/token/refresh`,
         refreshToken,
-        config
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
-      console.log(rsp.data);
-      Common.setAccessToken(rsp.data);
-      return true;
+      console.log("토큰 재발급 성공:", rsp.data);
+      Common.setAccessToken(rsp.data.accessToken);
+      Common.setAccessTokenExpiresIn(rsp.data.accessTokenExpiresIn);
+      return rsp.data.accessToken;
     } catch (e) {
-      console.log(e);
+      console.log("토큰 재발급 실패:", e);
       return false;
     }
   },

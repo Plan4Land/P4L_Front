@@ -1,18 +1,23 @@
-import {Footer, Header} from "../../Component/GlobalComponent";
-import {OtherUserInfo, UserInfo, UserMain, UserPlanning,} from "../../Style/MyPageMainStyled";
-import {useEffect, useState} from "react";
-import {CheckModal, Modal} from "../../Util/Modal";
-import {Button} from "../../Component/ButtonComponent";
-import {useNavigate, useParams} from "react-router-dom";
-import {UserPlannerApi} from "../../Api/ItemApi";
-import {areas} from "../../Util/Common";
-import {PlanItem} from "../../Component/ItemListComponent";
+import { Footer, Header } from "../../Component/GlobalComponent";
+import {
+  OtherUserInfo,
+  UserInfo,
+  UserMain,
+  UserPlanning,
+} from "../../Style/MyPageMainStyled";
+import { useEffect, useState } from "react";
+import { CheckModal, Modal } from "../../Util/Modal";
+import { Button } from "../../Component/ButtonComponent";
+import { useNavigate, useParams } from "react-router-dom";
+import { UserPlannerApi } from "../../Api/ItemApi";
+import { areas } from "../../Util/Common";
+import { PlanItem } from "../../Component/ItemListComponent";
 import AxiosApi from "../../Api/AxiosApi";
-import {Pagination} from "../../Component/Pagination";
+import { Pagination } from "../../Component/Pagination";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import {useMediaQuery} from "react-responsive";
-import {useAuth} from "../../Context/AuthContext";
+import { useMediaQuery } from "react-responsive";
+import { useAuth } from "../../Context/AuthContext";
 import FollowLoad from "../../Component/UserPageComponent/FollowLoad";
 import ReportModal from "../../Component/UserPageComponent/ReportModalComponent";
 
@@ -77,10 +82,10 @@ export const Otheruser = () => {
   const fetchReports = async () => {
     try {
       return await AxiosApi.report(user.id, userId, reportContent);
-    }catch (error) {
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const fetchPlanners = async () => {
     try {
@@ -205,10 +210,6 @@ export const Otheruser = () => {
             </div>
             {user && user.id !== userId && (
               <div className="Button">
-                <Button onClick={() => setShowReportModal(true)}>
-                  신고하기
-                </Button>
-
                 {isFollowed ? (
                   <Button
                     onClick={() => handleFollow(user?.id, userInfo.id, false)}
@@ -222,6 +223,9 @@ export const Otheruser = () => {
                     팔로우
                   </Button>
                 )}
+                <Button onClick={() => setShowReportModal(true)}>
+                  신고하기
+                </Button>
               </div>
             )}
           </UserInfo>
@@ -247,17 +251,21 @@ export const Otheruser = () => {
                         (subArea) => subArea.code === planner.subArea
                       )?.name || "알 수 없는 하위 지역";
                   return (
-                    <PlanItem
-                      key={planner.id}
-                      id={planner.id}
-                      thumbnail={planner.thumbnail || "/default-thumbnail.png"}
-                      title={planner.title}
-                      address={`${areaName} - ${subAreaName}`}
-                      subCategory={planner.theme}
-                      type={planner.public ? "공개" : "비공개"}
-                      ownerprofile={planner.ownerProfileImg}
-                      ownernick={planner.ownerNickname}
-                    />
+                    <div className="itemBox">
+                      <PlanItem
+                        key={planner.id}
+                        id={planner.id}
+                        thumbnail={
+                          planner.thumbnail || "/default-thumbnail.png"
+                        }
+                        title={planner.title}
+                        address={`${areaName} - ${subAreaName}`}
+                        subCategory={planner.theme}
+                        type={planner.public ? "공개" : "비공개"}
+                        ownerprofile={planner.ownerProfileImg}
+                        ownernick={planner.ownerNickname}
+                      />
+                    </div>
                   );
                 })}
               </div>
@@ -276,17 +284,19 @@ export const Otheruser = () => {
                       (subArea) => subArea.code === planner.subArea
                     )?.name || "알 수 없는 하위 지역";
                 return (
-                  <PlanItem
-                    key={planner.id}
-                    id={planner.id}
-                    thumbnail={planner.thumbnail || "/default-thumbnail.png"}
-                    title={planner.title}
-                    address={`${areaName} - ${subAreaName}`}
-                    subCategory={planner.theme}
-                    type={planner.public ? "공개" : "비공개"}
-                    ownerprofile={`/${planner.ownerProfileImg}`}
-                    ownernick={planner.ownerNickname}
-                  />
+                  <div className="itemBox">
+                    <PlanItem
+                      key={planner.id}
+                      id={planner.id}
+                      thumbnail={planner.thumbnail || "/default-thumbnail.png"}
+                      title={planner.title}
+                      address={`${areaName} - ${subAreaName}`}
+                      subCategory={planner.theme}
+                      type={planner.public ? "공개" : "비공개"}
+                      ownerprofile={`/${planner.ownerProfileImg}`}
+                      ownernick={planner.ownerNickname}
+                    />
+                  </div>
                 );
               })}
             </div>

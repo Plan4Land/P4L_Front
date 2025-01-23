@@ -28,6 +28,9 @@ const ModalContent = styled.div`
   flex-direction: column;
   .buttons {
     flex-direction: row;
+    button {
+      height: 30px;
+    }
   }
 `;
 

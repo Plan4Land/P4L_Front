@@ -52,7 +52,6 @@ export const MyBookmarkPlanItem = () => {
         currentPage,
         size
       );
-      console.log(data.content);
 
       // 모바일에서 이전 데이터와 새 데이터의 중복을 피하도록 처리
       if (isMobile) {
@@ -120,17 +119,24 @@ export const MyBookmarkPlanItem = () => {
                       )?.name || "알 수 없는 하위 지역";
 
                   return (
-                    <PlanItem
-                      key={planner.id}
-                      id={planner.id}
-                      thumbnail={planner.thumbnail || "/default-thumbnail.png"}
-                      title={planner.title}
-                      address={`${areaName} - ${subAreaName}`}
-                      subCategory={planner.theme}
-                      type={planner.public ? "공개" : "비공개"}
-                      ownerprofile={planner.owner.profileImg}
-                      ownernick={planner.owner.nickname}
-                    />
+                    <div className="itemBox">
+                      <PlanItem
+                        key={planner.id}
+                        id={planner.id}
+                        thumbnail={
+                          planner.thumbnail || "/default-thumbnail.png"
+                        }
+                        title={planner.title}
+                        address={`${areaName} - ${subAreaName}`}
+                        subCategory={planner.theme
+                          .split(",")
+                          .map((theme) => `#${theme.trim()}`)
+                          .join(" ")}
+                        type={planner.public ? "공개" : "비공개"}
+                        ownerprofile={planner.owner.profileImg}
+                        ownernick={planner.owner.nickname}
+                      />
+                    </div>
                   );
                 })
               ) : (
@@ -152,17 +158,22 @@ export const MyBookmarkPlanItem = () => {
                   ?.name || "알 수 없는 하위 지역";
 
               return (
-                <PlanItem
-                  key={planner.id}
-                  id={planner.id}
-                  thumbnail={planner.thumbnail || "/default-thumbnail.png"}
-                  title={planner.title}
-                  address={`${areaName} - ${subAreaName}`}
-                  subCategory={planner.theme}
-                  type={planner.public ? "공개" : "비공개"}
-                  ownerprofile={planner.owner.profileImg}
-                  ownernick={planner.owner.nickname}
-                />
+                <div className="itemBox">
+                  <PlanItem
+                    key={planner.id}
+                    id={planner.id}
+                    thumbnail={planner.thumbnail || "/default-thumbnail.png"}
+                    title={planner.title}
+                    address={`${areaName} - ${subAreaName}`}
+                    subCategory={planner.theme
+                      .split(",")
+                      .map((theme) => `#${theme.trim()}`)
+                      .join(" ")}
+                    type={planner.public ? "공개" : "비공개"}
+                    ownerprofile={planner.owner.profileImg}
+                    ownernick={planner.owner.nickname}
+                  />
+                </div>
               );
             })
           ) : (

@@ -11,9 +11,8 @@ import {
   InputBox,
 } from "../../Component/SignupComponents/SignupComponent";
 import { Button } from "../../Component/ButtonComponent";
-import { ProfilePicModal } from "../../Component/PictureModalComponent";
+// import { ProfilePicModal } from "../../Component/PictureModalComponent";
 import { CheckModal } from "../../Util/Modal";
-import { EditImg } from "../../Component/ProfileImg";
 import { PictureComponent } from "../../Component/PictureCommponent";
 
 // icon
@@ -334,7 +333,7 @@ export const Signup = () => {
         inputEmail,
         currentPic,
         social_id || null,
-        ssoState || null,
+        ssoState || null
       );
       if (response.status === 201 || response.status === 200) {
         setCheckModalMessage("회원가입이 완료되었습니다.");
@@ -366,10 +365,7 @@ export const Signup = () => {
           <h1 className="title">회원가입</h1>
 
           <div className="input-container">
-            <div 
-              className={idCheck 
-                ? "textMessage-true" 
-                : "textMessage"}>
+            <div className={idCheck ? "textMessage-true" : "textMessage"}>
               {idMsg}
             </div>
             <div className="inputWrapper">
@@ -398,10 +394,7 @@ export const Signup = () => {
           </div>
 
           <div className="input-container">
-            <div 
-              className={emailCheck 
-                ? "textMessage-true" 
-                : "textMessage"}>
+            <div className={emailCheck ? "textMessage-true" : "textMessage"}>
               {emailMsg}
             </div>
             <div className="inputWrapper">
@@ -431,10 +424,7 @@ export const Signup = () => {
 
           {isEmail2Show && (
             <div className="input-container">
-              <div 
-                className={email2Check 
-                  ? "textMessage-true" 
-                  : "textMessage"}>
+              <div className={email2Check ? "textMessage-true" : "textMessage"}>
                 {email2Msg}
               </div>
               <div className="inputWrapper">
@@ -521,10 +511,7 @@ export const Signup = () => {
           </div>
 
           <div className="input-container">
-            <div 
-              className={nicknameCheck 
-                ? "textMessage-true" 
-                : "textMessage"}>
+            <div className={nicknameCheck ? "textMessage-true" : "textMessage"}>
               {nicknameMsg}
             </div>
             <div className="inputWrapper">
@@ -553,16 +540,19 @@ export const Signup = () => {
           </div>
 
           {/* 프로필 사진 */}
-          <PictureComponent 
+          <PictureComponent
             currentPic={currentPic}
             setCurrentPic={setCurrentPic}
+            type={"profile"}
           />
 
-          {social_id && <input type="hidden" name="social_id" value={socialId} />}
+          {social_id && (
+            <input type="hidden" name="social_id" value={socialId} />
+          )}
           {sso && <input type="hidden" name="sso" value={ssoState} />}
 
           <Button onClick={onClickSignup}>회원가입</Button>
-          <div style={{margin: "15px"}} />
+          <div style={{ margin: "15px" }} />
           <Button onClick={() => navigate("/login")}>취소</Button>
 
           {/* 완료 모달 */}

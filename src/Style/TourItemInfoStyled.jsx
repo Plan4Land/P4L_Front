@@ -3,13 +3,14 @@ import { colors } from "./GlobalStyle";
 import { ScrollBar } from "../Component/ButtonComponent";
 
 export const TourItemInfoBox = styled.div`
-  width: 80%;
-  margin: 50px auto;
+  width: 60%;
+  margin: auto;
   padding: 20px;
-  border-radius: 10px;
-  /* display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr); */
+
+  .tour-title {
+    width: 90%;
+    border-bottom: 2px solid #ddd;
+  }
 
   .tour-title,
   .info-item {
@@ -22,15 +23,20 @@ export const TourItemInfoBox = styled.div`
       margin-right: 5px;
     }
   }
-  .tour-image {
+  .tourThumb {
     width: 100%;
-    height: 450px;
-    margin: auto;
-    border-radius: 10px;
+    text-align: center;
+    .tour-image {
+      margin: auto;
+      width: 80%;
+      height: 450px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
   }
+
   .tour-details {
     padding: 30px;
-    height: 450px;
     position: relative;
     .bookmark {
       color: ${colors.colorA};
@@ -51,63 +57,64 @@ export const TourItemInfoBox = styled.div`
       margin-top: 0;
       color: ${colors.colorA};
     }
-    .nearby-travelspot {
-      width: 95%;
-      height: 50%;
-      padding: 5px 15px 5px 15px;
-      overflow-y: scroll;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-      ${ScrollBar}
-      .nearbyspot {
-        text-decoration: none;
-        color: black;
-        h4 {
-          color: ${colors.colorA};
-        }
-      }
-      .nearbyspot:visited,
-      .nearbyspot:hover,
-      .nearbyspot:active {
-        color: inherit;
-      }
-    }
-    .nearbybox {
-      border-bottom: 1px solid #ddd;
-      h4,
-      p {
-        margin: 10px 0;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      p {
-        margin-bottom: 10px;
-      }
-    }
   }
   .item-map {
+    display: flex;
     margin: 20px auto;
-    grid-column: span 2;
     width: 100%;
     height: 500px;
+    gap: 10px;
+    @media (max-width: 768px) {
+      flex-direction: column;
+      height: 800px;
+    }
   }
   @media (max-width: 768px) {
-    .container {
-      grid-template-columns: 2fr; /* 한 열로 표시 */
-    }
+    width: 80%;
+  }
+`;
 
-    .item:nth-child(1) {
-      order: 2;
+export const NearTravelList = styled.div`
+  width: 70%;
+  h3 {
+    margin: 3px 0 8px 0;
+  }
+  .nearby-travelspot {
+    width: 95%;
+    height: 90%;
+    padding: 5px 15px 5px 15px;
+    overflow-y: scroll;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    ${ScrollBar}
+    .nearbyspot {
+      text-decoration: none;
+      color: black;
+      h4 {
+        color: ${colors.colorA};
+      }
     }
-
-    .item:nth-child(2) {
-      order: 1; /* 두 번째 항목을 첫 번째로 배치 */
+    .nearbyspot:visited,
+    .nearbyspot:hover,
+    .nearbyspot:active {
+      color: inherit;
     }
-
-    .item:nth-child(3) {
-      order: 3; /* 세 번째 항목은 그대로 */
+  }
+  .nearbybox {
+    border-bottom: 1px solid #ddd;
+    h4,
+    p {
+      margin: 10px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
+    p {
+      margin-bottom: 10px;
+    }
+  }
+  @media (max-width: 768px) {
+    height: 50%;
+    width: 100%;
   }
 `;

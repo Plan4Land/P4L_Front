@@ -18,6 +18,8 @@ import { Pagination } from "../../Component/Pagination";
 import { FaBars } from "react-icons/fa";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useMediaQuery } from "react-responsive";
+import { Loading } from "../../Component/LoadingComponent";
+import { SelectedFilters } from "../../Component/SelectedFilterComponent";
 
 export const TourList = () => {
   const location = useLocation();
@@ -169,10 +171,6 @@ export const TourList = () => {
 
   // 검색어
   const handleSearch = () => {
-    if (searchQuery.length < 2) {
-      alert("검색어는 2자리 이상 입력해 주세요.");
-      return;
-    }
     updateFilters("searchQuery", searchQuery);
   };
 
@@ -224,7 +222,7 @@ export const TourList = () => {
         );
       } else {
         if (newSelectedBottomThemes.length >= 3) {
-          alert("최대 3개의 소분류만 선택할 수 있습니다.");
+          // alert("최대 3개의 소분류만 선택할 수 있습니다.");
           return prev;
         }
         newSelectedBottomThemes.push(cat3);
@@ -238,8 +236,11 @@ export const TourList = () => {
 
   // 카테고리
   const handleCategoryChange = (category) => {
-    updateFilters("category", category);
+    const isSameCategory = filters.category === category;
+    const newCategory = isSameCategory ? "" : category;
+    updateFilters("category", newCategory);
   };
+
   const handleToggleSelect = () => {
     setIsSelectOpen(!isSelectOpen);
   };
@@ -250,6 +251,29 @@ export const TourList = () => {
         currentPage: prevFilters.currentPage + 1,
       }));
     }
+  };
+
+  const handleTopFilterChange = (key, name) => {
+    setFilters((prev) => {
+      const newFilters = { ...prev };
+
+      if (key === "bottomTheme") {
+        const code = ServiceCode.flatMap((cat) =>
+          cat.cat2List.flatMap((cat2) => cat2.cat3List)
+        ).find((cat3) => cat3.cat3Name === name)?.cat3;
+
+        if (code) {
+          newFilters[key] = newFilters[key]
+            .split(",")
+            .filter((theme) => theme !== code)
+            .join(",");
+        }
+      } else {
+        newFilters[key] = "";
+      }
+
+      return newFilters;
+    });
   };
 
   const selectedAreaData = areas.find((area) => area.code === filters.areaCode);
@@ -413,6 +437,10 @@ export const TourList = () => {
                               ? "selected"
                               : ""
                           }`}
+                          disabled={
+                            filters.bottomTheme.split(",").length >= 3 &&
+                            !filters.bottomTheme.includes(cat3.cat3)
+                          }
                         >
                           {cat3.cat3Name}
                         </Button>
@@ -447,51 +475,25 @@ export const TourList = () => {
             )}
           </div>
         </SelectTourItem>
-
         <ItemList>
-          {(loading || error) && <div>{loading ? "로딩 중..." : error}</div>}
-
+          <div className="totalCount">총 {totalItems.toLocaleString()}건</div>
+          <SelectedFilters
+            filters={filters}
+            onRemoveFilter={handleTopFilterChange}
+          ></SelectedFilters>
+          {loading && (
+            <Loading>
+              <p>목록을 불러오는 중 입니다.</p>
+            </Loading>
+          )}
+          {error && <div>{error}</div>}
           {!loading && !error && (
             <>
-              {isMobile ? (
-                <InfiniteScroll
-                  dataLength={travelSpots.length}
-                  next={handleLoadMore}
-                  hasMore={filters.currentPage + 1 < totalPages}
-                  loader={<div>로딩 중...</div>}
-                  endMessage={<div>더 이상 불러올 데이터가 없습니다.</div>}
-                >
-                  <div className="tour-list">
-                    {travelSpots.map((spot) => {
-                      const cat3Name = ServiceCode.flatMap((cat) =>
-                        cat.cat2List.flatMap((cat2) =>
-                          cat2.cat3List.filter(
-                            (cat3) => cat3.cat3 === spot.cat3
-                          )
-                        )
-                      ).map((cat3) => cat3.cat3Name)[0];
-                      const typeName = types.find(
-                        (type) => type.code === spot.typeId
-                      )?.name;
-
-                      return (
-                        <TourItem
-                          key={spot.id}
-                          id={spot.id}
-                          thumbnail={spot.thumbnail}
-                          title={spot.title}
-                          address={spot.addr1 || "정보 없음"}
-                          subCategory={cat3Name || "정보 없음"}
-                          type={typeName || "정보 없음"}
-                        />
-                      );
-                    })}
-                  </div>
-                </InfiniteScroll>
-              ) : (
-                // 데스크탑 화면에서는 기존 페이지네이션 사용
-                <div className="tour-list">
-                  {travelSpots.map((spot) => {
+              <div className="tour-list">
+                {travelSpots.length === 0 ? (
+                  <p>해당하는 조건의 관광지가 존재하지 않습니다.</p>
+                ) : (
+                  travelSpots.map((spot) => {
                     const cat3Name = ServiceCode.flatMap((cat) =>
                       cat.cat2List.flatMap((cat2) =>
                         cat2.cat3List.filter((cat3) => cat3.cat3 === spot.cat3)
@@ -502,28 +504,26 @@ export const TourList = () => {
                     )?.name;
 
                     return (
-                      <TourItem
-                        key={spot.id}
-                        id={spot.id}
-                        thumbnail={spot.thumbnail}
-                        title={spot.title}
-                        address={spot.addr1 || "정보 없음"}
-                        subCategory={cat3Name || "정보 없음"}
-                        type={typeName || "정보 없음"}
-                      />
+                      <div className="itemBox">
+                        <TourItem
+                          key={spot.id}
+                          id={spot.id}
+                          thumbnail={spot.thumbnail}
+                          title={spot.title}
+                          address={spot.addr1 || "정보 없음"}
+                          subCategory={cat3Name || "정보 없음"}
+                          type={typeName || "정보 없음"}
+                        />
+                      </div>
                     );
-                  })}
-                </div>
-              )}
-
-              {/* 데스크탑에서는 페이지네이션 */}
-              {!isMobile && (
-                <Pagination
-                  currentPage={filters.currentPage}
-                  totalPages={totalPages}
-                  handlePageChange={handlePageChange}
-                />
-              )}
+                  })
+                )}
+              </div>
+              <Pagination
+                currentPage={filters.currentPage}
+                totalPages={totalPages}
+                handlePageChange={handlePageChange}
+              />
             </>
           )}
         </ItemList>
