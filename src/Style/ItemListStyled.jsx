@@ -8,6 +8,7 @@ export const List = styled.div`
   margin-top: 20px;
   margin-bottom: 50px;
   /* gap: 50px; */
+  justify-content: center;
   @media (max-width: 768px) {
     width: 90%;
   }
@@ -200,7 +201,10 @@ export const ItemList = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100%;
-
+  width: 40vw;
+  .itemBox {
+    border-bottom: 1px solid #ddd;
+  }
   .tour-list,
   .plannerList {
     padding: 0;

@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { ServiceCode } from "../Util/Service_code_final";
 
 const TourItemStyled = styled.div`
-  width: ${(props) => props.width || "50vw"};
-  height: ${(props) => props.height || "200px"};
+  width: ${(props) => props.width || "40vw"};
+  height: ${(props) => props.height || "180px"};
   margin: ${(props) => props.margin || "10px"};
   display: flex;
   cursor: pointer;
@@ -13,9 +13,10 @@ const TourItemStyled = styled.div`
   align-items: center;
   overflow: hidden;
   position: relative;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
   margin-bottom: 20px;
-
+  p {
+    margin: 0 0 5px 0;
+  }
   .img {
     min-width: 300px;
     max-width: 300px;
@@ -47,7 +48,6 @@ const TourItemStyled = styled.div`
     padding: 10px;
     display: flex;
     flex-direction: column;
-    border-left: 1px solid #ccc;
   }
   .infoWrapperSearch {
     width: 100%;
@@ -69,6 +69,10 @@ const TourItemStyled = styled.div`
   .title {
     font-size: 20px;
     font-weight: bold;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .titleSearch {
     font-size: 14px;
@@ -78,6 +82,10 @@ const TourItemStyled = styled.div`
   .address {
     font-size: 15px;
     color: #333;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .addressSearch {
     font-size: 12px;
@@ -93,25 +101,28 @@ const TourItemStyled = styled.div`
     color: #888;
   }
   .owner {
-    width: 180px;
+    width: 100px;
     position: absolute;
-    bottom: 15px;
-    right: 5px;
+    bottom: 10px;
+    left: 10px;
     display: flex;
     justify-content: left;
     align-items: center;
     gap: 10px;
     img {
-      width: 60px;
-      height: 60px;
-      min-width: 60px;
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
       border-radius: 50%;
+      background-color: white;
     }
     .ownernick {
       display: -webkit-box;
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      color: white;
+      text-shadow: 3px 3px 2px rgba(0, 0, 0, 1);
     }
   }
   @media (max-width: 768px) {

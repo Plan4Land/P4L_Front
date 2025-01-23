@@ -144,6 +144,22 @@ export const Main = () => {
                       className="planitem"
                       onClick={() => planHandleClick(plan.id)}
                     >
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          width: "100%",
+                          height: "100%",
+                          backgroundImage: `url(${
+                            plan.thumbnail || "/planning-pic/planningth1.jpg"
+                          })`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                          filter: "brightness(130%) blur(8px)",
+                          zIndex: -1, // 배경은 콘텐츠 뒤에 위치하도록 설정
+                        }}
+                      />
                       <img
                         src={plan.thumbnail || `/planning-pic/planningth1.jpg`}
                         alt={plan.title}

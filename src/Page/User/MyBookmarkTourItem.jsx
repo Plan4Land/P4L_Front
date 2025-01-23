@@ -117,15 +117,17 @@ export const MyBookmarkTourItem = () => {
                   )?.name;
 
                   return (
-                    <TourItem
-                      key={spot.id}
-                      id={spot.id}
-                      thumbnail={spot.thumbnail}
-                      title={spot.title}
-                      address={spot.addr1 || "정보 없음"}
-                      subCategory={cat3Name || "정보 없음"}
-                      type={typeName || "정보 없음"}
-                    />
+                    <div className="itemBox">
+                      <TourItem
+                        key={spot.id}
+                        id={spot.id}
+                        thumbnail={spot.thumbnail}
+                        title={spot.title}
+                        address={spot.addr1 || "정보 없음"}
+                        subCategory={cat3Name || "정보 없음"}
+                        type={typeName || "정보 없음"}
+                      />
+                    </div>
                   );
                 })
               ) : (
@@ -145,15 +147,17 @@ export const MyBookmarkTourItem = () => {
               )?.name;
 
               return (
-                <TourItem
-                  key={spot.id}
-                  id={spot.id}
-                  thumbnail={spot.thumbnail}
-                  title={spot.title}
-                  address={spot.addr1 || "정보 없음"}
-                  subCategory={cat3Name || "정보 없음"}
-                  type={typeName || "정보 없음"}
-                />
+                <div className="itemBox">
+                  <TourItem
+                    key={spot.id}
+                    id={spot.id}
+                    thumbnail={spot.thumbnail}
+                    title={spot.title}
+                    address={spot.addr1 || "정보 없음"}
+                    subCategory={cat3Name || "정보 없음"}
+                    type={typeName || "정보 없음"}
+                  />
+                </div>
               );
             })
           ) : (

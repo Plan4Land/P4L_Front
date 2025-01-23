@@ -247,36 +247,78 @@ export const RecommPlan = styled(GridItem)`
   justify-content: center;
   align-items: center;
   height: 500px;
-  h3 {
-    margin: 0;
-    color: ${colors.colorA};
-  }
 `;
 export const PlanBox = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
-  background-color: #fff7f3;
-  border: 1px solid red;
+  position: relative;
+  overflow: hidden;
   .planitem {
-    border: 1px solid blue;
     height: 95%;
     margin: 10px;
     overflow: hidden;
     display: flex;
-
     cursor: pointer;
-    .planExplain {
-      padding-left: 5%;
+  }
+  img {
+    min-width: 50%;
+    max-width: 50%;
+    min-height: 90%;
+    object-fit: cover;
+    transform: translateX(-100%);
+    opacity: 0;
+    animation: slideInImage 1.5s forwards;
+  }
+
+  .planExplain {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin: 0 0 10px 20px;
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideInText 1.5s forwards;
+    animation-delay: 0.5s;
+  }
+
+  h3 {
+    font-size: 100px;
+    margin: 0 0 0 10px;
+    color: ${colors.colorD};
+    text-shadow: 3px 3px 2px rgba(0, 0, 0, 1);
+  }
+
+  p {
+    margin: 10px 0 0 20px;
+    font-size: 20px;
+    color: white;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
+  }
+
+  @keyframes slideInImage {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
     }
-    img {
-      min-width: 50%;
-      max-width: 50%;
-      min-height: 90%;
-      border: 1px solid black;
+    100% {
+      transform: translateX(0);
+      opacity: 1;
     }
   }
+
+  @keyframes slideInText {
+    0% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
   .swiper-button-next,
   .swiper-button-prev {
     color: white !important;

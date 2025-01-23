@@ -265,19 +265,21 @@ export const MyPageMain = () => {
                               (subArea) => subArea.code === planner.subArea
                             )?.name || "알 수 없는 하위 지역";
                         return (
-                          <PlanItem
-                            key={planner.id}
-                            id={planner.id}
-                            thumbnail={
-                              planner.thumbnail || "/default-thumbnail.png"
-                            }
-                            title={planner.title}
-                            address={`${areaName} - ${subAreaName}`}
-                            subCategory={planner.theme}
-                            type={planner.public ? "공개" : "비공개"}
-                            ownerprofile={planner.ownerProfileImg}
-                            ownernick={planner.ownerNickname}
-                          />
+                          <div className="itembox">
+                            <PlanItem
+                              key={planner.id}
+                              id={planner.id}
+                              thumbnail={
+                                planner.thumbnail || "/default-thumbnail.png"
+                              }
+                              title={planner.title}
+                              address={`${areaName} - ${subAreaName}`}
+                              subCategory={planner.theme}
+                              type={planner.public ? "공개" : "비공개"}
+                              ownerprofile={planner.ownerProfileImg}
+                              ownernick={planner.ownerNickname}
+                            />
+                          </div>
                         );
                       })}
                     </div>
@@ -296,19 +298,21 @@ export const MyPageMain = () => {
                             (subArea) => subArea.code === planner.subArea
                           )?.name || "알 수 없는 하위 지역";
                       return (
-                        <PlanItem
-                          key={planner.id}
-                          id={planner.id}
-                          thumbnail={
-                            planner.thumbnail || "/default-thumbnail.png"
-                          }
-                          title={planner.title}
-                          address={`${areaName} - ${subAreaName}`}
-                          subCategory={planner.theme}
-                          type={planner.public ? "공개" : "비공개"}
-                          ownerprofile={`/${planner.ownerProfileImg}`}
-                          ownernick={planner.ownerNickname}
-                        />
+                        <div className="itemBox">
+                          <PlanItem
+                            key={planner.id}
+                            id={planner.id}
+                            thumbnail={
+                              planner.thumbnail || "/default-thumbnail.png"
+                            }
+                            title={planner.title}
+                            address={`${areaName} - ${subAreaName}`}
+                            subCategory={planner.theme}
+                            type={planner.public ? "공개" : "비공개"}
+                            ownerprofile={`/${planner.ownerProfileImg}`}
+                            ownernick={planner.ownerNickname}
+                          />
+                        </div>
                       );
                     })}
                   </div>

@@ -123,11 +123,15 @@ export const UserInfo = styled.div`
 export const UserPlanning = styled.div`
   height: 100%;
   width: 100%;
+
   .myPlanList {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    .itemBox {
+      border-bottom: 1px solid #ddd;
+    }
   }
   .pagebutton {
     display: flex;
