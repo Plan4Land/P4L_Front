@@ -274,7 +274,10 @@ export const MyPageMain = () => {
                               }
                               title={planner.title}
                               address={`${areaName} - ${subAreaName}`}
-                              subCategory={planner.theme}
+                              subCategory={planner.theme
+                                .split(",")
+                                .map((theme) => `#${theme.trim()}`)
+                                .join(" ")}
                               type={planner.public ? "공개" : "비공개"}
                               ownerprofile={planner.ownerProfileImg}
                               ownernick={planner.ownerNickname}
@@ -307,7 +310,10 @@ export const MyPageMain = () => {
                             }
                             title={planner.title}
                             address={`${areaName} - ${subAreaName}`}
-                            subCategory={planner.theme}
+                            subCategory={planner.theme
+                              .split(",")
+                              .map((theme) => `#${theme.trim()}`)
+                              .join(" ")}
                             type={planner.public ? "공개" : "비공개"}
                             ownerprofile={`/${planner.ownerProfileImg}`}
                             ownernick={planner.ownerNickname}

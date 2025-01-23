@@ -172,7 +172,12 @@ export const Main = () => {
                       <div className="planExplain">
                         <h3>{plan.title}</h3>
                         <p>플래너 지역: {`${areaName} > ${subAreaName}`}</p>
-                        <p>{plan.theme}</p>
+                        <p>
+                          {plan.theme
+                            .split(",")
+                            .map((theme) => `#${theme.trim()}`)
+                            .join(" ")}
+                        </p>
                       </div>
                     </div>
                   </SwiperSlide>

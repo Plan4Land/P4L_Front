@@ -481,7 +481,7 @@ export const TourList = () => {
           </div>
         </SelectTourItem>
         <ItemList>
-          <div className="totalCount">총 {totalItems}건</div>
+          <div className="totalCount">총 {totalItems.toLocaleString()}건</div>
           <SelectedFilters
             filters={filters}
             onRemoveFilter={handleTopFilterChange}

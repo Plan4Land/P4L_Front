@@ -52,7 +52,6 @@ export const MyBookmarkPlanItem = () => {
         currentPage,
         size
       );
-      console.log(data.content);
 
       // 모바일에서 이전 데이터와 새 데이터의 중복을 피하도록 처리
       if (isMobile) {
@@ -129,7 +128,10 @@ export const MyBookmarkPlanItem = () => {
                         }
                         title={planner.title}
                         address={`${areaName} - ${subAreaName}`}
-                        subCategory={planner.theme}
+                        subCategory={planner.theme
+                          .split(",")
+                          .map((theme) => `#${theme.trim()}`)
+                          .join(" ")}
                         type={planner.public ? "공개" : "비공개"}
                         ownerprofile={planner.owner.profileImg}
                         ownernick={planner.owner.nickname}
@@ -163,7 +165,10 @@ export const MyBookmarkPlanItem = () => {
                     thumbnail={planner.thumbnail || "/default-thumbnail.png"}
                     title={planner.title}
                     address={`${areaName} - ${subAreaName}`}
-                    subCategory={planner.theme}
+                    subCategory={planner.theme
+                      .split(",")
+                      .map((theme) => `#${theme.trim()}`)
+                      .join(" ")}
                     type={planner.public ? "공개" : "비공개"}
                     ownerprofile={planner.owner.profileImg}
                     ownernick={planner.owner.nickname}

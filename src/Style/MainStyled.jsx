@@ -76,9 +76,12 @@ export const QuickSearch = styled(GridItem)`
       button {
         background-color: white;
         color: ${colors.colorA};
+        border: 1px solid ${colors.colorC};
         height: 100%;
         width: 100%;
+        border-radius: 20px;
         transition: all 0.3s ease;
+        font-size: 18px;
         &:hover {
           background-color: ${colors.colorB};
           color: white;
@@ -93,7 +96,7 @@ export const QuickSearch = styled(GridItem)`
           margin: 5px;
         }
         button {
-          font-size: 11px;
+          font-size: 14px;
           padding: 0;
         }
       }

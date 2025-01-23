@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const colors = {
   colorA: "#69270d",
   colorB: "#fd7012",
-  colorC: "#ffa784",
+  colorC: "#ffb395",
   colorD: "#ffeee2",
   colorE: "#ff7700",
 };
@@ -16,7 +16,7 @@ export const HeaderSt = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  padding: 0 10px 0 10px;
+  padding: 0 10% 0 10%;
   .logo {
     display: inline-block;
     img {
@@ -117,6 +117,7 @@ export const HeaderSt = styled.div`
   .recomm {
     position: relative;
     cursor: pointer;
+    white-space: nowrap;
   }
 
   .recomm:hover .dropdown-list {
@@ -139,16 +140,20 @@ export const HeaderSt = styled.div`
     margin-bottom: 20px;
     .truncated-text {
       display: inline-block;
-      max-width: 200px; /* 원하는 너비 설정 */
+      max-width: 150px; /* 원하는 너비 설정 */
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+    .title {
+      width: 100%;
+      border-bottom: 1px solid #ddd;
     }
     h3 {
       font-size: 20px;
       font-weight: bold;
       margin-bottom: 10px;
-      color: ${colors.colorA};
+      color: black;
       cursor: default;
     }
     span {
