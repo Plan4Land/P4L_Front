@@ -44,8 +44,9 @@ const Common = {
         }
       );
       console.log("토큰 재발급 성공:", rsp.data);
-      // Common.setAccessToken(rsp.data);
-      return true;
+      Common.setAccessToken(rsp.data.accessToken);
+      Common.setAccessTokenExpiresIn(rsp.data.accessTokenExpiresIn);
+      return rsp.data.accessToken;
     } catch (e) {
       console.log("토큰 재발급 실패:", e);
       return false;
