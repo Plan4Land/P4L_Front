@@ -4,13 +4,13 @@ import { useState, useEffect } from "react";
 import { Modal } from "../Util/Modal";
 import { useAuth } from "../Context/AuthContext";
 import AxiosApi from "../Api/AxiosApi";
-import { TopTourApi, TopPlanApi } from "../Api/ItemApi";
+// import { TopTourApi, TopPlanApi } from "../Api/ItemApi";
 import { areas } from "../Util/Common";
 import { MyPlannerApi, BookmarkedSpotsApi } from "../Api/ItemApi";
 
 export const Header = () => {
-  const [topSpots, setTopSpots] = useState([]);
-  const [topPlans, setTopPlans] = useState([]);
+  // const [topSpots, setTopSpots] = useState([]);
+  // const [topPlans, setTopPlans] = useState([]);
   const [planners, setPlanners] = useState([]);
   const [bookmarkedSpots, setBookmarkedSpots] = useState([]);
   const navigate = useNavigate();
@@ -45,33 +45,49 @@ export const Header = () => {
     return pathnameMatches && queryMatches;
   };
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const [plannersData, bookmarkedSpotsData] = await Promise.all([
+  //         // TopTourApi.getTop5Travelspots(),
+  //         // TopPlanApi.getTop3Plans(),
+  //         MyPlannerApi.getPlannersByOwner(user.id),
+  //         BookmarkedSpotsApi.getBookmarkedSpots(user.id),
+  //       ]);
+  //       console.log(plannersData);
+  //       console.log(bookmarkedSpotsData);
+  //       // setTopSpots(topSpotsData.slice(0, 3));
+  //       // setTopPlans(topPlansData.slice(0, 3));
+  //       setPlanners(plannersData);
+  //       setBookmarkedSpots(bookmarkedSpotsData);
+  //     } catch (error) {
+  //       console.error("데이터 가져오기 실패: ", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [user.id]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [topSpotsData, topPlansData, plannersData, bookmarkedSpotsData] =
-          await Promise.all([
-            TopTourApi.getTop5Travelspots(),
-            TopPlanApi.getTop3Plans(),
-            MyPlannerApi.getPlannersByOwner(user.id),
-            BookmarkedSpotsApi.getBookmarkedSpots(user.id),
-          ]);
-
-        console.log("북마크된 관광지:", bookmarkedSpotsData);
-
-        // 각 데이터에서 3개씩만 추출하여 상태 설정
-        setTopSpots(topSpotsData.slice(0, 3));
-        setTopPlans(topPlansData.slice(0, 3));
-        setPlanners(plannersData.slice(0, 3));
-        setBookmarkedSpots(bookmarkedSpotsData.slice(0, 3));
+        const [plannersData, bookmarkedSpotsData] = await Promise.all([
+          MyPlannerApi.getPlannersByOwner(user.id, 0, 3),
+          BookmarkedSpotsApi.getBookmarkedSpots(user.id, 0, 3),
+        ]);
 
         console.log(plannersData);
+        console.log(bookmarkedSpotsData);
+
+        // 받은 데이터를 상태에 설정
+        setPlanners(plannersData.content);
+        setBookmarkedSpots(bookmarkedSpotsData.content);
       } catch (error) {
         console.error("데이터 가져오기 실패: ", error);
       }
     };
 
     fetchData();
-  }, [user.id]);
+  }, [user?.id]);
 
   return (
     <HeaderSt>
@@ -106,24 +122,12 @@ export const Header = () => {
         바로가기
         <div className="dropdown-list">
           <div className="topList">
-            {/* 북마크 관광지 */}
-            <div className="topItem">
-              <h3>북마크 관광지</h3>
-              {bookmarkedSpots.map((spot, index) => (
-                <p
-                  key={`bookmarked-spot-${index}`}
-                  onClick={() => topTourClick(spot.id)}
-                >
-                  <strong className="truncated-text">{spot.title}</strong> -
-                  <span className="truncated-text">{spot.addr1}</span>
-                </p>
-              ))}
-            </div>
-
             {/* 내 플래닝 */}
             <div className="topItem">
-              <h3>내 플래닝</h3>
-              {topPlans.map((plan, index) => {
+              <div className="title">
+                <h3>내 플래닝</h3>
+              </div>
+              {planners.map((plan, index) => {
                 const areaName =
                   areas.find((area) => area.code === plan.area)?.name ||
                   "알 수 없는 지역";
@@ -143,10 +147,30 @@ export const Header = () => {
                       {areaName} {subAreaName}
                     </span>
                     <span>||</span>
-                    <span className="truncated-text">{plan.theme}</span>
+                    <span className="truncated-text">
+                      {plan.theme
+                        .split(",")
+                        .map((theme) => `#${theme.trim()}`)
+                        .join(" ")}
+                    </span>
                   </p>
                 );
               })}
+              {/* 북마크 관광지 */}
+              <div className="topItem">
+                <div className="title">
+                  <h3>내 북마크 관광지</h3>
+                </div>
+                {bookmarkedSpots.map((spot, index) => (
+                  <p
+                    key={`bookmarked-spot-${index}`}
+                    onClick={() => topTourClick(spot.id)}
+                  >
+                    <strong className="truncated-text">{spot.title}</strong> -
+                    <span className="truncated-text">{spot.addr1}</span>
+                  </p>
+                ))}
+              </div>
             </div>
           </div>
         </div>

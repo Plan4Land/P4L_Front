@@ -303,7 +303,7 @@ export const PlanningList = () => {
                       !filters.themeList.split(",").includes(theme)
                     }
                   >
-                    {theme}
+                    #{theme}
                   </Button>
                 ))}
               </div>
@@ -312,7 +312,7 @@ export const PlanningList = () => {
         </SelectTourItem>
         <ItemList>
           <div className="totalCount">
-            총 {totalItems}건
+            총 {totalItems.toLocaleString()}건
             <Link to={"/makeplanning"}>
               <Button>플래닝 만들기</Button>
             </Link>

@@ -268,11 +268,6 @@ export const TourList = () => {
             .filter((theme) => theme !== code)
             .join(",");
         }
-      } else if (key === "themeList") {
-        newFilters[key] = newFilters[key]
-          .split(",")
-          .filter((theme) => theme !== name)
-          .join(",");
       } else {
         newFilters[key] = "";
       }
@@ -481,7 +476,7 @@ export const TourList = () => {
           </div>
         </SelectTourItem>
         <ItemList>
-          <div className="totalCount">총 {totalItems}건</div>
+          <div className="totalCount">총 {totalItems.toLocaleString()}건</div>
           <SelectedFilters
             filters={filters}
             onRemoveFilter={handleTopFilterChange}

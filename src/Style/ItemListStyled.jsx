@@ -36,6 +36,7 @@ export const SelectTourItem = styled.div`
     height: 30px;
     width: 90%;
     margin: 3px;
+    border: 1px solid ${colors.colorC};
 
     &:hover {
       background-color: ${colors.colorB};
@@ -160,7 +161,7 @@ export const SearchSt = styled.div`
     font-size: 14px;
     height: 40px;
     border-radius: 50px;
-    border: 2.5px solid ${colors.colorB};
+    border: 2px solid ${colors.colorB};
     padding-left: 20px;
     outline: none;
     width: 100%;
@@ -170,8 +171,7 @@ export const SearchSt = styled.div`
   .search-button {
     position: absolute;
     right: 15px;
-    top: 5%;
-    scale: 110%;
+    top: 10%;
     background: transparent;
     border: none;
     cursor: pointer;
