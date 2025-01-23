@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Footer, Header } from "../../Component/GlobalComponent";
-import { Button, ToggleButton } from "../../Component/ButtonComponent";
+import {useEffect, useState} from "react";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {Footer, Header} from "../../Component/GlobalComponent";
+import {Button, ToggleButton} from "../../Component/ButtonComponent";
 import {
   ItemList,
   List,
@@ -9,20 +9,21 @@ import {
   SelectTourItem,
   FilterButton,
 } from "../../Style/ItemListStyled";
-import { FaSearch, FaUndo } from "react-icons/fa";
-import { ServiceCode } from "../../Util/Service_code_final";
-import { TourItem } from "../../Component/ItemListComponent";
-import { TravelSpotApi } from "../../Api/ItemApi";
-import { areas, types } from "../../Util/Common";
-import { Pagination } from "../../Component/Pagination";
-import { FaBars } from "react-icons/fa";
+import {FaSearch, FaUndo} from "react-icons/fa";
+import {ServiceCode} from "../../Util/Service_code_final";
+import {TourItem} from "../../Component/ItemListComponent";
+import {TravelSpotApi} from "../../Api/ItemApi";
+import {areas, types} from "../../Util/Common";
+import {Pagination} from "../../Component/Pagination";
+import {FaBars} from "react-icons/fa";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useMediaQuery } from "react-responsive";
-import { Loading } from "../../Component/LoadingComponent";
+import {useMediaQuery} from "react-responsive";
+import {Loading} from "../../Component/LoadingComponent";
+import {SelectedFilters} from "../../Component/SelectedFilterComponent";
 
 export const TourList = () => {
   const location = useLocation();
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const isMobile = useMediaQuery({query: "(max-width: 768px)"});
 
   // Location 훅 사용
   const navigate = useNavigate();
@@ -70,6 +71,7 @@ export const TourList = () => {
         setTotalItems(data.totalElements);
         setTotalPages(data.totalPages);
         setTravelSpots(data.content);
+        console.log(data.totalElements);
       } catch (error) {
         setError("여행지 데이터를 가져오는 데 실패했습니다.");
       } finally {
@@ -102,7 +104,7 @@ export const TourList = () => {
     }
     navigate(
       `/tourlist${queryParams.toString() ? `?${queryParams.toString()}` : ""}`,
-      { replace: true }
+      {replace: true}
     );
     fetchFilteredTravelSpots();
   }, [filters, navigate, filters.currentPage]);
@@ -234,9 +236,13 @@ export const TourList = () => {
   };
 
   // 카테고리
+  // 카테고리
   const handleCategoryChange = (category) => {
-    updateFilters("category", category);
+    const isSameCategory = filters.category === category;
+    const newCategory = isSameCategory ? "" : category;
+    updateFilters("category", newCategory);
   };
+
   const handleToggleSelect = () => {
     setIsSelectOpen(!isSelectOpen);
   };
@@ -249,19 +255,31 @@ export const TourList = () => {
     }
   };
 
+  const handleTopFilterChange = (key, name) => {
+    setFilters((prev) => {
+      const newFilters = {...prev};
+      if (key === "themeList") {
+        newFilters[key] = newFilters[key].split(",").filter((theme) => theme !== name).join(",");
+      } else {
+        newFilters[key] = "";
+      }
+      return newFilters;
+    });
+  };
+
   const selectedAreaData = areas.find((area) => area.code === filters.areaCode);
 
   return (
     <>
-      <Header />
+      <Header/>
       <FilterButton onClick={handleToggleSelect}>
-        <FaBars />
+        <FaBars/>
       </FilterButton>
       <List>
         <SelectTourItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
-            <FaUndo style={{ marginLeft: "6px" }} />
+            <FaUndo style={{marginLeft: "6px"}}/>
           </button>
           <SearchSt>
             <div className="search-wrapper">
@@ -274,7 +292,7 @@ export const TourList = () => {
                 onKeyDown={handleKeyDown}
               />
               <button className="search-button" onClick={handleSearch}>
-                <FaSearch />
+                <FaSearch/>
               </button>
             </div>
           </SearchSt>
@@ -399,25 +417,25 @@ export const TourList = () => {
                   {filters.middleTheme &&
                     ServiceCode.find((cat) => cat.cat1 === filters.topTheme)
                       ?.cat2List.find(
-                        (cat2) => cat2.cat2 === filters.middleTheme
-                      )
+                      (cat2) => cat2.cat2 === filters.middleTheme
+                    )
                       ?.cat3List.map((cat3) => (
-                        <Button
-                          key={cat3.cat3}
-                          onClick={() => handleBottomThemeChange(cat3.cat3)}
-                          className={`theme-button ${
-                            filters.bottomTheme.includes(cat3.cat3)
-                              ? "selected"
-                              : ""
-                          }`}
-                          disabled={
-                            filters.bottomTheme.split(",").length >= 3 &&
-                            !filters.bottomTheme.includes(cat3.cat3)
-                          }
-                        >
-                          {cat3.cat3Name}
-                        </Button>
-                      ))}
+                      <Button
+                        key={cat3.cat3}
+                        onClick={() => handleBottomThemeChange(cat3.cat3)}
+                        className={`theme-button ${
+                          filters.bottomTheme.includes(cat3.cat3)
+                            ? "selected"
+                            : ""
+                        }`}
+                        disabled={
+                          filters.bottomTheme.split(",").length >= 3 &&
+                          !filters.bottomTheme.includes(cat3.cat3)
+                        }
+                      >
+                        {cat3.cat3Name}
+                      </Button>
+                    ))}
                 </div>
               )}
             </div>
@@ -448,6 +466,9 @@ export const TourList = () => {
             )}
           </div>
         </SelectTourItem>
+
+        <p>총 {totalItems}건</p>
+        <SelectedFilters filters={filters} onRemoveFilter={handleTopFilterChange}></SelectedFilters>
 
         <ItemList>
           {loading && (
@@ -499,7 +520,7 @@ export const TourList = () => {
           )}
         </ItemList>
       </List>
-      <Footer />
+      <Footer/>
     </>
   );
 };

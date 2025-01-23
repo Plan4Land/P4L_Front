@@ -1,8 +1,8 @@
-import { Header, Footer } from "../../Component/GlobalComponent";
-import { useState, useEffect } from "react";
-import { areas, themes } from "../../Util/Common";
-import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
-import { Button, ToggleButton } from "../../Component/ButtonComponent";
+import {Header, Footer} from "../../Component/GlobalComponent";
+import {useState, useEffect} from "react";
+import {areas, themes} from "../../Util/Common";
+import {useParams, useLocation, useNavigate, Link} from "react-router-dom";
+import {Button, ToggleButton} from "../../Component/ButtonComponent";
 import {
   SelectTourItem,
   SearchSt,
@@ -11,12 +11,13 @@ import {
   FilterButton,
   SortSelect,
 } from "../../Style/ItemListStyled";
-import { FaSearch, FaUndo } from "react-icons/fa";
-import { PlannerItemApi } from "../../Api/ItemApi";
-import { PlanItem } from "../../Component/ItemListComponent";
-import { Pagination } from "../../Component/Pagination";
-import { FaBars } from "react-icons/fa";
-import { Loading } from "../../Component/LoadingComponent";
+import {FaSearch, FaUndo} from "react-icons/fa";
+import {PlannerItemApi} from "../../Api/ItemApi";
+import {PlanItem} from "../../Component/ItemListComponent";
+import {Pagination} from "../../Component/Pagination";
+import {FaBars} from "react-icons/fa";
+import {Loading} from "../../Component/LoadingComponent";
+import {SelectedFilters} from "../../Component/SelectedFilterComponent";
 
 export const PlanningList = () => {
   const location = useLocation();
@@ -98,7 +99,7 @@ export const PlanningList = () => {
       if (value) {
         queryParams.set(
           key,
-          key === "themeList" ? encodeURIComponent(value) : value
+          value // url 인코딩 key === "themeList" ? encodeURIComponent(value) : value
         );
       }
     }
@@ -106,7 +107,7 @@ export const PlanningList = () => {
       `/planninglist${
         queryParams.toString() ? `?${queryParams.toString()}` : ""
       }`,
-      { replace: true }
+      {replace: true}
     );
     fetchFilteredPlanners();
   }, [filters, navigate, filters.currentPage]);
@@ -177,26 +178,38 @@ export const PlanningList = () => {
         }
         newSelectedThemes.push(theme);
       }
-      return { ...prev, themeList: newSelectedThemes.join(",") };
+      return {...prev, themeList: newSelectedThemes.join(",")};
     });
   };
   const handleToggleSelect = () => {
     setIsSelectOpen(!isSelectOpen);
   };
 
+  const handleTopFilterChange = (key, name) => {
+    setFilters((prev) => {
+      const newFilters = {...prev};
+      if (key === "themeList") {
+        newFilters[key] = newFilters[key].split(",").filter((theme) => theme !== name).join(",");
+      } else {
+        newFilters[key] = "";
+      }
+      return newFilters;
+    });
+  };
+
   const selectedAreaData = areas.find((area) => area.code === filters.areaCode);
 
   return (
     <>
-      <Header />
+      <Header/>
       <FilterButton onClick={handleToggleSelect}>
-        <FaBars />
+        <FaBars/>
       </FilterButton>
       <List>
         <SelectTourItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
-            <FaUndo style={{ marginLeft: "6px" }} />
+            <FaUndo style={{marginLeft: "6px"}}/>
           </button>
           <SearchSt>
             <div className="search-wrapper">
@@ -209,7 +222,7 @@ export const PlanningList = () => {
                 onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
               />
               <button className="search-button" onClick={handleSearch}>
-                <FaSearch /> {/* 검색 아이콘 */}
+                <FaSearch/> {/* 검색 아이콘 */}
               </button>
             </div>
           </SearchSt>
@@ -294,13 +307,17 @@ export const PlanningList = () => {
             )}
           </div>
         </SelectTourItem>
+
+        <SelectedFilters filters={filters} onRemoveFilter={handleTopFilterChange}></SelectedFilters>
+        <p>총 {totalItems}건</p>
+
         <ItemList>
           {loading && (
             <Loading>
               <p>목록을 불러오는 중 입니다.</p>
             </Loading>
           )}
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {error && <p style={{color: "red"}}>{error}</p>}
           <div className="selectMenu">
             <SortSelect value={filters.sortBy} onChange={handleSortChange}>
               {sortBy.map((e) => (
@@ -325,8 +342,8 @@ export const PlanningList = () => {
                   areas
                     .find((area) => area.code === planner.area)
                     ?.subAreas.find(
-                      (subArea) => subArea.code === planner.subArea
-                    )?.name || "알 수 없는 하위 지역";
+                    (subArea) => subArea.code === planner.subArea
+                  )?.name || "알 수 없는 하위 지역";
 
                 return (
                   <div className="itemBox">
@@ -353,7 +370,7 @@ export const PlanningList = () => {
           />
         </ItemList>
       </List>
-      <Footer />
+      <Footer/>
     </>
   );
 };
