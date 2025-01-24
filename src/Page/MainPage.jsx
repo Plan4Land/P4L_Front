@@ -116,55 +116,54 @@ export const Main = () => {
   return (
     <>
       <Header />
+      {/* 상위 플래닝 4개 */}
+      <RecommPlan className="GridItem">
+        <PlanBox>
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={20} // 슬라이드 간 간격
+            slidesPerView={1} // 한 번에 보여주는 슬라이드 수 (1개만 보이도록 설정)
+            loop={true}
+            navigation
+            pagination={{ clickable: true }}
+            // autoplay={{
+            //   delay: 4000,
+            //   disableOnInteraction: false,
+            // }}
+          >
+            {topPlans.map((plan, index) => {
+              const areaName =
+                areas.find((area) => area.code === plan.area)?.name ||
+                "알 수 없는 지역";
+              const subAreaName =
+                areas
+                  .find((area) => area.code === plan.area)
+                  ?.subAreas.find((subArea) => subArea.code === plan.subArea)
+                  ?.name || "알 수 없는 하위 지역";
 
-      <MainBox>
-        {/* 상위 플래닝 4개 */}
-        <RecommPlan className="GridItem">
-          <PlanBox>
-            <Swiper
-              modules={[Navigation, Pagination, Autoplay]}
-              spaceBetween={20} // 슬라이드 간 간격
-              slidesPerView={1} // 한 번에 보여주는 슬라이드 수 (1개만 보이도록 설정)
-              loop={true}
-              navigation
-              pagination={{ clickable: true }}
-              // autoplay={{
-              //   delay: 4000,
-              //   disableOnInteraction: false,
-              // }}
-            >
-              {topPlans.map((plan, index) => {
-                const areaName =
-                  areas.find((area) => area.code === plan.area)?.name ||
-                  "알 수 없는 지역";
-                const subAreaName =
-                  areas
-                    .find((area) => area.code === plan.area)
-                    ?.subAreas.find((subArea) => subArea.code === plan.subArea)
-                    ?.name || "알 수 없는 하위 지역";
-
-                return (
-                  <SwiperSlide key={index}>
+              return (
+                <SwiperSlide key={index}>
+                  <div
+                    className="planitem"
+                    onClick={() => planHandleClick(plan.id)}
+                  >
                     <div
-                      className="planitem"
-                      onClick={() => planHandleClick(plan.id)}
-                    >
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          width: "100%",
-                          height: "100%",
-                          backgroundImage: `url(${
-                            plan.thumbnail || "/planning-pic/planningth1.jpg"
-                          })`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                          filter: "brightness(85%) blur(8px)",
-                          zIndex: -1, // 배경은 콘텐츠 뒤에 위치하도록 설정
-                        }}
-                      />
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        backgroundImage: `url(${
+                          plan.thumbnail || "/planning-pic/planningth1.jpg"
+                        })`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        filter: "brightness(85%) blur(8px)",
+                        zIndex: -1, // 배경은 콘텐츠 뒤에 위치하도록 설정
+                      }}
+                    />
+                    <div className="recomplanner">
                       <img
                         src={plan.thumbnail || `/planning-pic/planningth1.jpg`}
                         alt={plan.title}
@@ -188,12 +187,14 @@ export const Main = () => {
                         </p>
                       </div>
                     </div>
-                  </SwiperSlide>
-                );
-              })}
-            </Swiper>
-          </PlanBox>
-        </RecommPlan>
+                  </div>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+        </PlanBox>
+      </RecommPlan>
+      <MainBox>
         {/* 미니 검색창 */}
         <QuickSearch>
           <div className="QuickSelect">

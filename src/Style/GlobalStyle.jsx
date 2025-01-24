@@ -17,6 +17,7 @@ export const HeaderSt = styled.div`
   align-items: center;
   gap: 20px;
   padding: 0 5% 0 10%;
+
   .logoBox {
     height: 100%;
     display: flex;
@@ -25,130 +26,179 @@ export const HeaderSt = styled.div`
     width: 300px;
     cursor: pointer;
     .logoImg {
-      scale: 0.7;
-      margin-right: -30px;
-    }
-    .logoTitle {
-      scale: 1.1;
+      scale: 0.6;
+      margin-right: -40px;
     }
     img {
       width: 200px;
     }
+    @media (max-width: 1024px) {
+      scale: 0.6;
+      width: 100px;
+    }
   }
-
-  .profile-link {
-    height: 80px;
-    width: 80px;
-    margin-right: 20px;
-    border-radius: 50%;
-    background-color: ${colors.colorC};
-    position: relative;
-    cursor: pointer;
+  .usermenu {
     display: flex;
-    align-items: center;
     justify-content: center;
-    transition: background-color 0.3s ease;
-  }
+    align-items: center;
+    gap: 10px;
+    .profile-link {
+      height: 80px;
+      width: 80px;
+      margin-right: 20px;
+      border-radius: 50%;
+      background-color: ${colors.colorC};
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+    }
+    .profile-link.logged-in {
+      background-color: transparent;
+    }
+    .profile-link.logged-out {
+      background-color: transparent;
+    }
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+    }
+    .login-btn {
+      color: ${colors.colorA};
+      font-size: 15px;
+      background-color: transparent;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: white;
+      border: 1px solid ${colors.colorC};
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      width: 160px;
+      font-size: 15px;
+      display: none;
+    }
+    .profile-link:hover .dropdown {
+      display: block;
+    }
+    .dropdown-item {
+      padding: 12px 16px;
+      color: #333;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
-  .profile-link.logged-in {
-    background-color: transparent;
-  }
+    .dropdown-item:last-child {
+      border-bottom: none;
+    }
 
-  .profile-link.logged-out {
-    background-color: transparent;
-  }
+    .dropdown-item:hover {
+      background-color: #f0f0f0;
+      color: ${colors.colorA};
+    }
 
-  .profile-img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-size: cover;
-    background-position: center;
-  }
+    .dropdown button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      padding: 12px 16px;
+      text-align: center;
+      width: 100%;
+      display: block;
+      color: #333;
+      transition: all 0.3s ease;
+    }
 
-  .login-btn {
-    color: ${colors.colorA};
-    font-size: 15px;
-    background-color: transparent;
-    text-decoration: none;
-    font-weight: bold;
-    cursor: pointer;
-  }
+    .dropdown button:hover {
+      background-color: #f0f0f0;
+    }
+    .recomm {
+      position: relative;
+      cursor: pointer;
+      white-space: nowrap;
+    }
 
-  .dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background-color: white;
-    border: 1px solid ${colors.colorC};
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    width: 160px;
-    font-size: 15px;
-    display: none;
-  }
-  .profile-link:hover .dropdown {
-    display: block;
-  }
-  .dropdown-item {
-    padding: 12px 16px;
-    color: #333;
-    text-decoration: none;
-    display: block;
-    text-align: center;
-    border-bottom: 1px solid #f0f0f0;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
+    .recomm:hover .dropdown-list {
+      display: block;
+    }
+    .dropdown-list {
+      display: none;
+      position: absolute;
+      right: 0;
+      width: 500px;
+      background-color: white;
+      border: 1px solid #ddd;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      padding-left: 20px;
+      padding-right: 20px;
+      border-radius: 10px;
+    }
+    .topItem {
+      margin-bottom: 20px;
+      .truncated-text {
+        display: inline-block;
+        max-width: 150px; /* 원하는 너비 설정 */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .title {
+        width: 100%;
+        border-bottom: 1px solid #ddd;
+      }
+      h3 {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: black;
+        cursor: default;
+      }
+      span {
+        padding: 0 5px 0 5px;
+      }
+      p {
+        color: ${colors.colorA};
+        font-size: 16px;
+        margin: 5px 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
 
-  .dropdown-item:last-child {
-    border-bottom: none;
+        &:hover {
+          background-color: ${colors.colorD};
+        }
+      }
+    }
   }
-
-  .dropdown-item:hover {
-    background-color: #f0f0f0;
-    color: ${colors.colorA};
+  @media (max-width: 768px) {
+    height: 60px;
+    padding: 0 3% 0 8%;
+    .profile-link {
+      scale: 70%;
+    }
+    .usermenu {
+      .dropdown-list {
+        top: 0px;
+        right: -180px;
+        scale: 0.7;
+      }
+    }
   }
-
-  .dropdown button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 15px;
-    padding: 12px 16px;
-    text-align: center;
-    width: 100%;
-    display: block;
-    color: #333;
-    transition: all 0.3s ease;
-  }
-
-  .dropdown button:hover {
-    background-color: #f0f0f0;
-  }
-  .recomm {
-    position: relative;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
-  .recomm:hover .dropdown-list {
-    display: block;
-  }
-  .dropdown-list {
-    display: none;
-    position: absolute;
-    right: 0;
-    width: 500px;
-    background-color: white;
-    border: 1px solid #ddd;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 10px;
-  }
-
   .dropdown-Trafficlist {
     display: block;
     position: absolute;
@@ -168,56 +218,6 @@ export const HeaderSt = styled.div`
     font-size: 30px;
     align-items: center; /* 수직 중앙 정렬 */
     margin-top: 5px; /* 드롭다운 상단에 간격 추가 */
-  }
-  .topItem {
-    margin-bottom: 20px;
-    .truncated-text {
-      display: inline-block;
-      max-width: 150px; /* 원하는 너비 설정 */
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .title {
-      width: 100%;
-      border-bottom: 1px solid #ddd;
-    }
-    h3 {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: black;
-      cursor: default;
-    }
-    span {
-      padding: 0 5px 0 5px;
-    }
-    p {
-      color: ${colors.colorA};
-      font-size: 16px;
-      margin: 5px 0;
-      cursor: pointer;
-      transition: all 0.3s ease;
-
-      &:hover {
-        background-color: ${colors.colorD};
-      }
-    }
-  }
-  @media (max-width: 768px) {
-    height: 60px;
-    padding: 0 3% 0 3%;
-    .logoBox {
-      scale: 0.7;
-    }
-    .profile-link {
-      scale: 70%;
-    }
-    .dropdown-list {
-      top: -30px;
-      right: -180px;
-      scale: 0.7;
-    }
   }
 `;
 

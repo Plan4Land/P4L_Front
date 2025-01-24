@@ -273,31 +273,23 @@ export const RecommPlan = styled(GridItem)`
   height: 500px;
 `;
 export const PlanBox = styled.div`
+  margin-top: 30px;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  .owner {
-    position: absolute;
+  .recomplanner {
+    width: 80%;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 10px;
-    img {
-      min-width: 50px;
-      max-width: 50px;
-      max-height: 50px;
-      min-height: 50px;
-      background-color: white;
-      border-radius: 50%;
-    }
-    span {
-      margin-left: 5px;
-      white-space: nowrap;
-      color: white;
-      text-shadow: 3px 3px 2px rgba(0, 0, 0, 1);
+    position: relative;
+    margin: 0 auto;
+  }
+  @media (max-width: 768px) {
+    /* margin-top: 0; */
+    .recomplanner {
+      width: 100%;
     }
   }
   .planitem {
@@ -320,7 +312,7 @@ export const PlanBox = styled.div`
       max-width: 100%;
     }
   }
-
+  // 플래너 정보
   .planExplain {
     display: flex;
     flex-direction: column;
@@ -330,6 +322,22 @@ export const PlanBox = styled.div`
     transform: translateX(100%);
     animation: slideInText 1.5s forwards;
     animation-delay: 0.5s;
+    h3 {
+      font-size: 50px;
+      margin: 0 0 0 10px;
+      color: ${colors.colorD};
+      text-shadow: 3px 3px 2px rgba(0, 0, 0, 1);
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    p {
+      margin: 10px 0 0 20px;
+      font-size: 20px;
+      color: white;
+      text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
+    }
     @media (max-width: 768px) {
       h3 {
         font-size: 40px;
@@ -342,25 +350,31 @@ export const PlanBox = styled.div`
       left: 0;
     }
   }
-
-  h3 {
-    font-size: 50px;
-    margin: 0 0 0 10px;
-    color: ${colors.colorD};
-    text-shadow: 3px 3px 2px rgba(0, 0, 0, 1);
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  // 플래너 소유자
+  .owner {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    top: 0;
+    left: 0;
+    img {
+      min-width: 50px;
+      max-width: 50px;
+      max-height: 50px;
+      min-height: 50px;
+      background-color: white;
+      border-radius: 50%;
+    }
+    span {
+      margin-left: 5px;
+      white-space: nowrap;
+      color: white;
+      text-shadow: 3px 3px 2px rgba(0, 0, 0, 1);
+    }
   }
-
-  p {
-    margin: 10px 0 0 20px;
-    font-size: 20px;
-    color: white;
-    text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
-  }
-
+  // 애니메이션 효과, 슬라이드 스타일
   @keyframes slideInImage {
     0% {
       transform: translateX(-100%);

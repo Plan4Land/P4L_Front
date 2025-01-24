@@ -157,109 +157,112 @@ export const Header = () => {
           </Link>
         </div>
       </NavSt>
-      <div className="recomm">
-        바로가기
-        <div className="dropdown-list">
-          <div className="topList">
-            {/* 내 플래닝 */}
-            <div className="topItem">
-              <div className="title">
-                <h3>내 플래닝</h3>
-              </div>
-              {planners.map((plan, index) => {
-                const areaName =
-                  areas.find((area) => area.code === plan.area)?.name ||
-                  "알 수 없는 지역";
-                const subAreaName =
-                  areas
-                    .find((area) => area.code === plan.area)
-                    ?.subAreas.find((subArea) => subArea.code === plan.subArea)
-                    ?.name || "알 수 없는 하위 지역";
-
-                return (
-                  <p
-                    key={`plan-${index}`}
-                    onClick={() => topPlanClick(plan.id)}
-                  >
-                    <strong className="truncated-text">{plan.title}</strong> -
-                    <span className="truncated-text">
-                      {areaName} {subAreaName}
-                    </span>
-                    <span>||</span>
-                    <span className="truncated-text">
-                      {plan.theme
-                        .split(",")
-                        .map((theme) => `#${theme.trim()}`)
-                        .join(" ")}
-                    </span>
-                  </p>
-                );
-              })}
-              {/* 북마크 관광지 */}
+      <div className="usermenu">
+        <div className="recomm">
+          <p className="quickmenu">바로가기</p>
+          <div className="dropdown-list">
+            <div className="topList">
+              {/* 내 플래닝 */}
               <div className="topItem">
                 <div className="title">
-                  <h3>내 북마크 관광지</h3>
+                  <h3>내 플래닝</h3>
                 </div>
-                {bookmarkedSpots.map((spot, index) => (
-                  <p
-                    key={`bookmarked-spot-${index}`}
-                    onClick={() => topTourClick(spot.id)}
-                  >
-                    <strong className="truncated-text">{spot.title}</strong> -
-                    <span className="truncated-text">{spot.addr1}</span>
-                  </p>
-                ))}
+                {planners.map((plan, index) => {
+                  const areaName =
+                    areas.find((area) => area.code === plan.area)?.name ||
+                    "알 수 없는 지역";
+                  const subAreaName =
+                    areas
+                      .find((area) => area.code === plan.area)
+                      ?.subAreas.find(
+                        (subArea) => subArea.code === plan.subArea
+                      )?.name || "알 수 없는 하위 지역";
+
+                  return (
+                    <p
+                      key={`plan-${index}`}
+                      onClick={() => topPlanClick(plan.id)}
+                    >
+                      <strong className="truncated-text">{plan.title}</strong> -
+                      <span className="truncated-text">
+                        {areaName} {subAreaName}
+                      </span>
+                      <span>||</span>
+                      <span className="truncated-text">
+                        {plan.theme
+                          .split(",")
+                          .map((theme) => `#${theme.trim()}`)
+                          .join(" ")}
+                      </span>
+                    </p>
+                  );
+                })}
+                {/* 북마크 관광지 */}
+                <div className="topItem">
+                  <div className="title">
+                    <h3>내 북마크 관광지</h3>
+                  </div>
+                  {bookmarkedSpots.map((spot, index) => (
+                    <p
+                      key={`bookmarked-spot-${index}`}
+                      onClick={() => topTourClick(spot.id)}
+                    >
+                      <strong className="truncated-text">{spot.title}</strong> -
+                      <span className="truncated-text">{spot.addr1}</span>
+                    </p>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className={`profile-link ${user ? "logged-in" : "logged-out"}`}>
-        {user ? (
-          <>
-            {user.imgPath && (
-              <div
-                className="profile-img"
-                style={{
-                  backgroundColor: "white",
-                  backgroundImage: `url(${user.imgPath})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-                onClick={() => {
-                  window.location.href = "/mypage";
-                }}
-              />
-            )}
+        <div className={`profile-link ${user ? "logged-in" : "logged-out"}`}>
+          {user ? (
+            <>
+              {user.imgPath && (
+                <div
+                  className="profile-img"
+                  style={{
+                    backgroundColor: "white",
+                    backgroundImage: `url(${user.imgPath})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                  onClick={() => {
+                    window.location.href = "/mypage";
+                  }}
+                />
+              )}
 
-            <div className="dropdown" onClick={(e) => e.stopPropagation()}>
-              <Link to="/mypage" className="dropdown-item">
-                마이페이지
-              </Link>
-              <button
-                className="dropdown-item"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setShowLogoutModal(true);
-                }}
-              >
-                로그아웃
-              </button>
-            </div>
-          </>
-        ) : (
-          <Link to="/login" className="login-btn">
-            로그인
-          </Link>
-        )}
-        <Modal
-          isOpen={showLogoutModal}
-          onClose={() => setShowLogoutModal(false)}
-          onConfirm={handleLogout}
-        >
-          <p>로그아웃 하시겠습니까?</p>
-        </Modal>
+              <div className="dropdown" onClick={(e) => e.stopPropagation()}>
+                <Link to="/mypage" className="dropdown-item">
+                  마이페이지
+                </Link>
+                <button
+                  className="dropdown-item"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowLogoutModal(true);
+                  }}
+                >
+                  로그아웃
+                </button>
+              </div>
+            </>
+          ) : (
+            <Link to="/login" className="login-btn">
+              로그인
+            </Link>
+          )}
+          <Modal
+            isOpen={showLogoutModal}
+            onClose={() => setShowLogoutModal(false)}
+            onConfirm={handleLogout}
+          >
+            <p>로그아웃 하시겠습니까?</p>
+          </Modal>
+        </div>
       </div>
     </HeaderSt>
   );
