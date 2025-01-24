@@ -8,7 +8,8 @@ import AxiosApi from "../Api/AxiosApi";
 import { areas } from "../Util/Common";
 import { MyPlannerApi, BookmarkedSpotsApi } from "../Api/ItemApi";
 // import Logo from "../../src/Img/Plan4landLogo.png";
-import Logo from "../Img/plan4landlogo.png";
+// import Logo from "../Img/plan4landlogo.png";
+import Logo from "../Img/Plan4landLogo.png";
 import Title from "../../src/Img/plan4land_.png";
 
 export const Header = () => {
