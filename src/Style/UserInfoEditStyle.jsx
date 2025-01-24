@@ -5,6 +5,7 @@ export const Center = styled.div`
   margin-top: 50px;
   display: flex;
   justify-content: center;
+  margin-left: 200px;
 `;
 
 export const Container = styled.div`

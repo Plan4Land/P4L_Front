@@ -106,6 +106,9 @@ export const Header = () => {
     transportClick(transportType); // 클릭된 항목에 해당하는 페이지로 이동
   };
 
+  const imagePath = "/logo192.png"; // public 폴더에 있는 이미지
+  console.log("Image Path:", imagePath);
+
   return (
     <HeaderSt>
       <Link to="/" className="logo">
