@@ -35,6 +35,7 @@ export const MyPageMainContainer = styled.div`
         display: block;
         p {
           font-size: 13px;
+          margin-bottom: 3px;
         }
       }
       width: 100px;

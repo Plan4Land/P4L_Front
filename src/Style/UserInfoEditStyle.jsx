@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 import { colors } from "../Style/GlobalStyle";
 
 export const Center = styled.div`
+  margin-top: 50px;
   display: flex;
   justify-content: center;
 `;
@@ -221,9 +222,9 @@ export const Container = styled.div`
   }
 
   .center2 {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     .deleteBox {
       display: flex;
       align-items: right;
@@ -325,7 +326,7 @@ export const EditBox = styled.div`
     flex-direction: column;
     cursor: pointer;
   }
-  
+
   .name {
     margin: 0;
     text-align: center;
@@ -367,6 +368,6 @@ export const EditBox = styled.div`
     }
     .iconBox:nth-child(2) {
       padding-left: 30px;
+    }
   }
-  }
-`
+`;

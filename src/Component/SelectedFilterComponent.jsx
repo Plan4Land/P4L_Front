@@ -40,8 +40,10 @@ const TopFilters = styled.div`
     cursor: pointer;
   }
   @media (max-width: 768px) {
+    font-size: 13px;
     .filter-tag {
       font-size: 10px;
+      padding: 3px 4px;
     }
   }
 `;

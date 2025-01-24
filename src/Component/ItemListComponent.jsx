@@ -125,6 +125,45 @@ const TourItemStyled = styled.div`
       text-shadow: 3px 3px 2px rgba(0, 0, 0, 1);
     }
   }
+  @media (max-width: 1024px) {
+    height: 15vw;
+    .img {
+      max-width: 50%;
+      min-width: 50%;
+    }
+    .profile-img {
+    }
+    .thumbnail {
+    }
+    .title {
+      font-size: 15px;
+      margin: 5px 0 0 5px;
+    }
+    .address,
+    .subCategory,
+    .type {
+      font-size: 9px;
+      margin: 5px;
+    }
+    .owner {
+      width: 20vw;
+      font-size: 10px;
+      right: 0px;
+      bottom: 10px;
+      gap: 10px;
+
+      .ownerth {
+        width: 20%;
+        height: 20%;
+      }
+      .ownernick {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+  }
   @media (max-width: 768px) {
     height: 25vw;
     width: 80vw;
