@@ -41,7 +41,7 @@ export const HeaderSt = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 30px;
     .profile-link {
       height: 80px;
       width: 80px;
@@ -131,6 +131,9 @@ export const HeaderSt = styled.div`
       position: relative;
       cursor: pointer;
       white-space: nowrap;
+      p {
+        font-size: 12px;
+      }
     }
 
     .recomm:hover .dropdown-list {
@@ -193,8 +196,8 @@ export const HeaderSt = styled.div`
     }
     .usermenu {
       .dropdown-list {
-        top: 0px;
-        right: -180px;
+        top: -20px;
+        right: -150px;
         scale: 0.7;
       }
     }
