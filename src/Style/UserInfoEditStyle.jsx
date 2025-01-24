@@ -12,7 +12,7 @@ export const Container = styled.div`
   flex-direction: column;
   width: 700px;
   @media (max-width: 768px) {
-    width: 95vw;
+    width: 90vw;
     margin: 0 auto;
   }
   padding: 30px;
