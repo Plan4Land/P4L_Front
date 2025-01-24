@@ -17,14 +17,25 @@ export const HeaderSt = styled.div`
   align-items: center;
   gap: 20px;
   padding: 0 5% 0 10%;
-  .logo {
-    display: inline-block;
+  .logoBox {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    cursor: pointer;
+    .logoImg {
+      scale: 0.7;
+      margin-right: -30px;
+    }
+    .logoTitle {
+      scale: 1.1;
+    }
     img {
       width: 200px;
-      cursor: pointer;
-      scale: 110%;
     }
   }
+
   .profile-link {
     height: 80px;
     width: 80px;
@@ -195,7 +206,10 @@ export const HeaderSt = styled.div`
   }
   @media (max-width: 768px) {
     height: 60px;
-    padding: 0 3% 0 8%;
+    padding: 0 3% 0 3%;
+    .logoBox {
+      scale: 0.7;
+    }
     .profile-link {
       scale: 70%;
     }

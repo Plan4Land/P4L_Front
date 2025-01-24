@@ -63,7 +63,7 @@ export const Main = () => {
     const fetchTopPlans = async () => {
       try {
         const response = await TopPlanApi.getTop3Plans();
-        console.log(response);
+        // console.log(response);
         setTopPlans(response);
       } catch (error) {
         console.error("상위 3개 플래닝 데이터를 가져오는 데 실패:", error);
@@ -170,8 +170,12 @@ export const Main = () => {
                         alt={plan.title}
                       />
                       <div className="owner">
-                        <img src={plan.ownerProfileImg} alt={plan.ownerNickname} />
-                        <span className="nick">{plan.ownerNickname}</span><span>님의 플래너</span>
+                        <img
+                          src={plan.ownerProfileImg}
+                          alt={plan.ownerNickname}
+                        />
+                        <span className="nick">{plan.ownerNickname}</span>
+                        <span>님의 플래너</span>
                       </div>
                       <div className="planExplain">
                         <h3>{plan.title}</h3>

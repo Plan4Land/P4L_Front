@@ -7,6 +7,8 @@ import AxiosApi from "../Api/AxiosApi";
 // import { TopTourApi, TopPlanApi } from "../Api/ItemApi";
 import { areas } from "../Util/Common";
 import { MyPlannerApi, BookmarkedSpotsApi } from "../Api/ItemApi";
+import Logo from "../../src/Img/Plan4landLogo.png";
+import Title from "../../src/Img/plan4land_.png";
 
 export const Header = () => {
   // const [topSpots, setTopSpots] = useState([]);
@@ -80,8 +82,8 @@ export const Header = () => {
           BookmarkedSpotsApi.getBookmarkedSpots(user.id, 0, 3),
         ]);
 
-        console.log(plannersData);
-        console.log(bookmarkedSpotsData);
+        // console.log(plannersData);
+        // console.log(bookmarkedSpotsData);
 
         // 받은 데이터를 상태에 설정
         setPlanners(plannersData.content);
@@ -112,7 +114,10 @@ export const Header = () => {
   return (
     <HeaderSt>
       <Link to="/" className="logo">
-        <img src="/img/plan4land.png" />
+        <div className="logoBox">
+          <img src={Logo} alt="" className="logoImg" />
+          <img src={Title} alt="" className="logoTitle" />
+        </div>
       </Link>
       <NavSt>
         <div className="recomm" onClick={toggleDropdown}>
@@ -253,7 +258,7 @@ export const Header = () => {
           onClose={() => setShowLogoutModal(false)}
           onConfirm={handleLogout}
         >
-          <p style={{ color: "black" }}>로그아웃 하시겠습니까?</p>
+          <p>로그아웃 하시겠습니까?</p>
         </Modal>
       </div>
     </HeaderSt>

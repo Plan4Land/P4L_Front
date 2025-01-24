@@ -30,14 +30,13 @@ export const QuickSearch = styled(GridItem)`
     display: flex;
     padding: 10px;
     border-radius: 8px;
-
     button {
       cursor: pointer;
       background-color: transparent;
       border: none;
       width: 100%;
       height: 30px;
-      margin: 0 20px 20px;
+      margin: 0 20px;
       transition: all 0.3s ease;
       font-size: 16px;
       border-radius: 10px;
@@ -46,9 +45,9 @@ export const QuickSearch = styled(GridItem)`
         opacity: 0.7;
       }
       &.active {
-        background-color: ${colors.colorB};
-        color: white;
-        opacity: 0.9;
+        background-color: ${colors.colorC};
+        /* color: white; */
+        color: black;
       }
     }
   }
@@ -77,7 +76,7 @@ export const QuickSearch = styled(GridItem)`
         background-color: white;
         color: ${colors.colorA};
         border: none;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); 
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
         height: 100%;
         width: 100%;
         border-radius: 10px;
@@ -280,13 +279,13 @@ export const PlanBox = styled.div`
   justify-content: center;
   position: relative;
   overflow: hidden;
-  .owner{
+  .owner {
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 10px;
-    img{
+    img {
       min-width: 50px;
       max-width: 50px;
       max-height: 50px;
@@ -294,7 +293,7 @@ export const PlanBox = styled.div`
       background-color: white;
       border-radius: 50%;
     }
-    span{
+    span {
       margin-left: 5px;
       white-space: nowrap;
       color: white;

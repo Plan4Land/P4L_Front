@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Footer, Header } from "../../Component/GlobalComponent";
-import { Button, ToggleButton } from "../../Component/ButtonComponent";
+import {
+  Button,
+  ToggleButton,
+  ToggleSection,
+} from "../../Component/ButtonComponent";
 import {
   ItemList,
   List,
@@ -16,7 +20,7 @@ import { TravelSpotApi } from "../../Api/ItemApi";
 import { areas, types } from "../../Util/Common";
 import { Pagination } from "../../Component/Pagination";
 import { FaBars } from "react-icons/fa";
-import InfiniteScroll from "react-infinite-scroll-component";
+// import InfiniteScroll from "react-infinite-scroll-component";
 import { useMediaQuery } from "react-responsive";
 import { Loading } from "../../Component/LoadingComponent";
 import { SelectedFilters } from "../../Component/SelectedFilterComponent";
@@ -307,16 +311,11 @@ export const TourList = () => {
           </SearchSt>
 
           <div className="mainarea">
-            <div className="title">
-              <h3>
-                지역 선택
-                <ToggleButton
-                  isOpen={isAreaOpen}
-                  onToggle={() => setIsAreaOpen(!isAreaOpen)}
-                />
-              </h3>
-            </div>
-            {isAreaOpen && (
+            <ToggleSection
+              title="지역 선택"
+              isOpen={isAreaOpen}
+              onToggle={() => setIsAreaOpen(!isAreaOpen)}
+            >
               <div className="buttons">
                 {areas.map((area) => (
                   <Button
@@ -330,21 +329,16 @@ export const TourList = () => {
                   </Button>
                 ))}
               </div>
-            )}
+            </ToggleSection>
           </div>
 
           {selectedAreaData && (
             <div className="subarea">
-              <div className="title">
-                <h3>
-                  세부 지역 선택
-                  <ToggleButton
-                    isOpen={isSubAreaOpen}
-                    onToggle={() => setIsSubAreaOpen(!isSubAreaOpen)}
-                  />
-                </h3>
-              </div>
-              {isSubAreaOpen && (
+              <ToggleSection
+                title="세부 지역 선택"
+                isOpen={isSubAreaOpen}
+                onToggle={() => setIsSubAreaOpen(!isSubAreaOpen)}
+              >
                 <div className="buttons">
                   {selectedAreaData.subAreas.map((subArea) => (
                     <Button
@@ -358,21 +352,16 @@ export const TourList = () => {
                     </Button>
                   ))}
                 </div>
-              )}
+              </ToggleSection>
             </div>
           )}
 
           <div className="top">
-            <div className="title">
-              <h3>
-                대분류
-                <ToggleButton
-                  isOpen={isTopThemeOpen}
-                  onToggle={() => setIsTopThemeOpen(!isTopThemeOpen)}
-                />
-              </h3>
-            </div>
-            {isTopThemeOpen && (
+            <ToggleSection
+              title="대분류"
+              isOpen={isTopThemeOpen}
+              onToggle={() => setIsTopThemeOpen(!isTopThemeOpen)}
+            >
               <div className="buttons">
                 {ServiceCode.map((cat) => (
                   <Button
@@ -386,21 +375,16 @@ export const TourList = () => {
                   </Button>
                 ))}
               </div>
-            )}
+            </ToggleSection>
           </div>
 
           {filters.topTheme && (
             <div className="middle">
-              <div className="title">
-                <h3>
-                  중분류
-                  <ToggleButton
-                    isOpen={isMiddleThemeOpen}
-                    onToggle={() => setIsMiddleThemeOpen(!isMiddleThemeOpen)}
-                  />
-                </h3>
-              </div>
-              {isMiddleThemeOpen && (
+              <ToggleSection
+                title="중분류"
+                isOpen={isMiddleThemeOpen}
+                onToggle={() => setIsMiddleThemeOpen(!isMiddleThemeOpen)}
+              >
                 <div className="buttons">
                   {ServiceCode.find(
                     (cat) => cat.cat1 === filters.topTheme
@@ -416,22 +400,17 @@ export const TourList = () => {
                     </Button>
                   ))}
                 </div>
-              )}
+              </ToggleSection>
             </div>
           )}
 
           {filters.middleTheme && (
             <div className="bottom">
-              <div className="title">
-                <h3>
-                  소분류
-                  <ToggleButton
-                    isOpen={isBottomThemeOpen}
-                    onToggle={() => setIsBottomThemeOpen(!isBottomThemeOpen)}
-                  />
-                </h3>
-              </div>
-              {isBottomThemeOpen && (
+              <ToggleSection
+                title="소분류"
+                isOpen={isBottomThemeOpen}
+                onToggle={() => setIsBottomThemeOpen(!isBottomThemeOpen)}
+              >
                 <div className="buttons">
                   {filters.middleTheme &&
                     ServiceCode.find((cat) => cat.cat1 === filters.topTheme)
@@ -456,21 +435,16 @@ export const TourList = () => {
                         </Button>
                       ))}
                 </div>
-              )}
+              </ToggleSection>
             </div>
           )}
 
           <div className="category">
-            <div className="title">
-              <h3>
-                카테고리 선택
-                <ToggleButton
-                  isOpen={isCategoryOpen}
-                  onToggle={() => setIsCategoryOpen(!isCategoryOpen)}
-                />
-              </h3>
-            </div>
-            {isCategoryOpen && (
+            <ToggleSection
+              title="카테고리 선택"
+              isOpen={isCategoryOpen}
+              onToggle={() => setIsCategoryOpen(!isCategoryOpen)}
+            >
               <div className="buttons">
                 {types.map((type) => (
                   <Button
@@ -484,7 +458,7 @@ export const TourList = () => {
                   </Button>
                 ))}
               </div>
-            )}
+            </ToggleSection>
           </div>
         </SelectTourItem>
         <ItemList>

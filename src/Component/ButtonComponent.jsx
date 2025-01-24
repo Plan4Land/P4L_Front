@@ -1,5 +1,5 @@
 import { colors } from "../Style/GlobalStyle";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import React from "react";
 
 const StyledButton = styled.button`
@@ -68,30 +68,6 @@ export const CancelButton = ({ onClick, children, ...props }) => (
     {children}
   </Button>
 );
-const StyledToggleButton = styled.button`
-  background-color: transparent;
-  width: 20px !important;
-  height: 20px !important;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  color: ${(props) => (props.isOpen ? colors.colorB : "#666")};
-  transition: color 0.2s ease;
-  &:hover {
-    background-color: transparent !important;
-  }
-`;
-export const ToggleButton = ({ isOpen, onToggle }) => {
-  return (
-    <StyledToggleButton
-      StyledToggleButton
-      onClick={onToggle}
-      className="toggle-button"
-    >
-      {isOpen ? "▲" : "▼"}
-    </StyledToggleButton>
-  );
-};
 
 export const ScrollBar = css`
   /* 전체 스크롤바 영역 스타일 */
@@ -117,3 +93,71 @@ export const ScrollBar = css`
     background: #b68444;
   }
 `;
+
+const rotateHalfClockwise = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+`;
+
+const StyledToggleButton = styled.button`
+  background-color: transparent;
+  width: 20px !important;
+  height: 20px !important;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: ${(props) => (props.isOpen ? colors.colorB : "#666")};
+  transition: color 0.2s ease;
+
+  .icon {
+    display: inline-block;
+    transform: ${(props) => (props.isOpen ? "rotate(180deg)" : "rotate(0deg)")};
+    transition: transform 0.3s ease;
+  }
+`;
+
+export const ToggleButton = ({ isOpen, onToggle }) => {
+  return (
+    <StyledToggleButton
+      isOpen={isOpen}
+      onClick={onToggle}
+      className="toggle-button"
+    >
+      <span className="icon">{isOpen ? "▼" : "▼"}</span>
+    </StyledToggleButton>
+  );
+};
+
+const SectionContainer = styled.div`
+  margin-bottom: 20px;
+`;
+
+const SectionTitle = styled.h3`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 5px 0 10px 5px;
+  border-bottom: 1px solid #ddd;
+`;
+
+const SectionContent = styled.div`
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  max-height: ${(props) => (props.isOpen ? "500px" : "0")};
+`;
+
+export const ToggleSection = ({ title, isOpen, onToggle, children }) => {
+  return (
+    <SectionContainer>
+      <SectionTitle>
+        {title}
+        <ToggleButton isOpen={isOpen} onToggle={onToggle} />
+      </SectionTitle>
+      <SectionContent isOpen={isOpen}>{children}</SectionContent>
+    </SectionContainer>
+  );
+};

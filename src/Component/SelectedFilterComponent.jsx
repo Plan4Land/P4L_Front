@@ -144,7 +144,7 @@ export const SelectedFilters = ({ filters, onRemoveFilter }) => {
   return (
     <TopFilters>
       <div className="filterList">
-        <h4>선택 목록:</h4>
+        <h4>태그:</h4>
         {selectedFilters.length > 0 && (
           <div className="filter-tags">
             {selectedFilters.map((filter, index) => (
