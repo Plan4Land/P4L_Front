@@ -18,8 +18,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import { Loading } from "../../Component/LoadingComponent";
 
-import 
-
 export const MakePlanning = () => {
   const [selectedArea, setSelectedArea] = useState("");
   const [selectedSubArea, setSelectedSubArea] = useState("");
