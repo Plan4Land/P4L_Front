@@ -9,7 +9,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { ToggleSwitch } from "../../Component/ToggleSwitch";
-// import { EditImg } from "../../Component/ProfileImg";
 import { Upload } from "../../Component/FirebaseUpload";
 import { PictureComponent } from "../../Component/PictureCommponent";
 import { CheckModal } from "../../Util/Modal";
@@ -18,6 +17,8 @@ import PlanningApi from "../../Api/PlanningApi";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import { Loading } from "../../Component/LoadingComponent";
+
+import 
 
 export const MakePlanning = () => {
   const [selectedArea, setSelectedArea] = useState("");
