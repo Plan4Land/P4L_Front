@@ -18,6 +18,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import { Loading } from "../../Component/LoadingComponent";
 
+import Planningth1 from "../../Img/planning-pic/planningth1.jpg";
+
 export const MakePlanning = () => {
   const [selectedArea, setSelectedArea] = useState("");
   const [selectedSubArea, setSelectedSubArea] = useState("");
@@ -25,9 +27,7 @@ export const MakePlanning = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [title, setTitle] = useState("");
-  const [currentPic, setCurrentPic] = useState(
-    "/img/planning-pic/planningth1.jpg"
-  );
+  const [currentPic, setCurrentPic] = useState(Planningth1);
   // const [selectedImage, setSelectedImage] = useState("");
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);

@@ -12,11 +12,72 @@ import AxiosApi from "../Api/AxiosApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 
+import Basic1 from "../Img/profile-pic/basic1.png";
+import Basic2 from "../Img/profile-pic/basic2.png";
+import Basic3 from "../Img/profile-pic/basic3.png";
+import Basic4 from "../Img/profile-pic/basic4.png";
+import Basic5 from "../Img/profile-pic/basic5.png";
+import Basic6 from "../Img/profile-pic/basic6.png";
+import Basic7 from "../Img/profile-pic/basic7.png";
+import Basic8 from "../Img/profile-pic/basic8.png";
+import Basic9 from "../Img/profile-pic/basic9.png";
+import Basic10 from "../Img/profile-pic/basic10.png";
+import Basic11 from "../Img/profile-pic/basic11.png";
+import Basic12 from "../Img/profile-pic/basic12.png";
+import Profile from "../Img/profile-pic/profile.png";
+
+import Planningth1 from "../Img/planning-pic/planningth1.jpg";
+import Planningth2 from "../Img/planning-pic/planningth2.jpg";
+import Planningth3 from "../Img/planning-pic/planningth3.jpg";
+import Planningth4 from "../Img/planning-pic/planningth4.jpg";
+import Planningth5 from "../Img/planning-pic/planningth5.jpg";
+import Planningth6 from "../Img/planning-pic/planningth6.jpg";
+
+import Plus from "../Img/profile-pic/plus.png";
+
+const profilePictures = [
+  { name: Basic7, alt: "기본7" },
+  { name: Basic8, alt: "기본8" },
+  { name: Basic9, alt: "기본9" },
+  { name: Basic10, alt: "기본10" },
+  { name: Basic11, alt: "기본11" },
+  { name: Basic12, alt: "기본12" },
+];
+
+const planningPictures = [
+  { name: Planningth1, alt: "기본1" },
+  { name: Planningth2, alt: "기본2" },
+  { name: Planningth3, alt: "기본3" },
+  { name: Planningth4, alt: "기본4" },
+  { name: Planningth5, alt: "기본5" },
+  { name: Planningth6, alt: "기본6" },
+];
+
 export const ProfileImg = ({ file, width, height }) => {
+  const getSrc = (file) => {
+    if (file.includes("firebasestorage")) {
+      return file;
+    }
+
+    const profileImage = profilePictures.find((pic) => pic.name === file);
+    if (profileImage) {
+      return profileImage.name;
+    }
+
+    const planningImage = planningPictures.find((pic) => pic.name === file);
+    if (planningImage) {
+      return planningImage.name;
+    }
+
+    return Profile;
+  };
+
+  const imgSrc = getSrc(file);
+
   return (
     <ProfileImgContainer width={width} height={height}>
       <img
-        src={file}
+        src={imgSrc}
         alt="프로필 이미지"
         style={{
           width: "100%",
@@ -32,15 +93,17 @@ export const ProfileImg = ({ file, width, height }) => {
 export const PictureComponent = (props) => {
   const { currentPic, setCurrentPic, role, type, width, height } = props;
   const [isPicsModalOpen, setIsPicsModalOpen] = useState("");
-  const imgRootPath = type === "profile" ? "/profile-pic" : "/img/planning-pic";
+  // const imgRootPath = type === "profile" ? "/profile-pic" : "/Img/planning-pic";
 
   const handlePicSelect = (picName) => {
-    setCurrentPic(`${imgRootPath}/${picName}`);
+    setCurrentPic(picName);
   };
 
   const handlePicAdd = (picture) => {
     setCurrentPic(URL.createObjectURL(picture));
   };
+
+  console.log("currentPic : ", currentPic);
 
   return (
     <>
@@ -82,24 +145,6 @@ export const ProfilePicModal = (props) => {
     close();
   };
 
-  const profilePictures = [
-    { name: "basic7.png", alt: "기본7" },
-    { name: "basic8.png", alt: "기본8" },
-    { name: "basic9.png", alt: "기본9" },
-    { name: "basic10.png", alt: "기본10" },
-    { name: "basic11.png", alt: "기본11" },
-    { name: "basic12.png", alt: "기본12" },
-  ];
-
-  const planningPictures = [
-    { name: "planningth1.jpg", alt: "기본1" },
-    { name: "planningth2.jpg", alt: "기본2" },
-    { name: "planningth3.jpg", alt: "기본3" },
-    { name: "planningth4.jpg", alt: "기본4" },
-    { name: "planningth5.jpg", alt: "기본5" },
-    { name: "planningth6.jpg", alt: "기본6" },
-  ];
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -130,7 +175,7 @@ export const ProfilePicModal = (props) => {
               ? profilePictures.map((picture, index) => (
                   <PictureModalBox key={index}>
                     <img
-                      src={`/profile-pic/${picture.name}`}
+                      src={picture.name}
                       alt={picture.alt}
                       onClick={() => selectPic(picture.name)}
                     />
@@ -139,7 +184,7 @@ export const ProfilePicModal = (props) => {
               : planningPictures.map((picture, index) => (
                   <PictureModalBox key={index}>
                     <img
-                      src={`/img/planning-pic/${picture.name}`}
+                      src={picture.name}
                       alt={picture.alt}
                       onClick={() => selectPic(picture.name)}
                     />
@@ -165,11 +210,7 @@ export const ProfilePicModal = (props) => {
                 </PictureModalBox>
                 <PictureModalBox />
                 <PictureModalBox onClick={openFilePicker}>
-                  <img
-                    src="/profile-pic/plus.png"
-                    alt="이미지 선택"
-                    className="plusPic"
-                  />
+                  <img src={Plus} alt="이미지 선택" className="plusPic" />
                 </PictureModalBox>
               </>
             )}
@@ -217,6 +258,7 @@ const PictureBox = styled.div`
   align-items: center;
   gap: 30px;
   margin: 20px 0;
+  height: 100%;
 
   .current-pic {
     display: flex;

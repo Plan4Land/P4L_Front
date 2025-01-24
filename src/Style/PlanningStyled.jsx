@@ -132,8 +132,8 @@ export const Info = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 20%;
-    height: 20%;
+    width: 15vw;
+    height: 15vw;
     flex-shrink: 0;
   }
   .editTitle {

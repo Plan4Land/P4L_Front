@@ -21,6 +21,9 @@ import { GoMail, GoPencil, GoLock, GoEye, GoEyeClosed } from "react-icons/go";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 
+// image
+import Profile from "../../Img/profile-pic/profile.png";
+
 export const Signup = () => {
   // input
   const [inputUserId, setInputUserId] = useState("");
@@ -30,7 +33,7 @@ export const Signup = () => {
   const [inputPw2, setInputPw2] = useState("");
   const [inputName, setInputName] = useState("");
   const [inputNickname, setInputNickname] = useState("");
-  const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
+  const [currentPic, setCurrentPic] = useState(Profile);
 
   // message
   const [idMsg, setIdMsg] = useState("");
