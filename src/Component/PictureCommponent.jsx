@@ -258,6 +258,7 @@ const PictureBox = styled.div`
   align-items: center;
   gap: 30px;
   margin: 20px 0;
+  height: 100%;
 
   .current-pic {
     display: flex;
