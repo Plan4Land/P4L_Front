@@ -12,7 +12,8 @@ export const Container = styled.div`
   flex-direction: column;
   width: 700px;
   @media (max-width: 768px) {
-    width: 100vw;
+    width: 95vw;
+    margin: 0 auto;
   }
   padding: 30px;
   box-sizing: border-box;
