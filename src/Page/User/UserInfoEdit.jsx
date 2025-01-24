@@ -13,6 +13,9 @@ import { CheckModal } from "../../Util/Modal";
 // icon
 import { IoIosArrowBack } from "react-icons/io";
 
+// image
+import Profile from "../../Img/profile-pic/profile.png";
+
 const UserInfoEdit = () => {
   const { user, updateUser } = useAuth();
   const [userId, setUserId] = useState("");
@@ -24,7 +27,7 @@ const UserInfoEdit = () => {
   const [nicknameCheck, setNicknameCheck] = useState(true);
   const nicknameRef = useRef(null);
   const [email, setEmail] = useState("");
-  const [currentPic, setCurrentPic] = useState("profile-pic/profile.png");
+  const [currentPic, setCurrentPic] = useState(Profile);
   const [userRole, setUserRole] = useState("");
 
   const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
