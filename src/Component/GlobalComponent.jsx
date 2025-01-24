@@ -96,9 +96,9 @@ export const Header = () => {
 
   const transportClick = (route) => {
     // 교통 드롭다운 항목 클릭 시 이동
-    if (route === 'ktxinquiry') navigate('/ktxinquiry');
-    if (route === 'expressbus') navigate('/expressbus');
-    if (route === 'intercitybus') navigate('/intercitybus');
+    if (route === "ktxinquiry") navigate("/ktxinquiry");
+    if (route === "expressbus") navigate("/expressbus");
+    if (route === "intercitybus") navigate("/intercitybus");
   };
 
   const handleItemClick = (transportType) => {
@@ -114,20 +114,14 @@ export const Header = () => {
       <NavSt>
         <div className="recomm" onClick={toggleDropdown}>
           {/* <Link className={`tag ${isActive("/ktxinquiry") ? "" : "active"}`}> */}
-            교통
+          교통
           {/* </Link> */}
           {dropdownVisible && (
             <div className="dropdown-Trafficlist">
               <div className="topItem">
-                <p onClick={() => handleItemClick("ktxinquiry")}>
-                  KTX
-                </p>
-                <p onClick={() => handleItemClick("expressbus")}>
-                  고속버스
-                </p>
-                <p onClick={() => handleItemClick("intercitybus")}>
-                  시외버스
-                </p>
+                <p onClick={() => handleItemClick("ktxinquiry")}>KTX</p>
+                <p onClick={() => handleItemClick("expressbus")}>고속버스</p>
+                <p onClick={() => handleItemClick("intercitybus")}>시외버스</p>
               </div>
             </div>
           )}
@@ -136,7 +130,9 @@ export const Header = () => {
         <div className="recomm">
           <Link
             to="/tourlist"
-            className={`tag ${isActive("/tourlist") || isActive("/tourItemInfo") ? "active" : ""}`}
+            className={`tag ${
+              isActive("/tourlist") || isActive("/tourItemInfo") ? "active" : ""
+            }`}
           >
             관광지
           </Link>
@@ -145,7 +141,9 @@ export const Header = () => {
         <div className="recomm">
           <Link
             to="/planninglist"
-            className={`tag ${isActive("/planninglist") || isActive("/planning")? "active" : ""}`}
+            className={`tag ${
+              isActive("/planninglist") || isActive("/planning") ? "active" : ""
+            }`}
           >
             플래닝
           </Link>
@@ -260,5 +258,11 @@ export const Header = () => {
 };
 
 export const Footer = () => {
-  return <FooterSt>footer 입니다.</FooterSt>;
+  return (
+    <FooterSt>
+      <h4>Plan4Land</h4>
+      <p>문의가 필요한 사항은 메일 부탁드립니다.</p>
+      <p>mail: plan4land.mail@gmail.com</p>
+    </FooterSt>
+  );
 };

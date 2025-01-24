@@ -196,7 +196,7 @@ export const HeaderSt = styled.div`
   @media (max-width: 768px) {
     height: 60px;
     padding: 0 3% 0 8%;
-    .profile-link{
+    .profile-link {
       scale: 70%;
     }
     .dropdown-list {
@@ -265,4 +265,12 @@ export const FooterSt = styled.div`
   background-color: lightgray;
   position: static;
   bottom: 0;
+  h4,
+  p {
+    margin: 5px 0 0 5px;
+    opacity: 0.7;
+  }
+  p {
+    font-size: 13px;
+  }
 `;
