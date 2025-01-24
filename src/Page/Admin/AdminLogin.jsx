@@ -1,26 +1,31 @@
 import { useState } from "react";
 import AdminApi from "../../Api/AdminApi";
 import {useNavigate} from "react-router-dom";
+import Common from "../../Util/Common";
+import {Button} from "../../Component/ButtonComponent";
 
 const AdminLogin = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // Admin-only login logic
-    if (id === "admin" && password === "1234") {
-      navigate("/management"); // Redirect to admin page
-    } else {
-      alert("아이디 또는 비밀번호가 잘못되었습니다.");
+  const handleLogin = async (e) => {
+    try{
+      const response = await AdminApi.adminLogin(id, password);
+      console.log(response);
+      if(response.status === 200){
+        Common.setAccessToken(response.data.accessToken);
+        Common.setRefreshToken(response.data.refreshToken);
+        navigate("/management");
+      }
+    }catch(err){
+      console.log(err)
     }
   };
 
   return (
     <div>
       <h1>관리자 로그인</h1>
-      <form onSubmit={handleLogin}>
         <div>
           <label>아이디:</label>
           <input
@@ -37,8 +42,7 @@ const AdminLogin = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit">로그인</button>
-      </form>
+        <Button onClick={handleLogin}>로그인</Button>
     </div>
   );
 };

@@ -1,6 +1,16 @@
 import AxiosInstance from "./AxiosInstance";
+import axios from "axios";
+import Common from "../Util/Common";
+
 
 const AdminApi = {
+  adminLogin: async (id, password) => {
+    const data = {
+      id: id,
+      password: password,
+    };
+    return axios.post(Common.PLAN_DOMAIN+"/admin/admin-login", data);
+  },
   // 유저 검색
   userSearch: async (keyword, select) => {
     const response = await AxiosInstance.get("/admin/member-search", {params: {keyword, select}});
