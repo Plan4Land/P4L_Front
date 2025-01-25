@@ -43,6 +43,7 @@ const AdminLogin = () => {
           />
         </div>
         <Button onClick={handleLogin}>로그인</Button>
+      <Button onClick={() => localStorage.clear()}>로컬 비우기</Button>
     </div>
   );
 };
