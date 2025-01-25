@@ -1,4 +1,5 @@
 import { Header, Footer } from "../Component/GlobalComponent";
+import { GlobalFont } from "../Style/GlobalStyle";
 import {
   MainBox,
   QuickSearch,
@@ -22,9 +23,9 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules"; // 추천 관
 import Calendar from "react-calendar"; // 축제 캘린더
 import "react-calendar/dist/Calendar.css"; // 캘린더
 import { TopTourApi, TopPlanApi, HolidayApi } from "../Api/ItemApi";
-import type100 from "../Img/cateimg/type_100.png"
-import type200 from "../Img/cateimg/type_200.png"
-import type300 from "../Img/cateimg/type_300.png"
+import type100 from "../Img/cateimg/type_100.png";
+import type200 from "../Img/cateimg/type_200.png";
+import type300 from "../Img/cateimg/type_300.png";
 
 export const Main = () => {
   const [selectedMenu, setSelectedMenu] = useState("지역"); // 미니검색창
@@ -118,6 +119,7 @@ export const Main = () => {
 
   return (
     <>
+      <GlobalFont />
       <Header />
       {/* 상위 플래닝 4개 */}
       <RecommPlan className="GridItem">
@@ -176,13 +178,16 @@ export const Main = () => {
                           src={plan.ownerProfileImg}
                           alt={plan.ownerNickname}
                         />
-                        <span className="nick">{plan.ownerNickname}</span>
-                        <span>님의 플래너</span>
+                        <span className="content-font1">
+                          {plan.ownerNickname}님의 플래너
+                        </span>
                       </div>
                       <div className="planExplain">
-                        <h3>{plan.title}</h3>
-                        <p> {`${areaName} > ${subAreaName}`}</p>
-                        <p>
+                        <h3 className="title-font">{plan.title}</h3>
+                        <p className="content-font1">
+                          {`${areaName} > ${subAreaName}`}
+                        </p>
+                        <p className="content-font1">
                           {plan.theme
                             .split(",")
                             .map((theme) => `#${theme.trim()}`)
@@ -205,14 +210,14 @@ export const Main = () => {
               onClick={() => setSelectedMenu("지역")}
               className={selectedMenu === "지역" ? "active" : ""}
             >
-              지역
+              <p>지역</p>
             </button>
             |
             <button
               onClick={() => setSelectedMenu("카테고리")}
               className={selectedMenu === "카테고리" ? "active" : ""}
             >
-              카테고리
+              <p>카테고리</p>
             </button>
           </div>
           <div className="SearchBox">
@@ -292,8 +297,8 @@ export const Main = () => {
                       src={tour.thumbnail || getDefaultImage(tour.typeId)}
                       alt={tour.title}
                     />
-                    <h3>{tour.title}</h3>
-                    <p>{tour.addr1}</p>
+                    <h3 className="title-font">{tour.title}</h3>
+                    <p className="content-font2">{tour.addr1}</p>
                   </div>
                 </SwiperSlide>
               );

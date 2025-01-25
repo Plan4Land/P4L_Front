@@ -1,4 +1,27 @@
 import styled from "styled-components";
+import { createGlobalStyle } from "styled-components";
+
+export const GlobalFont = createGlobalStyle`
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap');
+  
+.title-font {
+  font-family: "Jua", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.content-font1{
+  font-family: "Nanum Brush Script", serif;
+  font-weight: 400; 
+  font-style: normal;
+}
+.content-font2{
+  font-family: "Gothic A1", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+`;
 
 export const colors = {
   colorA: "rgb(105, 39, 13)",

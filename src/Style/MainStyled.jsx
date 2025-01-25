@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { colors } from "./GlobalStyle";
 import { ScrollBar } from "../Component/ButtonComponent";
-import searchCate1 from "../Img/cateimg/cate_tour.png"
-import searchCate2 from "../Img/cateimg/cate_lodgin.png"
-import searchCate3 from "../Img/cateimg/cate_restaurant.png"
+import searchCate1 from "../Img/cateimg/cate_tour.png";
+import searchCate2 from "../Img/cateimg/cate_lodgin.png";
+import searchCate3 from "../Img/cateimg/cate_restaurant.png";
 
 export const MainBox = styled.div`
   display: grid;
@@ -33,6 +33,10 @@ export const QuickSearch = styled(GridItem)`
     display: flex;
     padding: 10px;
     border-radius: 8px;
+    justify-content: center;
+    p {
+      margin: 0;
+    }
     button {
       cursor: pointer;
       background-color: transparent;
@@ -375,6 +379,7 @@ export const PlanBox = styled.div`
       white-space: nowrap;
       color: white;
       text-shadow: 3px 3px 2px rgba(0, 0, 0, 1);
+      font-size: 20px;
     }
   }
   // 애니메이션 효과, 슬라이드 스타일

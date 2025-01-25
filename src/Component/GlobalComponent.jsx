@@ -1,4 +1,4 @@
-import { HeaderSt, NavSt, FooterSt } from "../Style/GlobalStyle";
+import { HeaderSt, NavSt, FooterSt, GlobalFont } from "../Style/GlobalStyle";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Modal } from "../Util/Modal";
@@ -114,6 +114,7 @@ export const Header = () => {
 
   return (
     <HeaderSt>
+      <GlobalFont />
       <Link to="/" className="logo">
         <div className="logoBox">
           <img src={Logo} alt="" className="logoImg" />
@@ -143,7 +144,7 @@ export const Header = () => {
               isActive("/tourlist") || isActive("/tourItemInfo") ? "active" : ""
             }`}
           >
-            관광지
+            <p className="title-font">관광지</p>
           </Link>
         </div>
         <p>|</p>
@@ -154,13 +155,15 @@ export const Header = () => {
               isActive("/planninglist") || isActive("/planning") ? "active" : ""
             }`}
           >
-            플래닝
+            <p className="title-font">플래닝</p>
           </Link>
         </div>
       </NavSt>
       <div className="usermenu">
         <div className="recomm">
-          <p className="quickmenu">바로가기</p>
+          <div className="quickmenu">
+            <p className="content-font2">바로가기</p>
+          </div>
           <div className="dropdown-list">
             <div className="topList">
               {/* 내 플래닝 */}
