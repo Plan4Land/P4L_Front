@@ -22,6 +22,9 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules"; // 추천 관
 import Calendar from "react-calendar"; // 축제 캘린더
 import "react-calendar/dist/Calendar.css"; // 캘린더
 import { TopTourApi, TopPlanApi, HolidayApi } from "../Api/ItemApi";
+import type100 from "../Img/cateimg/type_100.png"
+import type200 from "../Img/cateimg/type_200.png"
+import type300 from "../Img/cateimg/type_300.png"
 
 export const Main = () => {
   const [selectedMenu, setSelectedMenu] = useState("지역"); // 미니검색창
@@ -269,11 +272,11 @@ export const Main = () => {
               const getDefaultImage = (typeId) => {
                 switch (typeId) {
                   case "100":
-                    return "/img/cateimg/type_200.png";
+                    return type200;
                   case "200":
-                    return "/img/cateimg/type_100.png";
+                    return type100;
                   case "300":
-                    return "/img/cateimg/type_300.png";
+                    return type300;
                   default:
                     return "/profile-pic/basic1.png";
                 }
