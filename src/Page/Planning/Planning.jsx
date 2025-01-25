@@ -600,10 +600,17 @@ export const Planning = () => {
                     {chatList.map((chat, index) => (
                       <Message key={index} isSender={chat.sender === sender}>
                         <p className="id">{`${chat.sender}`}</p>
-                        <p
+                        {/* <p
                           className="talk"
                           dangerouslySetInnerHTML={{ __html: chat.message }}
-                        />
+                        /> */}
+                        <div className="talk">
+                          {chat.message.split("<br>").map((line, i) => (
+                            <p key={i} style={{ margin: "0" }}>
+                              {line}
+                            </p>
+                          ))}
+                        </div>
                       </Message>
                     ))}
                   </ChatMsgContainer>

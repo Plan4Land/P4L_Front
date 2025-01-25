@@ -164,21 +164,32 @@ export const TourItemInfo = () => {
               <div className="info-left">
                 <li className="info-item">
                   <span className="info-name">·&nbsp;&nbsp;주소</span>
-                  <span
-                    className="info-content"
-                    dangerouslySetInnerHTML={{
-                      __html: spotDetails?.addr1 || "정보 없음",
-                    }}
-                  />
+                  <span className="info-content">
+                    {spotDetails?.addr1 || "정보 없음"}
+                  </span>
                 </li>
                 <li className="info-item">
                   <span className="info-name">·&nbsp;&nbsp;문의 전화</span>
-                  <span
+                  {/* <span
                     className="info-content"
                     dangerouslySetInnerHTML={{
                       __html: spotApiDetails?.infocenter || "정보 없음",
                     }}
-                  />
+                  /> */}
+                  <span className="info-content">
+                    {spotApiDetails?.infocenter
+                      ? spotApiDetails.infocenter
+                          .split("<br>")
+                          .map((line, i) => (
+                            <div key={i}>
+                              {line}
+                              {i <
+                                spotApiDetails.infocenter.split("<br>").length -
+                                  1 && <br />}
+                            </div>
+                          ))
+                      : "정보 없음"}
+                  </span>
                 </li>
                 <li className="info-item">
                   <span className="info-name">·&nbsp;&nbsp;주차</span>
@@ -197,22 +208,35 @@ export const TourItemInfo = () => {
               <div className="info-right">
                 <li className="info-item">
                   <span className="info-name">·&nbsp;&nbsp;휴일</span>
-                  <span
-                    className="info-content"
-                    dangerouslySetInnerHTML={{
-                      __html: spotApiDetails?.restdate || "정보 없음",
-                    }}
-                  />
+                  <span className="info-content">
+                    {spotApiDetails?.restdate
+                      ? spotApiDetails.restdate.split("<br>").map((line, i) => (
+                          <div key={i}>
+                            {line}
+                            {i <
+                              spotApiDetails.restdate.split("<br>").length -
+                                1 && <br />}
+                          </div>
+                        ))
+                      : "정보 없음"}
+                  </span>
                 </li>
                 <li className="info-item">
                   <span className="info-name">·&nbsp;&nbsp;운영 시간</span>
-                  <span
-                    className="info-content"
-                    dangerouslySetInnerHTML={{
-                      __html: spotApiDetails?.usetime || "정보 없음",
-                    }}
-                  />
+                  <span className="info-content">
+                    {spotApiDetails?.usetime
+                      ? spotApiDetails.usetime.split("<br>").map((line, i) => (
+                          <div key={i}>
+                            {line}
+                            {i <
+                              spotApiDetails.usetime.split("<br>").length -
+                                1 && <br />}
+                          </div>
+                        ))
+                      : "정보 없음"}
+                  </span>
                 </li>
+
                 <li className="info-item">
                   <span className="info-name">·&nbsp;&nbsp;홈페이지</span>
                   {spotApiInfo?.homepage ? (
@@ -242,12 +266,18 @@ export const TourItemInfo = () => {
               </div>
             </div>
             <h2>상세 정보</h2>
-            <div
-              className="info-description"
-              dangerouslySetInnerHTML={{
-                __html: spotApiInfo?.overview || "정보 없음",
-              }}
-            />
+            <div className="info-description">
+              {spotApiInfo?.overview
+                ? spotApiInfo.overview.split("<br>").map((line, i) => (
+                    <React.Fragment key={i}>
+                      {line}
+                      {i < spotApiInfo.overview.split("<br>").length - 1 && (
+                        <br />
+                      )}
+                    </React.Fragment>
+                  ))
+                : "정보 없음"}
+            </div>
             <div className="item-map">
               <KakaoMapSpot mapX={spotDetails.mapX} mapY={spotDetails.mapY} />
               <NearTravelList>
