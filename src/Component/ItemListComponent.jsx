@@ -2,6 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ServiceCode } from "../Util/Service_code_final";
+import cate100 from "../Img/cateimg/type_100.png"
+import cate200 from "../Img/cateimg/type_200.png"
+import cate300 from "../Img/cateimg/type_300.png"
 
 const TourItemStyled = styled.div`
   width: ${(props) => props.width || "40vw"};
@@ -231,20 +234,20 @@ export const TourItem = ({
   };
 
   // 기본 이미지 설정: type에 따라 다르게 설정
-  const getDefaultImage = (type) => {
-    switch (type) {
-      case "숙소":
-        return "/img/cateimg/type_100.png";
-      case "관광지":
-        return "/img/cateimg/type_200.png";
-      case "음식점":
-        return "/img/cateimg/type_300.png";
+  const getDefaultImage = (typeId) => {
+    switch (typeId) {
+      case "200":
+        return cate100;
+      case "100":
+        return cate200;
+      case "300":
+        return cate300;
       default:
         return "/profile-pic/basic7.png";
     }
   };
 
-  const imageUrl = thumbnail ? thumbnail : getDefaultImage(type);
+  const imageUrl = thumbnail ? thumbnail : getDefaultImage(data.typeId);
 
   const getCategoryPath = () => {
     const cat1Item = ServiceCode.find((item) => item.cat1 === data.cat1);

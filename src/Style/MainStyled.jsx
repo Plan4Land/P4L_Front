@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { colors } from "./GlobalStyle";
 import { ScrollBar } from "../Component/ButtonComponent";
+import searchCate1 from "../Img/cateimg/cate_tour.png"
+import searchCate2 from "../Img/cateimg/cate_lodgin.png"
+import searchCate3 from "../Img/cateimg/cate_restaurant.png"
 
 export const MainBox = styled.div`
   display: grid;
@@ -137,11 +140,11 @@ export const CateButton = styled.button`
   background-image: ${({ type }) => {
     switch (type) {
       case "100":
-        return "url(/img/cateimg/cate_tour.png)";
+        return `url(${searchCate1})`;
       case "200":
-        return "url(/img/cateimg/cate_lodgin.png)";
+        return `url(${searchCate2})`;
       case "300":
-        return "url(/img/cateimg/cate_restaurant.png)";
+        return `url(${searchCate3})`;
       default:
         return "url(/img/cateimg/cate_tour.png)";
     }

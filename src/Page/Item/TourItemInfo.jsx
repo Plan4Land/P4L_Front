@@ -12,6 +12,9 @@ import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-ico
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth } from "../../Context/AuthContext";
 import { Loading } from "../../Component/LoadingComponent";
+import cate1 from "../../Img/cateimg/type_100.png"
+import cate2 from "../../Img/cateimg/type_200.png"
+import cate3 from "../../Img/cateimg/type_300.png"
 
 export const TourItemInfo = () => {
   const { id } = useParams();
@@ -139,11 +142,11 @@ export const TourItemInfo = () => {
                 src={
                   spotDetails.thumbnail ||
                   (spotDetails.typeId === "100"
-                    ? "/img/cateimg/type_200.png"
+                    ? cate1
                     : spotDetails.typeId === "200"
-                    ? "/img/cateimg/type_200.png"
+                    ? cate2
                     : spotDetails.typeId === "300"
-                    ? "/img/cateimg/type_300.png"
+                    ? cate3
                     : "/profile-pic/basic1.png") // 기본 이미지
                 }
                 alt="여행지 이미지"
