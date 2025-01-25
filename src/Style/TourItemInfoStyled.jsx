@@ -14,11 +14,12 @@ export const TourItemInfoBox = styled.div`
 
   .tour-title,
   .info-item {
-    display: -webkit-box;
+    /* display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
-    overflow: hidden;
+    overflow: hidden; */
     margin-bottom: 15px;
+    display: table;
     strong {
       margin-right: 5px;
     }
@@ -33,6 +34,37 @@ export const TourItemInfoBox = styled.div`
       border-radius: 10px;
       object-fit: cover;
     }
+  }
+  h2 {
+    margin: 30px 4% 15px;
+    padding-bottom: 4px;
+    border-bottom: 1.8px solid #ddd;
+    display: inline-block;
+  }
+  .info-detail,
+  .info-description {
+    width: 90%;
+    margin: 10px auto;
+    display: flex;
+    line-height: 1.5;
+
+    .info-left,
+    .info-right {
+      width: 50%;
+    }
+    .info-name {
+      font-weight: bold;
+      width: 100px;
+      display: inline-block;
+    }
+    .info-content {
+      display: table-cell;
+    }
+  }
+  .info-description {
+    line-height: 2;
+    margin-top: 0;
+    margin-bottom: 4%;
   }
 
   .tour-details {

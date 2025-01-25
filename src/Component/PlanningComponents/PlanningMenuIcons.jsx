@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 export const MenuIcons = ({
   plannerId,
   plannerInfo,
+  setPlannerInfo,
   isBookmarked,
   setIsBookmarked,
   isParticipant,
@@ -23,8 +24,16 @@ export const MenuIcons = ({
     console.log("북마크 상태 : ", isBookmarked);
     if (isBookmarked && user) {
       await PlanningApi.deleteBookmarked(user.id, plannerId);
+      setPlannerInfo((prevInfo) => ({
+        ...prevInfo,
+        bookmarkCount: prevInfo.bookmarkCount - 1,
+      }));
     } else if (user) {
       await PlanningApi.putBookmarked(user.id, plannerId);
+      setPlannerInfo((prevInfo) => ({
+        ...prevInfo,
+        bookmarkCount: prevInfo.bookmarkCount + 1,
+      }));
     } else {
       navigate("/login");
     }

@@ -471,6 +471,7 @@ export const Planning = () => {
           <MenuIcons
             plannerId={plannerId}
             plannerInfo={plannerInfo}
+            setPlannerInfo={setPlannerInfo}
             isBookmarked={isBookmarked}
             setIsBookmarked={setIsBookmarked}
             isParticipant={isParticipant}
@@ -579,6 +580,9 @@ export const Planning = () => {
                       {new Date(plannerInfo.startDate).toLocaleDateString()}
                       &nbsp;&nbsp;~&nbsp;&nbsp;
                       {new Date(plannerInfo.endDate).toLocaleDateString()}
+                    </h3>
+                    <h3>
+                      북마크 수 &nbsp;:&nbsp;&nbsp;{plannerInfo.bookmarkCount}
                     </h3>
                   </div>
                 </>

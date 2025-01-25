@@ -1,3 +1,4 @@
+import axios from "axios";
 import AxiosInstance from "./AxiosInstance";
 
 // 여행지 목록 조회
@@ -52,6 +53,58 @@ export const TourItemApi = {
       console.error("근처 관광지 조회 오류:", error);
       throw error;
     }
+  },
+  // 관광지 상세정보 API 호출(홈페이지, 설명)
+  getSpotApiInfo: async (spotId) => {
+    const response = await axios.get(
+      "http://apis.data.go.kr/B551011/KorService1/detailCommon1",
+      {
+        params: {
+          MobileOS: "ETC",
+          MobileApp: "Plan4Land",
+          _type: "json",
+          contentId: spotId,
+          defaultYN: "Y",
+          overviewYN: "Y",
+          serviceKey: process.env.REACT_APP_API_KEY_JISUK,
+        },
+      }
+    );
+    return response.data.response.body.items.item[0];
+  },
+  // 관광지 상세이미지 API 호출
+  getSpotApiPics: async (spotId) => {
+    const response = await axios.get(
+      "http://apis.data.go.kr/B551011/KorService1/detailImage1",
+      {
+        params: {
+          MobileOS: "ETC",
+          MobileApp: "Plan4Land",
+          _type: "json",
+          contentId: spotId,
+          subImageYN: "Y",
+          serviceKey: process.env.REACT_APP_API_KEY_JISUK,
+        },
+      }
+    );
+    return response.data.response.body.items;
+  },
+  // 관광지 매우 상세정보 API 호출(운영시간, 주차)
+  getSpotApiDetails: async (spotId, typeId) => {
+    const response = await axios.get(
+      "http://apis.data.go.kr/B551011/KorService1/detailIntro1",
+      {
+        params: {
+          MobileOS: "ETC",
+          MobileApp: "Plan4Land",
+          _type: "json",
+          contentId: spotId,
+          contentTypeId: typeId,
+          serviceKey: process.env.REACT_APP_API_KEY_JISUK,
+        },
+      }
+    );
+    return response.data.response.body.items.item[0];
   },
 };
 

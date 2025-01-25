@@ -12,14 +12,17 @@ import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-ico
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth } from "../../Context/AuthContext";
 import { Loading } from "../../Component/LoadingComponent";
-import cate1 from "../../Img/cateimg/type_100.png"
-import cate2 from "../../Img/cateimg/type_200.png"
-import cate3 from "../../Img/cateimg/type_300.png"
+import cate1 from "../../Img/cateimg/type_100.png";
+import cate2 from "../../Img/cateimg/type_200.png";
+import cate3 from "../../Img/cateimg/type_300.png";
 
 export const TourItemInfo = () => {
   const { id } = useParams();
   const { user } = useAuth(); // useAuth 훅을 통해 user 객체 가져오기
   const [spotDetails, setSpotDetails] = useState(null);
+  const [spotApiInfo, setSpotApiInfo] = useState(null);
+  const [spotApiDetails, setSpotApiDetails] = useState(null);
+  const [spotApiPics, setSpotApiPics] = useState(null);
   const [nearbySpots, setNearbySpots] = useState([]);
   const [bookmarkCount, setBookmarkCount] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -90,6 +93,20 @@ export const TourItemInfo = () => {
           ); // 5km 반경
           setNearbySpots(nearbyData);
         }
+
+        const apiSpot = await TourItemApi.getSpotApiInfo(id);
+        setSpotApiInfo(apiSpot);
+        const apiPics = await TourItemApi.getSpotApiPics(id);
+        setSpotApiPics(apiPics);
+        const apiSpotDetail = await TourItemApi.getSpotApiDetails(
+          id,
+          apiSpot.contenttypeid
+        );
+        setSpotApiDetails(apiSpotDetail);
+
+        console.log("apiSpot : ", apiSpot);
+        console.log("apiPics : ", apiPics);
+        console.log("apidetails : ", apiSpotDetail);
       } catch (error) {
         console.error(
           "여행지 상세 정보 조회 오류 또는 근처 관광지 조회 오류:",
@@ -102,7 +119,12 @@ export const TourItemInfo = () => {
   }, [id, user]);
 
   if (!spotDetails) {
-    return <Loading> <p>정보를 불러오는 중 입니다.</p></Loading>;
+    return (
+      <Loading>
+        {" "}
+        <p>정보를 불러오는 중 입니다.</p>
+      </Loading>
+    );
   }
 
   return (
@@ -119,22 +141,6 @@ export const TourItemInfo = () => {
               </button>
               <div className="info">
                 <h1 className="tour-title">{spotDetails.title}</h1>
-                <div className="info-item">
-                  <strong>주소:</strong>
-                  <span className="ellipsis">
-                    {spotDetails.addr1 || "정보 없음"}
-                  </span>
-                </div>
-                <div className="info-item">
-                  <strong>연락처:</strong>
-                  <span className="ellipsis">
-                    {spotDetails.tel || "정보 없음"}
-                  </span>
-                </div>
-                <div className="info-item">
-                  <strong>북마크 수:</strong>
-                  <span>{spotDetails.bookmark}</span>
-                </div>
               </div>
             </div>
             <div className="tourThumb">
@@ -153,6 +159,95 @@ export const TourItemInfo = () => {
                 className="tour-image"
               />
             </div>
+            <h2>기본 정보</h2>
+            <div className="info-detail">
+              <div className="info-left">
+                <li className="info-item">
+                  <span className="info-name">·&nbsp;&nbsp;주소</span>
+                  <span
+                    className="info-content"
+                    dangerouslySetInnerHTML={{
+                      __html: spotDetails?.addr1 || "정보 없음",
+                    }}
+                  />
+                </li>
+                <li className="info-item">
+                  <span className="info-name">·&nbsp;&nbsp;문의 전화</span>
+                  <span
+                    className="info-content"
+                    dangerouslySetInnerHTML={{
+                      __html: spotApiDetails?.infocenter || "정보 없음",
+                    }}
+                  />
+                </li>
+                <li className="info-item">
+                  <span className="info-name">·&nbsp;&nbsp;주차</span>
+                  <span
+                    className="info-content"
+                    dangerouslySetInnerHTML={{
+                      __html: spotApiDetails?.parking || "정보 없음",
+                    }}
+                  />
+                </li>
+                <li className="info-item">
+                  <span className="info-name">·&nbsp;&nbsp;북마크 수</span>
+                  <span className="info-content">{spotDetails?.bookmark}</span>
+                </li>
+              </div>
+              <div className="info-right">
+                <li className="info-item">
+                  <span className="info-name">·&nbsp;&nbsp;휴일</span>
+                  <span
+                    className="info-content"
+                    dangerouslySetInnerHTML={{
+                      __html: spotApiDetails?.restdate || "정보 없음",
+                    }}
+                  />
+                </li>
+                <li className="info-item">
+                  <span className="info-name">·&nbsp;&nbsp;운영 시간</span>
+                  <span
+                    className="info-content"
+                    dangerouslySetInnerHTML={{
+                      __html: spotApiDetails?.usetime || "정보 없음",
+                    }}
+                  />
+                </li>
+                <li className="info-item">
+                  <span className="info-name">·&nbsp;&nbsp;홈페이지</span>
+                  {spotApiInfo?.homepage ? (
+                    spotApiInfo.homepage.startsWith("www.") ? (
+                      <a
+                        href={`http://${spotApiInfo.homepage}`}
+                        className="info-content"
+                      >
+                        {`http://${spotApiInfo.homepage}`}
+                      </a>
+                    ) : spotApiInfo.homepage.includes('<a href="') ? (
+                      <a
+                        href={spotApiInfo.homepage.split('"')[1]}
+                        className="info-content"
+                      >
+                        {spotApiInfo.homepage.split('"')[1]}
+                      </a>
+                    ) : (
+                      <span className="info-content">
+                        {spotApiInfo.homepage}
+                      </span>
+                    )
+                  ) : (
+                    <span className="info-content">정보 없음</span>
+                  )}
+                </li>
+              </div>
+            </div>
+            <h2>상세 정보</h2>
+            <div
+              className="info-description"
+              dangerouslySetInnerHTML={{
+                __html: spotApiInfo?.overview || "정보 없음",
+              }}
+            />
             <div className="item-map">
               <KakaoMapSpot mapX={spotDetails.mapX} mapY={spotDetails.mapY} />
               <NearTravelList>

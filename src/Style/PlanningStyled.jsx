@@ -1229,6 +1229,7 @@ export const Message = styled.div`
   align-self: ${(props) => (props.isSender ? "flex-end" : "flex-start")};
   display: flex;
   flex-direction: column;
+  color: black;
   .talk {
     font-size: 14px;
     background-color: ${(props) => (props.isSender ? "#cfebbb" : "#E0E0E0")};
