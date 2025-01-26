@@ -98,8 +98,8 @@ export const TourItemInfo = () => {
             5,
             id
           ); // 5km 반경
-          // setNearbySpots(nearbyData);
-          console.log(nearbyData);
+          setNearbySpots(nearbyData);
+          // console.log(nearbyData);
         }
 
         const apiSpot = await TourItemApi.getSpotApiInfo(id);
@@ -242,13 +242,13 @@ export const TourItemInfo = () => {
               {activeTab === "basic" && (
                 <div className="info-detail">
                   <div className="informationDetail">
-                    <li className="info-item">
+                    <div className="info-item">
                       <span className="info-name">&nbsp;&nbsp;주소</span>
                       <span className="info-content">
                         {spotDetails?.addr1 || "정보 없음"}
                       </span>
-                    </li>
-                    <li className="info-item">
+                    </div>
+                    <div className="info-item">
                       <span className="info-name">&nbsp;&nbsp;문의 전화</span>
                       <span className="info-content">
                         {spotApiDetails?.infocenter
@@ -265,8 +265,8 @@ export const TourItemInfo = () => {
                               ))
                           : "정보 없음"}
                       </span>
-                    </li>
-                    <li className="info-item">
+                    </div>
+                    <div className="info-item">
                       <span className="info-name">&nbsp;&nbsp;주차</span>
                       <span
                         className="info-content"
@@ -274,9 +274,9 @@ export const TourItemInfo = () => {
                           __html: spotApiDetails?.parking || "정보 없음",
                         }}
                       />
-                    </li>
-                    <li className="info-item">
-                      <span className="info-name">&nbsp;&nbsp;휴일</span>
+                    </div>
+                    <div className="info-item">
+                      <span className="info-name">&nbsp;&nbsp;휴무일</span>
                       <span className="info-content">
                         {spotApiDetails?.restdate
                           ? spotApiDetails.restdate
@@ -292,8 +292,8 @@ export const TourItemInfo = () => {
                               ))
                           : "정보 없음"}
                       </span>
-                    </li>
-                    <li className="info-item">
+                    </div>
+                    <div className="info-item">
                       <span className="info-name">&nbsp;&nbsp;운영 시간</span>
                       <span className="info-content">
                         {spotApiDetails?.usetime
@@ -310,8 +310,8 @@ export const TourItemInfo = () => {
                               ))
                           : "정보 없음"}
                       </span>
-                    </li>
-                    <li className="info-item">
+                    </div>
+                    <div className="info-item">
                       <span className="info-name">&nbsp;&nbsp;홈페이지</span>
                       {spotApiInfo?.homepage ? (
                         spotApiInfo.homepage.startsWith("www.") ? (
@@ -336,7 +336,7 @@ export const TourItemInfo = () => {
                       ) : (
                         <span className="info-content">정보 없음</span>
                       )}
-                    </li>
+                    </div>
                   </div>
                 </div>
               )}
@@ -360,6 +360,7 @@ export const TourItemInfo = () => {
                 </div>
               )}
             </SpotInformation>
+
             <div className="item-map">
               <KakaoMapSpot mapX={spotDetails.mapX} mapY={spotDetails.mapY} />
               <NearTravelList>

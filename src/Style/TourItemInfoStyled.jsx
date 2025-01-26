@@ -6,14 +6,10 @@ export const TourItemInfoBox = styled.div`
   width: 60%;
   margin: auto;
   padding: 20px;
-
   .tour-title {
     width: 90%;
     border-bottom: 2px solid #ddd;
-  }
-
-  .tour-title {
-    margin-bottom: 15px;
+    margin-bottom: 2px;
     display: table;
     strong {
       margin-right: 5px;
@@ -71,9 +67,13 @@ export const TourItemInfoBox = styled.div`
       opacity: 0.7;
     }
     h3 {
-      margin-bottom: 10px;
+      margin-bottom: 2px;
       margin-top: 0;
       color: ${colors.colorA};
+    }
+    p {
+      color: gray;
+      margin-top: 2px;
     }
   }
   .item-map {
@@ -175,14 +175,8 @@ export const SpotInformation = styled.div`
   .info-item {
     display: flex;
     margin: 20px auto;
-  }
-  .info-detail,
-  .info-description {
-    margin: 10px auto;
-    line-height: 1.5;
-    height: 75%;
-    overflow-y: scroll;
-    ${ScrollBar}
+    border-bottom: 1px solid #ddd;
+    align-items: center;
     .info-name {
       font-weight: bold;
       width: 100px;
@@ -192,5 +186,13 @@ export const SpotInformation = styled.div`
     .info-content {
       display: table-cell;
     }
+  }
+  .info-detail,
+  .info-description {
+    margin: 10px auto;
+    line-height: 1.5;
+    height: 75%;
+    overflow-y: scroll;
+    ${ScrollBar}
   }
 `;
