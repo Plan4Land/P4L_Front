@@ -52,12 +52,6 @@ export const AdminPage = () => {
     }
   }
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
-
   const handleUserTabClick = async () => {
     setActiveTab("user");
     if (members.length === 0) { // 중복 호출 방지
@@ -69,6 +63,13 @@ export const AdminPage = () => {
       }
     }
   };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
 
 
   const handleReportReject = async (reportId) => {
