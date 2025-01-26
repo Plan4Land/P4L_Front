@@ -2,6 +2,7 @@ import { Header, Footer } from "../../Component/GlobalComponent";
 import {
   TourItemInfoBox,
   NearTravelList,
+  SpotInformation,
 } from "../../Style/TourItemInfoStyled";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
@@ -15,6 +16,12 @@ import { Loading } from "../../Component/LoadingComponent";
 import cate1 from "../../Img/cateimg/type_100.png";
 import cate2 from "../../Img/cateimg/type_200.png";
 import cate3 from "../../Img/cateimg/type_300.png";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Navigation, Pagination } from "swiper/modules";
+import { ServiceCode } from "../../Util/Service_code_final";
 
 export const TourItemInfo = () => {
   const { id } = useParams();
@@ -22,10 +29,11 @@ export const TourItemInfo = () => {
   const [spotDetails, setSpotDetails] = useState(null);
   const [spotApiInfo, setSpotApiInfo] = useState(null);
   const [spotApiDetails, setSpotApiDetails] = useState(null);
-  const [spotApiPics, setSpotApiPics] = useState(null);
+  const [spotApiPics, setSpotApiPics] = useState([]);
   const [nearbySpots, setNearbySpots] = useState([]);
   const [bookmarkCount, setBookmarkCount] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [activeTab, setActiveTab] = useState("basic");
 
   // 북마크 상태 변경 함수
   const toggleBookmark = async () => {
@@ -41,7 +49,7 @@ export const TourItemInfo = () => {
           user.id,
           spotDetails.id
         );
-        console.log("북마크 삭제 결과:", result);
+        // console.log("북마크 삭제 결과:", result);
         setIsBookmarked(false);
         setBookmarkCount((prev) => prev - 1);
         // 북마크 수 직접 업데이트
@@ -52,7 +60,7 @@ export const TourItemInfo = () => {
       } else {
         // 북마크 추가
         const result = await BookmarkApi.addBookmark(user.id, spotDetails.id);
-        console.log("북마크 추가 결과:", result);
+        // console.log("북마크 추가 결과:", result);
         setIsBookmarked(true);
         setBookmarkCount((prev) => prev + 1);
         // 북마크 수 직접 업데이트
@@ -66,7 +74,6 @@ export const TourItemInfo = () => {
     }
   };
 
-  // 여행지 상세 정보 불러오기
   useEffect(() => {
     const fetchSpotDetails = async () => {
       try {
@@ -91,7 +98,8 @@ export const TourItemInfo = () => {
             5,
             id
           ); // 5km 반경
-          setNearbySpots(nearbyData);
+          // setNearbySpots(nearbyData);
+          console.log(nearbyData);
         }
 
         const apiSpot = await TourItemApi.getSpotApiInfo(id);
@@ -104,9 +112,10 @@ export const TourItemInfo = () => {
         );
         setSpotApiDetails(apiSpotDetail);
 
-        console.log("apiSpot : ", apiSpot);
-        console.log("apiPics : ", apiPics);
-        console.log("apidetails : ", apiSpotDetail);
+        // console.log("apiSpot : ", apiSpot);
+        // console.log("apiPics : ", apiPics);
+        // console.log(spotApiPics);
+        // console.log("apidetails : ", apiSpotDetail);
       } catch (error) {
         console.error(
           "여행지 상세 정보 조회 오류 또는 근처 관광지 조회 오류:",
@@ -117,15 +126,52 @@ export const TourItemInfo = () => {
 
     fetchSpotDetails();
   }, [id, user]);
-
+  useEffect(() => {
+    // console.log("spotApiPics : ", spotApiPics);
+  }, [spotApiPics]); // spotApiPics가 변경될 때마다 실행
+  // 여행지 상세 정보 불러오기
   if (!spotDetails) {
     return (
       <Loading>
-        {" "}
         <p>정보를 불러오는 중 입니다.</p>
       </Loading>
     );
   }
+
+  // 기본 썸네일 설정
+  const defaultThumbnail =
+    spotDetails.thumbnail ||
+    (spotDetails.typeId === "100"
+      ? cate1
+      : spotDetails.typeId === "200"
+      ? cate2
+      : spotDetails.typeId === "300"
+      ? cate3
+      : cate1);
+
+  // API에서 가져온 이미지 URL 추출
+  const apiImageUrls = Array.isArray(spotApiPics.item)
+    ? spotApiPics.item.map((pic) => pic.originimgurl).filter(Boolean) // 유효한 URL만 추출
+    : [];
+  // console.log("API 이미지 URL들:", apiImageUrls);
+
+  // 최종 이미지 배열 생성
+  const images = apiImageUrls.length > 0 ? apiImageUrls : [defaultThumbnail];
+  // console.log("이미지 배열", images);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab); // 클릭된 탭으로 상태 변경
+  };
+
+  const getCategoryName = (cat1, cat2, cat3) => {
+    const cat1Item = ServiceCode.find((item) => item.cat1 === cat1);
+    const cat2Item = cat1Item?.cat2List.find((item) => item.cat2 === cat2);
+    const cat3Item = cat2Item?.cat3List.find((item) => item.cat3 === cat3);
+
+    return [cat1Item?.cat1Name, cat2Item?.cat2Name, cat3Item?.cat3Name]
+      .filter(Boolean)
+      .join(" > ");
+  };
 
   return (
     <>
@@ -142,161 +188,204 @@ export const TourItemInfo = () => {
               <div className="info">
                 <h1 className="tour-title">{spotDetails.title}</h1>
               </div>
+              <p>북마크 수: {spotDetails?.bookmark}</p>
             </div>
             <div className="tourThumb">
-              <img
-                src={
-                  spotDetails.thumbnail ||
-                  (spotDetails.typeId === "100"
-                    ? cate1
-                    : spotDetails.typeId === "200"
-                    ? cate2
-                    : spotDetails.typeId === "300"
-                    ? cate3
-                    : "/profile-pic/basic1.png") // 기본 이미지
-                }
-                alt="여행지 이미지"
-                className="tour-image"
-              />
+              {images.length > 1 ? (
+                <Swiper
+                  modules={[Navigation, Pagination]}
+                  navigation
+                  pagination={{ clickable: true }}
+                  spaceBetween={10}
+                  slidesPerView={1}
+                >
+                  {images.map((image, index) => (
+                    <SwiperSlide key={index}>
+                      <img
+                        src={image}
+                        alt={`여행지 이미지 ${index + 1}`}
+                        className="tour-image"
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              ) : (
+                <img
+                  src={images[0]} // 기본 이미지 또는 첫 번째 이미지를 표시
+                  alt="여행지 기본 이미지"
+                  className="tour-image"
+                />
+              )}
             </div>
-            <h2>기본 정보</h2>
-            <div className="info-detail">
-              <div className="info-left">
-                <li className="info-item">
-                  <span className="info-name">·&nbsp;&nbsp;주소</span>
-                  <span className="info-content">
-                    {spotDetails?.addr1 || "정보 없음"}
-                  </span>
-                </li>
-                <li className="info-item">
-                  <span className="info-name">·&nbsp;&nbsp;문의 전화</span>
-                  {/* <span
-                    className="info-content"
-                    dangerouslySetInnerHTML={{
-                      __html: spotApiDetails?.infocenter || "정보 없음",
-                    }}
-                  /> */}
-                  <span className="info-content">
-                    {spotApiDetails?.infocenter
-                      ? spotApiDetails.infocenter
-                          .split("<br>")
-                          .map((line, i) => (
-                            <div key={i}>
-                              {line}
-                              {i <
-                                spotApiDetails.infocenter.split("<br>").length -
-                                  1 && <br />}
-                            </div>
-                          ))
-                      : "정보 없음"}
-                  </span>
-                </li>
-                <li className="info-item">
-                  <span className="info-name">·&nbsp;&nbsp;주차</span>
-                  <span
-                    className="info-content"
-                    dangerouslySetInnerHTML={{
-                      __html: spotApiDetails?.parking || "정보 없음",
-                    }}
-                  />
-                </li>
-                <li className="info-item">
-                  <span className="info-name">·&nbsp;&nbsp;북마크 수</span>
-                  <span className="info-content">{spotDetails?.bookmark}</span>
-                </li>
+            <SpotInformation>
+              <div className="tabs">
+                <button
+                  className={`tab-button ${
+                    activeTab === "basic" ? "active" : ""
+                  }`}
+                  onClick={() => handleTabClick("basic")}
+                >
+                  기본 정보
+                </button>
+                <p>|</p>
+                <button
+                  className={`tab-button ${
+                    activeTab === "detail" ? "active" : ""
+                  }`}
+                  onClick={() => handleTabClick("detail")}
+                >
+                  상세 정보
+                </button>
               </div>
-              <div className="info-right">
-                <li className="info-item">
-                  <span className="info-name">·&nbsp;&nbsp;휴일</span>
-                  <span className="info-content">
-                    {spotApiDetails?.restdate
-                      ? spotApiDetails.restdate.split("<br>").map((line, i) => (
-                          <div key={i}>
-                            {line}
-                            {i <
-                              spotApiDetails.restdate.split("<br>").length -
-                                1 && <br />}
-                          </div>
-                        ))
-                      : "정보 없음"}
-                  </span>
-                </li>
-                <li className="info-item">
-                  <span className="info-name">·&nbsp;&nbsp;운영 시간</span>
-                  <span className="info-content">
-                    {spotApiDetails?.usetime
-                      ? spotApiDetails.usetime.split("<br>").map((line, i) => (
-                          <div key={i}>
-                            {line}
-                            {i <
-                              spotApiDetails.usetime.split("<br>").length -
-                                1 && <br />}
-                          </div>
-                        ))
-                      : "정보 없음"}
-                  </span>
-                </li>
 
-                <li className="info-item">
-                  <span className="info-name">·&nbsp;&nbsp;홈페이지</span>
-                  {spotApiInfo?.homepage ? (
-                    spotApiInfo.homepage.startsWith("www.") ? (
-                      <a
-                        href={`http://${spotApiInfo.homepage}`}
-                        className="info-content"
-                      >
-                        {`http://${spotApiInfo.homepage}`}
-                      </a>
-                    ) : spotApiInfo.homepage.includes('<a href="') ? (
-                      <a
-                        href={spotApiInfo.homepage.split('"')[1]}
-                        className="info-content"
-                      >
-                        {spotApiInfo.homepage.split('"')[1]}
-                      </a>
-                    ) : (
+              {/* 기본 정보 탭 */}
+              {activeTab === "basic" && (
+                <div className="info-detail">
+                  <div className="informationDetail">
+                    <li className="info-item">
+                      <span className="info-name">&nbsp;&nbsp;주소</span>
                       <span className="info-content">
-                        {spotApiInfo.homepage}
+                        {spotDetails?.addr1 || "정보 없음"}
                       </span>
-                    )
-                  ) : (
-                    <span className="info-content">정보 없음</span>
-                  )}
-                </li>
-              </div>
-            </div>
-            <h2>상세 정보</h2>
-            <div className="info-description">
-              {spotApiInfo?.overview
-                ? spotApiInfo.overview.split("<br>").map((line, i) => (
-                    <React.Fragment key={i}>
-                      {line}
-                      {i < spotApiInfo.overview.split("<br>").length - 1 && (
-                        <br />
+                    </li>
+                    <li className="info-item">
+                      <span className="info-name">&nbsp;&nbsp;문의 전화</span>
+                      <span className="info-content">
+                        {spotApiDetails?.infocenter
+                          ? spotApiDetails.infocenter
+                              .split("<br>")
+                              .map((line, i) => (
+                                <div key={i}>
+                                  {line}
+                                  {i <
+                                    spotApiDetails.infocenter.split("<br>")
+                                      .length -
+                                      1 && <br />}
+                                </div>
+                              ))
+                          : "정보 없음"}
+                      </span>
+                    </li>
+                    <li className="info-item">
+                      <span className="info-name">&nbsp;&nbsp;주차</span>
+                      <span
+                        className="info-content"
+                        dangerouslySetInnerHTML={{
+                          __html: spotApiDetails?.parking || "정보 없음",
+                        }}
+                      />
+                    </li>
+                    <li className="info-item">
+                      <span className="info-name">&nbsp;&nbsp;휴일</span>
+                      <span className="info-content">
+                        {spotApiDetails?.restdate
+                          ? spotApiDetails.restdate
+                              .split("<br>")
+                              .map((line, i) => (
+                                <div key={i}>
+                                  {line}
+                                  {i <
+                                    spotApiDetails.restdate.split("<br>")
+                                      .length -
+                                      1 && <br />}
+                                </div>
+                              ))
+                          : "정보 없음"}
+                      </span>
+                    </li>
+                    <li className="info-item">
+                      <span className="info-name">&nbsp;&nbsp;운영 시간</span>
+                      <span className="info-content">
+                        {spotApiDetails?.usetime
+                          ? spotApiDetails.usetime
+                              .split("<br>")
+                              .map((line, i) => (
+                                <div key={i}>
+                                  {line}
+                                  {i <
+                                    spotApiDetails.usetime.split("<br>")
+                                      .length -
+                                      1 && <br />}
+                                </div>
+                              ))
+                          : "정보 없음"}
+                      </span>
+                    </li>
+                    <li className="info-item">
+                      <span className="info-name">&nbsp;&nbsp;홈페이지</span>
+                      {spotApiInfo?.homepage ? (
+                        spotApiInfo.homepage.startsWith("www.") ? (
+                          <a
+                            href={`http://${spotApiInfo.homepage}`}
+                            className="info-content"
+                          >
+                            {`http://${spotApiInfo.homepage}`}
+                          </a>
+                        ) : spotApiInfo.homepage.includes('<a href="') ? (
+                          <a
+                            href={spotApiInfo.homepage.split('"')[1]}
+                            className="info-content"
+                          >
+                            {spotApiInfo.homepage.split('"')[1]}
+                          </a>
+                        ) : (
+                          <span className="info-content">
+                            {spotApiInfo.homepage}
+                          </span>
+                        )
+                      ) : (
+                        <span className="info-content">정보 없음</span>
                       )}
-                    </React.Fragment>
-                  ))
-                : "정보 없음"}
-            </div>
+                    </li>
+                  </div>
+                </div>
+              )}
+
+              {/* 상세 정보 탭 */}
+              {activeTab === "detail" && (
+                <div className="info-description">
+                  <div className="informationDetail">
+                    {spotApiInfo?.overview
+                      ? spotApiInfo.overview.split("<br>").map((line, i) => (
+                          <React.Fragment key={i}>
+                            {line}
+                            {i <
+                              spotApiInfo.overview.split("<br>").length - 1 && (
+                              <br />
+                            )}
+                          </React.Fragment>
+                        ))
+                      : "정보 없음"}
+                  </div>
+                </div>
+              )}
+            </SpotInformation>
             <div className="item-map">
               <KakaoMapSpot mapX={spotDetails.mapX} mapY={spotDetails.mapY} />
               <NearTravelList>
                 <h3>주변 관광지</h3>
                 {nearbySpots.length > 0 && (
                   <div className="nearby-travelspot">
-                    {nearbySpots.map((spot) => (
-                      <div key={spot.id}>
-                        <div className="nearbybox">
-                          <Link
-                            to={`/tourItemInfo/${spot.id}`}
-                            className="nearbyspot"
-                          >
-                            <h4>{spot.title}</h4>
-                            <p>주소: {spot.addr1}</p>
-                          </Link>
+                    {nearbySpots.map((spot) => {
+                      const categoryPath = getCategoryName(
+                        spot.cat1,
+                        spot.cat2,
+                        spot.cat3
+                      );
+                      return (
+                        <div key={spot.id}>
+                          <div className="nearbybox">
+                            <Link
+                              to={`/tourItemInfo/${spot.id}`}
+                              className="nearbyspot"
+                            >
+                              <h4>{spot.title}</h4>
+                              <p>{categoryPath}</p>
+                            </Link>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </NearTravelList>

@@ -23,9 +23,9 @@ export const TravelSpotApi = {
 export const TourItemApi = {
   getSpotDetails: async (spotId) => {
     try {
-      console.log("여기 : ", spotId);
+      // console.log("여기 : ", spotId);
       const response = await AxiosInstance.get(`/api/travelspotInfo/${spotId}`);
-      console.log("API 응답 데이터:", response.data); // 응답 데이터 확인
+      // console.log("API 응답 데이터:", response.data); // 응답 데이터 확인
       return response.data || [];
     } catch (error) {
       console.error("여행지 상세 조회 오류:", error);
@@ -36,9 +36,9 @@ export const TourItemApi = {
   // 근처 관광지 조회
   getNearbySpots: async (mapX, mapY, radius = 5, spot_id) => {
     try {
-      console.log(
-        `근처 관광지 요청 - X좌표: ${mapX}, Y좌표: ${mapY}, 반경: ${radius}km`
-      );
+      // console.log(
+      //   `근처 관광지 요청 - X좌표: ${mapX}, Y좌표: ${mapY}, 반경: ${radius}km`
+      // );
       const response = await AxiosInstance.get(`/nearby`, {
         params: {
           mapX: mapX,
@@ -47,7 +47,7 @@ export const TourItemApi = {
           spotId: spot_id,
         },
       });
-      console.log("근처 관광지 목록 응답 데이터:", response.data); // 응답 데이터 확인
+      // console.log("근처 관광지 목록 응답 데이터:", response.data); // 응답 데이터 확인
       return response.data || [];
     } catch (error) {
       console.error("근처 관광지 조회 오류:", error);

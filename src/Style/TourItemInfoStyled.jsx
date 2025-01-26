@@ -12,12 +12,7 @@ export const TourItemInfoBox = styled.div`
     border-bottom: 2px solid #ddd;
   }
 
-  .tour-title,
-  .info-item {
-    /* display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden; */
+  .tour-title {
     margin-bottom: 15px;
     display: table;
     strong {
@@ -25,14 +20,30 @@ export const TourItemInfoBox = styled.div`
     }
   }
   .tourThumb {
-    width: 100%;
+    width: 80%;
     text-align: center;
+    margin: auto;
     .tour-image {
       margin: auto;
-      width: 80%;
-      height: 450px;
+      width: 100%;
+      height: 40vh;
       border-radius: 10px;
       object-fit: cover;
+    }
+    .swiper-button-next,
+    .swiper-button-prev {
+      color: white !important;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    .swiper-button-next:after,
+    .swiper-button-prev:after {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .swiper-pagination-bullet-active {
+      background-color: ${colors.colorB};
     }
   }
   h2 {
@@ -40,31 +51,6 @@ export const TourItemInfoBox = styled.div`
     padding-bottom: 4px;
     border-bottom: 1.8px solid #ddd;
     display: inline-block;
-  }
-  .info-detail,
-  .info-description {
-    width: 90%;
-    margin: 10px auto;
-    display: flex;
-    line-height: 1.5;
-
-    .info-left,
-    .info-right {
-      width: 50%;
-    }
-    .info-name {
-      font-weight: bold;
-      width: 100px;
-      display: inline-block;
-    }
-    .info-content {
-      display: table-cell;
-    }
-  }
-  .info-description {
-    line-height: 2;
-    margin-top: 0;
-    margin-bottom: 4%;
   }
 
   .tour-details {
@@ -96,6 +82,7 @@ export const TourItemInfoBox = styled.div`
     width: 100%;
     height: 500px;
     gap: 10px;
+
     @media (max-width: 768px) {
       flex-direction: column;
       height: 800px;
@@ -107,7 +94,7 @@ export const TourItemInfoBox = styled.div`
 `;
 
 export const NearTravelList = styled.div`
-  width: 70%;
+  width: 60%;
   h3 {
     margin: 3px 0 8px 0;
   }
@@ -148,5 +135,62 @@ export const NearTravelList = styled.div`
   @media (max-width: 768px) {
     height: 50%;
     width: 100%;
+  }
+`;
+export const SpotInformation = styled.div`
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  height: 300px;
+  width: 80%;
+  overflow: hidden;
+  .tabs {
+    justify-items: center;
+    align-items: center;
+    display: flex;
+    height: 50px;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    button {
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+      height: 30px;
+      margin: auto;
+      width: 30%;
+      transition: all 0.2s ease;
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+    button.active {
+      background-color: ${colors.colorC};
+    }
+  }
+  .informationDetail {
+    width: 90%;
+    margin: 10px auto;
+  }
+  .info-item {
+    display: flex;
+    margin: 20px auto;
+  }
+  .info-detail,
+  .info-description {
+    margin: 10px auto;
+    line-height: 1.5;
+    height: 75%;
+    overflow-y: scroll;
+    ${ScrollBar}
+    .info-name {
+      font-weight: bold;
+      width: 100px;
+      display: inline-block;
+      color: ${colors.colorA};
+    }
+    .info-content {
+      display: table-cell;
+    }
   }
 `;
