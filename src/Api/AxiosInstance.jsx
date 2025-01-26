@@ -8,6 +8,7 @@ const AxiosInstance = axios.create({
 // 요청 인터셉터 추가
 AxiosInstance.interceptors.request.use(
   async (config) => {
+    console.log("요청 인터셉터")
     const accessToken = Common.getAccessToken();
     config.headers.Authorization = `Bearer ${accessToken}`;
     return config;
@@ -34,7 +35,10 @@ const addSubscriber = (callback) => {
 
 // 응답 인터셉터 추가
 AxiosInstance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log("응답 인터셉터");
+    return response;
+  },
   async (error) => {
     console.log("AxiosInstance 응답 에러: ", error);
 

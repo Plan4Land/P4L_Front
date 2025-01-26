@@ -9,7 +9,7 @@ const AdminApi = {
       id: id,
       password: password,
     };
-    return axios.post(Common.PLAN_DOMAIN+"/admin/admin-login", data);
+    return axios.post(Common.PLAN_DOMAIN + "/admin/admin-login", data);
   },
   // 유저 검색
   userSearch: async (keyword, select) => {

@@ -9,7 +9,7 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = async () => {
     try{
       const response = await AdminApi.adminLogin(id, password);
       console.log(response);
