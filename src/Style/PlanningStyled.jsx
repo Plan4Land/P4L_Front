@@ -920,6 +920,7 @@ export const SearchSelectMenuContainer = styled.div`
   gap: 15%;
   box-sizing: border-box;
   margin: 3% 3% 0;
+  ${ScrollBar}
   .menu-item {
     cursor: pointer;
     transition: all 0.3s ease;
@@ -941,9 +942,11 @@ export const SearchSelectMenuContainer = styled.div`
 export const SearchMemberContainer = styled.div`
   width: 100%;
   height: 100%;
+
   .searched-users-container {
     height: 88%;
     overflow-y: auto;
+    ${ScrollBar}
   }
 `;
 
@@ -979,6 +982,7 @@ export const SearchBookmarkContainer = styled.div`
   overflow-y: auto;
   border: 1px solid #ddd;
   padding: 10px;
+  ${ScrollBar}
 `;
 
 export const DayToggleContainer = styled.div`

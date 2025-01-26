@@ -22,7 +22,12 @@ import "swiper/css/autoplay";
 import { Navigation, Pagination, Autoplay } from "swiper/modules"; // 추천 관광지 스와이퍼
 import Calendar from "react-calendar"; // 축제 캘린더
 import "react-calendar/dist/Calendar.css"; // 캘린더
-import { TopTourApi, TopPlanApi, HolidayApi } from "../Api/ItemApi";
+import {
+  TopTourApi,
+  TopPlanApi,
+  HolidayApi,
+  TourItemApi,
+} from "../Api/ItemApi";
 import type100 from "../Img/cateimg/type_100.png";
 import type200 from "../Img/cateimg/type_200.png";
 import type300 from "../Img/cateimg/type_300.png";

@@ -1,6 +1,12 @@
 import { Map, MapMarker, Roadview, RoadviewMarker } from "react-kakao-maps-sdk";
 import { useMap } from "react-kakao-maps-sdk";
 import React, { useState, useEffect, useMemo } from "react";
+import { ScrollBar } from "./ButtonComponent";
+import styled from "styled-components";
+import markerFood from "../Img/cateimg/markerFood.png";
+import markerPlace from "../Img/cateimg/markerPlace.png";
+import markerRoom from "../Img/cateimg/markerRoom.png";
+import { colors } from "../Style/GlobalStyle";
 
 const { kakao } = window;
 
@@ -65,6 +71,10 @@ export const KakaoMapSpot = ({ mapX, mapY }) => {
     </div>
   );
 };
+
+export const MapInfo = styled.div`
+  color: ${colors.colorD};
+`;
 
 // 플래너 페이지에 사용되는 지도
 export const KakaoMap = React.memo(({ plans, date }) => {
@@ -142,11 +152,11 @@ export const KakaoMap = React.memo(({ plans, date }) => {
     };
     const markerImage = (category) => {
       if (category?.includes("숙박") || category?.includes("부동산")) {
-        return "/img/cateimg/markerRoom.png";
+        return markerRoom;
       } else if (category?.includes("음식")) {
-        return "/img/cateimg/markerFood.png";
+        return markerFood;
       } else {
-        return "/img/cateimg/markerPlace.png";
+        return markerPlace;
       }
     };
 
@@ -165,7 +175,18 @@ export const KakaoMap = React.memo(({ plans, date }) => {
         onMouseOver={() => setIsVisible(true)}
         onMouseOut={() => setIsVisible(false)}
       >
-        {isVisible && content}
+        {isVisible && (
+          <div
+            style={{
+              padding: "4px 6px", // 패딩
+              fontSize: "14px", // 글씨 크기
+              fontWeight: "bold", // 글씨 굵기
+              textAlign: "center", // 텍스트 가운데 정렬
+            }}
+          >
+            {content}
+          </div>
+        )}
       </MapMarker>
     );
   };
@@ -192,6 +213,16 @@ export const KakaoMap = React.memo(({ plans, date }) => {
   );
 });
 
+export const ScrollableStyle = styled.div`
+  width: 90%;
+  height: 385px;
+  max-height: 385px;
+  margin: 0 auto;
+  padding: 10px;
+  border: 1px solid #ddd;
+  overflow-y: scroll;
+  ${ScrollBar}
+`;
 // 플래너 페이지에서 장소 추가할 때 검색
 export const SearchKakaoMap = ({
   searchKeyword,
@@ -266,16 +297,7 @@ export const SearchKakaoMap = ({
           ></MapMarker>
         ))}
       </Map>
-      <div
-        style={{
-          width: "90%",
-          height: "385px",
-          margin: "0 auto",
-          overflowY: "auto",
-          border: "1px solid #ddd",
-          padding: "10px",
-        }}
-      >
+      <ScrollableStyle>
         <h4 style={{ margin: "3px auto" }}>검색 결과</h4>
         <hr />
         <ul style={{ listStyleType: "none", padding: 0 }}>
@@ -297,7 +319,7 @@ export const SearchKakaoMap = ({
             </li>
           ))}
         </ul>
-      </div>
+      </ScrollableStyle>
     </div>
   );
 };

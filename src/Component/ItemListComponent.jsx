@@ -2,9 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ServiceCode } from "../Util/Service_code_final";
-import cate100 from "../Img/cateimg/type_100.png"
-import cate200 from "../Img/cateimg/type_200.png"
-import cate300 from "../Img/cateimg/type_300.png"
+import cate100 from "../Img/cateimg/type_100.png";
+import cate200 from "../Img/cateimg/type_200.png";
+import cate300 from "../Img/cateimg/type_300.png";
+import { TourItemApi } from "../Api/ItemApi";
+import { useState, useEffect } from "react";
 
 const TourItemStyled = styled.div`
   width: ${(props) => props.width || "40vw"};
@@ -45,6 +47,7 @@ const TourItemStyled = styled.div`
   .thumbnailSearch {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 
   .infoWrapper {
@@ -209,23 +212,100 @@ const TourItemStyled = styled.div`
   }
 `;
 
-export const TourItem = ({
-  // thumbnail,
-  // title,
-  // address,
-  // subCategory,
-  // type,
-  // id,
-  data,
-  width,
-  height,
-  margin,
-}) => {
+// export const TourItem = ({
+//   // thumbnail,
+//   // title,
+//   // address,
+//   // subCategory,
+//   // type,
+//   // id,
+//   data,
+//   width,
+//   height,
+//   margin,
+// }) => {
+//   const navigate = useNavigate();
+//   const title = data.title;
+//   const address = data.addr1;
+//   const type = data.typeName;
+//   const thumbnail = data.thumbnail;
+
+//   const handleOnClick = () => {
+//     navigate(`/tourItemInfo/${data.id}`, {
+//       state: { title, address, subCategory, type, thumbnail },
+//     });
+//   };
+
+//   // 기본 이미지 설정: type에 따라 다르게 설정
+//   const getDefaultImage = (typeId) => {
+//     switch (typeId) {
+//       case "200":
+//         return cate100;
+//       case "100":
+//         return cate200;
+//       case "300":
+//         return cate300;
+//       default:
+//         return "/profile-pic/basic7.png";
+//     }
+//   };
+
+//   const imageUrl = thumbnail ? thumbnail : getDefaultImage(data.typeId);
+
+//   const getCategoryPath = () => {
+//     const cat1Item = ServiceCode.find((item) => item.cat1 === data.cat1);
+//     const cat2Item = cat1Item?.cat2List.find((item) => item.cat2 === data.cat2);
+//     const cat3Item = cat2Item?.cat3List.find((item) => item.cat3 === data.cat3);
+
+//     return [cat1Item?.cat1Name, cat2Item?.cat2Name, cat3Item?.cat3Name]
+//       .filter(Boolean)
+//       .join(" > ");
+//   };
+
+//   const subCategory = getCategoryPath();
+
+//   return (
+//     <TourItemStyled
+//       width={width}
+//       height={height}
+//       margin={margin}
+//       onClick={handleOnClick}
+//     >
+//       <div className="img">
+//         <img className="thumbnail" src={imageUrl} alt={title} />
+//       </div>
+//       <div className="infoWrapper">
+//         <h3 className="title">{title}</h3>
+//         <p className="address">{address}</p>
+//         <p className="subCategory">{subCategory}</p>
+//         <p className="type">{type}</p>
+//       </div>
+//     </TourItemStyled>
+//   );
+// };
+export const TourItem = ({ data, width, height, margin }) => {
   const navigate = useNavigate();
   const title = data.title;
   const address = data.addr1;
   const type = data.typeName;
   const thumbnail = data.thumbnail;
+  const spotId = data.id;
+
+  const [spotApiPics, setSpotApiPics] = useState([]);
+
+  useEffect(() => {
+    const fetchSpotImages = async () => {
+      try {
+        // API 호출하여 상세 이미지 배열을 가져옴
+        const apiPics = await TourItemApi.getSpotApiPics(spotId);
+        setSpotApiPics(apiPics); // 상태에 이미지 배열 저장
+      } catch (error) {
+        console.error("이미지 로드 오류:", error);
+      }
+    };
+
+    fetchSpotImages();
+  }, [spotId]);
 
   const handleOnClick = () => {
     navigate(`/tourItemInfo/${data.id}`, {
@@ -243,11 +323,20 @@ export const TourItem = ({
       case "300":
         return cate300;
       default:
-        return "/profile-pic/basic7.png";
+        return "/profile-pic/basic7.png"; // 기본 이미지 경로
     }
   };
 
-  const imageUrl = thumbnail ? thumbnail : getDefaultImage(data.typeId);
+  // API에서 가져온 이미지 URL 추출
+  const apiImageUrls = Array.isArray(spotApiPics.item)
+    ? spotApiPics.item.map((pic) => pic.originimgurl).filter(Boolean) // 유효한 URL만 추출
+    : [];
+
+  // 최종 이미지 배열 생성 (API 이미지가 없으면 기본 이미지 사용)
+  const images =
+    apiImageUrls.length > 0
+      ? apiImageUrls
+      : [thumbnail || getDefaultImage(data.typeId)];
 
   const getCategoryPath = () => {
     const cat1Item = ServiceCode.find((item) => item.cat1 === data.cat1);
@@ -269,7 +358,7 @@ export const TourItem = ({
       onClick={handleOnClick}
     >
       <div className="img">
-        <img className="thumbnail" src={imageUrl} alt={title} />
+        <img className="thumbnail" src={images[0]} alt={title} />
       </div>
       <div className="infoWrapper">
         <h3 className="title">{title}</h3>
@@ -342,24 +431,46 @@ export const SearchTourItem = ({
   setCurrentAddedPlace,
   setModals,
 }) => {
+  const [spotApiPics, setSpotApiPics] = useState([]);
+
+  // API에서 이미지 가져오기
+  useEffect(() => {
+    const fetchSpotImages = async () => {
+      try {
+        const apiPics = await TourItemApi.getSpotApiPics(data.id);
+        setSpotApiPics(apiPics); // 상태에 이미지 배열 저장
+      } catch (error) {
+        console.error("이미지 로드 오류:", error);
+      }
+    };
+
+    fetchSpotImages();
+  }, [data.id]);
+
   // 기본 썸네일 이미지를 typeId에 따라 반환
   const getDefaultImage = (typeId) => {
     switch (typeId) {
       case "100":
-        return "/img/cateimg/type_200.png";
+        return cate200;
       case "200":
-        return "/img/cateimg/type_100.png";
+        return cate100;
       case "300":
-        return "/img/cateimg/type_300.png";
+        return cate300;
       default:
         return "/profile-pic/basic7.png"; // 기본 이미지
     }
   };
 
-  // 썸네일 이미지 결정
-  const imageUrl = data.thumbnail
-    ? data.thumbnail
-    : getDefaultImage(data.typeId);
+  // API에서 가져온 이미지 URL 추출
+  const apiImageUrls = Array.isArray(spotApiPics.item)
+    ? spotApiPics.item.map((pic) => pic.originimgurl).filter(Boolean) // 유효한 URL만 추출
+    : [];
+
+  // 최종 이미지 배열 생성 (API 이미지가 없으면 기본 이미지 사용)
+  const images =
+    apiImageUrls.length > 0
+      ? apiImageUrls
+      : [data.thumbnail || getDefaultImage(data.typeId)];
 
   // 카테고리 경로 계산
   const getCategoryPath = () => {
@@ -400,7 +511,7 @@ export const SearchTourItem = ({
       onClick={() => handleTourItemClick()}
     >
       <div className="imgSearch">
-        <img className="thumbnailSearch" src={imageUrl} alt={data.title} />
+        <img className="thumbnailSearch" src={images[0]} alt={data.title} />
       </div>
       <div className="infoWrapperSearch">
         <h3 className="titleSearch">{data.title}</h3>
