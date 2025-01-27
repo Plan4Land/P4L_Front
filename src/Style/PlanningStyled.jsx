@@ -1219,12 +1219,13 @@ export const ChatMsgContainer = styled.div`
   flex-direction: column;
   width: 95%;
   /* height: 83%; */
-  height: calc(100% - 100px);
+  max-height: calc(100% - 85px);
   overflow-y: scroll;
   gap: 10px;
   position: absolute;
-  top: 40px;
-  border-top: 1px solid #ddd;
+  // top: 40px;
+  bottom: 50px;
+  // border-top: 1px solid #ddd;
   ${ScrollBar};
 `;
 
