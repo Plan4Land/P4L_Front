@@ -584,6 +584,7 @@ export const MainPlanning = styled.div`
     opacity: 0;
     transform: translateX(-100%);
     transition: all 0.3s ease;
+    scale: 0.8;
 
     &.open {
       visibility: visible;
@@ -594,8 +595,8 @@ export const MainPlanning = styled.div`
     position: absolute;
     z-index: 10;
     background-color: white;
-    top: 135px;
-    left: 15px;
+    top: 95px;
+    left: 5px;
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -1164,10 +1165,14 @@ export const ChatContainer = styled.div`
     top: 140px;
   }
   @media (max-width: 768px) {
-    top: 130px;
+    top: 80px;
+    right: -10px;
+    scale: 0.9;
   }
   @media (max-width: 400px) {
     width: 240px;
+    scale: 0.8;
+    top: 70px;
   }
   .chat-header {
     width: 93%;
@@ -1191,6 +1196,7 @@ export const ChatContainer = styled.div`
     bottom: 0;
     margin-bottom: 8px;
     margin-left: 5px;
+    border: 1px solid black;
     textarea {
       width: 16rem;
       font-size: 15px;
@@ -1219,7 +1225,7 @@ export const ChatContainer = styled.div`
         cursor: default;
       }
       svg {
-        font-size: 2rem;
+        font-size: 1.8rem;
       }
     }
   }
