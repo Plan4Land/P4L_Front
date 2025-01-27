@@ -210,7 +210,7 @@ export const Signup = () => {
           setInputEmail2("");
           setIsEmail2Show(true);
           setIsLoading(false);
-          setEmailTimeLeft(10);
+          setEmailTimeLeft(300);
         })
         .catch((error) => {
           setEmailMsg(
@@ -446,6 +446,7 @@ export const Signup = () => {
               <button
                 className="duplicateButton"
                 onClick={handleEmailCheck}
+                disabled={emailCheck && email2Check}
               >
                 {isEmail2Show ? "재전송" : "인증"}
               </button>
@@ -469,10 +470,14 @@ export const Signup = () => {
                       placeholder="이메일 인증번호"
                       value={inputEmail2}
                       onChange={(e) => setInputEmail2(e.target.value)}
+                      readOnly={email2Check}
                     />
-                    <span style={{color:  'red'}}>
-                      {formatEmailTime(emailTimeLeft)}
-                    </span>
+                    {email2Check ? "" : 
+                      <span style={{color:  'red'}}>
+                        {formatEmailTime(emailTimeLeft)}
+                      </span>
+                    }
+                    
                   </div>
                 </InputBox>
                 <button
