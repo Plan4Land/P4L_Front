@@ -240,6 +240,25 @@ export const Info = styled.div`
     background-color: #89bafa;
   }
 
+  .editing-info {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    color: white;
+    z-index: 2;
+    span {
+      font-weight: bold;
+    }
+    @media (max-width: 990px) {
+      top: 10px;
+    }
+    @media (max-width: 768px) {
+      color: black;
+      left: 60px;
+      top: -47px;
+    }
+  }
+
   .plans-toggle-icon {
     display: none; /* 기본적으로 숨김 (768px 이상에서도 숨기기) */
 
@@ -407,11 +426,6 @@ export const Users = styled.div`
     &:hover {
       scale: 1.1;
     }
-  }
-  .editing-info {
-    position: absolute;
-    right: 0;
-    bottom: 0;
   }
 `;
 
