@@ -174,6 +174,16 @@ const AxiosApi = {
       console.log(error);
       throw error;
     }
+  },
+  // 정지 사유
+  banData: async (userId) => {
+    try{
+      const response = await axios.get(Common.PLAN_DOMAIN +`/member/bandata/${userId}`);
+      return response.data;
+    }catch(error){
+      console.log(error);
+      return null;
+    }
   }
 };
 export default AxiosApi;

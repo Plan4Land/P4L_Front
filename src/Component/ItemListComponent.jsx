@@ -7,6 +7,7 @@ import cate200 from "../Img/cateimg/type_200.png";
 import cate300 from "../Img/cateimg/type_300.png";
 // import { TourItemApi } from "../Api/ItemApi";
 // import { useState, useEffect } from "react";
+import profile from "../Img/profile-pic/basic1.png";
 
 const TourItemStyled = styled.div`
   width: ${(props) => props.width || "40vw"};
@@ -398,7 +399,8 @@ export const PlanItem = ({
       },
     });
   };
-  const defaultImage = "/profile-pic/basic7.png";
+  const defaultImage = profile;
+  // console.log(profile);
   const imageUrl = thumbnail ? thumbnail : defaultImage;
   return (
     <TourItemStyled
