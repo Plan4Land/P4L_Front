@@ -55,6 +55,10 @@ const planningPictures = [
 
 export const ProfileImg = ({ file, width, height }) => {
   const getSrc = (file) => {
+    if(!file){
+      return "";
+    }
+
     if (file.includes("firebasestorage")) {
       return file;
     }
