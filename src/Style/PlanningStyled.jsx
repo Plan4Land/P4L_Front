@@ -1196,7 +1196,7 @@ export const ChatContainer = styled.div`
     bottom: 0;
     margin-bottom: 8px;
     margin-left: 5px;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     textarea {
       width: 16rem;
       font-size: 15px;
