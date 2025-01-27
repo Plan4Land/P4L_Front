@@ -1,29 +1,29 @@
-import { Footer, Header } from "../../Component/GlobalComponent";
+import {Footer, Header} from "../../Component/GlobalComponent";
 import {
   OtherUserInfo,
   UserInfo,
   UserMain,
   UserPlanning,
 } from "../../Style/MyPageMainStyled";
-import { useEffect, useState } from "react";
-import { CheckModal, Modal } from "../../Util/Modal";
-import { Button } from "../../Component/ButtonComponent";
-import { useNavigate, useParams } from "react-router-dom";
-import { UserPlannerApi } from "../../Api/ItemApi";
-import { areas } from "../../Util/Common";
-import { PlanItem } from "../../Component/ItemListComponent";
+import {useEffect, useState} from "react";
+import {CheckModal, Modal} from "../../Util/Modal";
+import {Button} from "../../Component/ButtonComponent";
+import {useNavigate, useParams} from "react-router-dom";
+import {UserPlannerApi} from "../../Api/ItemApi";
+import {areas} from "../../Util/Common";
+import {PlanItem} from "../../Component/ItemListComponent";
 import AxiosApi from "../../Api/AxiosApi";
-import { Pagination } from "../../Component/Pagination";
+import {Pagination} from "../../Component/Pagination";
 
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useMediaQuery } from "react-responsive";
-import { useAuth } from "../../Context/AuthContext";
+import {useMediaQuery} from "react-responsive";
+import {useAuth} from "../../Context/AuthContext";
 import FollowLoad from "../../Component/UserPageComponent/FollowLoad";
 import ReportModal from "../../Component/UserPageComponent/ReportModalComponent";
 
 export const Otheruser = () => {
-  const { userId } = useParams();
-  const { user } = useAuth();
+  const {userId} = useParams();
+  const {user} = useAuth();
   const [planners, setPlanners] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -40,6 +40,7 @@ export const Otheruser = () => {
   const [showReportModal, setShowReportModal] = useState(false); // 신고 모달 상태
   const [showConfirmationModal, setShowConfirmationModal] = useState(false); // 신고 완료 모달 상태
   const [reportContent, setReportContent] = useState(""); // 신고 내용 저장
+  const [isActivateUser, setIsActivateUser] = useState(true);
 
   // 신고하기 모달을 닫고 완료 모달을 열기
   const handleReportConfirm = () => {
@@ -52,7 +53,7 @@ export const Otheruser = () => {
   const handleConfirmationClose = () => {
     setShowConfirmationModal(false);
   };
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const isMobile = useMediaQuery({query: "(max-width: 768px)"});
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -138,7 +139,10 @@ export const Otheruser = () => {
     const fetchUserInfo = async () => {
       try {
         const response = await AxiosApi.memberInfo(userId);
+        console.log(response.data);
+        console.log(response.data.state);
         setUserInfo(response.data);
+        setIsActivateUser(response.data.state === null);
       } catch (error) {
         console.error("유저 정보를 불러오는 데 오류가 발생했습니다:", error);
       }
@@ -164,7 +168,7 @@ export const Otheruser = () => {
     console.log(user?.id, " : ", userId);
 
     closeFollowModal();
-  }, [userId, isFollowed]);
+  }, [isFollowed]);
 
   const loadMorePlanners = () => {
     if (page + 1 < totalPages) {
@@ -207,7 +211,7 @@ export const Otheruser = () => {
                 </div>
               </div>
             </div>
-            {user && user.id !== userId && (
+            {user && user.id !== userId && isActivateUser && (
               <div className="Button">
                 {isFollowed ? (
                   <Button
@@ -227,6 +231,9 @@ export const Otheruser = () => {
                 </Button>
               </div>
             )}
+            {isActivateUser ? "" : (<p>
+              비활성화된 계정입니다.
+            </p>)}
           </UserInfo>
         </OtherUserInfo>
         <UserPlanning>
@@ -247,8 +254,8 @@ export const Otheruser = () => {
                     areas
                       .find((area) => area.code === planner.area)
                       ?.subAreas.find(
-                        (subArea) => subArea.code === planner.subArea
-                      )?.name || "알 수 없는 하위 지역";
+                      (subArea) => subArea.code === planner.subArea
+                    )?.name || "알 수 없는 하위 지역";
                   return (
                     <div className="itemBox">
                       <PlanItem
@@ -280,8 +287,8 @@ export const Otheruser = () => {
                   areas
                     .find((area) => area.code === planner.area)
                     ?.subAreas.find(
-                      (subArea) => subArea.code === planner.subArea
-                    )?.name || "알 수 없는 하위 지역";
+                    (subArea) => subArea.code === planner.subArea
+                  )?.name || "알 수 없는 하위 지역";
                 return (
                   <div className="itemBox">
                     <PlanItem
@@ -327,7 +334,7 @@ export const Otheruser = () => {
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
         onConfirm={handleReportConfirm}
-        buttonProps={{ children: "확인" }}
+        buttonProps={{children: "확인"}}
       >
         <h3>신고 내용을 입력해주세요</h3>
         <textarea
