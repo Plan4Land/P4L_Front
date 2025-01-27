@@ -107,8 +107,6 @@ export const PictureComponent = (props) => {
     setCurrentPic(URL.createObjectURL(picture));
   };
 
-  console.log("currentPic : ", currentPic);
-
   return (
     <>
       <PictureBox width={width} height={height}>
