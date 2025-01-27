@@ -1,30 +1,30 @@
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import {useState, useRef} from "react";
+import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import AxiosApi from "../../Api/AxiosApi";
 
 // context
-import { useAuth } from "../../Context/AuthContext";
+import {useAuth} from "../../Context/AuthContext";
 
 // component
 import Common from "../../Util/Common";
-import { Header, Footer } from "../../Component/GlobalComponent";
+import {Header, Footer} from "../../Component/GlobalComponent";
 import {
   Center,
   SignupContainer,
   InputBox,
 } from "../../Component/SignupComponents/SignupComponent";
-import { Button } from "../../Component/ButtonComponent";
+import {Button} from "../../Component/ButtonComponent";
 import {
   FindUserIdModal,
   ResultUserIdModal,
   FindPwModal,
-  ResultPwModal,
+  ResultPwModal, BanModal,
 } from "../../Component/SignupComponents/SignupModalComponent";
 
 // icon
-import { GoLock, GoEye, GoEyeClosed } from "react-icons/go";
-import { VscAccount } from "react-icons/vsc";
+import {GoLock, GoEye, GoEyeClosed} from "react-icons/go";
+import {VscAccount} from "react-icons/vsc";
 
 export const Login = () => {
   const [inputUserId, setInputUserId] = useState("");
@@ -38,13 +38,15 @@ export const Login = () => {
   const [findIdResultModalOpen, setFindIdResultModalOpen] = useState(false);
   const [pwModalOpen, setPwModalOpen] = useState(false);
   const [pwResultModalOpen, setPwResultModalOpen] = useState(false);
+  const [banModalOpen, setBanModalOpen] = useState(false);
 
   const [findIdResult, setFindIdResult] = useState("");
   const [findPwResult, setFindPwResult] = useState("");
+  const [banData, setBanData] = useState({});
 
   const navigate = useNavigate();
 
-  const { login } = useAuth();
+  const {login} = useAuth();
 
   const handleInputChange = (e, setState) => {
     setState(e.target.value);
@@ -88,6 +90,11 @@ export const Login = () => {
         error.response.data.message === "탈퇴한 회원입니다."
       ) {
         setTextMessage("탈퇴한 회원입니다.");
+      } else if (error.response.status === 403) {
+        const data = await AxiosApi.banData(inputUserId);
+        console.log(data)
+        setBanData(data);
+        setBanModalOpen(true);
       } else {
         setTextMessage("아이디 또는 비밀번호가 일치하지 않습니다.");
       }
@@ -159,7 +166,7 @@ export const Login = () => {
             <div className="textMessage">{textMessage}</div>
             <InputBox>
               <div className="iconBox-left">
-                <VscAccount />
+                <VscAccount/>
               </div>
               <div className="inputBox">
                 <input
@@ -174,7 +181,7 @@ export const Login = () => {
 
             <InputBox>
               <div className="iconBox-left">
-                <GoLock />
+                <GoLock/>
               </div>
               <div className="inputBox">
                 <input
@@ -186,7 +193,7 @@ export const Login = () => {
                   onKeyDown={handleEnterKey}
                 />
                 <div className="iconBox-right" onClick={onClickPwEye}>
-                  {isPwShow ? <GoEye /> : <GoEyeClosed />}
+                  {isPwShow ? <GoEye/> : <GoEyeClosed/>}
                 </div>
               </div>
             </InputBox>
@@ -266,7 +273,7 @@ export const Login = () => {
           </div>
 
           <Button onClick={onClickLogin}>로그인</Button>
-          <div style={{ margin: "30px" }} />
+          <div style={{margin: "30px"}}/>
 
           {/* 아이디 찾기 모달 */}
           <FindUserIdModal
@@ -296,6 +303,13 @@ export const Login = () => {
             open={pwResultModalOpen}
             close={() => openModal(setPwResultModalOpen, false)}
             email={findPwResult}
+          />
+
+          <BanModal
+            open={banModalOpen}
+            close={() => openModal(setBanModalOpen, false)}
+            id={banData.userId}
+            banDays={banData.endDate}
           />
         </SignupContainer>
       </Center>
