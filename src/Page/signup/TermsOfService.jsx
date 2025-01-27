@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import {
@@ -39,6 +39,15 @@ export const TermsOfService = () => {
   const handleClickScd = () => {
     setIsCheckedScd((prev) => !prev);
   }
+
+  // 전체동의 자동 활성화
+  useEffect(() => {
+    if (isCheckedFst && isCheckedScd) {
+      setIsCheckedTotal(true);
+    } else {
+      setIsCheckedTotal(false);
+    }
+  }, [isCheckedFst, isCheckedScd]);
 
   const isButtonOn = isCheckedFst && isCheckedScd;
 

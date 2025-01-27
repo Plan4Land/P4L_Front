@@ -15,6 +15,7 @@ import TermsOfService from "./Page/signup/TermsOfService";
 import RequestPayment from "./Page/Payment/RequestPayment";
 import Test from "./Page/test";
 import ProtectedRoute from "./Util/ProtectedRoute";
+import GuestRoute from "./Util/GuestRoute";
 import { TourItemInfo } from "./Page/Item/TourItemInfo";
 import KakaoRedirect from "./Page/signup/LoginRedirect/KakaoLoginRedirect";
 import GoogleRedirect from "./Page/signup/LoginRedirect/GoogleLoginRedirect";
@@ -32,20 +33,14 @@ function App() {
         <DndProvider backend={HTML5Backend}>
           <Router>
             <Routes>
+              
               {/* 로그인 필요 없는 페이지 */}
               <Route path="/" element={<Main />} />
-              <Route path="/planning/:plannerId" element={<Planning />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/login/oauth/kakao" element={<KakaoRedirect />} />
-              <Route path="/login/oauth/google" element={<GoogleRedirect />} />
-              <Route path="/login/oauth/naver" element={<NaverRedirect />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/ktxInquiry" element={<KtxInquiry />} />
+              <Route path="/planning/:plannerId" element={<Planning />} /><Route path="/ktxInquiry" element={<KtxInquiry />} />
               <Route path="/tourlist" element={<TourList />} />
               <Route path="/tourItemInfo" element={<TourItemInfo />} />
               <Route path="/tourItemInfo/:id" element={<TourItemInfo />} />
               <Route path="/planninglist" element={<PlanningList />} />
-              <Route path="/signup/terms" element={<TermsOfService />} />
               <Route path="/otheruser/:userId" element={<Otheruser />} />
               <Route path="/test" element={<Test />} />
               <Route path="/admin" element={<AdminLogin />} />
@@ -70,6 +65,57 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+
+              {/* 로그인시 접근불가 페이지 */}
+              <Route 
+                path="/login" 
+                element={
+                  <GuestRoute>
+                    <Login />
+                  </GuestRoute>
+                } 
+              />
+              <Route 
+                path="/login/oauth/kakao" 
+                element={
+                  <GuestRoute>
+                    <KakaoRedirect />
+                  </GuestRoute>
+                } 
+              />
+              <Route 
+                path="/login/oauth/google" 
+                element={
+                  <GuestRoute>
+                    <GoogleRedirect />
+                  </GuestRoute>
+                } 
+              />
+              <Route 
+                path="/login/oauth/naver" 
+                element={
+                  <GuestRoute>
+                    <NaverRedirect />
+                  </GuestRoute>
+                } 
+              />
+              <Route 
+                path="/signup" 
+                element={
+                  <GuestRoute>
+                    <Signup />
+                  </GuestRoute>
+                } 
+              />
+              <Route 
+                path="/signup/terms" 
+                element={
+                  <GuestRoute>
+                    <TermsOfService />
+                  </GuestRoute>
+                } 
+              />
+              
             </Routes>
           </Router>
         </DndProvider>
