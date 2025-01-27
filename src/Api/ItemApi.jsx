@@ -66,7 +66,7 @@ export const TourItemApi = {
           contentId: spotId,
           defaultYN: "Y",
           overviewYN: "Y",
-          serviceKey: process.env.REACT_APP_API_KEY_JISUK,
+          serviceKey: process.env.REACT_APP_API_KEY_KAHEE,
         },
       }
     );
@@ -100,7 +100,7 @@ export const TourItemApi = {
           _type: "json",
           contentId: spotId,
           contentTypeId: typeId,
-          serviceKey: process.env.REACT_APP_API_KEY_JISUK,
+          serviceKey: process.env.REACT_APP_API_KEY_KAHEE,
         },
       }
     );

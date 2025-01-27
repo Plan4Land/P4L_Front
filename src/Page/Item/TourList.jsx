@@ -480,15 +480,6 @@ export const TourList = () => {
                   <p>해당하는 조건의 관광지가 존재하지 않습니다.</p>
                 ) : (
                   travelSpots.map((spot) => {
-                    const cat3Name = ServiceCode.flatMap((cat) =>
-                      cat.cat2List.flatMap((cat2) =>
-                        cat2.cat3List.filter((cat3) => cat3.cat3 === spot.cat3)
-                      )
-                    ).map((cat3) => cat3.cat3Name)[0];
-                    const typeName = types.find(
-                      (type) => type.code === spot.typeId
-                    )?.name;
-
                     return (
                       <div className="itemBox">
                         <TourItem
