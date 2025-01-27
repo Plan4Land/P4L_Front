@@ -1,5 +1,6 @@
 import axios from "axios";
 import AxiosInstance from "./AxiosInstance";
+import Common from "../Util/Common";
 
 // 여행지 목록 조회
 export const TravelSpotApi = {
@@ -9,7 +10,7 @@ export const TravelSpotApi = {
         ...filters,
       };
 
-      const response = await AxiosInstance.get("/api/travelspots", { params });
+      const response = await axios.get(Common.PLAN_DOMAIN + "/spots/api/travelspots", {params});
 
       return response.data || [];
     } catch (error) {
@@ -24,7 +25,7 @@ export const TourItemApi = {
   getSpotDetails: async (spotId) => {
     try {
       // console.log("여기 : ", spotId);
-      const response = await AxiosInstance.get(`/api/travelspotInfo/${spotId}`);
+      const response = await axios.get(Common.PLAN_DOMAIN + `/spots/api/travelspotInfo/${spotId}`);
       // console.log("API 응답 데이터:", response.data); // 응답 데이터 확인
       return response.data || [];
     } catch (error) {
@@ -39,7 +40,7 @@ export const TourItemApi = {
       // console.log(
       //   `근처 관광지 요청 - X좌표: ${mapX}, Y좌표: ${mapY}, 반경: ${radius}km`
       // );
-      const response = await AxiosInstance.get(`/nearby`, {
+      const response = await axios.get(Common.PLAN_DOMAIN + `/spots/nearby`, {
         params: {
           mapX: mapX,
           mapY: mapY,
@@ -113,7 +114,7 @@ export const BookmarkApi = {
   addBookmark: async (memberId, spotId) => {
     try {
       const response = await AxiosInstance.post("/api/bookmarks/add", null, {
-        params: { memberId, spotId },
+        params: {memberId, spotId},
       });
       return response.data;
     } catch (error) {
@@ -125,7 +126,7 @@ export const BookmarkApi = {
   removeBookmark: async (memberId, spotId) => {
     try {
       const response = await AxiosInstance.delete("/api/bookmarks/remove", {
-        params: { memberId, spotId }, // params로 변경
+        params: {memberId, spotId}, // params로 변경
       });
       return response.data;
     } catch (error) {
@@ -137,7 +138,7 @@ export const BookmarkApi = {
   getBookmarkStatus: async (memberId, spotId) => {
     try {
       const response = await AxiosInstance.get("/api/bookmarks/status", {
-        params: { memberId, spotId },
+        params: {memberId, spotId},
       });
       return response.data;
     } catch (error) {
@@ -152,7 +153,7 @@ export const BookmarkedSpotsApi = {
   getBookmarkedSpots: async (memberId, page = 0, size = 3) => {
     try {
       const response = await AxiosInstance.get(`/api/bookmarks/myBookmarks`, {
-        params: { memberId, page, size },
+        params: {memberId, page, size},
       });
       return response.data; // 응답 데이터에는 Page 객체가 포함됩니다.
     } catch (error) {
@@ -169,7 +170,7 @@ export const PlannerItemApi = {
       const params = {
         ...filters, // 필터 추가
       };
-      const response = await AxiosInstance.get("/planner/planners", { params });
+      const response = await axios.get(Common.PLAN_DOMAIN + "/planner/planners", {params});
       return response.data || [];
     } catch (error) {
       console.error("플래너 데이터 조회 오류:", error);
@@ -185,7 +186,7 @@ export const BookmarkedPlanApi = {
       const response = await AxiosInstance.get(
         `/bookmarkPlanner/myBookmarkPlanners`,
         {
-          params: { memberId, page, size },
+          params: {memberId, page, size},
         }
       );
       return response.data;
@@ -200,7 +201,7 @@ export const BookmarkedPlanApi = {
 export const TopTourApi = {
   getTop5Travelspots: async () => {
     try {
-      const response = await AxiosInstance.get(`/api/travelspotTop5`);
+      const response = await axios.get(Common.PLAN_DOMAIN + `/spots/api/travelspotTop5`);
       return response.data;
     } catch (error) {
       console.error("상위 5개 관광지 조회 오류: ", error);
@@ -213,7 +214,7 @@ export const TopTourApi = {
 export const TopPlanApi = {
   getTop3Plans: async () => {
     try {
-      const response = await AxiosInstance.get(`/bookmarkPlanner/plannersTop3`);
+      const response = await axios.get(Common.PLAN_DOMAIN + `/bookmarkPlanner/plannersTop3`);
       return response.data;
     } catch (error) {
       console.error("상위 3개 플래닝 조회 오류: ", error);
@@ -227,7 +228,7 @@ export const MyPlannerApi = {
   getPlannersByOwner: async (memberId, page = 0, size = 5) => {
     try {
       const response = await AxiosInstance.get(`/planner/myPlanners`, {
-        params: { memberId, page, size },
+        params: {memberId, page, size},
       });
       return response.data;
     } catch (error) {
@@ -241,8 +242,8 @@ export const MyPlannerApi = {
 export const UserPlannerApi = {
   getuserPlannersByOwner: async (memberId, page = 0, size = 5) => {
     try {
-      const response = await AxiosInstance.get(`/planner/userPlanners`, {
-        params: { memberId, page, size },
+      const response = await axios.get(Common.PLAN_DOMAIN + `/planner/userPlanners`, {
+        params: {memberId, page, size},
       });
       return response.data;
     } catch (error) {
@@ -257,7 +258,7 @@ export const InPlannerApi = {
   getIncludePlan: async (memberId, page = 0, size = 5) => {
     try {
       const response = await AxiosInstance.get(`/planner/inPlanners`, {
-        params: { memberId, page, size },
+        params: {memberId, page, size},
       });
       return response.data;
     } catch (error) {
@@ -271,8 +272,8 @@ export const InPlannerApi = {
 export const HolidayApi = {
   getHolidaysByMonth: async (year, month) => {
     try {
-      const response = await AxiosInstance.get("/holidays", {
-        params: { year, month },
+      const response = await axios.get(Common.PLAN_DOMAIN + "/holidays", {
+        params: {year, month},
       });
       return response.data; // 공휴일 목록 반환
     } catch (error) {
