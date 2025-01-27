@@ -417,7 +417,7 @@ export const PlanItem = ({
         <p className="type">{type}</p>
       </div>
       <div className="owner">
-        <img className="ownerth" src={ownerprofile} alt="" />
+        <img className="ownerth" src={ownerprofile} alt={ownerprofile} />
         <p className="ownernick">{ownernick}</p>
       </div>
     </TourItemStyled>
