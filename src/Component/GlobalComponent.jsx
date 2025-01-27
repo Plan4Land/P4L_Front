@@ -38,6 +38,7 @@ export const Header = () => {
       const response = await AxiosApi.logout(user.id);
       if (response.status === 204) {
         logout();
+        setShowLogoutModal(false);
         navigate("/login");
       } else {
         console.error("Logout failed: Invalid response data");
