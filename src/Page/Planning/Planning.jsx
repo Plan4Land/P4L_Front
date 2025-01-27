@@ -167,7 +167,6 @@ export const Planning = () => {
     } else {
       // 편집 시작하면
       console.log("편집 시작", plannerInfo);
-      console.log(selectedThemes);
       setEditPlannerInfo(plannerInfo);
       setEditPlans(plans);
       message = {
@@ -299,29 +298,29 @@ export const Planning = () => {
         };
       }
     }
-    const closeMessage = {
-      type: "CLOSE",
-      plannerId: plannerId,
-      sender: sender,
-      message: editor,
-      data: {
-        plannerInfo: null,
-        plans: null,
-        isEditting: false,
-      },
-    };
+    // const closeMessage = {
+    //   type: "CLOSE",
+    //   plannerId: plannerId,
+    //   sender: sender,
+    //   message: editor,
+    //   data: {
+    //     plannerInfo: null,
+    //     plans: null,
+    //     isEditting: false,
+    //   },
+    // };
 
-    const handleBeforeUnload = () => {
-      console.log("editor /////// ", editor);
-      if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-        ws.current.send(JSON.stringify(closeMessage));
-      }
-    };
+    // const handleBeforeUnload = () => {
+    //   console.log("editor /////// ", editor);
+    //   if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+    //     ws.current.send(JSON.stringify(closeMessage));
+    //   }
+    // };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    // window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
+      // window.removeEventListener("beforeunload", handleBeforeUnload);
       if (ws.current) {
         ws.current.close();
         ws.current = null;
