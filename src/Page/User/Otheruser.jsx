@@ -174,8 +174,7 @@ export const Otheruser = () => {
 
   return (
     <>
-      <Header />
-
+      {/* <Header /> */}
       <UserMain>
         <OtherUserInfo>
           <UserInfo>
@@ -345,7 +344,7 @@ export const Otheruser = () => {
       >
         <p>신고가 완료되었습니다.</p>
       </CheckModal>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

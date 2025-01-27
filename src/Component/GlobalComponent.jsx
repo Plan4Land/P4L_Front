@@ -10,6 +10,7 @@ import { MyPlannerApi, BookmarkedSpotsApi } from "../Api/ItemApi";
 // import Logo from "../../src/Img/Plan4landLogo.png";
 import Logo from "../Img/plan4landlogo.png";
 import Title from "../../src/Img/plan4land_.png";
+import { Outlet } from "react-router-dom";
 
 export const Header = () => {
   // const [topSpots, setTopSpots] = useState([]);
@@ -279,5 +280,17 @@ export const Footer = () => {
       <p>문의가 필요한 사항은 메일 부탁드립니다.</p>
       <p>mail: plan4land.mail@gmail.com</p>
     </FooterSt>
+  );
+};
+
+export const Layout = () => {
+  return (
+    <div>
+      <Header />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
   );
 };

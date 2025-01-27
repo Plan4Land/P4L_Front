@@ -1,32 +1,38 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { Header, Footer } from '../../Component/GlobalComponent';
-import { Button, ToggleButton } from '../../Component/ButtonComponent';
-import { Table, SelectTourItem, SearchSt, List, FilterButton } from '../../Style/ItemListStyled';
-import { FaUndo, FaSearch } from 'react-icons/fa';
+import React, { useState, useCallback, useEffect } from "react";
+import { Header, Footer } from "../../Component/GlobalComponent";
+import { Button, ToggleButton } from "../../Component/ButtonComponent";
+import {
+  Table,
+  SelectTourItem,
+  SearchSt,
+  List,
+  FilterButton,
+} from "../../Style/ItemListStyled";
+import { FaUndo, FaSearch } from "react-icons/fa";
 import { Pagination } from "../../Component/Pagination";
-import { InterCityService } from '../../Util/Service_InterCityBus_code';
-import { InterCityGradeService } from '../../Util/Service_InterCityGrade_code';
+import { InterCityService } from "../../Util/Service_InterCityBus_code";
+import { InterCityGradeService } from "../../Util/Service_InterCityGrade_code";
 import { FaBars } from "react-icons/fa";
 
 const IntercityBus = () => {
-  const [schedule, setSchedule] = useState([]); 
-  const [displayedSchedule, setDisplayedSchedule] = useState([]); 
-  const [selectedDepCat1, setSelectedDepCat1] = useState(''); 
-  const [selectedDepCat2, setSelectedDepCat2] = useState(''); 
-  const [selectedArrCat1, setSelectedArrCat1] = useState(''); 
-  const [selectedArrCat2, setSelectedArrCat2] = useState(''); 
-  const [date, setDate] = useState(''); 
-  const [loading, setLoading] = useState(false); 
-  const [currentPage, setCurrentPage] = useState(0); 
-  const [selectedBusGrade, setSelectedBusGrade] = useState('');
+  const [schedule, setSchedule] = useState([]);
+  const [displayedSchedule, setDisplayedSchedule] = useState([]);
+  const [selectedDepCat1, setSelectedDepCat1] = useState("");
+  const [selectedDepCat2, setSelectedDepCat2] = useState("");
+  const [selectedArrCat1, setSelectedArrCat1] = useState("");
+  const [selectedArrCat2, setSelectedArrCat2] = useState("");
+  const [date, setDate] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [selectedBusGrade, setSelectedBusGrade] = useState("");
   const [isSelectOpen, setIsSelectOpen] = useState(false);
 
-    // 토글 상태 관리
-    const [isDepCat1Open, setIsDepCat1Open] = useState(true);
-    const [isDepCat2Open, setIsDepCat2Open] = useState(true);
-    const [isArrCat1Open, setIsArrCat1Open] = useState(true);
-    const [isArrCat2Open, setIsArrCat2Open] = useState(true);
-    const [isGradeOpen, setIsGradeOpen] = useState(true);
+  // 토글 상태 관리
+  const [isDepCat1Open, setIsDepCat1Open] = useState(true);
+  const [isDepCat2Open, setIsDepCat2Open] = useState(true);
+  const [isArrCat1Open, setIsArrCat1Open] = useState(true);
+  const [isArrCat2Open, setIsArrCat2Open] = useState(true);
+  const [isGradeOpen, setIsGradeOpen] = useState(true);
 
   const itemsPerPage = 25;
 
@@ -46,30 +52,33 @@ const IntercityBus = () => {
 
   const fetchSchedule = useCallback(async () => {
     if (!date || !selectedDepCat2 || !selectedArrCat2) {
-      alert('대분류, 중분류는 모두 선택해주세요!');
+      alert("대분류, 중분류는 모두 선택해주세요!");
       return;
     }
-  
-     // 출발지 터미널 찾기
-    const selectedDepTerminal = InterCityService.flatMap((cat1) => cat1.cat2List)
-    .find((cat2) => cat2.cat2 === selectedDepCat2);
+
+    // 출발지 터미널 찾기
+    const selectedDepTerminal = InterCityService.flatMap(
+      (cat1) => cat1.cat2List
+    ).find((cat2) => cat2.cat2 === selectedDepCat2);
 
     // 도착지 터미널 찾기
-    const selectedArrTerminal = InterCityService.flatMap((cat1) => cat1.cat2List)
-      .find((cat2) => cat2.cat2 === selectedArrCat2);
+    const selectedArrTerminal = InterCityService.flatMap(
+      (cat1) => cat1.cat2List
+    ).find((cat2) => cat2.cat2 === selectedArrCat2);
 
     if (!selectedDepTerminal || !selectedArrTerminal) {
-      alert('선택한 역에 대한 데이터를 찾을 수 없습니다.');
+      alert("선택한 역에 대한 데이터를 찾을 수 없습니다.");
       return;
     }
-  
+
     const depTerminalId = selectedDepTerminal.cat2Code;
     const arrTerminalId = selectedArrTerminal.cat2Code;
-  
-    const formattedDate = date.replace(/-/g, '');
-  
+
+    const formattedDate = date.replace(/-/g, "");
+
     const params = {
-      serviceKey: 'BaAcBeQKCSysvfPe3OYNj5RZR2Ndak1B6nK/pNi+AWPXoWb9ERyK++Iih8TqfSog2L4NtpXRGXOUouQhD+cigw==',
+      serviceKey:
+        "BaAcBeQKCSysvfPe3OYNj5RZR2Ndak1B6nK/pNi+AWPXoWb9ERyK++Iih8TqfSog2L4NtpXRGXOUouQhD+cigw==",
       depTerminalId: depTerminalId,
       arrTerminalId: arrTerminalId,
       depPlandTime: formattedDate,
@@ -77,18 +86,19 @@ const IntercityBus = () => {
       pageNo: 1,
     };
 
-    const url = 'http://apis.data.go.kr/1613000/SuburbsBusInfoService/getStrtpntAlocFndSuberbsBusInfo';
+    const url =
+      "http://apis.data.go.kr/1613000/SuburbsBusInfoService/getStrtpntAlocFndSuberbsBusInfo";
 
     setLoading(true);
     try {
       const response = await fetch(`${url}?${new URLSearchParams(params)}`);
-      console.log('API 응답 상태:', response.status);
+      console.log("API 응답 상태:", response.status);
       const textData = await response.text(); // XML 데이터로 받아옴
-      console.log('XML 응답 데이터:', textData);
+      console.log("XML 응답 데이터:", textData);
 
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(textData, "application/xml");
-      const items = xmlDoc.getElementsByTagName('item');
+      const items = xmlDoc.getElementsByTagName("item");
 
       if (items.length > 0) {
         const schedules = Array.from(items).map((item) => {
@@ -97,24 +107,31 @@ const IntercityBus = () => {
             const minute = timeStr.substring(10, 12);
             return `${hour}:${minute}`;
           };
-  
+
           return {
-            depStation: item.getElementsByTagName('depPlaceNm')[0]?.textContent || '',
-            arrStation: item.getElementsByTagName('arrPlaceNm')[0]?.textContent || '',
-            depTime: formatTime(item.getElementsByTagName('depPlandTime')[0]?.textContent || ''),
-            arrTime: formatTime(item.getElementsByTagName('arrPlandTime')[0]?.textContent || ''),
-            busGrade: item.getElementsByTagName('gradeNm')[0]?.textContent || '',
-            charge: item.getElementsByTagName('charge')[0]?.textContent || '',
+            depStation:
+              item.getElementsByTagName("depPlaceNm")[0]?.textContent || "",
+            arrStation:
+              item.getElementsByTagName("arrPlaceNm")[0]?.textContent || "",
+            depTime: formatTime(
+              item.getElementsByTagName("depPlandTime")[0]?.textContent || ""
+            ),
+            arrTime: formatTime(
+              item.getElementsByTagName("arrPlandTime")[0]?.textContent || ""
+            ),
+            busGrade:
+              item.getElementsByTagName("gradeNm")[0]?.textContent || "",
+            charge: item.getElementsByTagName("charge")[0]?.textContent || "",
           };
         });
         setSchedule(schedules);
         setCurrentPage(0);
       } else {
-        alert('조회된 시외버스 시간이 없습니다.');
+        alert("조회된 시외버스 시간이 없습니다.");
       }
     } catch (error) {
-      console.error('시외버스 조회 오류:', error);
-      alert('시외버스 조회 중 오류가 발생했습니다.');
+      console.error("시외버스 조회 오류:", error);
+      alert("시외버스 조회 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }
@@ -125,18 +142,21 @@ const IntercityBus = () => {
   };
 
   const handleResetSelections = () => {
-    setSelectedDepCat1('');
-    setSelectedDepCat2('');
-    setSelectedArrCat1('');
-    setSelectedArrCat2('');
-    setDate('');
+    setSelectedDepCat1("");
+    setSelectedDepCat2("");
+    setSelectedArrCat1("");
+    setSelectedArrCat2("");
+    setDate("");
     setSchedule([]);
     setCurrentPage(0);
-    console.log('초기화됨');
+    console.log("초기화됨");
   };
 
   const getCat2List = (selectedCat1) => {
-    return InterCityService.find((cat1) => cat1.cat1 === selectedCat1)?.cat2List || [];
+    return (
+      InterCityService.find((cat1) => cat1.cat1 === selectedCat1)?.cat2List ||
+      []
+    );
   };
 
   const handleToggleSelect = () => {
@@ -151,7 +171,7 @@ const IntercityBus = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <FilterButton onClick={handleToggleSelect}>
         <FaBars />
       </FilterButton>
@@ -159,7 +179,7 @@ const IntercityBus = () => {
         <SelectTourItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
-            <FaUndo style={{ marginLeft: '6px' }} />
+            <FaUndo style={{ marginLeft: "6px" }} />
           </button>
 
           {/* 날짜 입력 */}
@@ -177,10 +197,7 @@ const IntercityBus = () => {
           <div className="mainarea">
             <h3>
               출발 지역 선택
-              <ToggleButton
-                isOpen={isDepCat1Open}
-                onToggle={toggleDepCat1}
-                />
+              <ToggleButton isOpen={isDepCat1Open} onToggle={toggleDepCat1} />
             </h3>
             {isDepCat1Open && (
               <div>
@@ -189,9 +206,9 @@ const IntercityBus = () => {
                     key={`dep-cat1-${cat1.cat1}`}
                     onClick={() => {
                       setSelectedDepCat1(cat1.cat1);
-                      setSelectedDepCat2('');
+                      setSelectedDepCat2("");
                     }}
-                    className={selectedDepCat1 === cat1.cat1 ? 'selected' : ''}
+                    className={selectedDepCat1 === cat1.cat1 ? "selected" : ""}
                   >
                     {cat1.cat1}
                   </Button>
@@ -204,9 +221,7 @@ const IntercityBus = () => {
             <div className="details-area">
               <h3>
                 출발 세부 지역 선택
-                <ToggleButton isOpen={isDepCat2Open} 
-                onToggle={toggleDepCat2} 
-                />
+                <ToggleButton isOpen={isDepCat2Open} onToggle={toggleDepCat2} />
               </h3>
               {isDepCat2Open && (
                 <div>
@@ -216,7 +231,9 @@ const IntercityBus = () => {
                       onClick={() => {
                         setSelectedDepCat2(cat2.cat2);
                       }}
-                      className={selectedDepCat2 === cat2.cat2 ? 'selected' : ''}
+                      className={
+                        selectedDepCat2 === cat2.cat2 ? "selected" : ""
+                      }
                     >
                       {cat2.cat2}
                     </Button>
@@ -230,10 +247,7 @@ const IntercityBus = () => {
           <div className="mainarea">
             <h3>
               도착 지역 선택
-              <ToggleButton
-                isOpen={isArrCat1Open}
-                onToggle={toggleArrCat1}
-              />
+              <ToggleButton isOpen={isArrCat1Open} onToggle={toggleArrCat1} />
             </h3>
             {isArrCat1Open && (
               <div>
@@ -242,9 +256,9 @@ const IntercityBus = () => {
                     key={`dep-cat1-${cat1.cat1}`}
                     onClick={() => {
                       setSelectedArrCat1(cat1.cat1);
-                      setSelectedArrCat2('');
+                      setSelectedArrCat2("");
                     }}
-                    className={selectedArrCat1 === cat1.cat1 ? 'selected' : ''}
+                    className={selectedArrCat1 === cat1.cat1 ? "selected" : ""}
                   >
                     {cat1.cat1}
                   </Button>
@@ -257,10 +271,7 @@ const IntercityBus = () => {
             <div className="details-area">
               <h3>
                 도착 세부 지역 선택
-                <ToggleButton 
-                isOpen={isArrCat2Open} 
-                onToggle={toggleArrCat2} 
-                />
+                <ToggleButton isOpen={isArrCat2Open} onToggle={toggleArrCat2} />
               </h3>
               {isArrCat2Open && (
                 <div>
@@ -270,7 +281,10 @@ const IntercityBus = () => {
                       onClick={() => {
                         setSelectedArrCat2(cat2.cat2);
                       }}
-                      className={selectedArrCat2 === cat2.cat2 ? 'selected' : ''}>
+                      className={
+                        selectedArrCat2 === cat2.cat2 ? "selected" : ""
+                      }
+                    >
                       {cat2.cat2}
                     </Button>
                   ))}
@@ -293,10 +307,10 @@ const IntercityBus = () => {
                       key={grade.GradeId}
                       onClick={() => {
                         setSelectedBusGrade((prev) => {
-                          if (grade.GradeId === '') {
-                            return [''];
+                          if (grade.GradeId === "") {
+                            return [""];
                           }
-                          if (prev.includes('')) {
+                          if (prev.includes("")) {
                             return [grade.GradeId];
                           }
                           if (prev.includes(grade.GradeId)) {
@@ -305,7 +319,11 @@ const IntercityBus = () => {
                           return [...prev, grade.GradeId];
                         });
                       }}
-                      className={selectedBusGrade.includes(grade.GradeId) ? 'selected' : ''}
+                      className={
+                        selectedBusGrade.includes(grade.GradeId)
+                          ? "selected"
+                          : ""
+                      }
                     >
                       {grade.GradeNm}
                     </Button>
@@ -317,8 +335,8 @@ const IntercityBus = () => {
 
           <div>
             <Button onClick={fetchSchedule} disabled={loading}>
-              {loading ? '로딩 중...' : '조회'}
-              <FaSearch style={{ marginLeft: '6px' }} />
+              {loading ? "로딩 중..." : "조회"}
+              <FaSearch style={{ marginLeft: "6px" }} />
             </Button>
           </div>
         </SelectTourItem>
@@ -354,17 +372,23 @@ const IntercityBus = () => {
             </Table>
           )}
           {schedule.length > 0 && (
-            <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={Math.ceil(schedule.length / itemsPerPage)}
-              handlePageChange={handlePageChange}
-            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "20px",
+              }}
+            >
+              <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(schedule.length / itemsPerPage)}
+                handlePageChange={handlePageChange}
+              />
             </div>
           )}
         </div>
       </List>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

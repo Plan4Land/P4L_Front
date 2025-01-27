@@ -1,22 +1,28 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { KTXServiceCode } from '../../Util/Service_KTX_code'; 
-import { Header, Footer } from '../../Component/GlobalComponent';
-import { Button, ToggleButton } from '../../Component/ButtonComponent';
-import { Table, SelectTourItem, SearchSt, FilterButton, List } from '../../Style/ItemListStyled';
-import { FaUndo, FaSearch } from 'react-icons/fa';
-import { Vehiclekind } from '../../Util/Service_VehicleKind_code';
-import {Pagination} from "../../Component/Pagination";
+import React, { useState, useCallback, useEffect } from "react";
+import { KTXServiceCode } from "../../Util/Service_KTX_code";
+import { Header, Footer } from "../../Component/GlobalComponent";
+import { Button, ToggleButton } from "../../Component/ButtonComponent";
+import {
+  Table,
+  SelectTourItem,
+  SearchSt,
+  FilterButton,
+  List,
+} from "../../Style/ItemListStyled";
+import { FaUndo, FaSearch } from "react-icons/fa";
+import { Vehiclekind } from "../../Util/Service_VehicleKind_code";
+import { Pagination } from "../../Component/Pagination";
 import { FaBars } from "react-icons/fa";
 
 const KtxInquiry = () => {
   const [schedule, setSchedule] = useState([]);
   const [displayedSchedule, setDisplayedSchedule] = useState([]);
-  const [selectedDepCat1, setSelectedDepCat1] = useState(''); 
-  const [selectedDepCat2, setSelectedDepCat2] = useState('');
-  const [selectedArrCat1, setSelectedArrCat1] = useState(''); 
-  const [selectedArrCat2, setSelectedArrCat2] = useState('');
+  const [selectedDepCat1, setSelectedDepCat1] = useState("");
+  const [selectedDepCat2, setSelectedDepCat2] = useState("");
+  const [selectedArrCat1, setSelectedArrCat1] = useState("");
+  const [selectedArrCat2, setSelectedArrCat2] = useState("");
   const [selectedVehicle, setSelectedVehicle] = useState([]);
-  const [date, setDate] = useState(''); 
+  const [date, setDate] = useState("");
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
@@ -28,16 +34,16 @@ const KtxInquiry = () => {
   const [isArrCat2Open, setIsArrCat2Open] = useState(true);
   const [isVehicleOpen, setIsVehicleOpen] = useState(true);
 
-  const itemsPerPage = 22; 
+  const itemsPerPage = 22;
 
   useEffect(() => {
     if (schedule.length > 0) {
-      const startIndex = currentPage * itemsPerPage; 
+      const startIndex = currentPage * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
-      setDisplayedSchedule(schedule.slice(startIndex, endIndex)); 
+      setDisplayedSchedule(schedule.slice(startIndex, endIndex));
     }
   }, [schedule, currentPage]);
-  
+
   useEffect(() => {
     if (schedule.length > 0) {
       setDisplayedSchedule(schedule.slice(0, itemsPerPage));
@@ -47,20 +53,22 @@ const KtxInquiry = () => {
   const calculateDuration = (depTime, arrTime) => {
     const dep = new Date(`1970-01-01T${depTime}:00Z`);
     const arr = new Date(`1970-01-01T${arrTime}:00Z`);
-    
+
     if (arr < dep) {
       arr.setDate(arr.getDate() + 1);
     }
-  
+
     const diff = arr - dep;
-    
+
     if (diff < 0) {
-      return '유효하지 않은 시간';
+      return "유효하지 않은 시간";
     }
-    
-    const hours = String(Math.floor(diff / (1000 * 60 * 60))).padStart(2, '0');
-    const minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-    
+
+    const hours = String(Math.floor(diff / (1000 * 60 * 60))).padStart(2, "0");
+    const minutes = String(
+      Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+    ).padStart(2, "0");
+
     return `${hours}:${minutes}`;
   };
 
@@ -73,41 +81,48 @@ const KtxInquiry = () => {
   };
 
   const fetchSchedule = useCallback(async () => {
-    if (!date || !selectedDepCat2 || !selectedArrCat2 ||  selectedVehicle.length === 0) {
-      alert('날짜, 출발 세부 역, 도착 세부 역, 열차 종류를 모두 선택해주세요.');
+    if (
+      !date ||
+      !selectedDepCat2 ||
+      !selectedArrCat2 ||
+      selectedVehicle.length === 0
+    ) {
+      alert("날짜, 출발 세부 역, 도착 세부 역, 열차 종류를 모두 선택해주세요.");
       return;
     }
 
-    const selectedDepTerminal = KTXServiceCode.flatMap((cat1) => cat1.cat2List).find(
-      (terminal) => terminal.cat2 === selectedDepCat2
-    );
-    const selectedArrTerminal = KTXServiceCode.flatMap((cat1) => cat1.cat2List).find(
-      (terminal) => terminal.cat2 === selectedArrCat2
-    );
+    const selectedDepTerminal = KTXServiceCode.flatMap(
+      (cat1) => cat1.cat2List
+    ).find((terminal) => terminal.cat2 === selectedDepCat2);
+    const selectedArrTerminal = KTXServiceCode.flatMap(
+      (cat1) => cat1.cat2List
+    ).find((terminal) => terminal.cat2 === selectedArrCat2);
 
     if (!selectedDepTerminal || !selectedArrTerminal) {
-      alert('선택한 역에 대한 데이터를 찾을 수 없습니다.');
+      alert("선택한 역에 대한 데이터를 찾을 수 없습니다.");
       return;
     }
 
     const depTerminalId = selectedDepTerminal.cat2Code;
     const arrTerminalId = selectedArrTerminal.cat2Code;
 
-    const formattedDate = date.replace(/-/g, '');
+    const formattedDate = date.replace(/-/g, "");
 
     const formatDateTime = (dateTime) => {
       if (!dateTime || dateTime.length < 12) {
-        console.error('잘못된 날짜/시간 형식:', dateTime);
-        return '유효하지 않은 시간';
+        console.error("잘못된 날짜/시간 형식:", dateTime);
+        return "유효하지 않은 시간";
       }
       const hour = dateTime.slice(8, 10);
       const minute = dateTime.slice(10, 12);
       return `${hour}:${minute}`;
     };
 
-    const url = 'http://apis.data.go.kr/1613000/TrainInfoService/getStrtpntAlocFndTrainInfo';
+    const url =
+      "http://apis.data.go.kr/1613000/TrainInfoService/getStrtpntAlocFndTrainInfo";
     const params = {
-      serviceKey: 'BaAcBeQKCSysvfPe3OYNj5RZR2Ndak1B6nK/pNi+AWPXoWb9ERyK++Iih8TqfSog2L4NtpXRGXOUouQhD+cigw==',
+      serviceKey:
+        "BaAcBeQKCSysvfPe3OYNj5RZR2Ndak1B6nK/pNi+AWPXoWb9ERyK++Iih8TqfSog2L4NtpXRGXOUouQhD+cigw==",
       depPlaceId: depTerminalId,
       arrPlaceId: arrTerminalId,
       depPlandTime: formattedDate,
@@ -117,8 +132,11 @@ const KtxInquiry = () => {
     let allSchedules = [];
     try {
       const expandedVehicleCodes = selectedVehicle.flatMap((vehicle) =>
-        Vehiclekind.filter((kind) => kind.ParentVehicleKindCode === vehicle || kind.VehicleKindCode === vehicle)
-          .map((kind) => kind.VehicleKindCode)
+        Vehiclekind.filter(
+          (kind) =>
+            kind.ParentVehicleKindCode === vehicle ||
+            kind.VehicleKindCode === vehicle
+        ).map((kind) => kind.VehicleKindCode)
       );
 
       for (const vehicle of expandedVehicleCodes) {
@@ -130,27 +148,43 @@ const KtxInquiry = () => {
           const textResponse = await response.text();
 
           const parser = new DOMParser();
-          const xmlDoc = parser.parseFromString(textResponse, 'application/xml');
+          const xmlDoc = parser.parseFromString(
+            textResponse,
+            "application/xml"
+          );
 
-          const items = xmlDoc.getElementsByTagName('item');
-          const scheduleData = Array.from(items).map(item => {
-            const depTime = formatDateTime(item.getElementsByTagName('depplandtime')[0]?.textContent || '');
-            const arrTime = formatDateTime(item.getElementsByTagName('arrplandtime')[0]?.textContent || '');
+          const items = xmlDoc.getElementsByTagName("item");
+          const scheduleData = Array.from(items).map((item) => {
+            const depTime = formatDateTime(
+              item.getElementsByTagName("depplandtime")[0]?.textContent || ""
+            );
+            const arrTime = formatDateTime(
+              item.getElementsByTagName("arrplandtime")[0]?.textContent || ""
+            );
             return {
-              depStation: selectedDepCat2, 
+              depStation: selectedDepCat2,
               arrStation: selectedArrCat2,
               depTime,
               arrTime,
-              trainGradeCode: item.getElementsByTagName('traingradename')[0]?.textContent || '',
-              adultCharge: item.getElementsByTagName('adultcharge')[0]?.textContent || '',
-              duration: calculateDuration(depTime, arrTime), 
+              trainGradeCode:
+                item.getElementsByTagName("traingradename")[0]?.textContent ||
+                "",
+              adultCharge:
+                item.getElementsByTagName("adultcharge")[0]?.textContent || "",
+              duration: calculateDuration(depTime, arrTime),
             };
           });
 
           allSchedules = [...allSchedules, ...scheduleData];
 
-          const totalCount = parseInt(xmlDoc.getElementsByTagName('totalCount')[0]?.textContent || '0', 10);
-          const numOfRows = parseInt(xmlDoc.getElementsByTagName('numOfRows')[0]?.textContent || '0', 10);
+          const totalCount = parseInt(
+            xmlDoc.getElementsByTagName("totalCount")[0]?.textContent || "0",
+            10
+          );
+          const numOfRows = parseInt(
+            xmlDoc.getElementsByTagName("numOfRows")[0]?.textContent || "0",
+            10
+          );
           if (currentPage * numOfRows >= totalCount) break;
 
           currentPage += 1;
@@ -162,8 +196,8 @@ const KtxInquiry = () => {
       setSchedule(sortedSchedules);
       setCurrentPage(0);
     } catch (error) {
-      console.error('시간표 조회 오류:', error);
-      alert('시간표 조회 중 오류가 발생했습니다.');
+      console.error("시간표 조회 오류:", error);
+      alert("시간표 조회 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }
@@ -174,18 +208,20 @@ const KtxInquiry = () => {
   };
 
   const handleResetSelections = () => {
-    setSelectedDepCat1('');
-    setSelectedDepCat2('');
-    setSelectedArrCat1('');
-    setSelectedArrCat2('');
+    setSelectedDepCat1("");
+    setSelectedDepCat2("");
+    setSelectedArrCat1("");
+    setSelectedArrCat2("");
     setSelectedVehicle([]);
-    setDate('');
+    setDate("");
     setSchedule([]);
     setCurrentPage(1);
   };
 
   const getCat2List = (selectedCat1) => {
-    return KTXServiceCode.find((cat1) => cat1.cat1 === selectedCat1)?.cat2List || [];
+    return (
+      KTXServiceCode.find((cat1) => cat1.cat1 === selectedCat1)?.cat2List || []
+    );
   };
 
   const handleToggleSelect = () => {
@@ -200,7 +236,7 @@ const KtxInquiry = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <FilterButton onClick={handleToggleSelect}>
         <FaBars />
       </FilterButton>
@@ -208,7 +244,7 @@ const KtxInquiry = () => {
         <SelectTourItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
-            <FaUndo style={{ marginLeft: '6px' }} />
+            <FaUndo style={{ marginLeft: "6px" }} />
           </button>
 
           {/* 날짜 입력 */}
@@ -227,22 +263,19 @@ const KtxInquiry = () => {
           <div className="mainastation">
             <h3>
               출발 지역 선택
-              <ToggleButton
-                isOpen={isDepCat1Open}
-                onToggle={toggleDepCat1}
-                />
+              <ToggleButton isOpen={isDepCat1Open} onToggle={toggleDepCat1} />
             </h3>
-            {isDepCat1Open  && ( // isStationOpen 상태에 따라 조건부 렌더링
+            {isDepCat1Open && ( // isStationOpen 상태에 따라 조건부 렌더링
               <div>
                 {KTXServiceCode.map((cat1) => (
                   <Button
                     key={cat1.cat1}
                     onClick={() => {
                       setSelectedDepCat1(cat1.cat1);
-                      setSelectedDepCat2('');
-                      setSelectedVehicle('');
+                      setSelectedDepCat2("");
+                      setSelectedVehicle("");
                     }}
-                    className={selectedDepCat1 === cat1.cat1 ? 'selected' : ''}
+                    className={selectedDepCat1 === cat1.cat1 ? "selected" : ""}
                   >
                     {cat1.cat1}
                   </Button>
@@ -256,9 +289,7 @@ const KtxInquiry = () => {
             <div className="substation">
               <h3>
                 출발 세부 역 선택
-                <ToggleButton isOpen={isDepCat2Open} 
-                onToggle={toggleDepCat2} 
-                />
+                <ToggleButton isOpen={isDepCat2Open} onToggle={toggleDepCat2} />
               </h3>
               {isDepCat2Open && (
                 <div>
@@ -266,7 +297,9 @@ const KtxInquiry = () => {
                     <Button
                       key={cat2.cat2}
                       onClick={() => setSelectedDepCat2(cat2.cat2)}
-                      className={selectedDepCat2 === cat2.cat2 ? 'selected' : ''}
+                      className={
+                        selectedDepCat2 === cat2.cat2 ? "selected" : ""
+                      }
                     >
                       {cat2.cat2}
                     </Button>
@@ -276,27 +309,23 @@ const KtxInquiry = () => {
             </div>
           )}
 
-
           {/* 도착 지역 선택 */}
           <div className="mainastation">
             <h3>
               도착 지역 선택
-              <ToggleButton
-                isOpen={isArrCat1Open}
-                onToggle={toggleArrCat1}
-              />
+              <ToggleButton isOpen={isArrCat1Open} onToggle={toggleArrCat1} />
             </h3>
-            {isArrCat1Open  && ( // isStationOpen 상태에 따라 조건부 렌더링
+            {isArrCat1Open && ( // isStationOpen 상태에 따라 조건부 렌더링
               <div>
                 {KTXServiceCode.map((cat1) => (
                   <Button
                     key={cat1.cat1}
                     onClick={() => {
                       setSelectedArrCat1(cat1.cat1);
-                      setSelectedArrCat2('');
-                      setSelectedVehicle('');
+                      setSelectedArrCat2("");
+                      setSelectedVehicle("");
                     }}
-                    className={selectedArrCat1 === cat1.cat1 ? 'selected' : ''}
+                    className={selectedArrCat1 === cat1.cat1 ? "selected" : ""}
                   >
                     {cat1.cat1}
                   </Button>
@@ -310,10 +339,7 @@ const KtxInquiry = () => {
             <div className="substation">
               <h3>
                 도착 세부 역 선택
-                <ToggleButton 
-                isOpen={isArrCat2Open} 
-                onToggle={toggleArrCat2} 
-                />
+                <ToggleButton isOpen={isArrCat2Open} onToggle={toggleArrCat2} />
               </h3>
               {isArrCat2Open && (
                 <div>
@@ -321,7 +347,9 @@ const KtxInquiry = () => {
                     <Button
                       key={cat2.cat2}
                       onClick={() => setSelectedArrCat2(cat2.cat2)}
-                      className={selectedArrCat2 === cat2.cat2 ? 'selected' : ''}
+                      className={
+                        selectedArrCat2 === cat2.cat2 ? "selected" : ""
+                      }
                     >
                       {cat2.cat2}
                     </Button>
@@ -336,9 +364,7 @@ const KtxInquiry = () => {
             <div className="trainarea">
               <h3>
                 열차 종류 선택
-                <ToggleButton 
-                  isOpen={isVehicleOpen} 
-                  onToggle={toggleVehicle} />
+                <ToggleButton isOpen={isVehicleOpen} onToggle={toggleVehicle} />
               </h3>
               {isVehicleOpen && (
                 <div>
@@ -347,23 +373,29 @@ const KtxInquiry = () => {
                       key={vehicle.VehicleKindCode}
                       onClick={() => {
                         setSelectedVehicle((prev) => {
-                          if (vehicle.VehicleKindCode === '') {
+                          if (vehicle.VehicleKindCode === "") {
                             // '전체' 선택 시 모든 선택 해제하고 '전체'만 선택
-                            return [''];
+                            return [""];
                           }
                           // '전체'가 선택된 상태에서 특정 열차 선택 시 '전체' 제거
-                          if (prev.includes('')) {
+                          if (prev.includes("")) {
                             return [vehicle.VehicleKindCode];
                           }
                           // 이미 선택된 경우 해제
                           if (prev.includes(vehicle.VehicleKindCode)) {
-                            return prev.filter((code) => code !== vehicle.VehicleKindCode);
+                            return prev.filter(
+                              (code) => code !== vehicle.VehicleKindCode
+                            );
                           }
                           // 선택 추가
                           return [...prev, vehicle.VehicleKindCode];
                         });
                       }}
-                      className={selectedVehicle.includes(vehicle.VehicleKindCode) ? 'selected' : ''}
+                      className={
+                        selectedVehicle.includes(vehicle.VehicleKindCode)
+                          ? "selected"
+                          : ""
+                      }
                     >
                       {vehicle.VehicleKindName}
                     </Button>
@@ -376,8 +408,8 @@ const KtxInquiry = () => {
           {/* 검색 버튼 */}
           <div>
             <Button onClick={fetchSchedule} disabled={loading}>
-              {loading ? '로딩 중...' : '조회'}
-              <FaSearch style={{ marginLeft: '6px' }} />
+              {loading ? "로딩 중..." : "조회"}
+              <FaSearch style={{ marginLeft: "6px" }} />
             </Button>
           </div>
         </SelectTourItem>
@@ -416,18 +448,24 @@ const KtxInquiry = () => {
             </Table>
           )}
           {schedule.length > 0 && (
-            <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={Math.ceil(schedule.length / itemsPerPage)}
-              handlePageChange={handlePageChange}
-            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "20px",
+              }}
+            >
+              <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(schedule.length / itemsPerPage)}
+                handlePageChange={handlePageChange}
+              />
             </div>
           )}
         </div>
-      {/* </TrafficBox> */}
+        {/* </TrafficBox> */}
       </List>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

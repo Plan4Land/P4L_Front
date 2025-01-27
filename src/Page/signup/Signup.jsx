@@ -362,7 +362,7 @@ export const Signup = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <Center>
         <SignupContainer>
           <h1 className="title">회원가입</h1>
@@ -564,7 +564,7 @@ export const Signup = () => {
           </CheckModal>
         </SignupContainer>
       </Center>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

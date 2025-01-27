@@ -208,7 +208,7 @@ export const PlanningList = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <FilterButton onClick={handleToggleSelect}>
         <FaBars />
       </FilterButton>
@@ -380,7 +380,7 @@ export const PlanningList = () => {
           />
         </ItemList>
       </List>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

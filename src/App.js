@@ -25,6 +25,7 @@ import { AdminPage } from "./Page/Admin/AdminPage";
 import ExpressBus from "./Page/Traffic/ExpressBus";
 import IntercityBus from "./Page/Traffic/IntercityBus";
 import AdminLogin from "./Page/Admin/AdminLogin";
+import { Layout } from "./Component/GlobalComponent";
 
 function App() {
   return (
@@ -33,89 +34,88 @@ function App() {
         <DndProvider backend={HTML5Backend}>
           <Router>
             <Routes>
-              
-              {/* 로그인 필요 없는 페이지 */}
-              <Route path="/" element={<Main />} />
-              <Route path="/planning/:plannerId" element={<Planning />} /><Route path="/ktxInquiry" element={<KtxInquiry />} />
-              <Route path="/tourlist" element={<TourList />} />
-              <Route path="/tourItemInfo" element={<TourItemInfo />} />
-              <Route path="/tourItemInfo/:id" element={<TourItemInfo />} />
-              <Route path="/planninglist" element={<PlanningList />} />
-              <Route path="/otheruser/:userId" element={<Otheruser />} />
-              <Route path="/test" element={<Test />} />
-              <Route path="/admin" element={<AdminLogin />} />
-              <Route path="/management" element={<AdminPage />} />
-              <Route path="/ExpressBus" element={<ExpressBus />} />
-              <Route path="/IntercityBus" element={<IntercityBus />} />
+              {/* Layout 적용되는 페이지 */}
+              <Route element={<Layout />}>
+                <Route path="/" element={<Main />} />
+                <Route path="/planning/:plannerId" element={<Planning />} />
+                <Route path="/ktxInquiry" element={<KtxInquiry />} />
+                <Route path="/tourlist" element={<TourList />} />
+                <Route path="/tourItemInfo" element={<TourItemInfo />} />
+                <Route path="/tourItemInfo/:id" element={<TourItemInfo />} />
+                <Route path="/planninglist" element={<PlanningList />} />
+                <Route path="/otheruser/:userId" element={<Otheruser />} />
+                <Route path="/test" element={<Test />} />
+                <Route path="/management" element={<AdminPage />} />
+                <Route path="/ExpressBus" element={<ExpressBus />} />
+                <Route path="/IntercityBus" element={<IntercityBus />} />
+                <Route
+                  path="/makePlanning"
+                  element={
+                    <ProtectedRoute>
+                      <MakePlanning />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/mypage"
+                  element={
+                    <ProtectedRoute>
+                      <MyPageMain />
+                    </ProtectedRoute>
+                  }
+                />
+              </Route>
 
-              {/* 로그인 필요한 페이지 */}
+              {/* Layout 제외된 페이지 */}
               <Route
-                path="/makePlanning"
-                element={
-                  <ProtectedRoute>
-                    <MakePlanning />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/mypage"
-                element={
-                  <ProtectedRoute>
-                    <MyPageMain />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* 로그인시 접근불가 페이지 */}
-              <Route 
-                path="/login" 
+                path="/login"
                 element={
                   <GuestRoute>
                     <Login />
                   </GuestRoute>
-                } 
+                }
               />
-              <Route 
-                path="/login/oauth/kakao" 
-                element={
-                  <GuestRoute>
-                    <KakaoRedirect />
-                  </GuestRoute>
-                } 
-              />
-              <Route 
-                path="/login/oauth/google" 
-                element={
-                  <GuestRoute>
-                    <GoogleRedirect />
-                  </GuestRoute>
-                } 
-              />
-              <Route 
-                path="/login/oauth/naver" 
-                element={
-                  <GuestRoute>
-                    <NaverRedirect />
-                  </GuestRoute>
-                } 
-              />
-              <Route 
-                path="/signup" 
+              <Route
+                path="/signup"
                 element={
                   <GuestRoute>
                     <Signup />
                   </GuestRoute>
-                } 
+                }
               />
-              <Route 
-                path="/signup/terms" 
+              <Route
+                path="/signup/terms"
                 element={
                   <GuestRoute>
                     <TermsOfService />
                   </GuestRoute>
-                } 
+                }
               />
-              
+              <Route
+                path="/login/oauth/kakao"
+                element={
+                  <GuestRoute>
+                    <KakaoRedirect />
+                  </GuestRoute>
+                }
+              />
+              <Route
+                path="/login/oauth/google"
+                element={
+                  <GuestRoute>
+                    <GoogleRedirect />
+                  </GuestRoute>
+                }
+              />
+              <Route
+                path="/login/oauth/naver"
+                element={
+                  <GuestRoute>
+                    <NaverRedirect />
+                  </GuestRoute>
+                }
+              />
+              <Route path="/admin" element={<AdminLogin />} />
             </Routes>
           </Router>
         </DndProvider>

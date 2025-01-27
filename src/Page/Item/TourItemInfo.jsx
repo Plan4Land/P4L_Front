@@ -175,7 +175,7 @@ export const TourItemInfo = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <TourItemInfoBox>
         {spotDetails ? (
           <>
@@ -396,7 +396,7 @@ export const TourItemInfo = () => {
           <p>여행지 정보를 불러오는 중입니다...</p>
         )}
       </TourItemInfoBox>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

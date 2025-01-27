@@ -138,7 +138,7 @@ export const MakePlanning = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <MakePlanningContainer>
         {/* 지역 선택 */}
         <h2 className="question-title">어디로 가시나요?</h2>
@@ -319,7 +319,7 @@ export const MakePlanning = () => {
           <p>플래너 생성중입니다. 잠시만 기다려주세요...</p>
         </Loading>
       )}
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

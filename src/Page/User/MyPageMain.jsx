@@ -193,7 +193,7 @@ export const MyPageMain = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <FilterButton onClick={handleToggleSelect}>
         <FaBars />
       </FilterButton>
@@ -393,7 +393,7 @@ export const MyPageMain = () => {
           )}
         </InvitePlanning>
       </CloseModal>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

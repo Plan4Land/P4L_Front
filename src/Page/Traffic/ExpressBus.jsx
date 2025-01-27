@@ -1,26 +1,32 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { Header, Footer } from '../../Component/GlobalComponent';
-import { Button, ToggleButton } from '../../Component/ButtonComponent';
-import { Table, SelectTourItem, SearchSt, List, FilterButton } from '../../Style/ItemListStyled';
-import { FaUndo, FaSearch } from 'react-icons/fa';
+import React, { useState, useCallback, useEffect } from "react";
+import { Header, Footer } from "../../Component/GlobalComponent";
+import { Button, ToggleButton } from "../../Component/ButtonComponent";
+import {
+  Table,
+  SelectTourItem,
+  SearchSt,
+  List,
+  FilterButton,
+} from "../../Style/ItemListStyled";
+import { FaUndo, FaSearch } from "react-icons/fa";
 import { Pagination } from "../../Component/Pagination";
-import { ExpressServiceCode } from '../../Util/Service_Express_code';
-import { ExpressGradeService } from '../../Util/Service_ExpressGrade_code';
+import { ExpressServiceCode } from "../../Util/Service_Express_code";
+import { ExpressGradeService } from "../../Util/Service_ExpressGrade_code";
 import { FaBars } from "react-icons/fa";
 
 const ExpressBus = () => {
-  const [schedule, setSchedule] = useState([]); 
-  const [displayedSchedule, setDisplayedSchedule] = useState([]); 
-  const [selectedDepCat1, setSelectedDepCat1] = useState(''); 
-  const [selectedDepCat2, setSelectedDepCat2] = useState(''); 
-  const [selectedDepCat3, setSelectedDepCat3] = useState(''); 
-  const [selectedArrCat1, setSelectedArrCat1] = useState(''); 
-  const [selectedArrCat2, setSelectedArrCat2] = useState(''); 
-  const [selectedArrCat3, setSelectedArrCat3] = useState(''); 
-  const [date, setDate] = useState(''); 
-  const [loading, setLoading] = useState(false); 
-  const [currentPage, setCurrentPage] = useState(0); 
-  const [selectedBusGrade, setSelectedBusGrade] = useState('');
+  const [schedule, setSchedule] = useState([]);
+  const [displayedSchedule, setDisplayedSchedule] = useState([]);
+  const [selectedDepCat1, setSelectedDepCat1] = useState("");
+  const [selectedDepCat2, setSelectedDepCat2] = useState("");
+  const [selectedDepCat3, setSelectedDepCat3] = useState("");
+  const [selectedArrCat1, setSelectedArrCat1] = useState("");
+  const [selectedArrCat2, setSelectedArrCat2] = useState("");
+  const [selectedArrCat3, setSelectedArrCat3] = useState("");
+  const [date, setDate] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [selectedBusGrade, setSelectedBusGrade] = useState("");
   const [isSelectOpen, setIsSelectOpen] = useState(false);
 
   // 토글 상태 관리
@@ -50,37 +56,47 @@ const ExpressBus = () => {
 
   const fetchSchedule = useCallback(async () => {
     if (!date || !selectedDepCat2 || !selectedArrCat2) {
-      alert('대분류, 중분류는 모두 선택해주세요!');
+      alert("대분류, 중분류는 모두 선택해주세요!");
       return;
     }
-  
+
     // 출발지 터미널 찾기
-    const selectedDepTerminal = ExpressServiceCode.flatMap((cat1) => cat1.cat2List)
-      .flatMap((cat2) => cat2.cat3List)
-      .find((station) => station?.cat3Code === selectedDepCat3 || station?.cat2 === selectedDepCat2) 
-      || ExpressServiceCode.flatMap((cat1) => cat1.cat2List)
-      .find((cat2) => cat2.cat2 === selectedDepCat2);
+    const selectedDepTerminal =
+      ExpressServiceCode.flatMap((cat1) => cat1.cat2List)
+        .flatMap((cat2) => cat2.cat3List)
+        .find(
+          (station) =>
+            station?.cat3Code === selectedDepCat3 ||
+            station?.cat2 === selectedDepCat2
+        ) ||
+      ExpressServiceCode.flatMap((cat1) => cat1.cat2List).find(
+        (cat2) => cat2.cat2 === selectedDepCat2
+      );
 
     // 도착지 터미널 찾기
     const selectedArrTerminal = selectedArrCat3
       ? ExpressServiceCode.flatMap((cat1) => cat1.cat2List)
           .flatMap((cat2) => cat2.cat3List)
           .find((station) => station?.cat3Code === selectedArrCat3)
-      : ExpressServiceCode.flatMap((cat1) => cat1.cat2List)
-          .find((cat2) => cat2.cat2 === selectedArrCat2);
+      : ExpressServiceCode.flatMap((cat1) => cat1.cat2List).find(
+          (cat2) => cat2.cat2 === selectedArrCat2
+        );
 
     if (!selectedDepTerminal || !selectedArrTerminal) {
-      alert('선택한 역에 대한 데이터를 찾을 수 없습니다.');
+      alert("선택한 역에 대한 데이터를 찾을 수 없습니다.");
       return;
     }
-  
-    const depTerminalId = selectedDepTerminal.cat3Code || selectedDepTerminal.cat2Code;
-    const arrTerminalId = selectedArrTerminal.cat3Code || selectedArrTerminal.cat2Code;
-  
-    const formattedDate = date.replace(/-/g, '');
-  
+
+    const depTerminalId =
+      selectedDepTerminal.cat3Code || selectedDepTerminal.cat2Code;
+    const arrTerminalId =
+      selectedArrTerminal.cat3Code || selectedArrTerminal.cat2Code;
+
+    const formattedDate = date.replace(/-/g, "");
+
     const params = {
-      serviceKey: 'BaAcBeQKCSysvfPe3OYNj5RZR2Ndak1B6nK/pNi+AWPXoWb9ERyK++Iih8TqfSog2L4NtpXRGXOUouQhD+cigw==',
+      serviceKey:
+        "BaAcBeQKCSysvfPe3OYNj5RZR2Ndak1B6nK/pNi+AWPXoWb9ERyK++Iih8TqfSog2L4NtpXRGXOUouQhD+cigw==",
       depTerminalId: depTerminalId,
       arrTerminalId: arrTerminalId,
       depPlandTime: formattedDate,
@@ -88,23 +104,24 @@ const ExpressBus = () => {
       pageNo: 1,
     };
 
-    const url = 'http://apis.data.go.kr/1613000/ExpBusInfoService/getStrtpntAlocFndExpbusInfo';
+    const url =
+      "http://apis.data.go.kr/1613000/ExpBusInfoService/getStrtpntAlocFndExpbusInfo";
 
-    console.log('출발 터미널 ID:', depTerminalId);
-    console.log('도착 터미널 ID:', arrTerminalId); 
-    console.log('API 요청 파라미터:', params);
-    console.log('API 요청 URL:', `${url}?${new URLSearchParams(params)}`);
+    console.log("출발 터미널 ID:", depTerminalId);
+    console.log("도착 터미널 ID:", arrTerminalId);
+    console.log("API 요청 파라미터:", params);
+    console.log("API 요청 URL:", `${url}?${new URLSearchParams(params)}`);
 
     setLoading(true);
     try {
       const response = await fetch(`${url}?${new URLSearchParams(params)}`);
-      console.log('API 응답 상태:', response.status);
+      console.log("API 응답 상태:", response.status);
       const textData = await response.text(); // XML 데이터로 받아옴
-      console.log('XML 응답 데이터:', textData);
+      console.log("XML 응답 데이터:", textData);
 
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(textData, "application/xml");
-      const items = xmlDoc.getElementsByTagName('item');
+      const items = xmlDoc.getElementsByTagName("item");
 
       if (items.length > 0) {
         const schedules = Array.from(items).map((item) => {
@@ -113,61 +130,82 @@ const ExpressBus = () => {
             const minute = timeStr.substring(10, 12);
             return `${hour}:${minute}`;
           };
-  
+
           return {
-            depStation: item.getElementsByTagName('depPlaceNm')[0]?.textContent || '',
-            arrStation: item.getElementsByTagName('arrPlaceNm')[0]?.textContent || '',
-            depTime: formatTime(item.getElementsByTagName('depPlandTime')[0]?.textContent || ''),
-            arrTime: formatTime(item.getElementsByTagName('arrPlandTime')[0]?.textContent || ''),
-            busGrade: item.getElementsByTagName('gradeNm')[0]?.textContent || '',
-            charge: item.getElementsByTagName('charge')[0]?.textContent || '',
+            depStation:
+              item.getElementsByTagName("depPlaceNm")[0]?.textContent || "",
+            arrStation:
+              item.getElementsByTagName("arrPlaceNm")[0]?.textContent || "",
+            depTime: formatTime(
+              item.getElementsByTagName("depPlandTime")[0]?.textContent || ""
+            ),
+            arrTime: formatTime(
+              item.getElementsByTagName("arrPlandTime")[0]?.textContent || ""
+            ),
+            busGrade:
+              item.getElementsByTagName("gradeNm")[0]?.textContent || "",
+            charge: item.getElementsByTagName("charge")[0]?.textContent || "",
           };
         });
         setSchedule(schedules);
         setCurrentPage(0);
       } else {
-        alert('조회된 고속버스 시간이 없습니다.');
+        alert("조회된 고속버스 시간이 없습니다.");
       }
     } catch (error) {
-      console.error('고속버스 조회 오류:', error);
-      alert('고속버스 조회 중 오류가 발생했습니다.');
+      console.error("고속버스 조회 오류:", error);
+      alert("고속버스 조회 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }
-  }, [date, selectedDepCat2, selectedDepCat3, selectedArrCat2, selectedArrCat3]);
-    
+  }, [
+    date,
+    selectedDepCat2,
+    selectedDepCat3,
+    selectedArrCat2,
+    selectedArrCat3,
+  ]);
+
   const isMetropolitanCity = (cityName) => {
     const metropolitanCities = [
-      "서울특별시", "인천광역시", "세종특별시",
-      "대구광역시", "부산광역시", "울산광역시", "광주광역시"
+      "서울특별시",
+      "인천광역시",
+      "세종특별시",
+      "대구광역시",
+      "부산광역시",
+      "울산광역시",
+      "광주광역시",
     ];
     return metropolitanCities.includes(cityName);
   };
-  
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
   const handleResetSelections = () => {
-    setSelectedDepCat1('');
-    setSelectedDepCat2('');
-    setSelectedDepCat3('');
-    setSelectedArrCat1('');
-    setSelectedArrCat2('');
-    setSelectedArrCat3('');
-    setDate('');
+    setSelectedDepCat1("");
+    setSelectedDepCat2("");
+    setSelectedDepCat3("");
+    setSelectedArrCat1("");
+    setSelectedArrCat2("");
+    setSelectedArrCat3("");
+    setDate("");
     setSchedule([]);
     setCurrentPage(0);
-    console.log('초기화됨');
+    console.log("초기화됨");
   };
 
   const getCat2List = (selectedCat1) => {
-    return ExpressServiceCode.find((cat1) => cat1.cat1 === selectedCat1)?.cat2List || [];
+    return (
+      ExpressServiceCode.find((cat1) => cat1.cat1 === selectedCat1)?.cat2List ||
+      []
+    );
   };
 
   const getCat3List = (selectedCat2) => {
     if (isMetropolitanCity(selectedCat2)) {
-      return []; 
+      return [];
     }
     return selectedCat2?.cat3List || [];
   };
@@ -186,7 +224,7 @@ const ExpressBus = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <FilterButton onClick={handleToggleSelect}>
         <FaBars />
       </FilterButton>
@@ -194,7 +232,7 @@ const ExpressBus = () => {
         <SelectTourItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
-            <FaUndo style={{ marginLeft: '6px' }} />
+            <FaUndo style={{ marginLeft: "6px" }} />
           </button>
 
           {/* 날짜 입력 */}
@@ -212,10 +250,7 @@ const ExpressBus = () => {
           <div className="mainarea">
             <h3>
               출발 지역 선택
-              <ToggleButton
-                isOpen={isDepCat1Open}
-                onToggle={toggleDepCat1}
-              />
+              <ToggleButton isOpen={isDepCat1Open} onToggle={toggleDepCat1} />
             </h3>
             {isDepCat1Open && (
               <div>
@@ -224,10 +259,10 @@ const ExpressBus = () => {
                     key={`dep-cat1-${cat1.cat1}`}
                     onClick={() => {
                       setSelectedDepCat1(cat1.cat1);
-                      setSelectedDepCat2('');
-                      setSelectedDepCat3('');
+                      setSelectedDepCat2("");
+                      setSelectedDepCat3("");
                     }}
-                    className={selectedDepCat1 === cat1.cat1 ? 'selected' : ''}
+                    className={selectedDepCat1 === cat1.cat1 ? "selected" : ""}
                   >
                     {cat1.cat1}
                   </Button>
@@ -240,9 +275,7 @@ const ExpressBus = () => {
             <div className="details-area">
               <h3>
                 출발 세부 지역 선택
-                <ToggleButton isOpen={isDepCat2Open} 
-                  onToggle={toggleDepCat2} 
-                />
+                <ToggleButton isOpen={isDepCat2Open} onToggle={toggleDepCat2} />
               </h3>
               {isDepCat2Open && (
                 <div>
@@ -251,9 +284,11 @@ const ExpressBus = () => {
                       key={`dep-cat2-${cat2.cat2Code}`}
                       onClick={() => {
                         setSelectedDepCat2(cat2.cat2);
-                        setSelectedDepCat3('');
+                        setSelectedDepCat3("");
                       }}
-                      className={selectedDepCat2 === cat2.cat2 ? 'selected' : ''}
+                      className={
+                        selectedDepCat2 === cat2.cat2 ? "selected" : ""
+                      }
                     >
                       {cat2.cat2}
                     </Button>
@@ -267,19 +302,21 @@ const ExpressBus = () => {
             <div className="subcategory-area">
               <h3>
                 출발 소분류 지역 선택
-                <ToggleButton isOpen={isDepCat3Open} 
-                  onToggle={toggleDepCat3} 
-                />
+                <ToggleButton isOpen={isDepCat3Open} onToggle={toggleDepCat3} />
               </h3>
               {isDepCat3Open && (
                 <div>
                   {getCat3List(
-                    getCat2List(selectedDepCat1).find((cat2) => cat2.cat2 === selectedDepCat2)
+                    getCat2List(selectedDepCat1).find(
+                      (cat2) => cat2.cat2 === selectedDepCat2
+                    )
                   ).map((cat3) => (
                     <Button
                       key={`dep-cat3-${cat3.cat3Code}`}
                       onClick={() => setSelectedDepCat3(cat3.cat3Code)}
-                      className={selectedDepCat3 === cat3.cat3Code ? 'selected' : ''}
+                      className={
+                        selectedDepCat3 === cat3.cat3Code ? "selected" : ""
+                      }
                     >
                       {cat3.cat3}
                     </Button>
@@ -293,10 +330,7 @@ const ExpressBus = () => {
           <div className="mainarea">
             <h3>
               도착 지역 선택
-              <ToggleButton
-                isOpen={isArrCat1Open}
-                onToggle={toggleArrCat1}
-              />
+              <ToggleButton isOpen={isArrCat1Open} onToggle={toggleArrCat1} />
             </h3>
             {isArrCat1Open && (
               <div>
@@ -305,10 +339,10 @@ const ExpressBus = () => {
                     key={`dep-cat1-${cat1.cat1}`}
                     onClick={() => {
                       setSelectedArrCat1(cat1.cat1);
-                      setSelectedArrCat2('');
-                      setSelectedArrCat3('');
+                      setSelectedArrCat2("");
+                      setSelectedArrCat3("");
                     }}
-                    className={selectedArrCat1 === cat1.cat1 ? 'selected' : ''}
+                    className={selectedArrCat1 === cat1.cat1 ? "selected" : ""}
                   >
                     {cat1.cat1}
                   </Button>
@@ -321,10 +355,7 @@ const ExpressBus = () => {
             <div className="details-area">
               <h3>
                 도착 세부 지역 선택
-                <ToggleButton 
-                  isOpen={isArrCat2Open} 
-                  onToggle={toggleArrCat2} 
-                />
+                <ToggleButton isOpen={isArrCat2Open} onToggle={toggleArrCat2} />
               </h3>
               {isArrCat2Open && (
                 <div>
@@ -333,9 +364,12 @@ const ExpressBus = () => {
                       key={`dep-cat2-${cat2.cat2Code}`}
                       onClick={() => {
                         setSelectedArrCat2(cat2.cat2);
-                        setSelectedArrCat3('');
+                        setSelectedArrCat3("");
                       }}
-                      className={selectedArrCat2 === cat2.cat2 ? 'selected' : ''}>
+                      className={
+                        selectedArrCat2 === cat2.cat2 ? "selected" : ""
+                      }
+                    >
                       {cat2.cat2}
                     </Button>
                   ))}
@@ -348,20 +382,21 @@ const ExpressBus = () => {
             <div className="subcategoryarea">
               <h3>
                 도착 소분류 지역 선택
-                <ToggleButton 
-                  isOpen={isArrCat3Open} 
-                  onToggle={toggleArrCat3} 
-                />
+                <ToggleButton isOpen={isArrCat3Open} onToggle={toggleArrCat3} />
               </h3>
               {isArrCat2Open && (
                 <div>
                   {getCat3List(
-                    getCat2List(selectedArrCat1).find((cat2) => cat2.cat2 === selectedArrCat2)
+                    getCat2List(selectedArrCat1).find(
+                      (cat2) => cat2.cat2 === selectedArrCat2
+                    )
                   ).map((cat3) => (
                     <Button
                       key={`arr-cat3-${cat3.cat3Code}`}
                       onClick={() => setSelectedArrCat3(cat3.cat3Code)}
-                      className={selectedArrCat3 === cat3.cat3Code ? 'selected' : ''}
+                      className={
+                        selectedArrCat3 === cat3.cat3Code ? "selected" : ""
+                      }
                     >
                       {cat3.cat3}
                     </Button>
@@ -371,44 +406,50 @@ const ExpressBus = () => {
             </div>
           )}
 
-          {(selectedDepCat2 || selectedDepCat3) && selectedArrCat1 && selectedArrCat2 && (
-            <div className="bus-grade-section">
-              <h3>
-                버스 등급 선택
-                <ToggleButton isOpen={isGradeOpen} onToggle={toggleGrade} />
-              </h3>
-              {isGradeOpen && (
-                <div>
-                  {ExpressGradeService.map((grade) => (
-                    <Button
-                      key={grade.GradeId}
-                      onClick={() => {
-                        setSelectedBusGrade((prev) => {
-                          if (grade.GradeId === '') {
-                            return [''];
-                          }
-                          if (prev.includes('')) {
-                            return [grade.GradeId];
-                          }
-                          if (prev.includes(grade.GradeId)) {
-                            return prev.filter((id) => id !== grade.GradeId);
-                          }
-                          return [...prev, grade.GradeId];
-                        });
-                      }}
-                      className={selectedBusGrade.includes(grade.GradeId) ? 'selected' : ''}
-                    >
-                      {grade.GradeNm}
-                    </Button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+          {(selectedDepCat2 || selectedDepCat3) &&
+            selectedArrCat1 &&
+            selectedArrCat2 && (
+              <div className="bus-grade-section">
+                <h3>
+                  버스 등급 선택
+                  <ToggleButton isOpen={isGradeOpen} onToggle={toggleGrade} />
+                </h3>
+                {isGradeOpen && (
+                  <div>
+                    {ExpressGradeService.map((grade) => (
+                      <Button
+                        key={grade.GradeId}
+                        onClick={() => {
+                          setSelectedBusGrade((prev) => {
+                            if (grade.GradeId === "") {
+                              return [""];
+                            }
+                            if (prev.includes("")) {
+                              return [grade.GradeId];
+                            }
+                            if (prev.includes(grade.GradeId)) {
+                              return prev.filter((id) => id !== grade.GradeId);
+                            }
+                            return [...prev, grade.GradeId];
+                          });
+                        }}
+                        className={
+                          selectedBusGrade.includes(grade.GradeId)
+                            ? "selected"
+                            : ""
+                        }
+                      >
+                        {grade.GradeNm}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           {(selectedBusGrade || selectedBusGrade === "") && (
             <Button onClick={fetchSchedule} disabled={loading}>
-              {loading ? '로딩 중...' : '조회'}
-              <FaSearch style={{ marginLeft: '6px' }} />
+              {loading ? "로딩 중..." : "조회"}
+              <FaSearch style={{ marginLeft: "6px" }} />
             </Button>
           )}
         </SelectTourItem>
@@ -444,17 +485,23 @@ const ExpressBus = () => {
             </Table>
           )}
           {schedule.length > 0 && (
-            <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={Math.ceil(schedule.length / itemsPerPage)}
-              handlePageChange={handlePageChange}
-            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "20px",
+              }}
+            >
+              <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(schedule.length / itemsPerPage)}
+                handlePageChange={handlePageChange}
+              />
             </div>
           )}
         </div>
       </List>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

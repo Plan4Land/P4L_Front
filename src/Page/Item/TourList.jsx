@@ -284,7 +284,7 @@ export const TourList = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <FilterButton onClick={handleToggleSelect}>
         <FaBars />
       </FilterButton>
@@ -506,7 +506,7 @@ export const TourList = () => {
           )}
         </ItemList>
       </List>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

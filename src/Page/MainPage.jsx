@@ -125,7 +125,7 @@ export const Main = () => {
   return (
     <>
       <GlobalFont />
-      <Header />
+      {/* <Header /> */}
       {/* 상위 플래닝 4개 */}
       <RecommPlan className="GridItem">
         <PlanBox>
@@ -351,7 +351,7 @@ export const Main = () => {
           </HolidayList>
         </Festive>
       </MainBox>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
