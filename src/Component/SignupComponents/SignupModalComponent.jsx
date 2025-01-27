@@ -482,10 +482,11 @@ export const BanModal = (props) => {
         onClick={handleBackgroundClick}>
 
         {open && (
-          <>
+          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+            <p> 정지된 계정입니다.</p>
             <p> 아이디 : {id}</p>
             <p> 정지 해제 일자 : {banDays}</p>
-          </>
+          </div>
         )}
 
       </div>
