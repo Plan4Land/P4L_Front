@@ -71,7 +71,7 @@ export const Planning = () => {
     submittedKeyword: "", // 검색에 보낼 키워드
     userKeyword: "", // 멤버 초대할때 멤버 검색 키워드
     submitUserKeyword: "", // 검색에 보낼 멤버 키워드
-    searchUsersRst: [], // 검색한 멤버 정보
+    searchUsersRst: null, // 검색한 멤버 정보
   });
   const [travelInfo, setTravelInfo] = useState({
     days: 0, // 여행 기간
@@ -453,7 +453,7 @@ export const Planning = () => {
     setSearchState({
       userKeyword: "",
       submitUserKeyword: "",
-      searchUsersRst: [],
+      searchUsersRst: null,
     });
   }, [modals.searchUser]);
 
@@ -514,7 +514,8 @@ export const Planning = () => {
                     selectedThemes={selectedThemes}
                     setSelectedThemes={setSelectedThemes}
                     isEditting={isEditting}
-                    plans={plans}
+                    // plans={plans}
+                    editPlans={editPlans}
                     plannerId={plannerId}
                     sender={sender}
                     setIsLoading={setIsLoading}

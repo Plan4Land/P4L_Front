@@ -29,7 +29,8 @@ export const PlannerInfoEditComponent = ({
   selectedThemes,
   setSelectedThemes,
   isEditting,
-  plans,
+  // plans,
+  editPlans,
   plannerId,
   sender,
   setIsLoading,
@@ -141,7 +142,8 @@ export const PlannerInfoEditComponent = ({
         sender: sender,
         data: {
           plannerInfo: [editPlannerInfo],
-          plans: plans,
+          // plans: plans,
+          plans: editPlans,
           isEditting: isEditting,
         },
       };

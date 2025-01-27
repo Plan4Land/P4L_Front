@@ -24,7 +24,6 @@ export const MainContainer = styled.div`
       top: 120px;
     }
     @media (max-width: 768px) {
-      right: 2vw;
       top: 90px;
     }
     .menu-icon {
@@ -438,7 +437,7 @@ export const PlannerOwner = styled.div`
   color: #fff;
   @media (max-width: 768px) {
     bottom: 10px;
-    right: 10px;
+    right: 70px;
   }
 `;
 
@@ -542,7 +541,7 @@ export const SearchedUserHr = styled.hr`
 `;
 
 export const UserName = styled.div`
-  /* width: 120px; */
+  // width: 120px;
   height: 40px;
   padding-right: 20px;
   padding-left: 10px;
@@ -940,10 +939,16 @@ export const SearchSelectMenuContainer = styled.div`
     cursor: pointer;
     transition: all 0.3s ease;
     border-radius: 10px;
-    padding: 0 20px;
+    width: 130px;
+    display: inline-block;
+    text-align: center;
     white-space: nowrap;
     &:hover {
       background-color: ${colors.colorC};
+    }
+    @media (max-width: 768px) {
+      width: 100px;
+      font-size: 14px;
     }
   }
   .selected-menu {
@@ -971,6 +976,9 @@ export const SearchInputContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (max-width: 768px) {
+    margin: 10px auto 5px;
+  }
 
   input {
     border: 1px solid ${colors.colorA};
@@ -980,6 +988,10 @@ export const SearchInputContainer = styled.div`
     height: 25px;
     font-size: 14px;
     padding: 3px 3px 3px 10px;
+    @media (max-width: 768px) {
+      font-size: 12px;
+      height: 20px;
+    }
   }
 
   .searchIcon {
@@ -987,6 +999,9 @@ export const SearchInputContainer = styled.div`
     font-size: 25px;
     color: ${colors.colorA};
     cursor: pointer;
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
   }
 `;
 

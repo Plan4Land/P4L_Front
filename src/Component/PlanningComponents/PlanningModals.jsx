@@ -112,6 +112,8 @@ export const AddPlaceModal = ({
       }
       contentWidth="400px"
       contentHeight="500px"
+      mediaWidth768="300px"
+      mediaHeight768="400px"
     >
       <SearchSelectMenuContainer>
         <span
@@ -227,6 +229,10 @@ export const SearchUser = ({
       }
       contentWidth="400px"
       contentHeight="500px"
+      mediaWidth768="300px"
+      mediaHeight768="400px"
+      mediaWidth400="270px"
+      mediaHeight400="350px"
     >
       <SearchMemberContainer>
         <SearchInputContainer>
@@ -286,7 +292,11 @@ export const SearchUser = ({
                 </div>
               ))
           ) : (
-            <p>검색된 회원이 없습니다.</p>
+            <p>
+              {searchState.searchUsersRst?.length === 0
+                ? "검색된 회원이 없습니다."
+                : ""}
+            </p>
           )}
         </div>
       </SearchMemberContainer>

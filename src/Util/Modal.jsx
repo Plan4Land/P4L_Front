@@ -45,6 +45,16 @@ const CloseModalContent = styled.div`
   width: ${({ width }) => width || "auto"};
   height: ${({ height }) => height || "auto"};
   min-height: ${({ minHeight }) => minHeight || "auto"};
+  @media (max-width: 768px) {
+    width: ${({ mediaWidth768 }) => mediaWidth768 || "inherit"};
+    height: ${({ mediaHeight768 }) => mediaHeight768 || "inherit"};
+  }
+  @media (max-width: 400px) {
+    width: ${({ mediaWidth400, mediaWidth768 }) =>
+      mediaWidth400 || mediaWidth768 || "inherit"};
+    height: ${({ mediaHeight400, mediaHeight768 }) =>
+      mediaHeight400 || mediaHeight768 || "inherit"};
+  }
 `;
 
 const CloseButton = styled.div`
@@ -106,6 +116,10 @@ export const CloseModal = ({
   children,
   contentWidth,
   contentHeight,
+  mediaWidth768,
+  mediaHeight768,
+  mediaWidth400,
+  mediaHeight400,
   minHeight,
 }) => {
   if (!isOpen) return null;
@@ -116,6 +130,10 @@ export const CloseModal = ({
         width={contentWidth}
         height={contentHeight}
         minHeight={minHeight}
+        mediaWidth768={mediaWidth768}
+        mediaHeight768={mediaHeight768}
+        mediaWidth400={mediaWidth400}
+        mediaHeight400={mediaHeight400}
       >
         {children}
         <CloseButton onClick={onClose}>

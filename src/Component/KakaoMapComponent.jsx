@@ -222,6 +222,9 @@ export const ScrollableStyle = styled.div`
   border: 1px solid #ddd;
   overflow-y: scroll;
   ${ScrollBar}
+  @media (max-width: 768px) {
+    height: 315px;
+  }
 `;
 // 플래너 페이지에서 장소 추가할 때 검색
 export const SearchKakaoMap = ({
@@ -301,23 +304,35 @@ export const SearchKakaoMap = ({
         <h4 style={{ margin: "3px auto" }}>검색 결과</h4>
         <hr />
         <ul style={{ listStyleType: "none", padding: 0 }}>
-          {markers.map((marker, index) => (
+          {markers.length > 0 ? (
+            markers.map((marker, index) => (
+              <li
+                key={index}
+                onClick={() => handleListItemClick(marker)}
+                style={{
+                  padding: "10px",
+                  borderBottom: "1px solid #eee",
+                  cursor: "pointer",
+                }}
+              >
+                <strong>{marker.content}</strong>
+                <br />
+                <span style={{ fontSize: "12px", color: "#666" }}>
+                  {marker.address}
+                </span>
+              </li>
+            ))
+          ) : (
             <li
-              key={index}
-              onClick={() => handleListItemClick(marker)}
               style={{
                 padding: "10px",
-                borderBottom: "1px solid #eee",
-                cursor: "pointer",
+                textAlign: "center",
+                color: "#999",
               }}
             >
-              <strong>{marker.content}</strong>
-              <br />
-              <span style={{ fontSize: "12px", color: "#666" }}>
-                {marker.address}
-              </span>
+              검색 결과가 없습니다
             </li>
-          ))}
+          )}
         </ul>
       </ScrollableStyle>
     </div>
