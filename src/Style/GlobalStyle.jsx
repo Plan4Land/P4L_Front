@@ -42,7 +42,7 @@ export const HeaderSt = styled.div`
   padding: 0 5% 0 10%;
 
   .logoBox {
-    height: 100%;
+    height: 90px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -214,8 +214,16 @@ export const HeaderSt = styled.div`
   @media (max-width: 768px) {
     height: 60px;
     padding: 0 3% 0 8%;
+    .profile-img {
+      scale: 0.7;
+    }
     .profile-link {
-      scale: 70%;
+      /* scale: 70%; */
+      z-index: 5;
+      .dropdown {
+        top: 50px;
+        scale: 0.7;
+      }
     }
     .usermenu {
       .dropdown-list {

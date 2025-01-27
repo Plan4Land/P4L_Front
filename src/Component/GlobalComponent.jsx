@@ -7,8 +7,8 @@ import AxiosApi from "../Api/AxiosApi";
 // import { TopTourApi, TopPlanApi } from "../Api/ItemApi";
 import { areas } from "../Util/Common";
 import { MyPlannerApi, BookmarkedSpotsApi } from "../Api/ItemApi";
-import Logo from "../../src/Img/Plan4landLogo.png";
-// import Logo from "../Img/plan4landlogo.png";
+// import Logo from "../../src/Img/Plan4landLogo.png";
+import Logo from "../Img/plan4landlogo.png";
 import Title from "../../src/Img/plan4land_.png";
 import { Outlet } from "react-router-dom";
 
@@ -234,7 +234,7 @@ export const Header = () => {
                     backgroundPosition: "center",
                   }}
                   onClick={() => {
-                    window.location.href = "/mypage";
+                    navigate("/mypage");
                   }}
                 />
               )}
