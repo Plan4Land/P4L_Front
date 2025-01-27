@@ -265,6 +265,7 @@ export const Planning = () => {
             setPlans(plans);
             setEditPlans(null);
             setEditor(null);
+            setIsEditting(false);
             closeMemo();
           } else {
             setPlannerInfo(plannerInfo);
