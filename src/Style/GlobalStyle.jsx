@@ -262,6 +262,7 @@ export const NavSt = styled.div`
   align-items: center;
   flex-grow: 0.6;
   .tag,
+  .title-font,
   p {
     color: ${colors.colorA};
     font-size: 20px;
