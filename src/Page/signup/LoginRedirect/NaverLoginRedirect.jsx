@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import AxiosApi from "../../../Api/AxiosApi";
@@ -7,15 +7,16 @@ import { Button } from "../../../Component/ButtonComponent";
 
 export function NaverRedirect() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [code, setCode] = useState(null);
   const [state, setState] = useState(null);
   const { login } = useAuth();
   const [isSuccess, setIsSuccess] = useState(true);
 
   if (!code && !state) {
-    const urlParams = new URL(window.location.href).searchParams;
-    const codeParam = urlParams.get("code");
-    const stateParam = urlParams.get("state");
+    const queryParams = new URLSearchParams(location.search);
+    const codeParam = queryParams.get("code");
+    const stateParam = queryParams.get("state");
 
     if (codeParam && stateParam) {
       setCode(codeParam);

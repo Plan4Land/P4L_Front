@@ -89,7 +89,7 @@ const UserUpdatePassword = () => {
   };
 
   const handleBack = () => {
-    window.location.reload();
+    navigate(0);
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import AxiosApi from "../../../Api/AxiosApi";
@@ -7,7 +7,9 @@ import { Button } from "../../../Component/ButtonComponent";
 
 export function KakaoRedirect() {
   const navigate = useNavigate();
-  const code = new URL(window.location.href).searchParams.get("code");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const code = queryParams.get("code");
   const { login } = useAuth();
   const [isSuccess, setIsSuccess] = useState(true);
 
