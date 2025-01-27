@@ -64,7 +64,7 @@ const UserDelete = () => {
   };
 
   const handleBack = () => {
-    window.location.reload();
+    navigate(0);
   }
 
   const handleAgree = () => {
