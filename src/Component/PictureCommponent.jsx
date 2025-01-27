@@ -55,7 +55,7 @@ const planningPictures = [
 
 export const ProfileImg = ({ file, width, height }) => {
   const getSrc = (file) => {
-    if(!file){
+    if (!file) {
       return "";
     }
 
@@ -88,6 +88,7 @@ export const ProfileImg = ({ file, width, height }) => {
           height: "100%",
           objectFit: "cover",
           borderRadius: "50%",
+          backgroundColor: "white",
         }}
       />
     </ProfileImgContainer>

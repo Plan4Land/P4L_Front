@@ -25,7 +25,7 @@ export const GlobalFont = createGlobalStyle`
 
 export const colors = {
   colorA: "rgb(105, 39, 13)",
-  colorB: "rgb(255, 115, 22)",
+  colorB: "rgb(231, 107, 24)",
   colorC: "rgb(255, 170, 131)",
   colorD: "rgb(255, 238, 226)",
   colorE: "rgb(255, 119, 0)",
