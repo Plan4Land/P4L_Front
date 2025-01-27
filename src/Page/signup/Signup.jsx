@@ -14,6 +14,7 @@ import { Button } from "../../Component/ButtonComponent";
 // import { ProfilePicModal } from "../../Component/PictureModalComponent";
 import { CheckModal } from "../../Util/Modal";
 import { PictureComponent } from "../../Component/PictureCommponent";
+import { Loading } from "../../Component/LoadingComponent";
 
 // icon
 import { VscAccount } from "react-icons/vsc";
@@ -23,6 +24,7 @@ import { faCamera } from "@fortawesome/free-solid-svg-icons";
 
 // image
 import Profile from "../../Img/profile-pic/profile.png";
+import styled from "styled-components";
 
 export const Signup = () => {
   // input
@@ -64,7 +66,6 @@ export const Signup = () => {
   const [isPwShow, setIsPwShow] = useState(false);
 
   // modal
-  const [isPicsModalOpen, setIsPicsModalOpen] = useState(false);
   const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
   const [checkModalMessage, setCheckModalMessage] = useState("");
 
@@ -72,18 +73,46 @@ export const Signup = () => {
   const [emailResult, setEmailResult] = useState("");
   const [allSuccess, setAllSuccess] = useState(false);
 
-  const navigate = useNavigate();
-
-  // kakao
+  // social
   const location = useLocation();
   const { social_id, sso } = location.state || {};
   const [socialId, setSocialId] = useState(social_id || null);
   const [ssoState, setSsoState] = useState(sso || null);
 
+  const [emailTimeLeft, setEmailTimeLeft] = useState(-2);
+  const [emailTimeOver, setEmailTimeOver] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     setSocialId(social_id || null);
     setSsoState(sso || null);
   }, [social_id, sso]);
+
+  // 이메일 인증 타이머
+  useEffect(() => {
+    if (emailTimeLeft >= 0) {
+      const timer = setInterval(() => {
+        setEmailTimeLeft((prev) => prev -1);
+      }, 1000);
+      return () => clearInterval(timer);
+    } else if (emailTimeLeft === -1) {
+      setEmailTimeOver(true);
+      setEmailMsg("인증 시간이 만료되었습니다.");
+      setEmailCheck(false);
+      setIsEmail2Show(false);
+    }
+  }, [emailTimeLeft]);
+  const formatEmailTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    if (seconds >= 0) {
+      return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
+    } else {
+      return `0:00`;
+    }
+  };
 
   // 아이디 유효성 검사
   const handleIdInput = (e) => {
@@ -145,6 +174,7 @@ export const Signup = () => {
   }, [inputEmail]);
   // 이메일 체크
   const handleEmailCheck = async () => {
+    setIsLoading(true);
     // 유효성 검사 먼저 수행
     if (!handleEmailInput({ target: { value: inputEmail } })) return;
 
@@ -179,6 +209,8 @@ export const Signup = () => {
           setEmail2Msg("");
           setInputEmail2("");
           setIsEmail2Show(true);
+          setIsLoading(false);
+          setEmailTimeLeft(10);
         })
         .catch((error) => {
           setEmailMsg(
@@ -351,10 +383,6 @@ export const Signup = () => {
     }
   };
 
-  const handlePicSelect = (picName) => {
-    setCurrentPic(`profile-pic/${picName}`);
-  };
-
   const closeCheckModal = () => {
     setIsCheckModalOpen(false);
     if (allSuccess) navigate("/login");
@@ -418,9 +446,8 @@ export const Signup = () => {
               <button
                 className="duplicateButton"
                 onClick={handleEmailCheck}
-                disabled={emailCheck}
               >
-                인증
+                {isEmail2Show ? "재전송" : "인증"}
               </button>
             </div>
           </div>
@@ -443,6 +470,9 @@ export const Signup = () => {
                       value={inputEmail2}
                       onChange={(e) => setInputEmail2(e.target.value)}
                     />
+                    <span style={{color:  'red'}}>
+                      {formatEmailTime(emailTimeLeft)}
+                    </span>
                   </div>
                 </InputBox>
                 <button
@@ -562,6 +592,13 @@ export const Signup = () => {
           <CheckModal isOpen={isCheckModalOpen} onClose={closeCheckModal}>
             {checkModalMessage}
           </CheckModal>
+
+          {/* 로딩 */}
+          {isLoading && (
+            <Loading>
+              <p>인증 메일 전송중...</p>
+            </Loading>
+          )}
         </SignupContainer>
       </Center>
       {/* <Footer /> */}

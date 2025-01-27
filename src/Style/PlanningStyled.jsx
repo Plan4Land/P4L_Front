@@ -1156,24 +1156,24 @@ export const ChatContainer = styled.div`
     width: 240px;
   }
   .chat-header {
-    width: 100%;
+    width: 93%;
     display: flex;
     position: absolute;
     top: 10px;
-    right: 10px;
+    height: 18px;
+    align-items: center;
+    justify-content: flex-end;
+    border-bottom: 1px solid #ddd;
     .close-chat {
       color: #666;
       cursor: pointer;
-      position: absolute;
-      right: 0;
     }
   }
   .sendChat {
     width: 100%;
     display: flex;
-    position: relative;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     bottom: 0;
     margin-bottom: 8px;
     margin-left: 5px;
@@ -1183,21 +1183,18 @@ export const ChatContainer = styled.div`
       padding: 4px;
       box-sizing: border-box;
       resize: none;
-      border-radius: 10px;
+      border-radius: 15px;
+      border: 1px solid ${colors.colorA};
       ${ScrollBar};
     }
-
     button {
-      width: 2.6rem;
+      width: 2rem;
       margin-right: 20px;
       cursor: pointer;
-      /* transition: all 0.2s ease; */
       background-color: transparent;
       border: none;
       color: #597bd8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      scale: 0.9;
 
       &:hover {
         opacity: 0.8;
@@ -1218,8 +1215,9 @@ export const ChatMsgContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 95%;
+  padding-bottom: 20px;
   /* height: 83%; */
-  max-height: calc(100% - 85px);
+  max-height: calc(100% - 100px);
   overflow-y: scroll;
   gap: 10px;
   position: absolute;

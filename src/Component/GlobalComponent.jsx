@@ -7,8 +7,7 @@ import AxiosApi from "../Api/AxiosApi";
 // import { TopTourApi, TopPlanApi } from "../Api/ItemApi";
 import { areas } from "../Util/Common";
 import { MyPlannerApi, BookmarkedSpotsApi } from "../Api/ItemApi";
-import Logo from "../../src/Img/Plan4landLogo.png";
-// import Logo from "../Img/plan4landlogo.png";
+import Logo from "../Img/Plan4landLogo.png";
 import Title from "../../src/Img/plan4land_.png";
 import { Outlet } from "react-router-dom";
 
@@ -39,6 +38,7 @@ export const Header = () => {
       const response = await AxiosApi.logout(user.id);
       if (response.status === 204) {
         logout();
+        setShowLogoutModal(false);
         navigate("/login");
       } else {
         console.error("Logout failed: Invalid response data");
@@ -234,7 +234,7 @@ export const Header = () => {
                     backgroundPosition: "center",
                   }}
                   onClick={() => {
-                    window.location.href = "/mypage";
+                    navigate("/mypage");
                   }}
                 />
               )}

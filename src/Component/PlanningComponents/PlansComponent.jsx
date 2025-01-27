@@ -16,6 +16,7 @@ import { ko } from "date-fns/locale";
 import { FaPenToSquare } from "react-icons/fa6";
 import { FaChevronCircleUp, FaChevronCircleDown } from "react-icons/fa";
 import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
+import { PlanToggleSection, ToggleButton } from "../ButtonComponent";
 
 // import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -573,7 +574,7 @@ export const PlansComponent = ({
 
             <span className="arrow">{travelInfo.arrowDirections[index]}</span>
           </div>
-          {travelInfo.dayToggle[index] && (
+          <PlanToggleSection isOpen={travelInfo.dayToggle[index]}>
             <DayToggleContainer>
               {groupPlans[date] && groupPlans[date].length > 0 ? (
                 groupPlans[date].map((plan, planIndex) => (
@@ -684,7 +685,7 @@ export const PlansComponent = ({
                 </button>
               )}
             </DayToggleContainer>
-          )}
+          </PlanToggleSection>
         </div>
       ))}
     </MainPlanning>

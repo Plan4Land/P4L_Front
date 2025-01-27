@@ -64,33 +64,32 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-              </Route>
 
-              {/* Layout 제외된 페이지 */}
-              <Route
-                path="/login"
-                element={
-                  <GuestRoute>
-                    <Login />
-                  </GuestRoute>
-                }
-              />
-              <Route
-                path="/signup"
-                element={
-                  <GuestRoute>
-                    <Signup />
-                  </GuestRoute>
-                }
-              />
-              <Route
-                path="/signup/terms"
-                element={
-                  <GuestRoute>
-                    <TermsOfService />
-                  </GuestRoute>
-                }
-              />
+                <Route
+                  path="/login"
+                  element={
+                    <GuestRoute>
+                      <Login />
+                    </GuestRoute>
+                  }
+                />
+                <Route
+                  path="/signup"
+                  element={
+                    <GuestRoute>
+                      <Signup />
+                    </GuestRoute>
+                  }
+                />
+                <Route
+                  path="/signup/terms"
+                  element={
+                    <GuestRoute>
+                      <TermsOfService />
+                    </GuestRoute>
+                  }
+                />
+              </Route>
               <Route
                 path="/login/oauth/kakao"
                 element={

@@ -247,7 +247,7 @@ export const Planning = () => {
                 setEditPlannerInfo(null);
                 setEditPlans(null);
               }
-              window.location.reload();
+              navigate(0);
             } else {
               setEditor(data.sender);
             }

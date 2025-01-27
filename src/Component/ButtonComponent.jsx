@@ -146,7 +146,7 @@ const SectionTitle = styled.h3`
 
 const SectionContent = styled.div`
   overflow: hidden;
-  transition: max-height 0.5s ease;
+  transition: max-height 0.3s linear;
   max-height: ${(props) => (props.isOpen ? "500px" : "0")};
 `;
 
@@ -157,6 +157,14 @@ export const ToggleSection = ({ title, isOpen, onToggle, children }) => {
         {title}
         <ToggleButton isOpen={isOpen} onToggle={onToggle} />
       </SectionTitle>
+      <SectionContent isOpen={isOpen}>{children}</SectionContent>
+    </SectionContainer>
+  );
+};
+
+export const PlanToggleSection = ({ isOpen, children }) => {
+  return (
+    <SectionContainer>
       <SectionContent isOpen={isOpen}>{children}</SectionContent>
     </SectionContainer>
   );

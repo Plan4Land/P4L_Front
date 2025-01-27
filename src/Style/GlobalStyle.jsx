@@ -25,7 +25,7 @@ export const GlobalFont = createGlobalStyle`
 
 export const colors = {
   colorA: "rgb(105, 39, 13)",
-  colorB: "rgb(255, 115, 22)",
+  colorB: "rgb(231, 107, 24)",
   colorC: "rgb(255, 170, 131)",
   colorD: "rgb(255, 238, 226)",
   colorE: "rgb(255, 119, 0)",
@@ -42,7 +42,7 @@ export const HeaderSt = styled.div`
   padding: 0 5% 0 10%;
 
   .logoBox {
-    height: 100%;
+    height: 90px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -214,8 +214,16 @@ export const HeaderSt = styled.div`
   @media (max-width: 768px) {
     height: 60px;
     padding: 0 3% 0 8%;
+    .profile-img {
+      scale: 0.7;
+    }
     .profile-link {
-      scale: 70%;
+      /* scale: 70%; */
+      z-index: 5;
+      .dropdown {
+        top: 50px;
+        scale: 0.7;
+      }
     }
     .usermenu {
       .dropdown-list {
