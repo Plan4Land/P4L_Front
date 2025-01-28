@@ -127,12 +127,14 @@ export const Info = styled.div`
   }
 
   .planner-thumbnail {
-    margin: 0 2%;
+    margin: 0 2% 0 8%;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 15vw;
+    max-width: 370px;
     height: 15vw;
+    max-height: 370px;
     flex-shrink: 0;
   }
   .editTitle {
@@ -353,7 +355,11 @@ export const Info = styled.div`
     white-space: nowrap;
     &:hover {
       opacity: 0.7;
+      &:disabled {
+        opacity: 1;
+      }
     }
+
     @media (max-width: 768px) {
       padding: 3px;
       margin: 4px;
@@ -1142,13 +1148,15 @@ export const DayToggleContainer = styled.div`
       width: 230px;
       height: 15vh;
       /* max-height: 100vh; */
-      background-color: white;
       overflow-y: auto;
       z-index: 2;
+      background-color: transparent;
       ${ScrollBar}
-
       textarea {
+        border: 1px solid #808080;
+        border-radius: 5px;
         width: 100%;
+        background-color: ${colors.colorD};
         resize: none;
         padding: 6px;
         line-height: 1.5;

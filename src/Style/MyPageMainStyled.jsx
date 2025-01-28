@@ -30,9 +30,15 @@ export const MyPageMainContainer = styled.div`
     margin-top: -30px;
     .menu {
       position: absolute;
-      display: none;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateX(-100%);
+      transition: all 0.3s ease;
+      top: 100px;
       &.open {
-        display: block;
+        visibility: visible;
+        opacity: 1;
+        transform: translateX(0);
         p {
           font-size: 13px;
           margin-bottom: 3px;
@@ -103,7 +109,7 @@ export const UserInfo = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
     /* width: 80vw; */
-    height: 20vh;
+    height: 15vh;
     justify-content: center;
     align-items: center;
     font-size: 13px;
@@ -143,11 +149,12 @@ export const UserPlanning = styled.div`
 export const FollowList = styled.div`
   width: 500px;
   height: 300px;
-  overflow-y: scroll;
+
   .tabs {
     display: flex;
     justify-content: space-between;
-    margin: 10px 100px;
+    margin: 5px 100px;
+    align-items: center;
     button {
       background-color: white;
       border: none;

@@ -6,6 +6,7 @@ import styled from "styled-components";
 import AxiosApi from "../../Api/AxiosApi";
 import { Button } from "../ButtonComponent";
 import { colors } from "../../Style/GlobalStyle";
+import { ScrollBar } from "../ButtonComponent";
 
 /*
 email
@@ -19,12 +20,20 @@ state
 uid
 * */
 
+const ListBox = styled.div`
+  height: 230px;
+  overflow-y: scroll;
+  ${ScrollBar}
+`;
+
 const FollowListItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-
+  height: 80px;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
   & .user-info {
     width: 100%;
     display: flex;
@@ -44,9 +53,10 @@ const FollowListItem = styled.div`
   }
 
   & button {
-    font-size: 0.7em;
+    font-size: 0.8em;
     background-color: ${(props) => (props.isFollowed ? colors.colorB : "#ccc")};
-    padding: 1px;
+    border: ${(props) => (props.isFollowed ? colors.colorA : "#bebebe")};
+    padding: 5px 10px;
     width: 80px;
     flex-grow: 1;
     margin: 0 10px;
@@ -78,7 +88,7 @@ export const List = ({
   };
 
   return (
-    <div className="list">
+    <ListBox>
       {items.map((item, index) => (
         <FollowListItem key={index} isFollowed={followState[index]}>
           <div
@@ -88,8 +98,8 @@ export const List = ({
             <ProfileImg
               className={"image"}
               file={item.imgPath}
-              width={"40px"}
-              height={"40px"}
+              width={"50px"}
+              height={"50px"}
             />
             <p>{item.nickname}</p>
             <p>{item.id}</p>
@@ -105,7 +115,7 @@ export const List = ({
           )}
         </FollowListItem>
       ))}
-    </div>
+    </ListBox>
   );
 };
 
