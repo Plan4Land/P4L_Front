@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { colors } from "./GlobalStyle";
+import { ScrollBar } from "../Component/ButtonComponent";
 
 export const MyPageMainContainer = styled.div`
   display: flex;
@@ -26,7 +27,7 @@ export const MyPageMainContainer = styled.div`
   .MyPageMenu {
     margin-left: 20px;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     margin-top: -30px;
     .menu {
       position: absolute;
@@ -225,4 +226,39 @@ export const InvitePlanning = styled.div`
 export const OtherUserInfo = styled.div`
   width: 60%;
   margin: auto;
+`;
+
+export const ReportContent = styled.div`
+  /* height: 500px; */
+  width: 300px;
+  h3 {
+    color: ${colors.colorA};
+  }
+  textarea {
+    width: 100%;
+    height: 150px;
+    resize: none;
+    overflow-y: scroll;
+    margin-bottom: 15px;
+    ${ScrollBar}
+  }
+`;
+
+export const MenuBarButton = styled.div`
+  display: none;
+
+  @media (max-width: 1024px) {
+    display: block;
+    text-align: center;
+    width: 20px;
+    padding: 10px 0 0 20px;
+    background-color: transparent;
+    color: gray;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
 `;

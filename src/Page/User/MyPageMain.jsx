@@ -9,6 +9,7 @@ import {
   UserInfo,
   UserPlanning,
   InvitePlanning,
+  MenuBarButton,
 } from "../../Style/MyPageMainStyled";
 import UserInfoValidate from "./UserInfoValidate";
 import { MyBookmarkTourItem } from "./MyBookmarkTourItem";
@@ -24,7 +25,6 @@ import { MyIncludePlans } from "./MyIncludePlans";
 import { Pagination } from "../../Component/Pagination";
 import AxiosApi from "../../Api/AxiosApi";
 import FollowLoad from "../../Component/UserPageComponent/FollowLoad";
-import { FilterButton } from "../../Style/ItemListStyled";
 import { FaBars } from "react-icons/fa";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useMediaQuery } from "react-responsive";
@@ -194,9 +194,9 @@ export const MyPageMain = () => {
   return (
     <>
       {/* <Header /> */}
-      <FilterButton onClick={handleToggleSelect}>
+      <MenuBarButton onClick={handleToggleSelect}>
         <FaBars />
-      </FilterButton>
+      </MenuBarButton>
       <MyPageMainContainer>
         <div className={`menu ${isSelectOpen ? "open" : ""}`}>
           <UserMenu

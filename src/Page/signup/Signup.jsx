@@ -94,7 +94,7 @@ export const Signup = () => {
   useEffect(() => {
     if (emailTimeLeft >= 0) {
       const timer = setInterval(() => {
-        setEmailTimeLeft((prev) => prev -1);
+        setEmailTimeLeft((prev) => prev - 1);
       }, 1000);
       return () => clearInterval(timer);
     } else if (emailTimeLeft === -1) {
@@ -301,7 +301,11 @@ export const Signup = () => {
       nicknameRef.current.focus();
       return false;
     } else if (input.length < 3) {
-      setNicknameMsg("닉네임은 3글자 이상이어야 합니다.");
+      setNicknameMsg("닉네임은 3글자 이상 또는 10글자 이하여야 합니다.");
+      nicknameRef.current.focus();
+      return false;
+    } else if (input.length >= 10) {
+      setNicknameMsg("닉네임은 3글자 이상 또는 10글자 이하여야 합니다.");
       nicknameRef.current.focus();
       return false;
     } else {
@@ -472,12 +476,13 @@ export const Signup = () => {
                       onChange={(e) => setInputEmail2(e.target.value)}
                       readOnly={email2Check}
                     />
-                    {email2Check ? "" : 
-                      <span style={{color:  'red'}}>
+                    {email2Check ? (
+                      ""
+                    ) : (
+                      <span style={{ color: "red" }}>
                         {formatEmailTime(emailTimeLeft)}
                       </span>
-                    }
-                    
+                    )}
                   </div>
                 </InputBox>
                 <button

@@ -1,6 +1,7 @@
 import { Footer, Header } from "../../Component/GlobalComponent";
 import {
   OtherUserInfo,
+  ReportContent,
   UserInfo,
   UserMain,
   UserPlanning,
@@ -41,12 +42,23 @@ export const Otheruser = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false); // 신고 완료 모달 상태
   const [reportContent, setReportContent] = useState(""); // 신고 내용 저장
   const [isActivateUser, setIsActivateUser] = useState(true);
+  const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
 
   // 신고하기 모달을 닫고 완료 모달을 열기
   const handleReportConfirm = () => {
-    setShowReportModal(false); // 신고 모달 닫기
-    fetchReports();
-    setShowConfirmationModal(true); // 신고 완료 모달 열기
+    if (!reportContent.trim()) {
+      setIsCheckModalOpen(true); // 신고 내용이 비어있으면 CheckModal 열기
+    } else {
+      // 신고 내용이 있으면 신고 처리 로직 실행
+      setShowReportModal(false); // 신고 모달 닫기
+      fetchReports(); // 신고 내용 처리 (예: 서버에 전송)
+      setShowConfirmationModal(true); // 신고 완료 모달 열기
+    }
+  };
+
+  // 신고 내용이 비었을 때 CheckModal 닫기
+  const handleCheckModalClose = () => {
+    setIsCheckModalOpen(false); // CheckModal 닫기
   };
 
   // 신고 완료 모달을 닫기
@@ -342,13 +354,21 @@ export const Otheruser = () => {
         onConfirm={handleReportConfirm}
         buttonProps={{ children: "확인" }}
       >
-        <h3>신고 내용을 입력해주세요</h3>
-        <textarea
-          value={reportContent}
-          onChange={(e) => setReportContent(e.target.value)}
-          placeholder="신고 내용을 입력하세요."
-        />
+        <ReportContent>
+          <h3>신고 내용을 입력해주세요</h3>
+          <textarea
+            value={reportContent}
+            onChange={(e) => setReportContent(e.target.value)}
+            placeholder="신고 내용을 입력 해 주세요.
+            허위 신고의 경우 신고자에게 불이익이 생길 수 있습니다."
+          />
+        </ReportContent>
       </Modal>
+
+      {/* CheckModal: 신고 내용이 비었을 때 띄움 */}
+      <CheckModal isOpen={isCheckModalOpen} onClose={handleCheckModalClose}>
+        <p>신고 사유를 작성 해 주세요.</p>
+      </CheckModal>
 
       {/* 신고 완료 모달 */}
       <CheckModal

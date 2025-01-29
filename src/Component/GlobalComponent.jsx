@@ -161,47 +161,51 @@ export const Header = () => {
         </div>
       </NavSt>
       <div className="usermenu">
-        <div className="recomm">
-          <div className="quickmenu">
-            <p className="content-font2">바로가기</p>
-          </div>
-          <div className="dropdown-list">
-            <div className="topList">
-              {/* 내 플래닝 */}
-              <div className="topItem">
-                <div className="title">
-                  <h3>내 플래닝</h3>
-                </div>
-                {planners.map((plan, index) => {
-                  const areaName =
-                    areas.find((area) => area.code === plan.area)?.name ||
-                    "알 수 없는 지역";
-                  const subAreaName =
-                    areas
-                      .find((area) => area.code === plan.area)
-                      ?.subAreas.find(
-                        (subArea) => subArea.code === plan.subArea
-                      )?.name || "알 수 없는 하위 지역";
+        {user ? (
+          <div className="recomm">
+            <div className="quickmenu">
+              <p>바로가기</p>
+            </div>
+            <div className="dropdown-list">
+              <div className="topList">
+                {/* 내 플래닝 */}
+                <div className="topItem">
+                  <div className="title">
+                    <h3>내 플래닝</h3>
+                  </div>
+                  {planners.map((plan, index) => {
+                    const areaName =
+                      areas.find((area) => area.code === plan.area)?.name ||
+                      "알 수 없는 지역";
+                    const subAreaName =
+                      areas
+                        .find((area) => area.code === plan.area)
+                        ?.subAreas.find(
+                          (subArea) => subArea.code === plan.subArea
+                        )?.name || "알 수 없는 하위 지역";
 
-                  return (
-                    <p
-                      key={`plan-${index}`}
-                      onClick={() => topPlanClick(plan.id)}
-                    >
-                      <strong className="truncated-text">{plan.title}</strong> -
-                      <span className="truncated-text">
-                        {areaName} {subAreaName}
-                      </span>
-                      <span>||</span>
-                      <span className="truncated-text">
-                        {plan.theme
-                          .split(",")
-                          .map((theme) => `#${theme.trim()}`)
-                          .join(" ")}
-                      </span>
-                    </p>
-                  );
-                })}
+                    return (
+                      <p
+                        key={`plan-${index}`}
+                        onClick={() => topPlanClick(plan.id)}
+                      >
+                        <strong className="truncated-text">{plan.title}</strong>{" "}
+                        -
+                        <span className="truncated-text">
+                          {areaName} {subAreaName}
+                        </span>
+                        <span>||</span>
+                        <span className="truncated-text">
+                          {plan.theme
+                            .split(",")
+                            .map((theme) => `#${theme.trim()}`)
+                            .join(" ")}
+                        </span>
+                      </p>
+                    );
+                  })}
+                </div>
+
                 {/* 북마크 관광지 */}
                 <div className="topItem">
                   <div className="title">
@@ -220,7 +224,10 @@ export const Header = () => {
               </div>
             </div>
           </div>
-        </div>
+        ) : (
+          ""
+        )}
+
         <div className={`profile-link ${user ? "logged-in" : "logged-out"}`}>
           {user ? (
             <>
