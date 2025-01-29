@@ -26,6 +26,7 @@ import ExpressBus from "./Page/Traffic/ExpressBus";
 import IntercityBus from "./Page/Traffic/IntercityBus";
 import AdminLogin from "./Page/Admin/AdminLogin";
 import { Layout } from "./Component/GlobalComponent";
+import Train from "./Page/Traffic/Train";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
                 <Route path="/management" element={<AdminPage />} />
                 <Route path="/ExpressBus" element={<ExpressBus />} />
                 <Route path="/IntercityBus" element={<IntercityBus />} />
+                <Route path="/train" element={<Train />} />
                 <Route
                   path="/makePlanning"
                   element={
