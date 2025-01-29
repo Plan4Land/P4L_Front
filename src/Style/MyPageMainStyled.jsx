@@ -27,7 +27,7 @@ export const MyPageMainContainer = styled.div`
   .MyPageMenu {
     margin-left: 20px;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     margin-top: -30px;
     .menu {
       position: absolute;
@@ -241,5 +241,24 @@ export const ReportContent = styled.div`
     overflow-y: scroll;
     margin-bottom: 15px;
     ${ScrollBar}
+  }
+`;
+
+export const MenuBarButton = styled.div`
+  display: none;
+
+  @media (max-width: 1024px) {
+    display: block;
+    text-align: center;
+    width: 20px;
+    padding: 10px 0 0 20px;
+    background-color: transparent;
+    color: gray;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+      opacity: 0.7;
+    }
   }
 `;
