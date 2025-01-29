@@ -2,11 +2,7 @@ import { Header, Footer } from "../../Component/GlobalComponent";
 import { useState, useEffect } from "react";
 import { areas, themes } from "../../Util/Common";
 import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
-import {
-  Button,
-  ToggleButton,
-  ToggleSection,
-} from "../../Component/ButtonComponent";
+import { Button, ToggleSection } from "../../Component/ButtonComponent";
 import {
   SelectTourItem,
   SearchSt,
@@ -22,10 +18,21 @@ import { Pagination } from "../../Component/Pagination";
 import { FaBars } from "react-icons/fa";
 import { Loading } from "../../Component/LoadingComponent";
 import { SelectedFilters } from "../../Component/SelectedFilterComponent";
+import { CheckModal } from "../../Util/Modal";
+import { useAuth } from "../../Context/AuthContext";
 
 export const PlanningList = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user } = useAuth();
+
+  const handlePlanningClick = (e) => {
+    if (!user?.id) {
+      e.preventDefault(); // 네비게이션 막기
+      setIsModalOpen(true); // 모달 열기
+    }
+  };
 
   const [filters, setFilters] = useState(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -310,7 +317,7 @@ export const PlanningList = () => {
         <ItemList>
           <div className="totalCount">
             총 {totalItems.toLocaleString()}건
-            <Link to={"/makeplanning"}>
+            <Link to={"/makeplanning"} onClick={handlePlanningClick}>
               <Button>플래닝 만들기</Button>
             </Link>
           </div>
@@ -381,6 +388,9 @@ export const PlanningList = () => {
         </ItemList>
       </List>
       {/* <Footer /> */}
+      <CheckModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        로그인이 필요한 서비스입니다.
+      </CheckModal>
     </>
   );
 };

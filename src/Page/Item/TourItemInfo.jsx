@@ -22,6 +22,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination } from "swiper/modules";
 import { ServiceCode } from "../../Util/Service_code_final";
+import { CheckModal } from "../../Util/Modal";
 
 export const TourItemInfo = () => {
   const { id } = useParams();
@@ -34,12 +35,13 @@ export const TourItemInfo = () => {
   const [bookmarkCount, setBookmarkCount] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [activeTab, setActiveTab] = useState("basic");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 북마크 상태 변경 함수
   const toggleBookmark = async () => {
     try {
       if (!user?.id) {
-        console.error("사용자 ID가 없습니다");
+        setIsModalOpen(true);
         return;
       }
 
@@ -396,6 +398,9 @@ export const TourItemInfo = () => {
           <p>여행지 정보를 불러오는 중입니다...</p>
         )}
       </TourItemInfoBox>
+      <CheckModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        로그인이 필요한 서비스입니다.
+      </CheckModal>
       {/* <Footer /> */}
     </>
   );

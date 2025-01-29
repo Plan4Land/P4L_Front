@@ -5,6 +5,8 @@ import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
 import PlanningApi from "../../Api/PlanningApi";
 import { useAuth } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { CheckModal } from "../../Util/Modal";
+import { useState } from "react";
 
 export const MenuIcons = ({
   plannerId,
@@ -19,6 +21,7 @@ export const MenuIcons = ({
 }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleBookmarked = async () => {
     console.log("북마크 상태 : ", isBookmarked);
@@ -35,7 +38,8 @@ export const MenuIcons = ({
         bookmarkCount: prevInfo.bookmarkCount + 1,
       }));
     } else {
-      navigate("/login");
+      setIsModalOpen(true);
+      return;
     }
     setIsBookmarked(!isBookmarked);
   };
@@ -114,6 +118,9 @@ export const MenuIcons = ({
           />
         </>
       )}
+      <CheckModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        로그인이 필요한 서비스입니다.
+      </CheckModal>
     </div>
   );
 };
