@@ -297,7 +297,7 @@ export const Otheruser = () => {
                       address={`${areaName} - ${subAreaName}`}
                       subCategory={planner.theme}
                       type={planner.public ? "공개" : "비공개"}
-                      ownerprofile={`/${planner.ownerProfileImg}`}
+                      ownerprofile={`${planner.ownerProfileImg}`}
                       ownernick={planner.ownerNickname}
                     />
                   </div>
