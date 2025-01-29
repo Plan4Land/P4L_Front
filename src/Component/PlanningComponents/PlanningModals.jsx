@@ -218,6 +218,11 @@ export const SearchUser = ({
     await fetchMember();
   };
 
+  const handleCancelInvite = async (memberId) => {
+    await PlanningApi.rejectInvitation(memberId, plannerId);
+    await fetchMember();
+  };
+
   return (
     <CloseModal
       isOpen={modals.searchUser}
@@ -273,16 +278,22 @@ export const SearchUser = ({
                       $height={"35px"}
                       fontSize={"13px"}
                       padding={"7px 10px"}
-                      bgcolor={colors.colorC}
+                      bgcolor={
+                        member.state === "WAIT" ? "#FF6F61" : colors.colorC
+                      }
                       color={"black"}
                       border={"none"}
-                      onClick={() => handleInviteUser(member.id)}
-                      disabled={
-                        member.state === "WAIT" || member.state === "ACCEPT"
-                      }
+                      onClick={() => {
+                        if (member.state === "WAIT") {
+                          handleCancelInvite(member.id); // 초대 취소 로직
+                        } else {
+                          handleInviteUser(member.id); // 초대 하기 로직
+                        }
+                      }}
+                      disabled={member.state === "ACCEPT"}
                     >
                       {member.state === "WAIT"
-                        ? "수락 대기"
+                        ? "초대 취소"
                         : member.state === "ACCEPT"
                         ? "수락 완료"
                         : "초대 하기"}
