@@ -26,6 +26,19 @@ const ModalContent = styled.div`
   text-align: center;
   display: flex;
   flex-direction: column;
+  animation: slideDown 0.3s ease-out;
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
   .buttons {
     flex-direction: row;
     button {
@@ -45,6 +58,18 @@ const CloseModalContent = styled.div`
   width: ${({ width }) => width || "auto"};
   height: ${({ height }) => height || "auto"};
   min-height: ${({ minHeight }) => minHeight || "auto"};
+  animation: slideDown 0.3s ease-out;
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
   @media (max-width: 768px) {
     width: ${({ mediaWidth768 }) => mediaWidth768 || "inherit"};
     height: ${({ mediaHeight768 }) => mediaHeight768 || "inherit"};
