@@ -81,7 +81,10 @@ const UserInfoEdit = () => {
       setNicknameMsg("닉네임을 입력해주세요.");
       setNicknameCheck(false);
     } else if (input.length < 3) {
-      setNicknameMsg("닉네임은 3글자 이상이어야 합니다.");
+      setNicknameMsg("닉네임은 3글자 이상 또는 10글자 이하여야 합니다.");
+      setNicknameCheck(false);
+    } else if (input.length >= 10) {
+      setNicknameMsg("닉네임은 3글자 이상 또는 10글자 이하여야 합니다.");
       setNicknameCheck(false);
     } else {
       setNicknameMsg("");
