@@ -181,7 +181,7 @@ export const Otheruser = () => {
       {/* <Header /> */}
       <UserMain>
         <OtherUserInfo>
-          <UserInfo>
+          <UserInfo isInactive={!isActivateUser}>
             <div className="user">
               <div
                 className="ProfileImg"
@@ -204,11 +204,15 @@ export const Otheruser = () => {
                 ) : (
                   <p>유저 정보를 불러오지 못했습니다.</p>
                 )}
-                <div className="follow" onClick={openFollowModal}>
-                  <p>
-                    팔로잉: {followings.length} 팔로워: {followers.length}
-                  </p>
-                </div>
+                {isActivateUser ? (
+                  <div className="follow" onClick={openFollowModal}>
+                    <p>
+                      팔로잉: {followings.length} 팔로워: {followers.length}
+                    </p>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
             {user && user.id !== userId && isActivateUser && (
@@ -231,7 +235,11 @@ export const Otheruser = () => {
                 </Button>
               </div>
             )}
-            {isActivateUser ? "" : <p>비활성화된 계정입니다.</p>}
+            {isActivateUser ? (
+              ""
+            ) : (
+              <p className="inactiveUser">비활성화된 계정입니다.</p>
+            )}
           </UserInfo>
         </OtherUserInfo>
         <UserPlanning>

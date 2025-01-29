@@ -66,6 +66,12 @@ export const UserInfo = styled.div`
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
   border-radius: 20px;
   margin-bottom: 15px;
+  background-color: ${({ isInactive }) => (isInactive ? "#bbbbbb" : "white")};
+  color: ${({ isInactive }) => (isInactive ? "#910505" : "inherit")};
+  .inactiveUser {
+    font-weight: bold;
+    margin-right: 30px;
+  }
   .ProfileImg {
     height: 100px;
     width: 100px;

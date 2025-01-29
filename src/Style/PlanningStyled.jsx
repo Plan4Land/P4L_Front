@@ -492,8 +492,14 @@ export const ParticipantsContainer = styled.div`
   flex-direction: column;
   gap: 15px;
   ${ScrollBar}
-  img {
+  .participants-profile {
     cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+      background-color: #ddd;
+    }
+  }
+  img {
     width: 70px;
     height: 70px;
     border-radius: 50%;
