@@ -22,8 +22,27 @@ import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 
 // 플래닝에 초대 수락한 회원들 모달창
-export const UserModal = ({ plannerInfo, modals, setModals }) => {
+export const UserModal = ({
+  plannerInfo,
+  setPlannerInfo,
+  modals,
+  setModals,
+  plannerId,
+}) => {
   const navigate = useNavigate();
+
+  const handleDeleteParticipants = async (memberId, plannerId) => {
+    await PlanningApi.rejectInvitation(memberId, plannerId);
+    const updatedParticipants = plannerInfo.participants.filter(
+      (participant) => participant.id !== memberId
+    );
+
+    setPlannerInfo((prevState) => ({
+      ...prevState,
+      participants: updatedParticipants,
+    }));
+  };
+
   return (
     <CloseModal
       isOpen={modals.userModal}
@@ -43,11 +62,29 @@ export const UserModal = ({ plannerInfo, modals, setModals }) => {
               id={participant.id}
               // nickname={participant.nickname}
               // profileImg={`/${participant.memberProfileImg}`}
-              onClick={() => navigate(`/otheruser/${participant.id}`)}
+              // onClick={() => navigate(`/otheruser/${participant.id}`)}
             >
               <div className="participantsInfo">
-                <img src={`${participant.memberProfileImg}`} alt="Profile" />
-                <p>{participant.memberNickname}</p>
+                <img
+                  src={`${participant.memberProfileImg}`}
+                  alt="Profile"
+                  onClick={() => navigate(`/otheruser/${participant.id}`)}
+                />
+                <p onClick={() => navigate(`/otheruser/${participant.id}`)}>
+                  {participant.memberNickname}
+                </p>
+                <Button
+                  className="deleteMember"
+                  $width={"55px"}
+                  $height={"30px"}
+                  fontSize={"13px"}
+                  padding={"7px 10px"}
+                  onClick={() =>
+                    handleDeleteParticipants(participant.id, plannerId)
+                  }
+                >
+                  삭제
+                </Button>
               </div>
             </div>
           ))}

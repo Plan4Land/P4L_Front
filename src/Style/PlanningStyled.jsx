@@ -493,7 +493,6 @@ export const ParticipantsContainer = styled.div`
   gap: 15px;
   ${ScrollBar}
   .participants-profile {
-    cursor: pointer;
     transition: all 0.3s ease;
     &:hover {
       background-color: #ddd;
@@ -507,8 +506,17 @@ export const ParticipantsContainer = styled.div`
   .participantsInfo {
     display: flex;
     align-items: center;
+    img {
+      cursor: pointer;
+    }
     p {
+      cursor: pointer;
       margin-left: 20px;
+    }
+    .deleteMember {
+      display: flex;
+      position: absolute;
+      right: 30px;
     }
   }
 `;

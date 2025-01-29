@@ -744,8 +744,10 @@ export const Planning = () => {
         {modals.userModal && (
           <UserModal
             plannerInfo={plannerInfo}
+            setPlannerInfo={setPlannerInfo}
             modals={modals}
             setModals={setModals}
+            plannerId={plannerId}
           />
         )}
         {modals.addPlaceModal && (
