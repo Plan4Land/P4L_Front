@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { colors } from "./GlobalStyle";
+import { ScrollBar } from "../Component/ButtonComponent";
 
 export const MyPageMainContainer = styled.div`
   display: flex;
@@ -225,4 +226,20 @@ export const InvitePlanning = styled.div`
 export const OtherUserInfo = styled.div`
   width: 60%;
   margin: auto;
+`;
+
+export const ReportContent = styled.div`
+  /* height: 500px; */
+  width: 300px;
+  h3 {
+    color: ${colors.colorA};
+  }
+  textarea {
+    width: 100%;
+    height: 150px;
+    resize: none;
+    overflow-y: scroll;
+    margin-bottom: 15px;
+    ${ScrollBar}
+  }
 `;

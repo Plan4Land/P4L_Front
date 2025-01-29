@@ -73,19 +73,19 @@ export const UserModal = ({
                 <p onClick={() => navigate(`/otheruser/${participant.id}`)}>
                   {participant.memberNickname}
                 </p>
-                <Button
-                  className="deleteMember"
-                  $width={"55px"}
-                  $height={"30px"}
-                  fontSize={"13px"}
-                  padding={"7px 10px"}
-                  onClick={() =>
-                    handleDeleteParticipants(participant.id, plannerId)
-                  }
-                >
-                  삭제
-                </Button>
               </div>
+              <Button
+                className="deleteMember"
+                $width={"55px"}
+                $height={"30px"}
+                fontSize={"13px"}
+                padding={"7px 10px"}
+                onClick={() =>
+                  handleDeleteParticipants(participant.id, plannerId)
+                }
+              >
+                삭제
+              </Button>
             </div>
           ))}
       </ParticipantsContainer>

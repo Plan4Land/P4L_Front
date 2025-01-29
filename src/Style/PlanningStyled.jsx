@@ -490,12 +490,19 @@ export const ParticipantsContainer = styled.div`
   margin: 15px 0 20px 0;
   display: flex;
   flex-direction: column;
-  gap: 15px;
   ${ScrollBar}
   .participants-profile {
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     transition: all 0.3s ease;
+    border-bottom: 1px solid #ddd;
     &:hover {
       background-color: #ddd;
+    }
+    .deleteMember {
+      margin-right: 20px;
     }
   }
   img {
@@ -512,11 +519,6 @@ export const ParticipantsContainer = styled.div`
     p {
       cursor: pointer;
       margin-left: 20px;
-    }
-    .deleteMember {
-      display: flex;
-      position: absolute;
-      right: 30px;
     }
   }
 `;
