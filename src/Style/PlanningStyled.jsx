@@ -443,7 +443,7 @@ export const PlannerOwner = styled.div`
   color: #fff;
   @media (max-width: 768px) {
     bottom: 10px;
-    right: 70px;
+    right: 30px;
   }
 `;
 

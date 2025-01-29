@@ -71,14 +71,14 @@ const CloseModalContent = styled.div`
     }
   }
   @media (max-width: 768px) {
-    width: ${({ mediaWidth768 }) => mediaWidth768 || "inherit"};
-    height: ${({ mediaHeight768 }) => mediaHeight768 || "inherit"};
+    width: ${({ mediaWidth768 }) => mediaWidth768 || "300px"};
+    height: ${({ mediaHeight768 }) => mediaHeight768 || "400px"};
   }
   @media (max-width: 400px) {
     width: ${({ mediaWidth400, mediaWidth768 }) =>
-      mediaWidth400 || mediaWidth768 || "inherit"};
+      mediaWidth400 || mediaWidth768 || "300px"};
     height: ${({ mediaHeight400, mediaHeight768 }) =>
-      mediaHeight400 || mediaHeight768 || "inherit"};
+      mediaHeight400 || mediaHeight768 || "400px"};
   }
 `;
 
