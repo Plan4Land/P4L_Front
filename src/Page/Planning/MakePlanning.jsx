@@ -86,8 +86,11 @@ export const MakePlanning = () => {
   };
 
   const handleStartDateChange = (date) => {
+    console.log(date);
+    console.log(new Date(date));
     setStartDate(date);
     if (endDate && date > endDate) {
+      console.log("여기 오는건 아니지..?");
       setEndDate(null);
     }
   };
@@ -131,10 +134,10 @@ export const MakePlanning = () => {
       setIsLoading(false);
     }
   };
-
   useEffect(() => {
-    console.log("selectedarea : ", selectedArea);
-  }, [selectedArea]);
+    console.log("시작일 : ", startDate);
+    console.log("종료일 : ", endDate);
+  }, [startDate, endDate]);
 
   return (
     <>
@@ -214,13 +217,12 @@ export const MakePlanning = () => {
                   locale={ko}
                   dateFormat="yyyy-MM-dd"
                   dateFormatCalendar="yyyy년 MM월"
-                  timeCaption="시간"
                   selected={startDate}
                   onChange={handleStartDateChange}
                   selectsStart
                   startDate={startDate}
                   endDate={endDate}
-                  minDate={new Date()}
+                  // minDate={new Date()}
                   placeholderText="시작일 선택"
                 />
                 <span>~</span>
@@ -230,7 +232,6 @@ export const MakePlanning = () => {
                     locale={ko}
                     dateFormat="yyyy-MM-dd"
                     dateFormatCalendar="yyyy년 MM월"
-                    timeCaption="시간"
                     selected={endDate}
                     onChange={(date) => setEndDate(date)}
                     selectsEnd

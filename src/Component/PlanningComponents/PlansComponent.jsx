@@ -289,13 +289,12 @@ export const PlannerInfoEditComponent = ({
               locale={ko}
               dateFormat="yyyy-MM-dd"
               dateFormatCalendar="yyyy년 MM월"
-              timeCaption="시간"
               selected={new Date(editPlannerInfo.startDate)}
               onChange={handleStartDateChange}
               selectsStart
               startDate={new Date(editPlannerInfo.startDate)}
               endDate={new Date(editPlannerInfo.endDate)}
-              minDate={new Date()}
+              // minDate={new Date()}
               placeholderText="시작일 선택"
             />
             <span>~</span>
@@ -305,7 +304,6 @@ export const PlannerInfoEditComponent = ({
                 locale={ko}
                 dateFormat="yyyy-MM-dd"
                 dateFormatCalendar="yyyy년 MM월"
-                timeCaption="시간"
                 selected={new Date(editPlannerInfo.endDate)}
                 onChange={(date) =>
                   setEditPlannerInfo((prev) => ({
