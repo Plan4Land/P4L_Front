@@ -7,12 +7,15 @@ import {
   SearchSt,
   List,
   FilterButton,
+  ItemList,
 } from "../../Style/ItemListStyled";
 import { FaUndo, FaSearch } from "react-icons/fa";
 import { Pagination } from "../../Component/Pagination";
 import { ExpressServiceCode } from "../../Util/Service_Express_code";
 import { ExpressGradeService } from "../../Util/Service_ExpressGrade_code";
 import { FaBars } from "react-icons/fa";
+import { TourItem } from "../../Component/ItemListComponent";
+import { useMediaQuery } from "react-responsive";
 
 const ExpressBus = () => {
   const [schedule, setSchedule] = useState([]);
@@ -28,6 +31,8 @@ const ExpressBus = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedBusGrade, setSelectedBusGrade] = useState("");
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const [totalItems, setTotalItems] = useState(0);
 
   // 토글 상태 관리
   const [isDepCat1Open, setIsDepCat1Open] = useState(true);
@@ -38,7 +43,7 @@ const ExpressBus = () => {
   const [isArrCat3Open, setIsArrCat3Open] = useState(true);
   const [isGradeOpen, setIsGradeOpen] = useState(true);
 
-  const itemsPerPage = 25;
+  const itemsPerPage = 22;
 
   useEffect(() => {
     if (schedule.length > 0) {
@@ -234,8 +239,6 @@ const ExpressBus = () => {
             초기화
             <FaUndo style={{ marginLeft: "6px" }} />
           </button>
-
-          {/* 날짜 입력 */}
           <SearchSt>
             <div className="search-wrapper">
               <input
@@ -253,7 +256,7 @@ const ExpressBus = () => {
               <ToggleButton isOpen={isDepCat1Open} onToggle={toggleDepCat1} />
             </h3>
             {isDepCat1Open && (
-              <div>
+              <div className="buttons">
                 {ExpressServiceCode.map((cat1) => (
                   <Button
                     key={`dep-cat1-${cat1.cat1}`}
@@ -272,13 +275,13 @@ const ExpressBus = () => {
           </div>
 
           {selectedDepCat1 && (
-            <div className="details-area">
+            <div className="subarea">
               <h3>
                 출발 세부 지역 선택
                 <ToggleButton isOpen={isDepCat2Open} onToggle={toggleDepCat2} />
               </h3>
               {isDepCat2Open && (
-                <div>
+                <div className="buttons">
                   {getCat2List(selectedDepCat1).map((cat2) => (
                     <Button
                       key={`dep-cat2-${cat2.cat2Code}`}
@@ -299,13 +302,13 @@ const ExpressBus = () => {
           )}
 
           {selectedDepCat2 && !isMetropolitanCity(selectedDepCat1) && (
-            <div className="subcategory-area">
+            <div className="top">
               <h3>
                 출발 소분류 지역 선택
                 <ToggleButton isOpen={isDepCat3Open} onToggle={toggleDepCat3} />
               </h3>
               {isDepCat3Open && (
-                <div>
+                <div className="buttons">
                   {getCat3List(
                     getCat2List(selectedDepCat1).find(
                       (cat2) => cat2.cat2 === selectedDepCat2
@@ -327,13 +330,13 @@ const ExpressBus = () => {
           )}
 
           {/* 도착지 설정 */}
-          <div className="mainarea">
+          <div className="middle">
             <h3>
               도착 지역 선택
               <ToggleButton isOpen={isArrCat1Open} onToggle={toggleArrCat1} />
             </h3>
             {isArrCat1Open && (
-              <div>
+              <div className="buttons">
                 {ExpressServiceCode.map((cat1) => (
                   <Button
                     key={`dep-cat1-${cat1.cat1}`}
@@ -352,13 +355,13 @@ const ExpressBus = () => {
           </div>
 
           {selectedArrCat1 && (
-            <div className="details-area">
+            <div className="bottom">
               <h3>
                 도착 세부 지역 선택
                 <ToggleButton isOpen={isArrCat2Open} onToggle={toggleArrCat2} />
               </h3>
               {isArrCat2Open && (
-                <div>
+                <div className="buttons">
                   {getCat2List(selectedArrCat1).map((cat2) => (
                     <Button
                       key={`dep-cat2-${cat2.cat2Code}`}
@@ -406,46 +409,40 @@ const ExpressBus = () => {
             </div>
           )}
 
-          {(selectedDepCat2 || selectedDepCat3) &&
-            selectedArrCat1 &&
-            selectedArrCat2 && (
-              <div className="bus-grade-section">
-                <h3>
-                  버스 등급 선택
-                  <ToggleButton isOpen={isGradeOpen} onToggle={toggleGrade} />
-                </h3>
-                {isGradeOpen && (
-                  <div>
-                    {ExpressGradeService.map((grade) => (
-                      <Button
-                        key={grade.GradeId}
-                        onClick={() => {
-                          setSelectedBusGrade((prev) => {
-                            if (grade.GradeId === "") {
-                              return [""];
-                            }
-                            if (prev.includes("")) {
-                              return [grade.GradeId];
-                            }
-                            if (prev.includes(grade.GradeId)) {
-                              return prev.filter((id) => id !== grade.GradeId);
-                            }
-                            return [...prev, grade.GradeId];
-                          });
-                        }}
-                        className={
-                          selectedBusGrade.includes(grade.GradeId)
-                            ? "selected"
-                            : ""
-                        }
-                      >
-                        {grade.GradeNm}
-                      </Button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+          {(selectedDepCat2 || selectedDepCat3) && selectedArrCat1 && selectedArrCat2 && (
+            <div className="category">
+              <h3>
+                버스 등급 선택
+                <ToggleButton isOpen={isGradeOpen} onToggle={toggleGrade} />
+              </h3>
+              {isGradeOpen && (
+                <div className="buttons">
+                  {ExpressGradeService.map((grade) => (
+                    <Button
+                      key={grade.GradeId}
+                      onClick={() => {
+                        setSelectedBusGrade((prev) => {
+                          if (grade.GradeId === '') {
+                            return [''];
+                          }
+                          if (prev.includes('')) {
+                            return [grade.GradeId];
+                          }
+                          if (prev.includes(grade.GradeId)) {
+                            return prev.filter((id) => id !== grade.GradeId);
+                          }
+                          return [...prev, grade.GradeId];
+                        });
+                      }}
+                      className={selectedBusGrade.includes(grade.GradeId) ? 'selected' : ''}
+                    >
+                      {grade.GradeNm}
+                    </Button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
           {(selectedBusGrade || selectedBusGrade === "") && (
             <Button onClick={fetchSchedule} disabled={loading}>
               {loading ? "로딩 중..." : "조회"}
@@ -454,7 +451,7 @@ const ExpressBus = () => {
           )}
         </SelectTourItem>
 
-        <div className="schedule-results">
+        <div className="tour-list">
           <h3>고속버스 조회</h3>
           {displayedSchedule.length === 0 ? (
             <p>조회된 시간표가 없습니다.</p>
