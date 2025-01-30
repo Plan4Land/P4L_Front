@@ -85,21 +85,24 @@ export const Login = () => {
       }
     } catch (error) {
       console.error("Error during login: ", error);
-      if (
-        error.response &&
-        error.response.data.message === "탈퇴한 회원입니다."
-      ) {
-        setTextMessage("탈퇴한 회원입니다.");
-      } else if (error.response.status === 403) {
-        const data = await AxiosApi.banData(inputUserId);
-        console.log(data)
-        setBanData(data);
-        setBanModalOpen(true);
+      if (error.response) {
+        console.log("로그 : ",error.response.data.message);
+        if (error.response.data.message === "탈퇴한 회원입니다.") {
+          setTextMessage("탈퇴한 회원입니다.");
+        } else if (error.response.data.message === "정지된 회원입니다.") {
+          const data = await AxiosApi.banData(inputUserId);
+          console.log(data);
+          setBanData(data);
+          setBanModalOpen(true);
+        } else {
+          setTextMessage("아이디 또는 비밀번호가 일치하지 않습니다.");
+        }
       } else {
         setTextMessage("아이디 또는 비밀번호가 일치하지 않습니다.");
       }
     }
   };
+
 
   // 카카오 로그인
   const kakaoLogin = () => {
@@ -308,8 +311,8 @@ export const Login = () => {
           <BanModal
             open={banModalOpen}
             close={() => openModal(setBanModalOpen, false)}
-            id={banData.userId}
-            banDays={banData.endDate}
+            id={banData?.userId}
+            banDays={banData?.endDate}
           />
         </SignupContainer>
       </Center>
