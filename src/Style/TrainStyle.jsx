@@ -17,6 +17,12 @@ export const Container = styled.div`
     width: 100%;
     margin: auto;
     border-bottom: 1px solid #ddd;
+    @media (max-width: 768px) {
+      padding: 7px 0;
+    }
+    @media (max-width: 400px) {
+      padding: 5px 0;
+    }
     .menu-title {
       padding: 5px 0;
       min-width: 150px;
@@ -25,6 +31,14 @@ export const Container = styled.div`
       align-items: center;
       justify-content: center;
       margin-right: 20px;
+      @media (max-width: 768px) {
+        min-width: 100px;
+        font-size: 15px;
+      }
+      @media (max-width: 400px) {
+        min-width: 80px;
+        font-size: 14px;
+      }
     }
     .select-content {
       padding: 5px 0;
@@ -33,10 +47,15 @@ export const Container = styled.div`
   }
   .datepicker {
     display: flex;
+    align-items: center;
     .datepicker-component {
       min-width: 250px;
       width: 35%;
       height: 80%;
+      @media (max-width: 768px) {
+        scale: 0.8;
+        min-width: 180px;
+      }
     }
   }
   .search-button {
@@ -45,19 +64,18 @@ export const Container = styled.div`
     border: none;
     :disabled {
     }
+    @media (max-width: 768px) {
+      font-size: 15px;
+    }
   }
 `;
 
-// export const MenuTitle = styled.div`
-//   min-width: 150px;
-//   display: flex;
-//   align-items: center;
-//   border: 1px solid black;
-//   margin-right: 20px;
-// `;
 export const VehicleKindContainer = styled.div`
   display: flex;
   width: 90%;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
   .checkbox-container {
     display: flex;
     flex-wrap: wrap;
@@ -69,6 +87,10 @@ export const VehicleKindContainer = styled.div`
     button {
       all: unset;
     }
+    @media (max-width: 768px) {
+      width: 115px;
+      font-size: 14px;
+    }
   }
 `;
 export const SelectStationContainer = styled.div`
@@ -76,9 +98,11 @@ export const SelectStationContainer = styled.div`
 `;
 
 export const SelectStation = styled.div`
-  width: 60%;
+  width: 100%;
   .select-wrapper {
     display: flex;
+    flex-wrap: wrap;
+    row-gap: 5px;
     select {
       min-width: 150px;
       padding: 5px;
@@ -95,6 +119,15 @@ export const SelectStation = styled.div`
         outline: none;
         border-color: ${colors.colorA};
       }
+      @media (max-width: 990px) {
+        min-width: 120px;
+      }
+      @media (max-width: 768px) {
+        min-width: 80px;
+        padding: 2px;
+        margin-right: 10px;
+        font-size: 12px;
+      }
 
       option {
         padding: 10px;
@@ -106,6 +139,7 @@ export const SelectStation = styled.div`
 `;
 
 export const ScheduleResult = styled.div`
+  padding-bottom: 20px;
   .result-table {
     margin: 20px auto;
     width: 80vw;
@@ -124,11 +158,20 @@ export const ScheduleResult = styled.div`
       padding: 12px 16px;
       text-align: center;
       border-bottom: 1px solid #ddd;
+      @media (max-width: 768px) {
+        padding: 6px 9px;
+      }
     }
 
     th {
       font-weight: bold;
       color: #333;
+      @media (max-width: 768px) {
+        font-size: 13.9px;
+      }
+      @media (max-width: 400px) {
+        font-size: 12.6px;
+      }
     }
     td:nth-child(1) {
       font-weight: bold;
@@ -144,6 +187,39 @@ export const ScheduleResult = styled.div`
     td {
       font-size: 14px;
       color: #555;
+      @media (max-width: 768px) {
+        font-size: 12.8px;
+      }
+      @media (max-width: 400px) {
+        font-size: 11.8px;
+      }
+    }
+    @media (max-width: 400px) {
+      td .currency {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      th:nth-child(2),
+      th:nth-child(3),
+      td:nth-child(2),
+      td:nth-child(3) {
+        display: none;
+      }
+    }
+  }
+
+  .inform {
+    margin: 0 auto;
+    padding: 10px 0;
+    width: 80vw;
+    font-size: 14px;
+    @media (max-width: 768px) {
+      font-size: 12px;
+    }
+    @media (max-width: 768px) {
+      font-size: 11px;
     }
   }
 `;

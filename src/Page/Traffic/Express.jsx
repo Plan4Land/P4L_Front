@@ -268,11 +268,27 @@ const Express = () => {
           )}
         </table>
         {trainSchedule && trainSchedule.length > 0 && (
-          <Pagination
-            currentPage={currentPage - 1}
-            totalPages={trainSchedule.length}
-            handlePageChange={(page) => handlePageChange(page + 1)}
-          />
+          <>
+            <Pagination
+              currentPage={currentPage - 1}
+              totalPages={trainSchedule.length}
+              handlePageChange={(page) => handlePageChange(page + 1)}
+            />
+            <div className="inform">
+              <span>
+                ※본 정보는 한국철도공사의 사정에 따라 변경될 수 있습니다.
+                최신정보 확인은{" "}
+                <a
+                  href="https://www.letskorail.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  한국철도공사 홈페이지
+                </a>
+                에서 확인하시기 바랍니다.
+              </span>
+            </div>
+          </>
         )}
       </ScheduleResult>
     </>
