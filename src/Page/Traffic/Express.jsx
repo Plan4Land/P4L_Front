@@ -1,26 +1,28 @@
-import { useState } from "react";
-import { KTXServiceCode } from "../../Util/Service_KTX_code";
-import { Vehiclekind } from "../../Util/Service_VehicleKind_code";
+import { useEffect, useState } from "react";
+import { ExpressServiceCode } from "../../Util/Service_Express_code";
+import { ExpressGradeService } from "../../Util/Service_ExpressGrade_code";
 import {
   Container,
   MenuTitle,
   SelectStationContainer,
   VehicleKindContainer,
 } from "../../Style/TrainStyle";
-import { SelectStationComponent } from "../../Component/TrafficComponents/SelectStation";
+import { SelectExpressStation } from "../../Component/TrafficComponents/SelectStation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { format } from "date-fns";
 import { DatePickerContainer } from "../../Style/PlanningStyled";
 import { Button } from "../../Component/ButtonComponent";
-import { KTXApi } from "../../Api/TrafficApi";
+import { ExpressApi } from "../../Api/TrafficApi";
 
-const Train = () => {
+const Express = () => {
   const [departureArea, setDepartureArea] = useState(null);
+  const [departureCity, setDepartureCity] = useState(null);
   const [departureStation, setDepartureStation] = useState(null);
   const [departureStationCode, setDepartureStationCode] = useState(null);
   const [arrivalArea, setArrivalArea] = useState(null);
+  const [arrivalCity, setArrivalCity] = useState(null);
   const [arrivalStation, setArrivalStation] = useState(null);
   const [arrivalStationCode, setArrivalStationCode] = useState(null);
 
@@ -31,35 +33,19 @@ const Train = () => {
   const [trainSchedule, setTrainSchedule] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const allVehicleCodes = Vehiclekind.flatMap((vehicle) =>
-    vehicle.subKinds
-      ? [...vehicle.subKinds.map((sub) => sub.VehicleKindCode)]
-      : [vehicle.VehicleKindCode]
-  );
+  const allVehicleCodes = ExpressGradeService.map((vehicle) => vehicle.GradeId);
 
   const allSelected = selectedVehicles.length === allVehicleCodes.length;
 
   const handleVehicleClick = (vehicle) => {
     let updatedVehicles = [...selectedVehicles];
 
-    if (vehicle.subKinds) {
-      vehicle.subKinds.forEach((sub) => {
-        if (!updatedVehicles.includes(sub.VehicleKindCode)) {
-          updatedVehicles.push(sub.VehicleKindCode);
-        } else {
-          updatedVehicles = updatedVehicles.filter(
-            (code) => code !== sub.VehicleKindCode
-          );
-        }
-      });
+    const vehicleId = vehicle.GradeId;
+
+    if (updatedVehicles.includes(vehicleId)) {
+      updatedVehicles = updatedVehicles.filter((id) => id !== vehicleId);
     } else {
-      if (updatedVehicles.includes(vehicle.VehicleKindCode)) {
-        updatedVehicles = updatedVehicles.filter(
-          (code) => code !== vehicle.VehicleKindCode
-        );
-      } else {
-        updatedVehicles.push(vehicle.VehicleKindCode);
-      }
+      updatedVehicles.push(vehicleId);
     }
 
     setSelectedVehicles(updatedVehicles);
@@ -83,7 +69,7 @@ const Train = () => {
     try {
       setLoading(true);
       const formattedDate = format(date, "yyyyMMdd");
-      const response = await KTXApi.getSchedule(
+      const response = await ExpressApi.getSchedule(
         departureStationCode,
         arrivalStationCode,
         formattedDate,
@@ -91,6 +77,7 @@ const Train = () => {
       );
       console.log(response); // API 응답 처리
       const combinedSchedules = response.flat();
+      console.log("combinedSchedules : ", combinedSchedules);
       const sortedSchedules = combinedSchedules.sort(
         (a, b) => a.arrplandtime - b.arrplandtime
       );
@@ -122,6 +109,7 @@ const Train = () => {
       setCurrentPage(page);
     }
   };
+
   return (
     <Container>
       <div className="datepicker">
@@ -153,18 +141,18 @@ const Train = () => {
             <span className="checkbox-name">전체 선택</span>
           </label>
 
-          {Vehiclekind.map((vehicle) => (
-            <label key={vehicle.VehicleKindCode}>
+          {ExpressGradeService.map((vehicle) => (
+            <label key={vehicle.GradeId}>
               <input
                 type="checkbox"
-                checked={selectedVehicles.includes(vehicle.VehicleKindCode)}
+                checked={selectedVehicles.includes(vehicle.GradeId)}
                 onChange={() => handleVehicleClick(vehicle)}
               />
               <button
                 className="checkbox-name"
                 onClick={() => handleVehicleClick(vehicle)}
               >
-                {vehicle.VehicleKindName}
+                {vehicle.GradeNm}
               </button>
             </label>
           ))}
@@ -172,25 +160,29 @@ const Train = () => {
       </VehicleKindContainer>
       <SelectStationContainer>
         <MenuTitle>출발지</MenuTitle>
-        <SelectStationComponent
+        <SelectExpressStation
           area={departureArea}
           setArea={setDepartureArea}
+          city={departureCity}
+          setCity={setDepartureCity}
           station={departureStation}
           setStation={setDepartureStation}
           setStationCode={setDepartureStationCode}
-          code={KTXServiceCode}
+          code={ExpressServiceCode}
           placeHolder={"출발지 선택"}
         />
       </SelectStationContainer>
       <SelectStationContainer>
         <MenuTitle>도착지</MenuTitle>
-        <SelectStationComponent
+        <SelectExpressStation
           area={arrivalArea}
           setArea={setArrivalArea}
+          city={arrivalCity}
+          setCity={setArrivalCity}
           station={arrivalStation}
           setStation={setArrivalStation}
           setStationCode={setArrivalStationCode}
-          code={KTXServiceCode}
+          code={ExpressServiceCode}
           placeHolder={"도착지 선택"}
         />
       </SelectStationContainer>
@@ -219,16 +211,16 @@ const Train = () => {
             <tbody>
               {currentSchedule.map((schedule, index) => (
                 <tr key={index}>
-                  <td>{schedule.traingradename}</td>
-                  <td>{schedule.depplacename}</td>
-                  <td>{schedule.arrplacename}</td>
-                  <td>{`${String(schedule.depplandtime).slice(8, 10)}:${String(
-                    schedule.depplandtime
+                  <td>{schedule.gradeNm}</td>
+                  <td>{schedule.depPlaceNm}</td>
+                  <td>{schedule.arrPlaceNm}</td>
+                  <td>{`${String(schedule.depPlandTime).slice(8, 10)}:${String(
+                    schedule.depPlandTime
                   ).slice(10, 12)}`}</td>
-                  <td>{`${String(schedule.arrplandtime).slice(8, 10)}:${String(
-                    schedule.arrplandtime
+                  <td>{`${String(schedule.arrPlandTime).slice(8, 10)}:${String(
+                    schedule.arrPlandTime
                   ).slice(10, 12)}`}</td>
-                  <td>{schedule.adultcharge} 원</td>
+                  <td>{schedule.charge} 원</td>
                 </tr>
               ))}
             </tbody>
@@ -262,4 +254,4 @@ const Train = () => {
   );
 };
 
-export default Train;
+export default Express;

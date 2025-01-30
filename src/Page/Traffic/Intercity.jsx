@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { KTXServiceCode } from "../../Util/Service_KTX_code";
-import { Vehiclekind } from "../../Util/Service_VehicleKind_code";
+import { InterCityService } from "../../Util/Service_InterCityBus_code";
+import { InterCityGradeService } from "../../Util/Service_InterCityGrade_code";
 import {
   Container,
   MenuTitle,
@@ -14,9 +14,9 @@ import { ko } from "date-fns/locale";
 import { format } from "date-fns";
 import { DatePickerContainer } from "../../Style/PlanningStyled";
 import { Button } from "../../Component/ButtonComponent";
-import { KTXApi } from "../../Api/TrafficApi";
+import { IntercityApi } from "../../Api/TrafficApi";
 
-const Train = () => {
+const Intercity = () => {
   const [departureArea, setDepartureArea] = useState(null);
   const [departureStation, setDepartureStation] = useState(null);
   const [departureStationCode, setDepartureStationCode] = useState(null);
@@ -31,10 +31,8 @@ const Train = () => {
   const [trainSchedule, setTrainSchedule] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const allVehicleCodes = Vehiclekind.flatMap((vehicle) =>
-    vehicle.subKinds
-      ? [...vehicle.subKinds.map((sub) => sub.VehicleKindCode)]
-      : [vehicle.VehicleKindCode]
+  const allVehicleCodes = InterCityGradeService.map(
+    (vehicle) => vehicle.GradeId
   );
 
   const allSelected = selectedVehicles.length === allVehicleCodes.length;
@@ -42,24 +40,12 @@ const Train = () => {
   const handleVehicleClick = (vehicle) => {
     let updatedVehicles = [...selectedVehicles];
 
-    if (vehicle.subKinds) {
-      vehicle.subKinds.forEach((sub) => {
-        if (!updatedVehicles.includes(sub.VehicleKindCode)) {
-          updatedVehicles.push(sub.VehicleKindCode);
-        } else {
-          updatedVehicles = updatedVehicles.filter(
-            (code) => code !== sub.VehicleKindCode
-          );
-        }
-      });
+    const vehicleId = vehicle.GradeId;
+
+    if (updatedVehicles.includes(vehicleId)) {
+      updatedVehicles = updatedVehicles.filter((id) => id !== vehicleId);
     } else {
-      if (updatedVehicles.includes(vehicle.VehicleKindCode)) {
-        updatedVehicles = updatedVehicles.filter(
-          (code) => code !== vehicle.VehicleKindCode
-        );
-      } else {
-        updatedVehicles.push(vehicle.VehicleKindCode);
-      }
+      updatedVehicles.push(vehicleId);
     }
 
     setSelectedVehicles(updatedVehicles);
@@ -83,7 +69,7 @@ const Train = () => {
     try {
       setLoading(true);
       const formattedDate = format(date, "yyyyMMdd");
-      const response = await KTXApi.getSchedule(
+      const response = await IntercityApi.getSchedule(
         departureStationCode,
         arrivalStationCode,
         formattedDate,
@@ -153,18 +139,18 @@ const Train = () => {
             <span className="checkbox-name">전체 선택</span>
           </label>
 
-          {Vehiclekind.map((vehicle) => (
-            <label key={vehicle.VehicleKindCode}>
+          {InterCityGradeService.map((vehicle) => (
+            <label key={vehicle.GradeId}>
               <input
                 type="checkbox"
-                checked={selectedVehicles.includes(vehicle.VehicleKindCode)}
+                checked={selectedVehicles.includes(vehicle.GradeId)}
                 onChange={() => handleVehicleClick(vehicle)}
               />
               <button
                 className="checkbox-name"
                 onClick={() => handleVehicleClick(vehicle)}
               >
-                {vehicle.VehicleKindName}
+                {vehicle.GradeNm}
               </button>
             </label>
           ))}
@@ -178,7 +164,7 @@ const Train = () => {
           station={departureStation}
           setStation={setDepartureStation}
           setStationCode={setDepartureStationCode}
-          code={KTXServiceCode}
+          code={InterCityService}
           placeHolder={"출발지 선택"}
         />
       </SelectStationContainer>
@@ -190,7 +176,7 @@ const Train = () => {
           station={arrivalStation}
           setStation={setArrivalStation}
           setStationCode={setArrivalStationCode}
-          code={KTXServiceCode}
+          code={InterCityService}
           placeHolder={"도착지 선택"}
         />
       </SelectStationContainer>
@@ -262,4 +248,4 @@ const Train = () => {
   );
 };
 
-export default Train;
+export default Intercity;
