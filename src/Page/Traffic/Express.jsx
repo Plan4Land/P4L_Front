@@ -3,10 +3,11 @@ import { ExpressServiceCode } from "../../Util/Service_Express_code";
 import { ExpressGradeService } from "../../Util/Service_ExpressGrade_code";
 import {
   Container,
-  MenuTitle,
+  ScheduleResult,
   SelectStationContainer,
   VehicleKindContainer,
 } from "../../Style/TrainStyle";
+import { Pagination } from "../../Component/Pagination";
 import { SelectExpressStation } from "../../Component/TrafficComponents/SelectStation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -15,6 +16,7 @@ import { format } from "date-fns";
 import { DatePickerContainer } from "../../Style/PlanningStyled";
 import { Button } from "../../Component/ButtonComponent";
 import { ExpressApi } from "../../Api/TrafficApi";
+import { FaSearch } from "react-icons/fa";
 
 const Express = () => {
   const [departureArea, setDepartureArea] = useState(null);
@@ -111,146 +113,169 @@ const Express = () => {
   };
 
   return (
-    <Container>
-      <div className="datepicker">
-        <MenuTitle>출발일</MenuTitle>
-        <DatePickerContainer className="datepicker-component">
-          <DatePicker
-            className="input-date-picker"
-            locale={ko}
-            dateFormat="yyyy-MM-dd"
-            dateFormatCalendar="yyyy년 MM월"
-            selected={date}
-            onChange={(date) => setDate(date)}
-            startDate={date}
-            minDate={new Date()}
-            maxDate={new Date().setDate(new Date().getDate() + 6)}
-            placeholderText="시작일 선택"
-          />
-        </DatePickerContainer>
-      </div>
-      <VehicleKindContainer>
-        <MenuTitle>차량 종류</MenuTitle>
-        <div className="checkbox-container">
-          <label>
-            <input
-              type="checkbox"
-              checked={allSelected}
-              onChange={handleSelectAll}
-            />
-            <span className="checkbox-name">전체 선택</span>
-          </label>
-
-          {ExpressGradeService.map((vehicle) => (
-            <label key={vehicle.GradeId}>
-              <input
-                type="checkbox"
-                checked={selectedVehicles.includes(vehicle.GradeId)}
-                onChange={() => handleVehicleClick(vehicle)}
-              />
-              <button
-                className="checkbox-name"
-                onClick={() => handleVehicleClick(vehicle)}
-              >
-                {vehicle.GradeNm}
-              </button>
-            </label>
-          ))}
+    <>
+      <Container>
+        <div className="menu-box">
+          <div className="datepicker">
+            <div className="menu-title">출발일</div>
+            <div className="select-content">
+              <DatePickerContainer className="datepicker-component">
+                <DatePicker
+                  className="input-date-picker"
+                  locale={ko}
+                  dateFormat="yyyy-MM-dd"
+                  dateFormatCalendar="yyyy년 MM월"
+                  selected={date}
+                  onChange={(date) => setDate(date)}
+                  startDate={date}
+                  minDate={new Date()}
+                  maxDate={new Date().setDate(new Date().getDate() + 6)}
+                  placeholderText="시작일 선택"
+                />
+              </DatePickerContainer>
+            </div>
+          </div>
         </div>
-      </VehicleKindContainer>
-      <SelectStationContainer>
-        <MenuTitle>출발지</MenuTitle>
-        <SelectExpressStation
-          area={departureArea}
-          setArea={setDepartureArea}
-          city={departureCity}
-          setCity={setDepartureCity}
-          station={departureStation}
-          setStation={setDepartureStation}
-          setStationCode={setDepartureStationCode}
-          code={ExpressServiceCode}
-          placeHolder={"출발지 선택"}
-        />
-      </SelectStationContainer>
-      <SelectStationContainer>
-        <MenuTitle>도착지</MenuTitle>
-        <SelectExpressStation
-          area={arrivalArea}
-          setArea={setArrivalArea}
-          city={arrivalCity}
-          setCity={setArrivalCity}
-          station={arrivalStation}
-          setStation={setArrivalStation}
-          setStationCode={setArrivalStationCode}
-          code={ExpressServiceCode}
-          placeHolder={"도착지 선택"}
-        />
-      </SelectStationContainer>
-      <Button
-        className="search-button"
-        disabled={!isSearchButtonEnabled || loading}
-        onClick={() => getTrainSchedules()}
-      >
-        {loading ? "조회중..." : "조회하기"}
-      </Button>
-      {trainSchedule && trainSchedule.length === 0 ? (
-        <p>조회된 시간표가 없습니다.</p>
-      ) : (
-        <div className="schedule-result">
-          <table>
-            <thead>
-              <tr>
-                <th>차량 종류</th>
-                <th>출발지</th>
-                <th>도착지</th>
-                <th>출발 시간</th>
-                <th>도착 시간</th>
-                <th>요금</th>
-              </tr>
-            </thead>
+        <div className="menu-box">
+          <VehicleKindContainer>
+            <div className="menu-title">차량 종류</div>
+            <div className="select-content">
+              <div className="checkbox-container">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={allSelected}
+                    onChange={handleSelectAll}
+                  />
+                  <span className="checkbox-name">전체 선택</span>
+                </label>
+
+                {ExpressGradeService.map((vehicle) => (
+                  <label key={vehicle.GradeId}>
+                    <input
+                      type="checkbox"
+                      checked={selectedVehicles.includes(vehicle.GradeId)}
+                      onChange={() => handleVehicleClick(vehicle)}
+                    />
+                    <button
+                      className="checkbox-name"
+                      onClick={() => handleVehicleClick(vehicle)}
+                    >
+                      {vehicle.GradeNm}
+                    </button>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </VehicleKindContainer>
+        </div>
+        <div className="menu-box">
+          <SelectStationContainer>
+            <div className="menu-title">출발지</div>
+            <div className="select-content">
+              <SelectExpressStation
+                area={departureArea}
+                setArea={setDepartureArea}
+                city={departureCity}
+                setCity={setDepartureCity}
+                station={departureStation}
+                setStation={setDepartureStation}
+                setStationCode={setDepartureStationCode}
+                code={ExpressServiceCode}
+                placeHolder={"출발지 선택"}
+              />
+            </div>
+          </SelectStationContainer>
+        </div>
+        <div className="menu-box">
+          <SelectStationContainer>
+            <div className="menu-title">도착지</div>
+            <div className="select-content">
+              <SelectExpressStation
+                area={arrivalArea}
+                setArea={setArrivalArea}
+                city={arrivalCity}
+                setCity={setArrivalCity}
+                station={arrivalStation}
+                setStation={setArrivalStation}
+                setStationCode={setArrivalStationCode}
+                code={ExpressServiceCode}
+                placeHolder={"도착지 선택"}
+              />
+            </div>
+          </SelectStationContainer>
+        </div>
+        <Button
+          className="search-button"
+          disabled={!isSearchButtonEnabled || loading}
+          onClick={() => getTrainSchedules()}
+        >
+          {loading ? (
+            <>
+              <span>조회중...</span>
+            </>
+          ) : (
+            <>
+              <span>조회하기</span>
+              <FaSearch style={{ marginLeft: "8px" }} />
+            </>
+          )}
+        </Button>
+      </Container>
+      <ScheduleResult>
+        <table className="result-table">
+          <thead>
+            <tr>
+              <th>차량 종류</th>
+              <th>출발지</th>
+              <th>도착지</th>
+              <th>출발 시간</th>
+              <th>도착 시간</th>
+              <th>요금</th>
+            </tr>
+          </thead>
+          {trainSchedule && trainSchedule.length === 0 ? (
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan="6">조회중...</td>
+                </tr>
+              ) : (
+                <tr>
+                  <td colSpan="6">조회된 시간표가 없습니다.</td>
+                </tr>
+              )}
+            </tbody>
+          ) : (
             <tbody>
               {currentSchedule.map((schedule, index) => (
                 <tr key={index}>
                   <td>{schedule.gradeNm}</td>
                   <td>{schedule.depPlaceNm}</td>
                   <td>{schedule.arrPlaceNm}</td>
-                  <td>{`${String(schedule.depPlandTime).slice(8, 10)}:${String(
-                    schedule.depPlandTime
-                  ).slice(10, 12)}`}</td>
-                  <td>{`${String(schedule.arrPlandTime).slice(8, 10)}:${String(
-                    schedule.arrPlandTime
-                  ).slice(10, 12)}`}</td>
-                  <td>{schedule.charge} 원</td>
+                  <td>{`${String(schedule.depPlandTime).slice(
+                    8,
+                    10
+                  )} : ${String(schedule.depPlandTime).slice(10, 12)}`}</td>
+                  <td>{`${String(schedule.arrPlandTime).slice(
+                    8,
+                    10
+                  )} : ${String(schedule.arrPlandTime).slice(10, 12)}`}</td>
+                  <td>{Number(schedule.charge).toLocaleString()} 원</td>
                 </tr>
               ))}
             </tbody>
-          </table>
-          <div className="pagination">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              이전
-            </button>
-            {Array.from({ length: trainSchedule.length }, (_, index) => (
-              <button
-                key={index}
-                onClick={() => handlePageChange(index + 1)}
-                className={currentPage === index + 1 ? "active" : ""}
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === trainSchedule.length}
-            >
-              다음
-            </button>
-          </div>
-        </div>
-      )}
-    </Container>
+          )}
+        </table>
+        {trainSchedule && trainSchedule.length > 0 && (
+          <Pagination
+            currentPage={currentPage - 1}
+            totalPages={trainSchedule.length}
+            handlePageChange={(page) => handlePageChange(page + 1)}
+          />
+        )}
+      </ScheduleResult>
+    </>
   );
 };
 

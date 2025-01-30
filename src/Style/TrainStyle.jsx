@@ -57,7 +57,7 @@ export const Container = styled.div`
 // `;
 export const VehicleKindContainer = styled.div`
   display: flex;
-  width: 80%;
+  width: 90%;
   .checkbox-container {
     display: flex;
     flex-wrap: wrap;
@@ -65,7 +65,7 @@ export const VehicleKindContainer = styled.div`
   }
   label {
     display: flex;
-    width: 100px;
+    width: 120px;
     button {
       all: unset;
     }

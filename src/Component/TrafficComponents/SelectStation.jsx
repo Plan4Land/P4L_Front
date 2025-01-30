@@ -118,7 +118,7 @@ export const SelectExpressStation = ({
             }}
           >
             <option value="" disabled>
-              시/군 선택
+              시/군/역 선택
             </option>
             {(area?.cat2List || []).map((cityItem) => (
               <option key={cityItem.cat2Code} value={cityItem.cat2}>

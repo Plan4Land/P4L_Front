@@ -125,8 +125,6 @@ const Train = () => {
     }
   };
   return (
-    // 가희님.. 저도 알아요. 개구린거.. 그냥 "타고"홈페이지처럼 내일 바꿀게요..
-    // 그리고 api 호출해서 로그정도 찍어놓긴 했는데 근데.. 음.. 조회 다 안되는거같은데..
     <>
       <Container>
         <div className="menu-box">
@@ -198,7 +196,7 @@ const Train = () => {
                 setStation={setDepartureStation}
                 setStationCode={setDepartureStationCode}
                 code={KTXServiceCode}
-                placeHolder={"출발역 선택"}
+                placeHolder={"출발지 선택"}
               />
             </div>
           </SelectStationContainer>
@@ -214,7 +212,7 @@ const Train = () => {
                 setStation={setArrivalStation}
                 setStationCode={setArrivalStationCode}
                 code={KTXServiceCode}
-                placeHolder={"도착역 선택"}
+                placeHolder={"도착지 선택"}
               />
             </div>
           </SelectStationContainer>
@@ -267,12 +265,14 @@ const Train = () => {
                   <td>{schedule.traingradename}</td>
                   <td>{schedule.depplacename}</td>
                   <td>{schedule.arrplacename}</td>
-                  <td>{`${String(schedule.depplandtime).slice(8, 10)}:${String(
-                    schedule.depplandtime
-                  ).slice(10, 12)}`}</td>
-                  <td>{`${String(schedule.arrplandtime).slice(8, 10)}:${String(
-                    schedule.arrplandtime
-                  ).slice(10, 12)}`}</td>
+                  <td>{`${String(schedule.depplandtime).slice(
+                    8,
+                    10
+                  )} : ${String(schedule.depplandtime).slice(10, 12)}`}</td>
+                  <td>{`${String(schedule.arrplandtime).slice(
+                    8,
+                    10
+                  )} : ${String(schedule.arrplandtime).slice(10, 12)}`}</td>
                   <td>{Number(schedule.adultcharge).toLocaleString()} 원</td>
                 </tr>
               ))}

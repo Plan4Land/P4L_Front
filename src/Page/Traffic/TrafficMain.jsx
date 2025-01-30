@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Train from "./Train";
 import Express from "./Express.jsx";
-import Intercity from "./Intercity.jsx";
+// import Intercity from "./Intercity.jsx";
 import styled from "styled-components";
 
 const TrafficMain = () => {
@@ -13,8 +13,8 @@ const TrafficMain = () => {
         return <Train />;
       case "expressBus":
         return <Express />;
-      case "intercityBus":
-        return <Intercity />;
+      // case "intercityBus":
+      //   return <Intercity />;
       default:
         return <Train />;
     }
