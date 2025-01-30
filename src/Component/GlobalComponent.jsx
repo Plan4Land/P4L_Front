@@ -101,17 +101,17 @@ export const Header = () => {
     fetchData();
   }, [user?.id]);
 
-  const transportClick = (route) => {
-    // 교통 드롭다운 항목 클릭 시 이동
-    if (route === "ktxinquiry") navigate("/ktxinquiry");
-    if (route === "expressbus") navigate("/expressbus");
-    if (route === "intercitybus") navigate("/intercitybus");
-  };
+  // const transportClick = (route) => {
+  //   // 교통 드롭다운 항목 클릭 시 이동
+  //   if (route === "ktxinquiry") navigate("/ktxinquiry");
+  //   if (route === "expressbus") navigate("/expressbus");
+  //   if (route === "intercitybus") navigate("/intercitybus");
+  // };
 
-  const handleItemClick = (transportType) => {
-    setDropdownVisible(false); // 클릭 시 드롭다운 숨기기
-    transportClick(transportType); // 클릭된 항목에 해당하는 페이지로 이동
-  };
+  // const handleItemClick = (transportType) => {
+  //   setDropdownVisible(false); // 클릭 시 드롭다운 숨기기
+  //   transportClick(transportType); // 클릭된 항목에 해당하는 페이지로 이동
+  // };
 
   const imagePath = "/logo192.png"; // public 폴더에 있는 이미지
   // console.log("Image Path:", imagePath);
@@ -126,11 +126,16 @@ export const Header = () => {
         </div>
       </Link>
       <NavSt>
-        <div className="recomm" onClick={toggleDropdown}>
-          {/* <Link className={`tag ${isActive("/ktxinquiry") ? "" : "active"}`}> */}
-          교통
-          {/* </Link> */}
-          {dropdownVisible && (
+        {/* <div className="recomm" onClick={toggleDropdown}> */}
+        <div className="recomm">
+          <Link
+            to="/traffic"
+            className={`tag ${isActive("/traffic") ? "active" : ""}`}
+          >
+            <p className="title-font">교통</p>
+          </Link>
+        </div>
+        {/* {dropdownVisible && (
             <div className="dropdown-Trafficlist">
               <div className="topItem">
                 <p onClick={() => handleItemClick("ktxinquiry")}>KTX</p>
@@ -139,7 +144,7 @@ export const Header = () => {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
         <p>|</p>
         <div className="recomm">
           <Link
