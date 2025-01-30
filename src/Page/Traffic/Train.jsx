@@ -3,7 +3,6 @@ import { KTXServiceCode } from "../../Util/Service_KTX_code";
 import { Vehiclekind } from "../../Util/Service_VehicleKind_code";
 import {
   Container,
-  MenuTitle,
   SelectStationContainer,
   VehicleKindContainer,
   ScheduleResult,
@@ -17,6 +16,7 @@ import { DatePickerContainer } from "../../Style/PlanningStyled";
 import { Button } from "../../Component/ButtonComponent";
 import { KTXApi } from "../../Api/TrafficApi";
 import { Pagination } from "../../Component/Pagination";
+import { FaSearch } from "react-icons/fa";
 
 export const Train = () => {
   const [departureArea, setDepartureArea] = useState(null);
@@ -223,7 +223,16 @@ export const Train = () => {
           disabled={!isSearchButtonEnabled || loading}
           onClick={() => getTrainSchedules()}
         >
-          {loading ? "조회중..." : "조회하기"}
+          {loading ? (
+            <>
+              <span>조회중...</span>
+            </>
+          ) : (
+            <>
+              <span>조회하기</span>
+              <FaSearch style={{ marginLeft: "8px" }} />
+            </>
+          )}
         </Button>
       </Container>
       <ScheduleResult>
