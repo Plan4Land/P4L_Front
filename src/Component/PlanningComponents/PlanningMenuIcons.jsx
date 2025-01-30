@@ -61,7 +61,7 @@ export const MenuIcons = ({
       )}
       {isParticipant && (
         <>
-          {plannerInfo.ownerNickname === user.nickname && (
+          {plannerInfo.ownerNickname === user?.nickname && (
             <>
               {/* 사용자 추가 아이콘 */}
               <LuUserRoundPlus

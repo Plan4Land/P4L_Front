@@ -39,7 +39,10 @@ export const Header = () => {
       if (response.status === 204) {
         logout();
         setShowLogoutModal(false);
-        navigate("/login");
+        // navigate("/login");
+        setTimeout(() => {
+          navigate("/login");
+        }, 100);
       } else {
         console.error("Logout failed: Invalid response data");
       }

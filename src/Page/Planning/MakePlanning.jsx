@@ -39,7 +39,6 @@ export const MakePlanning = () => {
   const [isImageVisible, setIsImageVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
-  // const memberId = JSON.parse(localStorage.getItem("user")).id;
   const memberId = user?.id;
   const navigate = useNavigate();
 

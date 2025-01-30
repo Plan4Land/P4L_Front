@@ -21,7 +21,7 @@ const Test = () => {
   return (
     user && (
       <div>
-        <p>{userInfo}</p>
+        {/* <p>{userInfo}</p>
         <H4>아이디 : JSON.parse(localStorage.getItem("user")).id</H4>
         <P>{JSON.parse(userInfo).id}</P>
         <H4>이름 : JSON.parse(localStorage.getItem("user")).name</H4>
@@ -33,7 +33,7 @@ const Test = () => {
         </H4>
         <P>{JSON.parse(userInfo).imgPath}</P>
         <H4>멤버십 : JSON.parse(localStorage.getItem("user")).role</H4>
-        <P>{JSON.parse(userInfo).role}</P>
+        <P>{JSON.parse(userInfo).role}</P> */}
         <p>refreshToken : {localStorage.getItem("refreshToken")}</p>
         <p>accessToken : {localStorage.getItem("accessToken")}</p>
         <br />

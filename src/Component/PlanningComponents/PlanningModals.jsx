@@ -28,8 +28,10 @@ export const UserModal = ({
   modals,
   setModals,
   plannerId,
+  isParticipant,
 }) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleDeleteParticipants = async (memberId, plannerId) => {
     await PlanningApi.rejectInvitation(memberId, plannerId);
@@ -74,18 +76,21 @@ export const UserModal = ({
                   {participant.memberNickname}
                 </p>
               </div>
-              <Button
-                className="deleteMember"
-                $width={"55px"}
-                $height={"30px"}
-                fontSize={"13px"}
-                padding={"7px 10px"}
-                onClick={() =>
-                  handleDeleteParticipants(participant.id, plannerId)
-                }
-              >
-                삭제
-              </Button>
+              {isParticipant &&
+                plannerInfo.ownerNickname === user?.nickname && (
+                  <Button
+                    className="deleteMember"
+                    $width={"55px"}
+                    $height={"30px"}
+                    fontSize={"13px"}
+                    padding={"7px 10px"}
+                    onClick={() =>
+                      handleDeleteParticipants(participant.id, plannerId)
+                    }
+                  >
+                    삭제
+                  </Button>
+                )}
             </div>
           ))}
       </ParticipantsContainer>

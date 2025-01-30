@@ -463,6 +463,12 @@ export const Planning = () => {
     }
   }, [memoState]);
 
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
   if (plannerInfo) {
     return (
       <div>
@@ -748,6 +754,7 @@ export const Planning = () => {
             modals={modals}
             setModals={setModals}
             plannerId={plannerId}
+            isParticipant={isParticipant}
           />
         )}
         {modals.addPlaceModal && (
