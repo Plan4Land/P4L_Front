@@ -260,13 +260,13 @@ const KtxInquiry = () => {
           </SearchSt>
 
           {/* 출발 지역 선택 */}
-          <div className="mainastation">
+          <div className="mainarea">
             <h3>
               출발 지역 선택
               <ToggleButton isOpen={isDepCat1Open} onToggle={toggleDepCat1} />
             </h3>
             {isDepCat1Open && ( // isStationOpen 상태에 따라 조건부 렌더링
-              <div>
+              <div className="buttons">
                 {KTXServiceCode.map((cat1) => (
                   <Button
                     key={cat1.cat1}
@@ -286,13 +286,13 @@ const KtxInquiry = () => {
 
           {/* 출발 세부 역 선택 */}
           {selectedDepCat1 && (
-            <div className="substation">
+            <div className="subarea">
               <h3>
                 출발 세부 역 선택
                 <ToggleButton isOpen={isDepCat2Open} onToggle={toggleDepCat2} />
               </h3>
               {isDepCat2Open && (
-                <div>
+                <div className="buttons">
                   {getCat2List(selectedDepCat1).map((cat2) => (
                     <Button
                       key={cat2.cat2}
@@ -310,13 +310,13 @@ const KtxInquiry = () => {
           )}
 
           {/* 도착 지역 선택 */}
-          <div className="mainastation">
+          <div className="top">
             <h3>
               도착 지역 선택
               <ToggleButton isOpen={isArrCat1Open} onToggle={toggleArrCat1} />
             </h3>
             {isArrCat1Open && ( // isStationOpen 상태에 따라 조건부 렌더링
-              <div>
+              <div className="buttons">
                 {KTXServiceCode.map((cat1) => (
                   <Button
                     key={cat1.cat1}
@@ -336,13 +336,13 @@ const KtxInquiry = () => {
 
           {/* 도착 세부 역 선택 */}
           {selectedArrCat1 && (
-            <div className="substation">
+            <div className="middle">
               <h3>
                 도착 세부 역 선택
                 <ToggleButton isOpen={isArrCat2Open} onToggle={toggleArrCat2} />
               </h3>
               {isArrCat2Open && (
-                <div>
+                <div className="buttons">
                   {getCat2List(selectedArrCat1).map((cat2) => (
                     <Button
                       key={cat2.cat2}
@@ -361,13 +361,13 @@ const KtxInquiry = () => {
 
           {/* 열차 종류 선택 */}
           {selectedDepCat2 && selectedArrCat2 && (
-            <div className="trainarea">
+            <div className="category">
               <h3>
                 열차 종류 선택
                 <ToggleButton isOpen={isVehicleOpen} onToggle={toggleVehicle} />
               </h3>
               {isVehicleOpen && (
-                <div>
+                <div className="buttons">
                   {Vehiclekind.map((vehicle) => (
                     <Button
                       key={vehicle.VehicleKindCode}
@@ -415,7 +415,7 @@ const KtxInquiry = () => {
         </SelectTourItem>
 
         {/* 시간표 결과 */}
-        <div className="schedule-results">
+        <div className="tour-list">
           <h3>KTX 조회</h3>
           {displayedSchedule.length === 0 ? (
             <p>조회된 시간표가 없습니다.</p>
