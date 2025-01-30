@@ -1,8 +1,8 @@
 export const Vehiclekind = [
-  {
-    VehicleKindName: "전체",
-    VehicleKindCode: "",
-  },
+  // {
+  //   VehicleKindName: "전체",
+  //   VehicleKindCode: "",
+  // },
   {
     VehicleKindName: "KTX",
     VehicleKindCode: "00",

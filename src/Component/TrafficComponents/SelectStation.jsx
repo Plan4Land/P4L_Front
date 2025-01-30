@@ -4,8 +4,6 @@ import { Button } from "../ButtonComponent";
 
 // SelectStation 컴포넌트의 props를 객체로 묶어 관리
 export const SelectStationComponent = ({
-  modal,
-  setModal,
   area,
   setArea,
   station,
@@ -15,52 +13,79 @@ export const SelectStationComponent = ({
   placeHolder,
 }) => {
   return (
+    // <SelectStation>
+    //   <select
+    //     value={station || ""}
+    //     onChange={(e) => {
+    //       const selectedStation = e.target.value;
+    //       setStation(selectedStation);
+    //       setStationCode(selectedStation); // station 선택 후 코드도 설정
+    //     }}
+    //   >
+    //     <option value="" disabled>
+    //       {placeHolder}
+    //     </option>
+    //     {code.map((areaItem) => (
+    //       <optgroup key={areaItem.cat1} label={areaItem.cat1}>
+    //         {areaItem.cat2List.map((stationItem) => (
+    //           <option
+    //             key={stationItem.cat2Code}
+    //             value={stationItem.cat2}
+    //             selected={station === stationItem.cat2}
+    //           >
+    //             {stationItem.cat2}
+    //           </option>
+    //         ))}
+    //       </optgroup>
+    //     ))}
+    //   </select>
+    // </SelectStation>
     <SelectStation>
-      <button className="input-box" onClick={() => setModal(!modal)}>
-        {station ? `${station}역` : placeHolder}
-      </button>
-      {modal && (
-        <div className="select-area-container">
-          <div className="select-area">
-            {code.map((areaItem) => (
-              <Button
-                key={areaItem.cat1}
-                onClick={() => {
-                  setArea(areaItem);
-                  setStation(null);
-                }}
-                bgcolor={area === areaItem ? colors.colorB : "white"}
-                color="black"
-              >
-                {areaItem.cat1}
-              </Button>
+      <div className="select-wrapper">
+        <select
+          value={area?.cat1 || ""}
+          onChange={(e) => {
+            const selectedArea = code.find(
+              (item) => item.cat1 === e.target.value
+            );
+            setArea(selectedArea);
+            setStation(null);
+          }}
+        >
+          <option value="" disabled>
+            {placeHolder}
+          </option>
+          {code.map((areaItem) => (
+            <option key={areaItem.cat1} value={areaItem.cat1}>
+              {areaItem.cat1}
+            </option>
+          ))}
+        </select>
+
+        {area && (
+          <select
+            value={station || ""}
+            onChange={(e) => {
+              const selectedStation = area?.cat2List.find(
+                (stationItem) => stationItem.cat2 === e.target.value
+              );
+              if (selectedStation) {
+                setStation(selectedStation.cat2);
+                setStationCode(selectedStation.cat2Code);
+              }
+            }}
+          >
+            <option value="" disabled>
+              역 선택
+            </option>
+            {(area?.cat2List || []).map((stationItem) => (
+              <option key={stationItem.cat2Code} value={stationItem.cat2}>
+                {stationItem.cat2}
+              </option>
             ))}
-          </div>
-          {area && (
-            <>
-              <hr />
-              <div className="select-station">
-                {(area?.cat2List || []).map((stationItem) => (
-                  <Button
-                    key={stationItem.cat2Code}
-                    onClick={() => {
-                      setStation(stationItem.cat2);
-                      setStationCode(stationItem.cat2Code);
-                      setModal(!modal); // station 선택 후 모달 닫기
-                    }}
-                    bgcolor={
-                      station === stationItem.cat2 ? colors.colorB : "white"
-                    }
-                    color="black"
-                  >
-                    {stationItem.cat2}
-                  </Button>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      )}
+          </select>
+        )}
+      </div>
     </SelectStation>
   );
 };

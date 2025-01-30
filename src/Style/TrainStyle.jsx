@@ -7,68 +7,54 @@ export const Container = styled.div`
   width: 1000px;
   height: 800px;
   margin: 20px auto;
-  z-index: 1;
+  gap: 15px;
 
   .datepicker {
-    margin: 15px auto;
-    width: 60%;
+    display: flex;
+    .datepicker-component {
+      min-width: 250px;
+      width: 35%;
+      height: 80%;
+    }
   }
   .search-button {
-    height: 40px;
-    width: 600px;
-    margin: 15px auto 15px;
+    display: flex;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    height: 100px;
   }
+`;
+export const MenuTitle = styled.div`
+  min-width: 150px;
+  background-color: aquamarine;
+`;
+export const VehicleKindContainer = styled.div`
+  display: flex;
+  width: 70%;
+  .checkbox-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  label {
+    display: flex;
+    width: 100px;
+    button {
+      all: unset;
+    }
+  }
+
+  /* .checkbox-name {
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+  } */
 `;
 export const SelectStationContainer = styled.div`
   display: flex;
-  justify-content: space-around;
-  position: relative;
-  width: 100%;
-  height: 100px;
-  background-color: white;
-  z-index: 2;
 `;
 
 export const SelectStation = styled.div`
-  width: 30%;
-  height: 100%;
-
-  .input-box {
-    width: 100%;
-    height: 100%;
-    background-color: white;
-    font-size: 17px;
-  }
-  .select-area-container {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 100%;
-    left: 8.5%;
-    background-color: white;
-    border: 1px solid black;
-    width: 900px;
-    padding: 20px;
-    box-sizing: border-box;
-
-    .select-area,
-    .select-station {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-    }
-    button {
-      width: 90px;
-      height: 30px;
-      margin: 2px 6px;
-      white-space: nowrap;
-    }
-    hr {
-      margin: 5px 0;
-    }
-  }
-`;
-
-export const VehicleKindContainer = styled.div`
-  display: flex;
-  margin: 0 auto;
+  width: 60%;
 `;
