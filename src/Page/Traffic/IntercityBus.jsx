@@ -200,7 +200,7 @@ const IntercityBus = () => {
               <ToggleButton isOpen={isDepCat1Open} onToggle={toggleDepCat1} />
             </h3>
             {isDepCat1Open && (
-              <div>
+              <div className="buttons">
                 {InterCityService.map((cat1) => (
                   <Button
                     key={`dep-cat1-${cat1.cat1}`}
@@ -218,13 +218,13 @@ const IntercityBus = () => {
           </div>
 
           {selectedDepCat1 && (
-            <div className="details-area">
+            <div className="subarea">
               <h3>
                 출발 세부 지역 선택
                 <ToggleButton isOpen={isDepCat2Open} onToggle={toggleDepCat2} />
               </h3>
               {isDepCat2Open && (
-                <div>
+                <div className="buttons">
                   {getCat2List(selectedDepCat1).map((cat2) => (
                     <Button
                       key={`dep-cat2-${cat2.cat2Code}`}
@@ -244,13 +244,13 @@ const IntercityBus = () => {
           )}
 
           {/* 도착지 설정 */}
-          <div className="mainarea">
+          <div className="top">
             <h3>
               도착 지역 선택
               <ToggleButton isOpen={isArrCat1Open} onToggle={toggleArrCat1} />
             </h3>
             {isArrCat1Open && (
-              <div>
+              <div className="buttons">
                 {InterCityService.map((cat1) => (
                   <Button
                     key={`dep-cat1-${cat1.cat1}`}
@@ -268,13 +268,13 @@ const IntercityBus = () => {
           </div>
 
           {selectedArrCat1 && (
-            <div className="details-area">
+            <div className="middle">
               <h3>
                 도착 세부 지역 선택
                 <ToggleButton isOpen={isArrCat2Open} onToggle={toggleArrCat2} />
               </h3>
               {isArrCat2Open && (
-                <div>
+                <div className="buttons">
                   {getCat2List(selectedArrCat1).map((cat2) => (
                     <Button
                       key={`dep-cat2-${cat2.cat2Code}`}
@@ -295,13 +295,13 @@ const IntercityBus = () => {
 
           {/* 버스 등급 선택 */}
           {selectedDepCat2 && selectedArrCat2 && (
-            <div className="bus-grade-section">
+            <div className="category">
               <h3>
                 버스 등급 선택
                 <ToggleButton isOpen={isGradeOpen} onToggle={toggleGrade} />
               </h3>
               {isGradeOpen && (
-                <div>
+                <div className="buttons">
                   {InterCityGradeService.map((grade) => (
                     <Button
                       key={grade.GradeId}

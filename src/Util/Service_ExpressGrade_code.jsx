@@ -1,5 +1,9 @@
 export const ExpressGradeService = [
   {
+    GradeId: "",
+    GradeNm: "전체",
+  },
+  {
     GradeId: 1,
     GradeNm: "우등",
   },

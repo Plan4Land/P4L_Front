@@ -1,5 +1,9 @@
 export const InterCityGradeService = [
   {
+    GradeId: "",
+    GradeNm: "전체",
+  },
+  {
     GradeId: "IDB",
     GradeNm: "프리미엄",
   },
