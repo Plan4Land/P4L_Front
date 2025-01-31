@@ -285,18 +285,23 @@ export const SortSelect = styled.select`
 `;
 
 export const Table = styled.table`
-  width: 90vh;
+  width: 65vw;
+  min-width: 680px; /* 최소 테이블 너비 */
+  max-width: 700px;
   border-collapse: collapse;
   text-align: center;
-
   th,
-  td {
-    padding: 10px;
+  td 
+  {
+    padding: 13px;
     border: 1px solid #ddd;
   }
-
-  th {
+  th 
+  {
     background-color: #f4f4f4;
+  }
+  @media (max-width: 1616px) {
+    min-width: auto;
   }
 `;
 

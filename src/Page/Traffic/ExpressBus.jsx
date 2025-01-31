@@ -1,13 +1,12 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
-import { Button, ToggleButton, ToggleSection } from "../../Component/ButtonComponent";
+import { Button, ToggleSection } from "../../Component/ButtonComponent";
 import {
   Table,
   SelectTourItem,
   SearchSt,
   List,
   FilterButton,
-  ItemList,
 } from "../../Style/ItemListStyled";
 import { FaUndo, FaSearch } from "react-icons/fa";
 import { Pagination } from "../../Component/Pagination";
@@ -308,8 +307,8 @@ const ExpressBus = () => {
             <div className="top">
               <ToggleSection
                 title="출발 소분류 지역 선택"
-                isOpen={isDepCat3Open}
-                onToggle={toggleDepCat3}
+                isOpen={isArrCat1Open}
+                onToggle={toggleArrCat1}
               >
                 {isDepCat3Open && (
                   <div className="buttons">
@@ -336,116 +335,124 @@ const ExpressBus = () => {
 
           {/* 도착지 설정 */}
           <div className="middle">
-            <h3>
-              도착 지역 선택
-              <ToggleButton isOpen={isArrCat1Open} onToggle={toggleArrCat1} />
-            </h3>
-            {isArrCat1Open && (
-              <div className="buttons">
-                {ExpressServiceCode.map((cat1) => (
-                  <Button
-                    key={`dep-cat1-${cat1.cat1}`}
-                    onClick={() => {
-                      setSelectedArrCat1(cat1.cat1);
-                      setSelectedArrCat2("");
-                      setSelectedArrCat3("");
-                    }}
-                    className={selectedArrCat1 === cat1.cat1 ? "selected" : ""}
-                  >
-                    {cat1.cat1}
-                  </Button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {selectedArrCat1 && (
-            <div className="bottom">
-              <h3>
-                도착 세부 지역 선택
-                <ToggleButton isOpen={isArrCat2Open} onToggle={toggleArrCat2} />
-              </h3>
-              {isArrCat2Open && (
+            <ToggleSection
+                title="도착 지역 선택"
+                isOpen={isDepCat3Open}
+                onToggle={toggleDepCat3}
+            >
+              {isArrCat1Open && (
                 <div className="buttons">
-                  {getCat2List(selectedArrCat1).map((cat2) => (
+                  {ExpressServiceCode.map((cat1) => (
                     <Button
-                      key={`dep-cat2-${cat2.cat2Code}`}
+                      key={`dep-cat1-${cat1.cat1}`}
                       onClick={() => {
-                        setSelectedArrCat2(cat2.cat2);
+                        setSelectedArrCat1(cat1.cat1);
+                        setSelectedArrCat2("");
                         setSelectedArrCat3("");
                       }}
-                      className={
-                        selectedArrCat2 === cat2.cat2 ? "selected" : ""
-                      }
+                      className={selectedArrCat1 === cat1.cat1 ? "selected" : ""}
                     >
-                      {cat2.cat2}
+                      {cat1.cat1}
                     </Button>
                   ))}
                 </div>
               )}
+            </ToggleSection>
+          </div>
+
+          {selectedArrCat1 && (
+            <div className="bottom">
+              <ToggleSection
+                title="도착 세부 지역 선택"
+                isOpen={isArrCat2Open}
+                onToggle={toggleArrCat2}
+              >
+                {isArrCat2Open && (
+                  <div className="buttons">
+                    {getCat2List(selectedArrCat1).map((cat2) => (
+                      <Button
+                        key={`dep-cat2-${cat2.cat2Code}`}
+                        onClick={() => {
+                          setSelectedArrCat2(cat2.cat2);
+                          setSelectedArrCat3("");
+                        }}
+                        className={
+                          selectedArrCat2 === cat2.cat2 ? "selected" : ""
+                        }
+                      >
+                        {cat2.cat2}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </ToggleSection>  
             </div>
           )}
 
           {selectedArrCat2 && !isMetropolitanCity(selectedArrCat1) && (
             <div className="subcategoryarea">
-              <h3>
-                도착 소분류 지역 선택
-                <ToggleButton isOpen={isArrCat3Open} onToggle={toggleArrCat3} />
-              </h3>
-              {isArrCat2Open && (
-                <div>
-                  {getCat3List(
-                    getCat2List(selectedArrCat1).find(
-                      (cat2) => cat2.cat2 === selectedArrCat2
-                    )
-                  ).map((cat3) => (
-                    <Button
-                      key={`arr-cat3-${cat3.cat3Code}`}
-                      onClick={() => setSelectedArrCat3(cat3.cat3Code)}
-                      className={
-                        selectedArrCat3 === cat3.cat3Code ? "selected" : ""
-                      }
-                    >
-                      {cat3.cat3}
-                    </Button>
-                  ))}
-                </div>
-              )}
+              <ToggleSection
+                title="도착 소분류 지역 선택"
+                isOpen={isArrCat3Open}
+                onToggle={toggleArrCat3}
+              >
+                {isArrCat2Open && (
+                  <div>
+                    {getCat3List(
+                      getCat2List(selectedArrCat1).find(
+                        (cat2) => cat2.cat2 === selectedArrCat2
+                      )
+                    ).map((cat3) => (
+                      <Button
+                        key={`arr-cat3-${cat3.cat3Code}`}
+                        onClick={() => setSelectedArrCat3(cat3.cat3Code)}
+                        className={
+                          selectedArrCat3 === cat3.cat3Code ? "selected" : ""
+                        }
+                      >
+                        {cat3.cat3}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </ToggleSection> 
             </div>
           )}
 
           {(selectedDepCat2 || selectedDepCat3) && selectedArrCat1 && selectedArrCat2 && (
             <div className="category">
-              <h3>
-                버스 등급 선택
-                <ToggleButton isOpen={isGradeOpen} onToggle={toggleGrade} />
-              </h3>
-              {isGradeOpen && (
-                <div className="buttons">
-                  {ExpressGradeService.map((grade) => (
-                    <Button
-                      key={grade.GradeId}
-                      onClick={() => {
-                        setSelectedBusGrade((prev) => {
-                          if (grade.GradeId === '') {
-                            return [''];
-                          }
-                          if (prev.includes('')) {
-                            return [grade.GradeId];
-                          }
-                          if (prev.includes(grade.GradeId)) {
-                            return prev.filter((id) => id !== grade.GradeId);
-                          }
-                          return [...prev, grade.GradeId];
-                        });
-                      }}
-                      className={selectedBusGrade.includes(grade.GradeId) ? 'selected' : ''}
-                    >
-                      {grade.GradeNm}
-                    </Button>
-                  ))}
-                </div>
-              )}
+              <ToggleSection
+                title="버스 등급 선택"
+                isOpen={isGradeOpen}
+                onToggle={toggleGrade}
+              >
+                {isGradeOpen && (
+                  <div className="buttons">
+                    {ExpressGradeService.map((grade) => (
+                      <Button
+                        key={grade.GradeId}
+                        onClick={() => {
+                          setSelectedBusGrade((prev) => {
+                            if (grade.GradeId === '') {
+                              return [''];
+                            }
+                            if (prev.includes('')) {
+                              return [grade.GradeId];
+                            }
+                            if (prev.includes(grade.GradeId)) {
+                              return prev.filter((id) => id !== grade.GradeId);
+                            }
+                            return [...prev, grade.GradeId];
+                          });
+                        }}
+                        className={selectedBusGrade.includes(grade.GradeId) ? 'selected' : ''}
+                      >
+                        {grade.GradeNm}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </ToggleSection>
             </div>
           )}
           {(selectedBusGrade || selectedBusGrade === "") && (
@@ -455,58 +462,53 @@ const ExpressBus = () => {
             </Button>
           )}
         </SelectTourItem>
-        
-        <ItemList>
-          <div className="tour-list">
-            <h3>고속버스 조회</h3>
-            <div className="totalCount">
-              총 {displayedSchedule.length.toLocaleString()}건
-            </div>
-            {displayedSchedule.length === 0 ? (
-              <p>조회된 시간표가 없습니다.</p>
-            ) : (
-              <Table>
-                <thead>
-                  <tr>
-                    <th>출발지</th>
-                    <th>도착지</th>
-                    <th>출발시간</th>
-                    <th>도착시간</th>
-                    <th>버스등급</th>
-                    <th>요금</th>
+
+        <div className="tour-list">
+          <h3>고속버스 조회</h3>
+          {displayedSchedule.length === 0 ? (
+            <p>조회된 시간표가 없습니다.</p>
+          ) : (
+            <Table>
+              <thead>
+                <tr>
+                  <th>출발지</th>
+                  <th>도착지</th>
+                  <th>출발시간</th>
+                  <th>도착시간</th>
+                  <th>버스등급</th>
+                  <th>요금</th>
+                </tr>
+              </thead>
+              <tbody>
+                {displayedSchedule.map((bus, index) => (
+                  <tr key={index}>
+                    <td>{bus.depStation}</td>
+                    <td>{bus.arrStation}</td>
+                    <td>{bus.depTime}</td>
+                    <td>{bus.arrTime}</td>
+                    <td>{bus.busGrade}</td>
+                    <td>{bus.charge}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {displayedSchedule.map((bus, index) => (
-                    <tr key={index}>
-                      <td>{bus.depStation}</td>
-                      <td>{bus.arrStation}</td>
-                      <td>{bus.depTime}</td>
-                      <td>{bus.arrTime}</td>
-                      <td>{bus.busGrade}</td>
-                      <td>{bus.charge}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            )}
-            {schedule.length > 0 && (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "20px",
-                }}
-              >
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={Math.ceil(schedule.length / itemsPerPage)}
-                  handlePageChange={handlePageChange}
-                />
-              </div>
-            )}
-          </div>
-        </ItemList>
+                ))}
+              </tbody>
+            </Table>
+          )}
+          {schedule.length > 0 && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "20px",
+              }}
+            >
+              <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(schedule.length / itemsPerPage)}
+                handlePageChange={handlePageChange}
+              />
+            </div>
+          )}
+        </div>
       </List>
     </>
   );

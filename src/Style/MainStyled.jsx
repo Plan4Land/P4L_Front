@@ -184,6 +184,7 @@ export const CateButton = styled.button`
     opacity: 0; /* 기본값은 숨김 */
     z-index: 2; /* 어두운 레이어 위 */
     transition: opacity 0.3s ease;
+    white-space: nowrap;
   }
 
   &:hover::after {

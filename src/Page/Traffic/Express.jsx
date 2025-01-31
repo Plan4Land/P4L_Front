@@ -6,6 +6,7 @@ import {
   ScheduleResult,
   SelectStationContainer,
   VehicleKindContainer,
+  TrafficBox,
 } from "../../Style/TrainStyle";
 import { Pagination } from "../../Component/Pagination";
 import { SelectExpressStation } from "../../Component/TrafficComponents/SelectStation";
@@ -113,11 +114,11 @@ const Express = () => {
   };
 
   return (
-    <>
+    <TrafficBox>
       <Container>
         <div className="menu-box">
+          <div className="menu-title">출발일</div>
           <div className="datepicker">
-            <div className="menu-title">출발일</div>
             <div className="select-content">
               <DatePickerContainer className="datepicker-component">
                 <DatePicker
@@ -291,7 +292,7 @@ const Express = () => {
           </>
         )}
       </ScheduleResult>
-    </>
+    </TrafficBox>
   );
 };
 

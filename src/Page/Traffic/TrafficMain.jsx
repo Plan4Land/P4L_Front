@@ -73,17 +73,25 @@ const TrafficContainer = styled.div`
     span {
       cursor: pointer;
       margin-right: 10px;
-      @media (max-width: 768px) {
+      /* @media (max-width: 768px) {
         font-size: 15px;
       }
       @media (max-width: 400px) {
         font-size: 14px;
-      }
+      } */
     }
 
     .active {
       text-decoration: underline;
       font-weight: bold;
+    }
+  }
+  @media (max-width: 768px) {
+    .menu {
+      margin: 10px 0;
+      span {
+        font-size: 10px;
+      }
     }
   }
 `;

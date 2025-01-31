@@ -237,7 +237,7 @@ export const HeaderSt = styled.div`
   .dropdown-Trafficlist {
     position: fixed;
     transform: translateX(-53px) translateY(calc(100% + 5px));
-    z-index: 1000; 
+    z-index: 1000;
     background-color: white;
     border: 1px solid #ddd;
     width: 120px;
@@ -287,14 +287,14 @@ export const NavSt = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    height: 40px;
+    height: 35px;
     background-color: white;
     font-size: 12px;
     z-index: 10;
-    padding: 0 10%;
+    padding: 0 15%;
     box-shadow: 1px -1px 4px rgba(0, 0, 0, 0.1);
-    .tag,
-    p {
+    p,
+    .title-font {
       font-size: 15px;
     }
   }
