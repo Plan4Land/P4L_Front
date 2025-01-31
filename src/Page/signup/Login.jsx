@@ -313,6 +313,7 @@ export const Login = () => {
             close={() => openModal(setBanModalOpen, false)}
             id={banData?.userId}
             banDays={banData?.endDate}
+            banReason={banData?.reason}
           />
         </SignupContainer>
       </Center>

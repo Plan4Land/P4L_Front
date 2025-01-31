@@ -1,6 +1,6 @@
 import { HeaderSt, NavSt, FooterSt, GlobalFont } from "../Style/GlobalStyle";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Modal } from "../Util/Modal";
 import { useAuth } from "../Context/AuthContext";
 import AxiosApi from "../Api/AxiosApi";
@@ -21,6 +21,23 @@ export const Header = () => {
   const { user, logout } = useAuth();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  
+  const dropdownRef = useRef(null); // 드롭다운 영역을 참조
+
+  // 여백을 클릭할 때 드롭다운을 닫기 위해 이벤트 리스너를 추가
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownVisible(false); // 드롭다운 닫기
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside); // 언마운트 시 이벤트 리스너 제거
+    };
+  }, []);
 
   const topPlanClick = (id) => {
     navigate(`/planning/${id}`);
@@ -55,18 +72,6 @@ export const Header = () => {
     const pathnameMatches = location.pathname.startsWith(path);
     const queryMatches = query ? location.search.includes(query) : true;
     return pathnameMatches && queryMatches;
-  };
-
-  const transportClick = (route) => {
-    // 교통 드롭다운 항목 클릭 시 이동
-    if (route === 'ktxinquiry') navigate('/ktxinquiry');
-    if (route === 'expressbus') navigate('/expressbus');
-    if (route === 'intercitybus') navigate('/intercitybus');
-  };
-
-  const handleItemClick = (transportType) => {
-    setDropdownVisible(false); // 클릭 시 드롭다운 숨기기
-    transportClick(transportType); // 클릭된 항목에 해당하는 페이지로 이동
   };
 
   // useEffect(() => {
@@ -113,17 +118,17 @@ export const Header = () => {
     fetchData();
   }, [user?.id]);
 
-  // const transportClick = (route) => {
-  //   // 교통 드롭다운 항목 클릭 시 이동
-  //   if (route === "ktxinquiry") navigate("/ktxinquiry");
-  //   if (route === "expressbus") navigate("/expressbus");
-  //   if (route === "intercitybus") navigate("/intercitybus");
-  // };
+  const transportClick = (route) => {
+    // 교통 드롭다운 항목 클릭 시 이동
+    if (route === "ktxinquiry") navigate("/ktxinquiry");
+    if (route === "expressbus") navigate("/expressbus");
+    if (route === "intercitybus") navigate("/intercitybus");
+  };
 
-  // const handleItemClick = (transportType) => {
-  //   setDropdownVisible(false); // 클릭 시 드롭다운 숨기기
-  //   transportClick(transportType); // 클릭된 항목에 해당하는 페이지로 이동
-  // };
+  const handleItemClick = (transportType) => {
+    setDropdownVisible(false); // 클릭 시 드롭다운 숨기기
+    transportClick(transportType); // 클릭된 항목에 해당하는 페이지로 이동
+  };
 
   const imagePath = "/logo192.png"; // public 폴더에 있는 이미지
   // console.log("Image Path:", imagePath);
@@ -139,37 +144,17 @@ export const Header = () => {
       </Link>
       <NavSt>
         <div className="recomm" onClick={toggleDropdown}>
-          <Link
-            // to="/traffic"
-            className={`tag ${isActive("/ktxinquiry") ? "active" : ""}`}
-          >
+          <Link className={`tag ${isActive("/ktxinquiry") ? "active" : ""}`}>
             <p className="title-font">교통</p>
           </Link>
           {dropdownVisible && (
-            <div className="dropdown-Trafficlist">
-              <p onClick={() => handleItemClick("ktxinquiry")}>
-                KTX
-              </p>
-              <p onClick={() => handleItemClick("expressbus")}>
-                고속버스
-              </p>
-              <p onClick={() => handleItemClick("intercitybus")}>
-                시외버스
-              </p>
+            <div ref={dropdownRef} className="dropdown-Trafficlist">
+              <p onClick={() => handleItemClick("ktxinquiry")}>KTX</p>
+              <p onClick={() => handleItemClick("expressbus")}>고속버스</p>
+              <p onClick={() => handleItemClick("intercitybus")}>시외버스</p>
             </div>
           )}
         </div>
-        
-        {/* {dropdownVisible && (
-            <div className="dropdown-Trafficlist">
-              <div className="topItem">
-                <p onClick={() => handleItemClick("ktxinquiry")}>KTX</p>
-                <p onClick={() => handleItemClick("expressbus")}>고속버스</p>
-                <p onClick={() => handleItemClick("intercitybus")}>시외버스</p>
-              </div>
-            </div>
-          )}
-        </div> */}
         <p>|</p>
         <div className="recomm">
           <Link

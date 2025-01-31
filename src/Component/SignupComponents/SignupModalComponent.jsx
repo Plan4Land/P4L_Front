@@ -468,7 +468,7 @@ export const ResultPwModal = (props) => {
 };
 
 export const BanModal = (props) => {
-  const {open, close, id, banDays} = props;
+  const {open, close, id, banDays, banReason} = props;
 
   const handleBackgroundClick = (e) => {
     e.stopPropagation(); // 내부 클릭 시 닫히지 않게 설정
@@ -486,6 +486,7 @@ export const BanModal = (props) => {
             <p> 정지된 계정입니다.</p>
             <p> 아이디 : {id}</p>
             <p> 정지 해제 일자 : {banDays}</p>
+            <p> 정지 사유 : {banReason}</p>
           </div>
         )}
 
