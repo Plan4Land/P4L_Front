@@ -5,22 +5,18 @@ export const Center = styled.div`
   margin-top: 50px;
   display: flex;
   justify-content: center;
-  margin-left: 200px;
+  width: 60vw;
+  @media (width: 768px) {
+    width: 90vw;
+  }
 `;
-
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 700px;
-  @media (max-width: 768px) {
-    width: 90vw;
-    margin: 0 auto;
-  }
   padding: 30px;
   box-sizing: border-box;
-
+  width: 100%;
   .title {
-    margin: 0 0 50px 0;
     display: flex;
     justify-content: center;
   }
@@ -28,15 +24,14 @@ export const Container = styled.div`
   .labelBox {
     display: flex;
     justify-content: space-between;
+    margin: 0 5px;
   }
-
   label {
     margin-bottom: 5px;
   }
 
   .input-container {
     position: relative;
-    padding-top: 20px;
   }
 
   .textMessage {
@@ -81,7 +76,6 @@ export const Container = styled.div`
         border: 1px solid #bbb;
       }
     }
-
     img {
       width: 100%;
       height: 100%;
@@ -222,24 +216,36 @@ export const Container = styled.div`
       }
     }
   }
-
   .center2 {
     display: flex;
     align-items: center;
     flex-direction: column;
+    width: 100%;
     .deleteBox {
       display: flex;
-      align-items: right;
-      justify-content: right;
-      width: 423px;
-      @media (max-width: 768px) {
-        width: 312px;
-      }
+      width: 100%;
+      justify-content: flex-end;
+      padding-right: 20px;
     }
     .userDeleteBtn {
+      color: gray;
       font-size: 12px;
       margin-top: 4px;
       cursor: pointer;
+    }
+  }
+  @media (max-width: 768px) {
+    .labelBox {
+      font-size: 13px;
+    }
+    .message {
+      font-size: 10px;
+    }
+    .nextButton {
+      scale: 0.7;
+    }
+    .deleteBox {
+      margin-top: -35px;
     }
   }
 `;
@@ -249,21 +255,19 @@ export const InputBox = styled.div`
   height: 30px;
   width: calc(100% - 34px);
   border: 1px solid #ddd;
+  border-radius: 5px;
   padding: 1em;
   margin-bottom: 30px;
   &:focus-within {
     border: 1px solid #bbb;
   }
-
   .inputBox {
     display: flex;
     width: 100%;
-
     &:focus {
       outline: none;
       border: none;
     }
-
     input {
       width: 100%;
       background-color: transparent;
@@ -272,7 +276,6 @@ export const InputBox = styled.div`
       font-size: 1em;
     }
   }
-
   .iconBox-left {
     display: flex;
     justify-content: center;
@@ -293,6 +296,10 @@ export const InputBox = styled.div`
       width: 20px;
       height: 20px;
     }
+  }
+  @media (max-width: 768px) {
+    font-size: 0.8em;
+    padding: 5px 10px;
   }
 `;
 
@@ -317,18 +324,31 @@ export const Button = styled.button`
 `;
 
 export const EditBox = styled.div`
-  padding: 30px;
   border: 1px solid #ddd;
   border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  .iconBox {
+  .iconBox1 {
+    padding: 20px 50px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+  }
+  .iconBox2 {
+    padding: 30px 50px;
     display: flex;
     flex-direction: column;
     cursor: pointer;
   }
-
+  .iconBox1,
+  .iconBox2 {
+    transition: all 0.3s ease;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
   .name {
     margin: 0;
     text-align: center;
@@ -339,37 +359,13 @@ export const EditBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    color: ${colors.colorA};
     svg {
       width: 150px;
       height: 180px;
     }
   }
   @media (max-width: 768px) {
-    flex-direction: column;
-    width: 250px;
-    .iconBox {
-      width: 80%;
-    }
-    .iconBox:nth-child(1) {
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 30px;
-    }
-    .iconBox:nth-child(2) {
-      padding-top: 30px;
-    }
-  }
-  @media (min-width: 769px) {
-    flex-direction: row;
-    .iconBox {
-      width: 50%;
-      height: 200px;
-    }
-    .iconBox:nth-child(1) {
-      border-right: 1px solid #ddd;
-      padding-right: 30px;
-    }
-    .iconBox:nth-child(2) {
-      padding-left: 30px;
-    }
+    scale: 0.7;
   }
 `;

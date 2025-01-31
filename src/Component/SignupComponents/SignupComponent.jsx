@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import { colors } from "../../Style/GlobalStyle";
+import { ScrollBar } from "../ButtonComponent";
 
 export const Center = styled.div`
   display: flex;
@@ -10,33 +11,35 @@ export const Center = styled.div`
 export const SignupContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   width: 700px;
   padding: 30px;
   box-sizing: border-box;
-
+  min-height: 700px;
   .title {
-    margin: 0 0 50px 0;
+    margin-bottom: 20px;
     text-align: center;
-    margin-bottom: 30px;
+    padding-bottom: 20px;
   }
 
   .input-container {
     position: relative;
-    padding-top: 20px;
+    padding-top: 15px;
   }
 
   .textMessage {
     position: absolute;
-    top: 0;
+    top: -2px;
     color: red;
     font-size: 12px;
+    margin-left: 5px;
   }
   .textMessage-true {
     position: absolute;
-    top: 0;
+    top: -2px;
     color: green;
     font-size: 12px;
+    margin-left: 5px;
   }
 
   .inputWrapper {
@@ -50,14 +53,15 @@ export const SignupContainer = styled.div`
     display: flex;
     justify-content: space-between;
     margin-bottom: 50px;
-    p {
-      margin: 0;
-      font-size: 12px;
-      cursor: pointer;
-    }
+    p,
     span {
       margin: 0;
       font-size: 12px;
+      cursor: pointer;
+      color: gray;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
   .linkBox-left {
@@ -110,18 +114,20 @@ export const SignupContainer = styled.div`
   }
 
   .duplicateButton {
-    width: 36px;
-    height: 36px;
+    width: 60px;
+    height: 30px;
     font-size: 12px;
-    padding: 2px;
+    padding: 3px 5px;
     margin-bottom: 10px;
-    background-color: rgb(0, 180, 0);
+    background-color: ${colors.colorC};
     border: none;
     border-radius: 5px;
     box-sizing: border-box;
+    white-space: nowrap;
     cursor: pointer;
+    transition: all 0.3s ease;
     &:hover {
-      background-color: rgb(0, 160, 0);
+      opacity: 0.7;
     }
     &:disabled {
       background-color: #bbb;
@@ -172,6 +178,40 @@ export const SignupContainer = styled.div`
       }
     }
   }
+  .signup-button {
+    margin: 5px auto;
+  }
+  @media (max-width: 768px) {
+    .title {
+      margin: 0;
+      font-size: 20px;
+    }
+    .login-social-box {
+      scale: 0.7;
+    }
+    .linkBox {
+      p,
+      span {
+        font-size: 10px;
+      }
+    }
+    .nextButton {
+      width: 80%;
+      font-size: 13px;
+      margin: auto;
+    }
+    .duplicateButton {
+      font-size: 10px;
+    }
+    .textMessage,
+    .textMessage-true {
+      font-size: 10px;
+    }
+  }
+  .signup-button {
+    width: 80%;
+    font-size: 14px;
+  }
 `;
 
 export const InputBox = styled.div`
@@ -181,6 +221,7 @@ export const InputBox = styled.div`
   border: 1px solid #ddd;
   padding: 1em;
   margin-bottom: 10px;
+  border-radius: 15px;
   &:focus-within {
     border: 1px solid #bbb;
   }
@@ -188,12 +229,10 @@ export const InputBox = styled.div`
   .inputBox {
     display: flex;
     width: 100%;
-
     &:focus {
       outline: none;
       border: none;
     }
-
     input {
       width: 100%;
       background-color: transparent;
@@ -224,6 +263,10 @@ export const InputBox = styled.div`
       height: 20px;
     }
   }
+  @media (max-width: 768px) {
+    font-size: 0.8em;
+    padding: 5px 10px;
+  }
 `;
 
 export const Button = styled.button`
@@ -246,7 +289,6 @@ export const Button = styled.button`
 
 export const Terms = styled.div`
   margin-bottom: 30px;
-
   .terms-label {
     display: flex;
     flex-direction: row;
@@ -297,8 +339,30 @@ export const Terms = styled.div`
     padding: 15px;
     margin: 9px 0 0 35px;
     border: 1px solid #ddd;
+    ${ScrollBar}
     p {
       line-height: 1.5;
+    }
+  }
+  @media (max-width: 768px) {
+    .inputBox-big,
+    .inputBox {
+      font-size: 15px;
+    }
+    .circle {
+      scale: 0.7;
+    }
+    .terms-content {
+      h3 {
+        font-size: 15px;
+      }
+      h4 {
+        font-size: 13px;
+      }
+      p,
+      li {
+        font-size: 10px;
+      }
     }
   }
 `;

@@ -1,30 +1,31 @@
-import {useState, useRef} from "react";
-import {useNavigate} from "react-router-dom";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AxiosApi from "../../Api/AxiosApi";
 
 // context
-import {useAuth} from "../../Context/AuthContext";
+import { useAuth } from "../../Context/AuthContext";
 
 // component
 import Common from "../../Util/Common";
-import {Header, Footer} from "../../Component/GlobalComponent";
+import { Header, Footer } from "../../Component/GlobalComponent";
 import {
   Center,
   SignupContainer,
   InputBox,
 } from "../../Component/SignupComponents/SignupComponent";
-import {Button} from "../../Component/ButtonComponent";
+import { Button } from "../../Component/ButtonComponent";
 import {
   FindUserIdModal,
   ResultUserIdModal,
   FindPwModal,
-  ResultPwModal, BanModal,
+  ResultPwModal,
+  BanModal,
 } from "../../Component/SignupComponents/SignupModalComponent";
 
 // icon
-import {GoLock, GoEye, GoEyeClosed} from "react-icons/go";
-import {VscAccount} from "react-icons/vsc";
+import { GoLock, GoEye, GoEyeClosed } from "react-icons/go";
+import { VscAccount } from "react-icons/vsc";
 
 export const Login = () => {
   const [inputUserId, setInputUserId] = useState("");
@@ -46,7 +47,7 @@ export const Login = () => {
 
   const navigate = useNavigate();
 
-  const {login} = useAuth();
+  const { login } = useAuth();
 
   const handleInputChange = (e, setState) => {
     setState(e.target.value);
@@ -86,7 +87,7 @@ export const Login = () => {
     } catch (error) {
       console.error("Error during login: ", error);
       if (error.response) {
-        console.log("로그 : ",error.response.data.message);
+        console.log("로그 : ", error.response.data.message);
         if (error.response.data.message === "탈퇴한 회원입니다.") {
           setTextMessage("탈퇴한 회원입니다.");
         } else if (error.response.data.message === "정지된 회원입니다.") {
@@ -102,7 +103,6 @@ export const Login = () => {
       }
     }
   };
-
 
   // 카카오 로그인
   const kakaoLogin = () => {
@@ -169,7 +169,7 @@ export const Login = () => {
             <div className="textMessage">{textMessage}</div>
             <InputBox>
               <div className="iconBox-left">
-                <VscAccount/>
+                <VscAccount />
               </div>
               <div className="inputBox">
                 <input
@@ -184,7 +184,7 @@ export const Login = () => {
 
             <InputBox>
               <div className="iconBox-left">
-                <GoLock/>
+                <GoLock />
               </div>
               <div className="inputBox">
                 <input
@@ -196,12 +196,11 @@ export const Login = () => {
                   onKeyDown={handleEnterKey}
                 />
                 <div className="iconBox-right" onClick={onClickPwEye}>
-                  {isPwShow ? <GoEye/> : <GoEyeClosed/>}
+                  {isPwShow ? <GoEye /> : <GoEyeClosed />}
                 </div>
               </div>
             </InputBox>
           </div>
-
           <div className="linkBox">
             <div className="linkBox-left">
               <p onClick={() => openModal(setFindIdModalOpen, true)}>
@@ -276,7 +275,7 @@ export const Login = () => {
           </div>
 
           <Button onClick={onClickLogin}>로그인</Button>
-          <div style={{margin: "30px"}}/>
+          <div style={{ margin: "30px" }} />
 
           {/* 아이디 찾기 모달 */}
           <FindUserIdModal

@@ -314,4 +314,12 @@ export const FooterSt = styled.div`
   p {
     font-size: 13px;
   }
+  @media (max-width: 768px) {
+    h4 {
+      font-size: 13px;
+    }
+    p {
+      font-size: 10px;
+    }
+  }
 `;

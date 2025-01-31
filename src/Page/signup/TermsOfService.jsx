@@ -63,7 +63,7 @@ export const TermsOfService = () => {
                   isCheckedTotal ? "iconBox-left checked" : "iconBox-left"
                 }
               >
-                <GoCheckCircle />
+                <GoCheckCircle className="circle" />
               </div>
               <div className="inputBox-big">전체 동의하기</div>
             </div>
@@ -75,7 +75,7 @@ export const TermsOfService = () => {
                   isCheckedFst ? "iconBox-left checked" : "iconBox-left"
                 }
               >
-                <GoCheckCircle />
+                <GoCheckCircle className="circle" />
               </div>
               <div className="inputBox">PLAN4LAND 이용약관</div>
             </div>
@@ -171,7 +171,7 @@ export const TermsOfService = () => {
                   isCheckedScd ? "iconBox-left checked" : "iconBox-left"
                 }
               >
-                <GoCheckCircle />
+                <GoCheckCircle className="circle" />
               </div>
               <div className="inputBox">개인정보 수집 및 이용</div>
             </div>
@@ -248,7 +248,11 @@ export const TermsOfService = () => {
               </p>
             </div>
           </Terms>
-          <Button onClick={() => navigate("/signup")} disabled={!isButtonOn}>
+          <Button
+            onClick={() => navigate("/signup")}
+            disabled={!isButtonOn}
+            className="nextButton"
+          >
             다음
           </Button>
         </SignupContainer>

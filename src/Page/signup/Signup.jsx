@@ -398,7 +398,6 @@ export const Signup = () => {
       <Center>
         <SignupContainer>
           <h1 className="title">회원가입</h1>
-
           <div className="input-container">
             <div className={idCheck ? "textMessage-true" : "textMessage"}>
               {idMsg}
@@ -594,9 +593,12 @@ export const Signup = () => {
           )}
           {sso && <input type="hidden" name="sso" value={ssoState} />}
 
-          <Button onClick={onClickSignup}>회원가입</Button>
-          <div style={{ margin: "15px" }} />
-          <Button onClick={() => navigate("/login")}>취소</Button>
+          <Button onClick={onClickSignup} className="signup-button">
+            회원가입
+          </Button>
+          <Button onClick={() => navigate("/login")} className="signup-button">
+            취소
+          </Button>
 
           {/* 완료 모달 */}
           <CheckModal isOpen={isCheckModalOpen} onClose={closeCheckModal}>
