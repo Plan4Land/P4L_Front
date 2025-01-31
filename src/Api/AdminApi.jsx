@@ -30,11 +30,11 @@ const AdminApi = {
     console.log("AdminAPI : ", reportId);
     return await AxiosInstance.post(`/admin/report-manage?reportId=${reportId}&status=false`);
   },
-  reportAccept: async (reportId, userId, day) => {
-    return await AxiosInstance.post(`/admin/report-manage?reportId=${reportId}&userId=${userId}&day=${day}&status=true`);
+  reportAccept: async (reportId, userId, day, reason) => {
+    return await AxiosInstance.post(`/admin/report-manage?reportId=${reportId}&userId=${userId}&day=${day}&status=true&reason=${reason}`);
   },
-  userBan: async (userId, day) => {
-    return await AxiosInstance.post(`/admin/member-ban?userId=${userId}&day=${day}`);
+  userBan: async (userId, day, reason) => {
+    return await AxiosInstance.post(`/admin/member-ban?userId=${userId}&day=${day}&reason=${reason}`);
   }
 
 }

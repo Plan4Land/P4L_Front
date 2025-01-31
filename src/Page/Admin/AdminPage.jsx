@@ -25,6 +25,7 @@ export const AdminPage = () => {
   const [selectedReport, setSelectedReport] = useState(null);
   const [searchCategory, setSearchCategory] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [banReason, setBanReason] = useState("");
 
   const category = [{
     name: '전체',
@@ -71,7 +72,6 @@ export const AdminPage = () => {
   };
 
 
-
   const handleReportReject = async (reportId) => {
     try {
       console.log(reportId);
@@ -86,9 +86,9 @@ export const AdminPage = () => {
     }
   }
 
-  const handleReportAccept = async (reportId, userId, day) => {
+  const handleReportAccept = async (reportId, userId, day, reason) => {
     try {
-      const response = await AdminApi.reportAccept(reportId, userId, day);
+      const response = await AdminApi.reportAccept(reportId, userId, day, reason);
       setReports(reports.map(report =>
         report.id === reportId ? {...report, state: "ACCEPT"} : report));
       console.log(response.data)
@@ -142,7 +142,7 @@ export const AdminPage = () => {
 
   const confirmAccountBan = async () => {
     try {
-      await AdminApi.userBan(selectedMember.id, banDays);
+      await AdminApi.userBan(selectedMember.id, banDays, banReason);
       alert(`${selectedMember.name}님의 계정을 정지합니다.`);
       setIsConfirmModalOpen(false);
       setMembers(members.map(member => member.id === selectedMember.id ? {
@@ -154,7 +154,7 @@ export const AdminPage = () => {
     }
   };
 
-  const handlePlannerClick= async () => {
+  const handlePlannerClick = async () => {
     setActiveTab("planner");
   }
 
@@ -254,6 +254,9 @@ export const AdminPage = () => {
           >
             정지일 입력
             <input onChange={(e) => setBanDays(e.target.value)}/>
+            
+            정지 사유 입력
+            <input onChange={(e) => setBanReason(e.target.value)}/>
             <h3>{selectedMember.name}님의 계정을 정지시키겠습니까?</h3>
           </Modal>
         )}
@@ -261,11 +264,14 @@ export const AdminPage = () => {
           <Modal
             isOpen={isReportModalOpen}
             onClose={() => handleReportReject(selectedReport.id)}
-            onConfirm={() => handleReportAccept(selectedReport.id, selectedReport.reported.id, banDays)}
+            onConfirm={() => handleReportAccept(selectedReport.id, selectedReport.reported.id, banDays, banReason)}
             confirmText="승인"
             cancelText="거절">
             정지일 입력
             <input onChange={(e) => setBanDays(e.target.value)}/>
+            
+            정지 사유 입력
+            <input onChange={(e) => setBanReason(e.target.value)}/>
             <Button onClick={() => setIsReportModalOpen(false)}>취소</Button>
           </Modal>
         )}
