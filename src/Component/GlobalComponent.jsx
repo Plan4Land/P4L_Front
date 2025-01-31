@@ -24,7 +24,6 @@ export const Header = () => {
   
   const dropdownRef = useRef(null); // 드롭다운 영역을 참조
 
-  // 여백을 클릭할 때 드롭다운을 닫기 위해 이벤트 리스너를 추가
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -143,12 +142,12 @@ export const Header = () => {
         </div>
       </Link>
       <NavSt>
-        <div className="recomm" onClick={toggleDropdown}>
-          <Link className={`tag ${isActive("/ktxinquiry") ? "active" : ""}`}>
+        <div className="recomm" onClick={toggleDropdown} ref={dropdownRef}>
+          <div className={`tag ${isActive("/ktxinquiry") ? "active" : ""}`}>
             <p className="title-font">교통</p>
-          </Link>
+          </div>
           {dropdownVisible && (
-            <div ref={dropdownRef} className="dropdown-Trafficlist">
+            <div className="dropdown-Trafficlist">
               <p onClick={() => handleItemClick("ktxinquiry")}>KTX</p>
               <p onClick={() => handleItemClick("expressbus")}>고속버스</p>
               <p onClick={() => handleItemClick("intercitybus")}>시외버스</p>

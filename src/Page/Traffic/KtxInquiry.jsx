@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { KTXServiceCode } from "../../Util/Service_KTX_code";
 import { Header, Footer } from "../../Component/GlobalComponent";
-import { Button, ToggleButton } from "../../Component/ButtonComponent";
+import { Button, ToggleSection } from "../../Component/ButtonComponent";
 import {
   Table,
   SelectTourItem,
@@ -261,147 +261,157 @@ const KtxInquiry = () => {
 
           {/* 출발 지역 선택 */}
           <div className="mainarea">
-            <h3>
-              출발 지역 선택
-              <ToggleButton isOpen={isDepCat1Open} onToggle={toggleDepCat1} />
-            </h3>
-            {isDepCat1Open && ( // isStationOpen 상태에 따라 조건부 렌더링
-              <div className="buttons">
-                {KTXServiceCode.map((cat1) => (
-                  <Button
-                    key={cat1.cat1}
-                    onClick={() => {
-                      setSelectedDepCat1(cat1.cat1);
-                      setSelectedDepCat2("");
-                      setSelectedVehicle("");
-                    }}
-                    className={selectedDepCat1 === cat1.cat1 ? "selected" : ""}
-                  >
-                    {cat1.cat1}
-                  </Button>
-                ))}
-              </div>
-            )}
+            <ToggleSection
+              title="출발 역 선택"
+              isOpen={{isDepCat1Open} }
+              onToggle={toggleDepCat1}
+            >
+              {isDepCat1Open && ( // isStationOpen 상태에 따라 조건부 렌더링
+                <div className="buttons">
+                  {KTXServiceCode.map((cat1) => (
+                    <Button
+                      key={cat1.cat1}
+                      onClick={() => {
+                        setSelectedDepCat1(cat1.cat1);
+                        setSelectedDepCat2("");
+                        setSelectedVehicle("");
+                      }}
+                      className={selectedDepCat1 === cat1.cat1 ? "selected" : ""}
+                    >
+                      {cat1.cat1}
+                    </Button>
+                  ))}
+                </div>
+              )}
+            </ToggleSection>
           </div>
 
           {/* 출발 세부 역 선택 */}
           {selectedDepCat1 && (
             <div className="subarea">
-              <h3>
-                출발 세부 역 선택
-                <ToggleButton isOpen={isDepCat2Open} onToggle={toggleDepCat2} />
-              </h3>
-              {isDepCat2Open && (
-                <div className="buttons">
-                  {getCat2List(selectedDepCat1).map((cat2) => (
-                    <Button
-                      key={cat2.cat2}
-                      onClick={() => setSelectedDepCat2(cat2.cat2)}
-                      className={
-                        selectedDepCat2 === cat2.cat2 ? "selected" : ""
-                      }
-                    >
-                      {cat2.cat2}
-                    </Button>
-                  ))}
-                </div>
-              )}
+              <ToggleSection
+                title="출발 세부 역 선택"
+                isOpen={isDepCat2Open}
+                onToggle={toggleDepCat2}
+              >
+                {isDepCat2Open && (
+                  <div className="buttons">
+                    {getCat2List(selectedDepCat1).map((cat2) => (
+                      <Button
+                        key={cat2.cat2}
+                        onClick={() => setSelectedDepCat2(cat2.cat2)}
+                        className={
+                          selectedDepCat2 === cat2.cat2 ? "selected" : ""
+                        }
+                      >
+                        {cat2.cat2}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </ToggleSection>
             </div>
           )}
 
           {/* 도착 지역 선택 */}
           <div className="top">
-            <h3>
-              도착 지역 선택
-              <ToggleButton isOpen={isArrCat1Open} onToggle={toggleArrCat1} />
-            </h3>
-            {isArrCat1Open && ( // isStationOpen 상태에 따라 조건부 렌더링
-              <div className="buttons">
-                {KTXServiceCode.map((cat1) => (
-                  <Button
-                    key={cat1.cat1}
-                    onClick={() => {
-                      setSelectedArrCat1(cat1.cat1);
-                      setSelectedArrCat2("");
-                      setSelectedVehicle("");
-                    }}
-                    className={selectedArrCat1 === cat1.cat1 ? "selected" : ""}
-                  >
-                    {cat1.cat1}
-                  </Button>
-                ))}
-              </div>
-            )}
+            <ToggleSection
+              title="도착 역 선택"
+              isOpen={isArrCat1Open}
+              onToggle={toggleArrCat1}
+            >
+              {isArrCat1Open && ( // isStationOpen 상태에 따라 조건부 렌더링
+                <div className="buttons">
+                  {KTXServiceCode.map((cat1) => (
+                    <Button
+                      key={cat1.cat1}
+                      onClick={() => {
+                        setSelectedArrCat1(cat1.cat1);
+                        setSelectedArrCat2("");
+                        setSelectedVehicle("");
+                      }}
+                      className={selectedArrCat1 === cat1.cat1 ? "selected" : ""}
+                    >
+                      {cat1.cat1}
+                    </Button>
+                  ))}
+                </div>
+              )}
+            </ToggleSection>
           </div>
 
           {/* 도착 세부 역 선택 */}
           {selectedArrCat1 && (
             <div className="middle">
-              <h3>
-                도착 세부 역 선택
-                <ToggleButton isOpen={isArrCat2Open} onToggle={toggleArrCat2} />
-              </h3>
-              {isArrCat2Open && (
-                <div className="buttons">
-                  {getCat2List(selectedArrCat1).map((cat2) => (
-                    <Button
-                      key={cat2.cat2}
-                      onClick={() => setSelectedArrCat2(cat2.cat2)}
-                      className={
-                        selectedArrCat2 === cat2.cat2 ? "selected" : ""
-                      }
-                    >
-                      {cat2.cat2}
-                    </Button>
-                  ))}
-                </div>
-              )}
+              <ToggleSection
+                title="도착 세부 역 선택"
+                isOpen={isArrCat2Open}
+                onToggle={toggleArrCat2}
+              >
+                {isArrCat2Open && (
+                  <div className="buttons">
+                    {getCat2List(selectedArrCat1).map((cat2) => (
+                      <Button
+                        key={cat2.cat2}
+                        onClick={() => setSelectedArrCat2(cat2.cat2)}
+                        className={
+                          selectedArrCat2 === cat2.cat2 ? "selected" : ""
+                        }
+                      >
+                        {cat2.cat2}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </ToggleSection>
             </div>
           )}
 
           {/* 열차 종류 선택 */}
           {selectedDepCat2 && selectedArrCat2 && (
             <div className="category">
-              <h3>
-                열차 종류 선택
-                <ToggleButton isOpen={isVehicleOpen} onToggle={toggleVehicle} />
-              </h3>
-              {isVehicleOpen && (
-                <div className="buttons">
-                  {Vehiclekind.map((vehicle) => (
-                    <Button
-                      key={vehicle.VehicleKindCode}
-                      onClick={() => {
-                        setSelectedVehicle((prev) => {
-                          if (vehicle.VehicleKindCode === "") {
-                            // '전체' 선택 시 모든 선택 해제하고 '전체'만 선택
-                            return [""];
-                          }
-                          // '전체'가 선택된 상태에서 특정 열차 선택 시 '전체' 제거
-                          if (prev.includes("")) {
-                            return [vehicle.VehicleKindCode];
-                          }
-                          // 이미 선택된 경우 해제
-                          if (prev.includes(vehicle.VehicleKindCode)) {
-                            return prev.filter(
-                              (code) => code !== vehicle.VehicleKindCode
-                            );
-                          }
-                          // 선택 추가
-                          return [...prev, vehicle.VehicleKindCode];
-                        });
-                      }}
-                      className={
-                        selectedVehicle.includes(vehicle.VehicleKindCode)
-                          ? "selected"
-                          : ""
-                      }
-                    >
-                      {vehicle.VehicleKindName}
-                    </Button>
-                  ))}
-                </div>
-              )}
+              <ToggleSection
+                title="열차 종류 선택"
+                isOpen={isVehicleOpen}
+                onToggle={toggleVehicle}
+              >
+                {isVehicleOpen && (
+                  <div className="buttons">
+                    {Vehiclekind.map((vehicle) => (
+                      <Button
+                        key={vehicle.VehicleKindCode}
+                        onClick={() => {
+                          setSelectedVehicle((prev) => {
+                            if (vehicle.VehicleKindCode === "") {
+                              // '전체' 선택 시 모든 선택 해제하고 '전체'만 선택
+                              return [""];
+                            }
+                            // '전체'가 선택된 상태에서 특정 열차 선택 시 '전체' 제거
+                            if (prev.includes("")) {
+                              return [vehicle.VehicleKindCode];
+                            }
+                            // 이미 선택된 경우 해제
+                            if (prev.includes(vehicle.VehicleKindCode)) {
+                              return prev.filter(
+                                (code) => code !== vehicle.VehicleKindCode
+                              );
+                            }
+                            // 선택 추가
+                            return [...prev, vehicle.VehicleKindCode];
+                          });
+                        }}
+                        className={
+                          selectedVehicle.includes(vehicle.VehicleKindCode)
+                            ? "selected"
+                            : ""
+                        }
+                      >
+                        {vehicle.VehicleKindName}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </ToggleSection>
             </div>
           )}
 
