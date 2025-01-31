@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
-import { Button, ToggleButton } from "../../Component/ButtonComponent";
+import { Button, ToggleButton, ToggleSection } from "../../Component/ButtonComponent";
 import {
   Table,
   SelectTourItem,
@@ -14,7 +14,6 @@ import { Pagination } from "../../Component/Pagination";
 import { ExpressServiceCode } from "../../Util/Service_Express_code";
 import { ExpressGradeService } from "../../Util/Service_ExpressGrade_code";
 import { FaBars } from "react-icons/fa";
-import { TourItem } from "../../Component/ItemListComponent";
 import { useMediaQuery } from "react-responsive";
 
 const ExpressBus = () => {
@@ -105,7 +104,7 @@ const ExpressBus = () => {
       depTerminalId: depTerminalId,
       arrTerminalId: arrTerminalId,
       depPlandTime: formattedDate,
-      numOfRows: 100, // 최대 데이터 개수 요청
+      numOfRows: 100,
       pageNo: 1,
     };
 
@@ -121,7 +120,7 @@ const ExpressBus = () => {
     try {
       const response = await fetch(`${url}?${new URLSearchParams(params)}`);
       console.log("API 응답 상태:", response.status);
-      const textData = await response.text(); // XML 데이터로 받아옴
+      const textData = await response.text();
       console.log("XML 응답 데이터:", textData);
 
       const parser = new DOMParser();
@@ -251,81 +250,87 @@ const ExpressBus = () => {
           </SearchSt>
 
           <div className="mainarea">
-            <h3>
-              출발 지역 선택
-              <ToggleButton isOpen={isDepCat1Open} onToggle={toggleDepCat1} />
-            </h3>
-            {isDepCat1Open && (
-              <div className="buttons">
-                {ExpressServiceCode.map((cat1) => (
-                  <Button
-                    key={`dep-cat1-${cat1.cat1}`}
-                    onClick={() => {
-                      setSelectedDepCat1(cat1.cat1);
-                      setSelectedDepCat2("");
-                      setSelectedDepCat3("");
-                    }}
-                    className={selectedDepCat1 === cat1.cat1 ? "selected" : ""}
-                  >
-                    {cat1.cat1}
-                  </Button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {selectedDepCat1 && (
-            <div className="subarea">
-              <h3>
-                출발 세부 지역 선택
-                <ToggleButton isOpen={isDepCat2Open} onToggle={toggleDepCat2} />
-              </h3>
-              {isDepCat2Open && (
+            <ToggleSection
+              title="출발 지역 선택"
+              isOpen={{isDepCat1Open} }
+              onToggle={toggleDepCat1}
+            >
+              {isDepCat1Open && (
                 <div className="buttons">
-                  {getCat2List(selectedDepCat1).map((cat2) => (
+                  {ExpressServiceCode.map((cat1) => (
                     <Button
-                      key={`dep-cat2-${cat2.cat2Code}`}
+                      key={`dep-cat1-${cat1.cat1}`}
                       onClick={() => {
-                        setSelectedDepCat2(cat2.cat2);
+                        setSelectedDepCat1(cat1.cat1);
+                        setSelectedDepCat2("");
                         setSelectedDepCat3("");
                       }}
-                      className={
-                        selectedDepCat2 === cat2.cat2 ? "selected" : ""
-                      }
+                      className={selectedDepCat1 === cat1.cat1 ? "selected" : ""}
                     >
-                      {cat2.cat2}
+                      {cat1.cat1}
                     </Button>
                   ))}
                 </div>
               )}
+            </ToggleSection>
+          </div>
+
+          {selectedDepCat1 && (
+            <div className="subarea">
+              <ToggleSection
+                title="출발 세부 지역 선택"
+                isOpen={isDepCat2Open}
+                onToggle={toggleDepCat2}
+              >
+                {isDepCat2Open && (
+                  <div className="buttons">
+                    {getCat2List(selectedDepCat1).map((cat2) => (
+                      <Button
+                        key={`dep-cat2-${cat2.cat2Code}`}
+                        onClick={() => {
+                          setSelectedDepCat2(cat2.cat2);
+                          setSelectedDepCat3("");
+                        }}
+                        className={
+                          selectedDepCat2 === cat2.cat2 ? "selected" : ""
+                        }
+                      >
+                        {cat2.cat2}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </ToggleSection>
             </div>
           )}
 
           {selectedDepCat2 && !isMetropolitanCity(selectedDepCat1) && (
             <div className="top">
-              <h3>
-                출발 소분류 지역 선택
-                <ToggleButton isOpen={isDepCat3Open} onToggle={toggleDepCat3} />
-              </h3>
-              {isDepCat3Open && (
-                <div className="buttons">
-                  {getCat3List(
-                    getCat2List(selectedDepCat1).find(
-                      (cat2) => cat2.cat2 === selectedDepCat2
-                    )
-                  ).map((cat3) => (
-                    <Button
-                      key={`dep-cat3-${cat3.cat3Code}`}
-                      onClick={() => setSelectedDepCat3(cat3.cat3Code)}
-                      className={
-                        selectedDepCat3 === cat3.cat3Code ? "selected" : ""
-                      }
-                    >
-                      {cat3.cat3}
-                    </Button>
-                  ))}
-                </div>
-              )}
+              <ToggleSection
+                title="출발 소분류 지역 선택"
+                isOpen={isDepCat3Open}
+                onToggle={toggleDepCat3}
+              >
+                {isDepCat3Open && (
+                  <div className="buttons">
+                    {getCat3List(
+                      getCat2List(selectedDepCat1).find(
+                        (cat2) => cat2.cat2 === selectedDepCat2
+                      )
+                    ).map((cat3) => (
+                      <Button
+                        key={`dep-cat3-${cat3.cat3Code}`}
+                        onClick={() => setSelectedDepCat3(cat3.cat3Code)}
+                        className={
+                          selectedDepCat3 === cat3.cat3Code ? "selected" : ""
+                        }
+                      >
+                        {cat3.cat3}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </ToggleSection>
             </div>
           )}
 
@@ -450,55 +455,59 @@ const ExpressBus = () => {
             </Button>
           )}
         </SelectTourItem>
-
-        <div className="tour-list">
-          <h3>고속버스 조회</h3>
-          {displayedSchedule.length === 0 ? (
-            <p>조회된 시간표가 없습니다.</p>
-          ) : (
-            <Table>
-              <thead>
-                <tr>
-                  <th>출발지</th>
-                  <th>도착지</th>
-                  <th>출발시간</th>
-                  <th>도착시간</th>
-                  <th>버스등급</th>
-                  <th>요금</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayedSchedule.map((bus, index) => (
-                  <tr key={index}>
-                    <td>{bus.depStation}</td>
-                    <td>{bus.arrStation}</td>
-                    <td>{bus.depTime}</td>
-                    <td>{bus.arrTime}</td>
-                    <td>{bus.busGrade}</td>
-                    <td>{bus.charge}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          )}
-          {schedule.length > 0 && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "20px",
-              }}
-            >
-              <Pagination
-                currentPage={currentPage}
-                totalPages={Math.ceil(schedule.length / itemsPerPage)}
-                handlePageChange={handlePageChange}
-              />
+        
+        <ItemList>
+          <div className="tour-list">
+            <h3>고속버스 조회</h3>
+            <div className="totalCount">
+              총 {displayedSchedule.length.toLocaleString()}건
             </div>
-          )}
-        </div>
+            {displayedSchedule.length === 0 ? (
+              <p>조회된 시간표가 없습니다.</p>
+            ) : (
+              <Table>
+                <thead>
+                  <tr>
+                    <th>출발지</th>
+                    <th>도착지</th>
+                    <th>출발시간</th>
+                    <th>도착시간</th>
+                    <th>버스등급</th>
+                    <th>요금</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {displayedSchedule.map((bus, index) => (
+                    <tr key={index}>
+                      <td>{bus.depStation}</td>
+                      <td>{bus.arrStation}</td>
+                      <td>{bus.depTime}</td>
+                      <td>{bus.arrTime}</td>
+                      <td>{bus.busGrade}</td>
+                      <td>{bus.charge}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
+            {schedule.length > 0 && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "20px",
+                }}
+              >
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={Math.ceil(schedule.length / itemsPerPage)}
+                  handlePageChange={handlePageChange}
+                />
+              </div>
+            )}
+          </div>
+        </ItemList>
       </List>
-      {/* <Footer /> */}
     </>
   );
 };
