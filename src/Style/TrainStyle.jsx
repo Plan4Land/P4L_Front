@@ -1,13 +1,17 @@
 import styled from "styled-components";
 import { colors } from "./GlobalStyle";
 
+export const TrafficBox = styled.div`
+  min-height: 700px;
+`;
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 80vw;
+  width: 70vw;
   height: 100%;
   margin: 20px auto;
+  margin-top: 10px;
   border: 1px solid #ddd;
   border-radius: 15px;
   padding: 0 10px;
@@ -17,12 +21,12 @@ export const Container = styled.div`
     width: 100%;
     margin: auto;
     border-bottom: 1px solid #ddd;
-    @media (max-width: 768px) {
+    /* @media (max-width: 768px) {
       padding: 7px 0;
     }
     @media (max-width: 400px) {
       padding: 5px 0;
-    }
+    } */
     .menu-title {
       padding: 5px 0;
       min-width: 150px;
@@ -31,14 +35,14 @@ export const Container = styled.div`
       align-items: center;
       justify-content: center;
       margin-right: 20px;
-      @media (max-width: 768px) {
+      /* @media (max-width: 768px) {
         min-width: 100px;
         font-size: 15px;
       }
       @media (max-width: 400px) {
         min-width: 80px;
         font-size: 14px;
-      }
+      } */
     }
     .select-content {
       padding: 5px 0;
@@ -50,12 +54,12 @@ export const Container = styled.div`
     align-items: center;
     .datepicker-component {
       min-width: 250px;
-      width: 35%;
+      width: 50%;
       height: 80%;
-      @media (max-width: 768px) {
+      /* @media (max-width: 768px) {
         scale: 0.8;
         min-width: 180px;
-      }
+      } */
     }
   }
   .search-button {
@@ -64,18 +68,45 @@ export const Container = styled.div`
     border: none;
     :disabled {
     }
-    @media (max-width: 768px) {
+    /* @media (max-width: 768px) {
       font-size: 15px;
+    } */
+  }
+  @media (max-width: 768px) {
+    min-width: 80%;
+    font-size: 13px;
+    .select-content {
     }
+    .menu-title {
+      min-width: 80px !important;
+      margin-right: 0 !important;
+    }
+    .menu-box {
+      padding: 5px 0;
+    }
+    .search-button {
+      scale: 0.7;
+    }
+    .datepicker {
+      display: flex;
+      width: 80%;
+      margin: auto;
+      .datepicker-component {
+        width: 100%;
+        scale: 0.8;
+      }
+    }
+  }
+  @media (max-width: 400px) {
   }
 `;
 
 export const VehicleKindContainer = styled.div`
   display: flex;
   width: 90%;
-  @media (max-width: 768px) {
+  /* @media (max-width: 768px) {
     width: 100%;
-  }
+  } */
   .checkbox-container {
     display: flex;
     flex-wrap: wrap;
@@ -87,9 +118,15 @@ export const VehicleKindContainer = styled.div`
     button {
       all: unset;
     }
-    @media (max-width: 768px) {
+    /* @media (max-width: 768px) {
       width: 115px;
       font-size: 14px;
+    } */
+  }
+  @media (max-width: 768px) {
+    width: 100%;
+    label {
+      width: 100px;
     }
   }
 `;
@@ -119,7 +156,7 @@ export const SelectStation = styled.div`
         outline: none;
         border-color: ${colors.colorA};
       }
-      @media (max-width: 990px) {
+      /* @media (max-width: 990px) {
         min-width: 120px;
       }
       @media (max-width: 768px) {
@@ -127,8 +164,7 @@ export const SelectStation = styled.div`
         padding: 2px;
         margin-right: 10px;
         font-size: 12px;
-      }
-
+      } */
       option {
         padding: 10px;
         background-color: white;
@@ -136,13 +172,29 @@ export const SelectStation = styled.div`
       }
     }
   }
+  @media (max-width: 768px) {
+    .select-wrapper {
+      flex-wrap: nowrap;
+      select {
+        min-width: 80px;
+        margin: 0 10px !important;
+        font-size: 12px;
+      }
+    }
+  }
 `;
 
 export const ScheduleResult = styled.div`
   padding-bottom: 20px;
+  width: 70vw;
+  margin: 0 auto;
+  .inform {
+    color: gray;
+    /* white-space: nowrap; */
+  }
   .result-table {
-    margin: 20px auto;
-    width: 80vw;
+    min-width: 100%;
+    margin: 0px auto;
     border: 1px solid #ddd;
     border-radius: 8px;
     table {
@@ -158,20 +210,21 @@ export const ScheduleResult = styled.div`
       padding: 12px 16px;
       text-align: center;
       border-bottom: 1px solid #ddd;
-      @media (max-width: 768px) {
+      white-space: nowrap;
+      /* @media (max-width: 768px) {
         padding: 6px 9px;
-      }
+      } */
     }
 
     th {
       font-weight: bold;
       color: #333;
-      @media (max-width: 768px) {
+      /* @media (max-width: 768px) {
         font-size: 13.9px;
       }
       @media (max-width: 400px) {
         font-size: 12.6px;
-      }
+      } */
     }
     td:nth-child(1) {
       font-weight: bold;
@@ -187,7 +240,7 @@ export const ScheduleResult = styled.div`
     td {
       font-size: 14px;
       color: #555;
-      @media (max-width: 768px) {
+      /* @media (max-width: 768px) {
         font-size: 12.8px;
       }
       @media (max-width: 400px) {
@@ -197,29 +250,35 @@ export const ScheduleResult = styled.div`
     @media (max-width: 400px) {
       td .currency {
         display: none !important;
-      }
-    }
-
-    @media (max-width: 768px) {
-      th:nth-child(2),
-      th:nth-child(3),
-      td:nth-child(2),
-      td:nth-child(3) {
-        display: none;
-      }
+      } */
     }
   }
 
   .inform {
     margin: 0 auto;
     padding: 10px 0;
-    width: 80vw;
+    width: 90vw;
     font-size: 14px;
     @media (max-width: 768px) {
-      font-size: 12px;
+      font-size: 9px;
     }
-    @media (max-width: 768px) {
-      font-size: 11px;
+  }
+  @media (max-width: 768px) {
+    width: 90vw;
+    .result-table {
+      th {
+        font-size: 11px;
+        padding: 6px 0;
+      }
+      td {
+        font-size: 11px;
+      }
+      th:nth-child(2),
+      th:nth-child(3),
+      td:nth-child(2),
+      td:nth-child(3) {
+        display: none;
+      }
     }
   }
 `;

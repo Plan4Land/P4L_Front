@@ -6,6 +6,7 @@ import {
   SelectStationContainer,
   VehicleKindContainer,
   ScheduleResult,
+  TrafficBox,
 } from "../../Style/TrainStyle";
 import { SelectStationComponent } from "../../Component/TrafficComponents/SelectStation";
 import DatePicker from "react-datepicker";
@@ -125,11 +126,11 @@ const Train = () => {
     }
   };
   return (
-    <>
+    <TrafficBox>
       <Container>
         <div className="menu-box">
+          <div className="menu-title">출발일</div>
           <div className="datepicker">
-            <div className="menu-title">출발일</div>
             <div className="select-content">
               <DatePickerContainer className="datepicker-component">
                 <DatePicker
@@ -282,31 +283,29 @@ const Train = () => {
             </tbody>
           )}
         </table>
+        <div className="inform">
+          <span>
+            ※본 정보는 한국철도공사의 사정에 따라 변경될 수 있습니다. 최신정보
+            확인은
+            <a
+              href="https://www.letskorail.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              한국철도공사 홈페이지
+            </a>
+            에서 확인하시기 바랍니다.
+          </span>
+        </div>
         {trainSchedule && trainSchedule.length > 0 && (
-          <>
-            <Pagination
-              currentPage={currentPage - 1}
-              totalPages={trainSchedule.length}
-              handlePageChange={(page) => handlePageChange(page + 1)}
-            />
-            <div className="inform">
-              <span>
-                ※본 정보는 한국철도공사의 사정에 따라 변경될 수 있습니다.
-                최신정보 확인은{" "}
-                <a
-                  href="https://www.letskorail.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  한국철도공사 홈페이지
-                </a>
-                에서 확인하시기 바랍니다.
-              </span>
-            </div>
-          </>
+          <Pagination
+            currentPage={currentPage - 1}
+            totalPages={trainSchedule.length}
+            handlePageChange={(page) => handlePageChange(page + 1)}
+          />
         )}
       </ScheduleResult>
-    </>
+    </TrafficBox>
   );
 };
 

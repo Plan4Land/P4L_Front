@@ -34,6 +34,14 @@ const PaginationContainer = styled.div`
     color: #999;
     cursor: not-allowed;
   }
+  @media (max-width: 768px) {
+    button {
+      font-size: 10px;
+      margin: 0 2px;
+      white-space: nowrap;
+      padding: 4px 10px;
+    }
+  }
 `;
 
 // 페이지네이션 컴포넌트
