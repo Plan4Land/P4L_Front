@@ -57,6 +57,18 @@ export const Header = () => {
     return pathnameMatches && queryMatches;
   };
 
+  const transportClick = (route) => {
+    // 교통 드롭다운 항목 클릭 시 이동
+    if (route === 'ktxinquiry') navigate('/ktxinquiry');
+    if (route === 'expressbus') navigate('/expressbus');
+    if (route === 'intercitybus') navigate('/intercitybus');
+  };
+
+  const handleItemClick = (transportType) => {
+    setDropdownVisible(false); // 클릭 시 드롭다운 숨기기
+    transportClick(transportType); // 클릭된 항목에 해당하는 페이지로 이동
+  };
+
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -126,15 +138,28 @@ export const Header = () => {
         </div>
       </Link>
       <NavSt>
-        {/* <div className="recomm" onClick={toggleDropdown}> */}
-        <div className="recomm">
+        <div className="recomm" onClick={toggleDropdown}>
           <Link
-            to="/traffic"
-            className={`tag ${isActive("/traffic") ? "active" : ""}`}
+            // to="/traffic"
+            className={`tag ${isActive("/ktxinquiry") ? "active" : ""}`}
           >
             <p className="title-font">교통</p>
           </Link>
+          {dropdownVisible && (
+            <div className="dropdown-Trafficlist">
+              <p onClick={() => handleItemClick("ktxinquiry")}>
+                KTX
+              </p>
+              <p onClick={() => handleItemClick("expressbus")}>
+                고속버스
+              </p>
+              <p onClick={() => handleItemClick("intercitybus")}>
+                시외버스
+              </p>
+            </div>
+          )}
         </div>
+        
         {/* {dropdownVisible && (
             <div className="dropdown-Trafficlist">
               <div className="topItem">

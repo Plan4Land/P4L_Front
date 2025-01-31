@@ -32,6 +32,7 @@ export const colors = {
 };
 
 export const HeaderSt = styled.div`
+  position: relative;
   height: 90px;
   border-bottom: 7px solid ${colors.colorB};
   color: ${colors.colorA};
@@ -234,24 +235,15 @@ export const HeaderSt = styled.div`
     }
   }
   .dropdown-Trafficlist {
-    display: block;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    right: 0;
-    width: auto; /* 자동 너비 */
-    min-width: 100px; /* 최소 너비 설정 */
+    position: fixed;
+    transform: translateX(-53px) translateY(calc(100% + 5px));
+    z-index: 1000; 
     background-color: white;
     border: 1px solid #ddd;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 30px;
-    align-items: center; /* 수직 중앙 정렬 */
-    margin-top: 5px; /* 드롭다운 상단에 간격 추가 */
+    width: 120px;
+    height: 70px;
+    margin-top: -50px;
+    line-height: 35px;
   }
 `;
 
