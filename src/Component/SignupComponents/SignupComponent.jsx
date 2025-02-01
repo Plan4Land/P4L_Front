@@ -191,8 +191,6 @@ export const SignupContainer = styled.div`
       color: red;
     }
     .banInfo {
-      overflow-y: scroll;
-      ${ScrollBar}
       margin: 20px;
       display: flex;
       flex-direction: column;
