@@ -24,10 +24,10 @@ export const GlobalFont = createGlobalStyle`
 `;
 
 export const colors = {
-  colorA: "rgb(17, 29, 104)",
-  colorB: "#243192",
-  colorC: "rgb(85, 97, 182)",
-  colorD: "rgb(217, 220, 243)",
+  colorA: "rgb(31, 62, 87)",
+  colorB: "rgb(24, 97, 126)",
+  colorC: "rgb(96, 179, 214)",
+  colorD: "rgb(211, 237, 242)",
   colorE: "rgb(255, 119, 0)",
 };
 
