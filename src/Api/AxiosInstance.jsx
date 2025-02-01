@@ -60,12 +60,13 @@ AxiosInstance.interceptors.response.use(
             console.error("토큰 재발급 실패, 로그아웃 처리:");
             isRefreshing = false;
             localStorage.clear();
-            window.location.reload()
+            navigateToLogin();
           }
         } catch (e) {
           console.error("토큰 재발급 실패, 로그아웃 처리:", e);
           isRefreshing = false;
           localStorage.clear();
+          navigateToLogin();
           return Promise.reject(e);
         }
       }
@@ -82,3 +83,7 @@ AxiosInstance.interceptors.response.use(
   }
 );
 export default AxiosInstance;
+
+const navigateToLogin = () => {
+  window.location.href = "/login";
+}

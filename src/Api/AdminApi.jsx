@@ -12,13 +12,19 @@ const AdminApi = {
     return axios.post(Common.PLAN_DOMAIN + "/admin/admin-login", data);
   },
   // 유저 검색
-  userSearch: async (keyword, select) => {
-    const response = await AxiosInstance.get("/admin/member-search", {params: {keyword, select}});
+  userSearch: async (filters) => {
+    const params = {
+      ...filters,
+    }
+    const response = await AxiosInstance.get("/admin/member-search", {params});
     return response.data;
   },
   // 신고 목록 불러오기
-  loadReports: async () => {
-    const response = await AxiosInstance.get("/admin/report-list");
+  loadReports: async (filters) => {
+    const params = {
+      ...filters,
+    }
+    const response = await AxiosInstance.get("/admin/report-list", {params});
     console.log(response.data);
     return response.data;
   },
