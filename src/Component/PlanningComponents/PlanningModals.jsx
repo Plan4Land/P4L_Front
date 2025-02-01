@@ -32,6 +32,8 @@ export const UserModal = ({
 }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedParticipantId, setSelectedParticipantId] = useState(null);
 
   const handleDeleteParticipants = async (memberId, plannerId) => {
     await PlanningApi.rejectInvitation(memberId, plannerId);
@@ -43,58 +45,74 @@ export const UserModal = ({
       ...prevState,
       participants: updatedParticipants,
     }));
+    setDeleteModalOpen(false); // 모달 닫기
+  };
+
+  const openDeleteModal = (participantId) => {
+    setSelectedParticipantId(participantId);
+    setDeleteModalOpen(true);
   };
 
   return (
-    <CloseModal
-      isOpen={modals.userModal}
-      onClose={() =>
-        setModals((prevModals) => ({ ...prevModals, userModal: false }))
-      }
-      contentWidth="300px"
-      contentHeight="400px"
-    >
-      <ParticipantsContainer>
-        {plannerInfo.participants
-          .filter((participant) => participant.state === "ACCEPT")
-          .map((participant, index) => (
-            <div
-              className="participants-profile"
-              key={index}
-              id={participant.id}
-              // nickname={participant.nickname}
-              // profileImg={`/${participant.memberProfileImg}`}
-              // onClick={() => navigate(`/otheruser/${participant.id}`)}
-            >
-              <div className="participantsInfo">
-                <img
-                  src={`${participant.memberProfileImg}`}
-                  alt="Profile"
-                  onClick={() => navigate(`/otheruser/${participant.id}`)}
-                />
-                <p onClick={() => navigate(`/otheruser/${participant.id}`)}>
-                  {participant.memberNickname}
-                </p>
+    <>
+      <CloseModal
+        isOpen={modals.userModal}
+        onClose={() =>
+          setModals((prevModals) => ({ ...prevModals, userModal: false }))
+        }
+        contentWidth="300px"
+        contentHeight="400px"
+      >
+        <ParticipantsContainer>
+          {plannerInfo.participants
+            .filter((participant) => participant.state === "ACCEPT")
+            .map((participant, index) => (
+              <div
+                className="participants-profile"
+                key={index}
+                id={participant.id}
+              >
+                <div className="participantsInfo">
+                  <img
+                    src={`${participant.memberProfileImg}`}
+                    alt="Profile"
+                    onClick={() => navigate(`/otheruser/${participant.id}`)}
+                  />
+                  <p onClick={() => navigate(`/otheruser/${participant.id}`)}>
+                    {participant.memberNickname}
+                  </p>
+                </div>
+                {isParticipant &&
+                  plannerInfo.ownerNickname === user?.nickname && (
+                    <Button
+                      className="deleteMember"
+                      $width={"55px"}
+                      $height={"30px"}
+                      fontSize={"13px"}
+                      padding={"7px 10px"}
+                      onClick={() => openDeleteModal(participant.id)}
+                    >
+                      삭제
+                    </Button>
+                  )}
               </div>
-              {isParticipant &&
-                plannerInfo.ownerNickname === user?.nickname && (
-                  <Button
-                    className="deleteMember"
-                    $width={"55px"}
-                    $height={"30px"}
-                    fontSize={"13px"}
-                    padding={"7px 10px"}
-                    onClick={() =>
-                      handleDeleteParticipants(participant.id, plannerId)
-                    }
-                  >
-                    삭제
-                  </Button>
-                )}
-            </div>
-          ))}
-      </ParticipantsContainer>
-    </CloseModal>
+            ))}
+        </ParticipantsContainer>
+      </CloseModal>
+
+      {/* 삭제 확인 모달 */}
+      <Modal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={() =>
+          handleDeleteParticipants(selectedParticipantId, plannerId)
+        }
+        confirmText="확인"
+        cancelText="취소"
+      >
+        이 참여자를 플래너에서 삭제시키겠습니까?
+      </Modal>
+    </>
   );
 };
 
