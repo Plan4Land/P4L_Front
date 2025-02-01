@@ -463,12 +463,6 @@ export const Planning = () => {
     }
   }, [memoState]);
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
-
   if (plannerInfo) {
     return (
       <div>
