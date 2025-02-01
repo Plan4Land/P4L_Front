@@ -6,7 +6,7 @@ export const Center = styled.div`
   display: flex;
   justify-content: center;
   width: 60vw;
-  @media (width: 768px) {
+  @media (max-width: 768px) {
     width: 90vw;
   }
 `;
@@ -28,6 +28,7 @@ export const Container = styled.div`
   }
   label {
     margin-bottom: 5px;
+    margin-left: 5px;
   }
 
   .input-container {
@@ -36,15 +37,15 @@ export const Container = styled.div`
 
   .textMessage {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -20px;
+    right: 18px;
     color: red;
     font-size: 12px;
   }
   .textMessage-true {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -20px;
+    right: 18px;
     color: green;
     font-size: 12px;
   }
@@ -170,7 +171,7 @@ export const Container = styled.div`
     }
     .dropout {
       margin: 0;
-      margin-top: 40px;
+      margin-top: 20px;
     }
     .dropout-dsc {
       margin: 0;
@@ -247,6 +248,39 @@ export const Container = styled.div`
     .deleteBox {
       margin-top: -35px;
     }
+    label {
+      font-size: 13px;
+    }
+    .textMessage,
+    .textMessage-true {
+      font-size: 9px;
+    }
+    .title {
+      font-size: 20px;
+    }
+    .delete-header {
+      h2 {
+        font-size: 15px;
+      }
+      p {
+        font-size: 12px;
+      }
+    }
+    .delete-content {
+      p {
+        font-size: 10px;
+      }
+    }
+    .agreeBox {
+      font-size: 10px;
+    }
+    strong {
+      font-size: 12px;
+    }
+    .back-button {
+      width: 20px;
+      height: 20px;
+    }
   }
 `;
 
@@ -255,12 +289,13 @@ export const InputBox = styled.div`
   height: 30px;
   width: calc(100% - 34px);
   border: 1px solid #ddd;
-  border-radius: 5px;
   padding: 1em;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
+  border-radius: 15px;
   &:focus-within {
     border: 1px solid #bbb;
   }
+
   .inputBox {
     display: flex;
     width: 100%;
@@ -276,6 +311,7 @@ export const InputBox = styled.div`
       font-size: 1em;
     }
   }
+
   .iconBox-left {
     display: flex;
     justify-content: center;

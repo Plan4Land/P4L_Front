@@ -10,6 +10,7 @@ import { MyPlannerApi, BookmarkedSpotsApi } from "../Api/ItemApi";
 import Logo from "../Img/plan4landlogo.png"; //
 import Title from "../../src/Img/plan4land_.png";
 import { Outlet } from "react-router-dom";
+import { MdSwitchAccessShortcutAdd } from "react-icons/md";
 
 export const Header = () => {
   // const [topSpots, setTopSpots] = useState([]);
@@ -21,7 +22,7 @@ export const Header = () => {
   const { user, logout } = useAuth();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  
+
   const dropdownRef = useRef(null); // 드롭다운 영역을 참조
 
   useEffect(() => {
@@ -129,9 +130,6 @@ export const Header = () => {
     transportClick(transportType); // 클릭된 항목에 해당하는 페이지로 이동
   };
 
-  const imagePath = "/logo192.png"; // public 폴더에 있는 이미지
-  // console.log("Image Path:", imagePath);
-
   return (
     <HeaderSt>
       <GlobalFont />
@@ -181,7 +179,8 @@ export const Header = () => {
         {user ? (
           <div className="recomm">
             <div className="quickmenu">
-              <p>바로가기</p>
+              <MdSwitchAccessShortcutAdd />
+              <p className="content-font2">바로가기</p>
             </div>
             <div className="dropdown-list">
               <div className="topList">

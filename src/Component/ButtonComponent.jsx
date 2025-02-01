@@ -58,13 +58,7 @@ export const Button = ({
 );
 
 export const CancelButton = ({ onClick, children, ...props }) => (
-  <Button
-    onClick={onClick}
-    {...props}
-    bgColor="#c4c4c4"
-    color="black"
-    border="1px solid #6d6d6d"
-  >
+  <Button onClick={onClick} {...props} bgColor="#c4c4c4" color="black">
     {children}
   </Button>
 );

@@ -15,4 +15,10 @@ export const BookmarkItem = styled.div`
     justify-content: center;
     align-items: center;
   }
+  .endList {
+    text-align: center;
+    margin: auto;
+    color: gray;
+    font-size: 13px;
+  }
 `;
