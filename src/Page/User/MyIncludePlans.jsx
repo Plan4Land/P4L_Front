@@ -97,7 +97,9 @@ export const MyIncludePlans = () => {
               next={loadMorePlanners}
               hasMore={page + 1 < totalPages}
               loader={<p>로딩 중...</p>}
-              endMessage={<p>더 이상 불러올 데이터가 없습니다.</p>}
+              endMessage={
+                <p className="endList">모든 플래너를 불러왔습니다.</p>
+              }
             >
               {includePlans.length > 0 ? (
                 includePlans.map((plannerObj) => {

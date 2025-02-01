@@ -33,6 +33,7 @@ const addSubscriber = (callback) => {
   refreshSubscribers.push(callback);
 };
 
+
 // 응답 인터셉터 추가
 AxiosInstance.interceptors.response.use(
   (response) => {
@@ -44,22 +45,28 @@ AxiosInstance.interceptors.response.use(
 
     const originalRequest = error.config;
 
-    if (error.response && error.response.status === 401) {
-      if(!isRefreshing) {
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      if (!isRefreshing) {
         isRefreshing = true;
 
         try {
           const newToken = await Common.handleUnauthorized();
           isRefreshing = false;
+          console.log("뉴 토큰 : ", newToken)
           if (newToken) {
             onRrefreshed(newToken);
             return AxiosInstance.request(originalRequest);
+          } else{
+            console.error("토큰 재발급 실패, 로그아웃 처리:");
+            isRefreshing = false;
+            localStorage.clear();
+            navigateToLogin();
           }
         } catch (e) {
           console.error("토큰 재발급 실패, 로그아웃 처리:", e);
           isRefreshing = false;
-          localStorage.setItem("user", null);
-          window.location.href = "/login";
+          localStorage.clear();
+          navigateToLogin();
           return Promise.reject(e);
         }
       }
@@ -76,3 +83,7 @@ AxiosInstance.interceptors.response.use(
   }
 );
 export default AxiosInstance;
+
+const navigateToLogin = () => {
+  window.location.href = "/login";
+}

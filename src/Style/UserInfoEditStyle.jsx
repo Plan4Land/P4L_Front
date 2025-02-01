@@ -5,22 +5,18 @@ export const Center = styled.div`
   margin-top: 50px;
   display: flex;
   justify-content: center;
-  margin-left: 200px;
+  width: 60vw;
+  @media (max-width: 768px) {
+    width: 90vw;
+  }
 `;
-
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 700px;
-  @media (max-width: 768px) {
-    width: 90vw;
-    margin: 0 auto;
-  }
   padding: 30px;
   box-sizing: border-box;
-
+  width: 100%;
   .title {
-    margin: 0 0 50px 0;
     display: flex;
     justify-content: center;
   }
@@ -28,28 +24,28 @@ export const Container = styled.div`
   .labelBox {
     display: flex;
     justify-content: space-between;
+    margin: 0 5px;
   }
-
   label {
     margin-bottom: 5px;
+    margin-left: 5px;
   }
 
   .input-container {
     position: relative;
-    padding-top: 20px;
   }
 
   .textMessage {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -20px;
+    right: 18px;
     color: red;
     font-size: 12px;
   }
   .textMessage-true {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -20px;
+    right: 18px;
     color: green;
     font-size: 12px;
   }
@@ -81,7 +77,6 @@ export const Container = styled.div`
         border: 1px solid #bbb;
       }
     }
-
     img {
       width: 100%;
       height: 100%;
@@ -176,7 +171,7 @@ export const Container = styled.div`
     }
     .dropout {
       margin: 0;
-      margin-top: 40px;
+      margin-top: 20px;
     }
     .dropout-dsc {
       margin: 0;
@@ -222,24 +217,72 @@ export const Container = styled.div`
       }
     }
   }
-
   .center2 {
     display: flex;
     align-items: center;
     flex-direction: column;
+    width: 100%;
     .deleteBox {
       display: flex;
-      align-items: right;
-      justify-content: right;
-      width: 423px;
-      @media (max-width: 768px) {
-        width: 312px;
-      }
+      width: 80%;
+      justify-content: flex-end;
+      padding-right: 20px;
     }
     .userDeleteBtn {
+      color: gray;
       font-size: 12px;
       margin-top: 4px;
       cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  @media (max-width: 768px) {
+    .labelBox {
+      font-size: 13px;
+    }
+    .message {
+      font-size: 10px;
+    }
+    .nextButton {
+      scale: 0.7;
+    }
+    .deleteBox {
+      margin-top: -35px;
+    }
+    label {
+      font-size: 13px;
+    }
+    .textMessage,
+    .textMessage-true {
+      font-size: 9px;
+    }
+    .title {
+      font-size: 20px;
+    }
+    .delete-header {
+      h2 {
+        font-size: 15px;
+      }
+      p {
+        font-size: 12px;
+      }
+    }
+    .delete-content {
+      p {
+        font-size: 10px;
+      }
+    }
+    .agreeBox {
+      font-size: 10px;
+    }
+    strong {
+      font-size: 12px;
+    }
+    .back-button {
+      width: 20px;
+      height: 20px;
     }
   }
 `;
@@ -250,7 +293,8 @@ export const InputBox = styled.div`
   width: calc(100% - 34px);
   border: 1px solid #ddd;
   padding: 1em;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
+  border-radius: 15px;
   &:focus-within {
     border: 1px solid #bbb;
   }
@@ -258,12 +302,10 @@ export const InputBox = styled.div`
   .inputBox {
     display: flex;
     width: 100%;
-
     &:focus {
       outline: none;
       border: none;
     }
-
     input {
       width: 100%;
       background-color: transparent;
@@ -294,6 +336,10 @@ export const InputBox = styled.div`
       height: 20px;
     }
   }
+  @media (max-width: 768px) {
+    font-size: 0.8em;
+    padding: 5px 10px;
+  }
 `;
 
 export const Button = styled.button`
@@ -317,18 +363,31 @@ export const Button = styled.button`
 `;
 
 export const EditBox = styled.div`
-  padding: 30px;
   border: 1px solid #ddd;
   border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  .iconBox {
+  .iconBox1 {
+    padding: 20px 50px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+  }
+  .iconBox2 {
+    padding: 30px 50px;
     display: flex;
     flex-direction: column;
     cursor: pointer;
   }
-
+  .iconBox1,
+  .iconBox2 {
+    transition: all 0.3s ease;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
   .name {
     margin: 0;
     text-align: center;
@@ -339,37 +398,13 @@ export const EditBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    color: ${colors.colorA};
     svg {
       width: 150px;
       height: 180px;
     }
   }
   @media (max-width: 768px) {
-    flex-direction: column;
-    width: 250px;
-    .iconBox {
-      width: 80%;
-    }
-    .iconBox:nth-child(1) {
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 30px;
-    }
-    .iconBox:nth-child(2) {
-      padding-top: 30px;
-    }
-  }
-  @media (min-width: 769px) {
-    flex-direction: row;
-    .iconBox {
-      width: 50%;
-      height: 200px;
-    }
-    .iconBox:nth-child(1) {
-      border-right: 1px solid #ddd;
-      padding-right: 30px;
-    }
-    .iconBox:nth-child(2) {
-      padding-left: 30px;
-    }
+    scale: 0.7;
   }
 `;

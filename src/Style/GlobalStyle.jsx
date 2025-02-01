@@ -24,10 +24,10 @@ export const GlobalFont = createGlobalStyle`
 `;
 
 export const colors = {
-  colorA: "rgb(105, 39, 13)",
-  colorB: "rgb(231, 107, 24)",
-  colorC: "rgb(255, 170, 131)",
-  colorD: "rgb(255, 238, 226)",
+  colorA: "rgb(31, 62, 87)",
+  colorB: "rgb(24, 97, 126)",
+  colorC: "rgb(96, 179, 214)",
+  colorD: "rgb(211, 237, 242)",
   colorE: "rgb(255, 119, 0)",
 };
 
@@ -155,8 +155,13 @@ export const HeaderSt = styled.div`
       position: relative;
       cursor: pointer;
       white-space: nowrap;
-      p {
-        font-size: 12px;
+      .quickmenu {
+        display: flex;
+        align-items: center;
+        p {
+          margin-left: 5px;
+          font-size: 12px;
+        }
       }
     }
 
@@ -214,12 +219,13 @@ export const HeaderSt = styled.div`
   }
   @media (max-width: 768px) {
     height: 60px;
-    padding: 0 3% 0 8%;
+    padding: 0 0 0 8%;
     .profile-img {
       scale: 0.7;
     }
     .profile-link {
       /* scale: 70%; */
+      margin-right: 0 !important;
       z-index: 5;
       .dropdown {
         top: 50px;
@@ -313,5 +319,13 @@ export const FooterSt = styled.div`
   }
   p {
     font-size: 13px;
+  }
+  @media (max-width: 768px) {
+    h4 {
+      font-size: 13px;
+    }
+    p {
+      font-size: 10px;
+    }
   }
 `;

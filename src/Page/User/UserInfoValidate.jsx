@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import AxiosApi from "../../Api/AxiosApi";
-import styled from "styled-components";
 
-import { Center, Container, InputBox, EditBox } from "../../Style/UserInfoEditStyle";
+import {
+  Center,
+  Container,
+  InputBox,
+  EditBox,
+} from "../../Style/UserInfoEditStyle";
 import { Button } from "../../Component/ButtonComponent";
 
 import UserInfoEdit from "./UserInfoEdit";
@@ -30,14 +34,13 @@ const UserInfoValidate = () => {
     setPassValidate(false); // 비밀번호 검증 상태 초기화
     setSelectedMenu(""); // URL에서 menu 값을 가져와 설정
   }, []);
-  
 
   // 엔터키로 다음
   const handleEnterKey = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSubmit();
     }
-  }
+  };
 
   const handleSubmit = async () => {
     try {
@@ -48,7 +51,7 @@ const UserInfoValidate = () => {
       }
     } catch (error) {
       console.error("Error during validate: ", error);
-      setMessage("비밀번호가 같지 않습니다.")
+      setMessage("비밀번호가 일치하지 않습니다.");
     }
   };
 
@@ -59,9 +62,8 @@ const UserInfoValidate = () => {
         <Center>
           <Container>
             <h2 className="title">내 정보 수정</h2>
-
             <div className="labelBox">
-              <label htmlFor="userPw">비밀번호</label>
+              <label htmlFor="userPw">비밀번호 확인</label>
               <p className="message">{message}</p>
             </div>
             <InputBox>
@@ -79,7 +81,9 @@ const UserInfoValidate = () => {
               </div>
             </InputBox>
 
-            <Button onClick={handleSubmit}>다음</Button>
+            <Button onClick={handleSubmit} className="nextButton">
+              다음
+            </Button>
           </Container>
         </Center>
       )}
@@ -88,21 +92,20 @@ const UserInfoValidate = () => {
         <Center>
           <Container>
             <h2 className="title">내 정보 수정</h2>
-            
             <div className="center2">
               <EditBox>
-                <div 
-                  className="iconBox"
-                  onClick={()=>setSelectedMenu("회원정보 수정")}
+                <div
+                  className="iconBox1"
+                  onClick={() => setSelectedMenu("회원정보 수정")}
                 >
                   <p className="name">회원정보 수정</p>
                   <div className="icon">
                     <FaUserEdit />
                   </div>
                 </div>
-                <div 
-                  className="iconBox"
-                  onClick={()=>setSelectedMenu("비밀번호 변경")}
+                <div
+                  className="iconBox2"
+                  onClick={() => setSelectedMenu("비밀번호 변경")}
                 >
                   <p className="name">비밀번호 변경</p>
                   <div className="icon">
@@ -111,9 +114,9 @@ const UserInfoValidate = () => {
                 </div>
               </EditBox>
               <div className="deleteBox">
-                <span 
+                <span
                   className="userDeleteBtn"
-                  onClick={()=>setSelectedMenu("회원 탈퇴")}
+                  onClick={() => setSelectedMenu("회원 탈퇴")}
                 >
                   회원 탈퇴
                 </span>

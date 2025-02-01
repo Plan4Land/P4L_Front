@@ -1,10 +1,12 @@
 import styled from "styled-components";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Button} from "../../Component/ButtonComponent";
 import {Modal} from "../../Util/Modal";
 import AdminApi from "../../Api/AdminApi";
 import {FaSearch} from "react-icons/fa";
 import {SearchSt} from "../../Style/ItemListStyled";
+import {Pagination} from "../../Component/Pagination";
+import {useLocation, useNavigate} from "react-router-dom";
 // 게시글 목록 불러와서 삭제하기
 // 정지 유저 풀어주기
 // 관리자 토큰으로 로그인하기
@@ -13,6 +15,10 @@ import {SearchSt} from "../../Style/ItemListStyled";
 
 
 export const AdminPage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [activeTab, setActiveTab] = useState("report");
   const [members, setMembers] = useState([]);
   const [reports, setReports] = useState([]);
@@ -23,42 +29,110 @@ export const AdminPage = () => {
   const [banDays, setBanDays] = useState(0);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
-  const [searchCategory, setSearchCategory] = useState("");
-  const [searchKeyword, setSearchKeyword] = useState("");
   const [banReason, setBanReason] = useState("");
-
-  const category = [{
-    name: '전체',
-    value: ''
-  }, {
-    name: '아이디',
-    value: 'id'
-  }, {
-    name: '닉네임',
-    value: 'nickname'
-  }, {
-    name: '이름',
-    value: 'name'
-  }, {
-    name: '이메일',
-    value: 'email'
-  },]
-
-  const handleSearch = async () => {
-    try {
-      const data = await AdminApi.userSearch(searchKeyword, searchCategory);
-      setMembers(data);
-    } catch (error) {
-      console.log(error);
+  const [loading, setLoading] = useState(false);
+  const [filters, setFilters] = useState(() => {
+    const searchParams = new URLSearchParams(location.search);
+    return {
+      currentPage: searchParams.get("currentPage") || 0,
+      pageSize: searchParams.get("pageSize") || 20,
+      select: searchParams.get("select") || "",
+      keyword: searchParams.get("keyword") || ""
     }
+  });
+  const [totalPages, setTotalPages] = useState(0);
+
+  const handleSearch = () => {
+    updateFilters("keyword", searchKeyword);
+  };
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        if(activeTab === "report") {
+          const data = await AdminApi.loadReports(filters);
+          setReports(data.content);
+          setTotalPages(data.totalPages);
+        }else if(activeTab === "user") {
+          const data = await AdminApi.userSearch(filters);
+          setMembers(data.content); // 배열 형식으로 설정
+          setTotalPages(data.totalPages);
+        }
+      } catch (error) {
+        console.error("Error fetching members:", error);
+      }
+    };
+
+    fetchMembers();
+  }, [filters]);
+
+  const memberCategory = [
+    {name: '전체', value: ''},
+    {name: '아이디', value: 'id'},
+    {name: '닉네임', value: 'nickname'},
+    {name: '이름', value: 'name'},
+    {name: '이메일', value: 'email'},
+  ];
+
+  const reportsCategory = [
+    {name: '전체', value: ''},
+    {name: '대기', value: 'WAIT'},
+    {name: '거절', value: 'REJECT'},
+    {name: '승인', value: 'ACCEPT'},
+  ]
+
+  const clearFilters = () => {
+    setFilters({
+      currentPage: 0,
+      pageSize: 20,
+      select: "",
+      keyword: ""
+    })
+    navigate("/management");
   }
+
+  const updateFilters = (key, value) => {
+    setFilters((prev) => {
+      const newFilters = {
+        ...prev,
+        [key]: value,
+        currentPage: key === "currentPage" ? value : 0,
+      };
+      const searchParams = new URLSearchParams(newFilters);
+      navigate(`/management?${searchParams.toString()}`, {replace: true});
+      return newFilters;
+    });
+  };
+
+  const handlePageChange = (newPage) => {
+    updateFilters("currentPage", newPage);
+  }
+
+  const handleReportTabClick = async () => {
+    setActiveTab("report");
+    if (reports.length === 0) { // 중복 호출 방지
+      try {
+        setSearchKeyword("");
+        clearFilters();
+        const data = await AdminApi.loadReports();
+        setReports(data.content);
+        setTotalPages(data.totalPages);
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      }
+    }
+  };
 
   const handleUserTabClick = async () => {
     setActiveTab("user");
     if (members.length === 0) { // 중복 호출 방지
       try {
+        setSearchKeyword("");
+        clearFilters();
         const data = await AdminApi.userSearch();
-        setMembers(data);
+        console.log(data);
+        setMembers(data.content);
+        setTotalPages(data.totalPages);
       } catch (error) {
         console.error("Error fetching members:", error);
       }
@@ -66,11 +140,16 @@ export const AdminPage = () => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && activeTab === "user") {
       handleSearch();
+    }else if (e.key === "Enter" && activeTab === "reports") {
+      handleReportSearch();
     }
   };
 
+  const handleReportSearch = () => {
+    updateFilters("keyword", searchKeyword);
+  }
 
   const handleReportReject = async (reportId) => {
     try {
@@ -84,7 +163,7 @@ export const AdminPage = () => {
     } catch (error) {
       console.error("Error fetching report:", error);
     }
-  }
+  };
 
   const handleReportAccept = async (reportId, userId, day, reason) => {
     try {
@@ -98,24 +177,14 @@ export const AdminPage = () => {
     } catch (error) {
       console.error("Error fetching report:", error);
     }
-  }
+  };
 
   const handleReportSelected = (e) => {
     setSelectedReport(e);
     setIsReportModalOpen(true);
-  }
-
-  const handleReportTabClick = async () => {
-    setActiveTab("report");
-    if (reports.length === 0) { // 중복 호출 방지
-      try {
-        const data = await AdminApi.loadReports();
-        setReports(data);
-      } catch (error) {
-        console.error("Error fetching reports:", error);
-      }
-    }
   };
+
+
 
 
   // 멤버 클릭 시 저장된 상세정보 사용 및 신고 횟수 가져오기
@@ -170,14 +239,54 @@ export const AdminPage = () => {
         {activeTab === "report" && (
           <div>
             <h2>신고 관리</h2>
+            <SearchSt>
+              <div className="search-wrapper">
+                <select
+                  value={filters.select}
+                  onChange={(e) => updateFilters("select", e.target.value)}
+                >
+                  {reportsCategory.map((cat) => (
+                    <option key={cat.value} value={cat.value}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="text"
+                  className="search"
+                  placeholder="신고 검색"
+                  value={searchKeyword}
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+                <button className="search-button" onClick={handleReportSearch}>
+                  <FaSearch/> {/* 검색 아이콘 */}
+                </button>
+              </div>
+            </SearchSt>
             {reports.map((report) => (
               <ReportBox key={report.id}>
-                <p><strong>신고자 ID:</strong> {report.reporter.id}</p>
-                <p><strong>피신고자 ID:</strong> {report.reported.id}</p>
-                <p><strong>내용:</strong> {report.content}</p>
+                <p>
+                  <strong>신고자 ID:</strong> {report.reporter.id}
+                </p>
+                <p>
+                  <strong>피신고자 ID:</strong> {report.reported.id}
+                </p>
+                <p>
+                  <strong>내용:</strong> {report.content}
+                </p>
                 <Button
-                  onClick={() => report.state === "WAIT" && handleReportSelected(report)}
-                  bgColor={report.state === "WAIT" ? "gray" : report.state === "ACCEPT" ? "green" : "red"}>
+                  onClick={() =>
+                    report.state === "WAIT" && handleReportSelected(report)
+                  }
+                  bgColor={
+                    report.state === "WAIT"
+                      ? "gray"
+                      : report.state === "ACCEPT"
+                      ? "green"
+                      : "red"
+                  }
+                >
                   {report.state}
                 </Button>
               </ReportBox>
@@ -189,12 +298,11 @@ export const AdminPage = () => {
             <h2>유저 목록</h2>
             <SearchSt>
               <div className="search-wrapper">
-
                 <select
-                  value={searchCategory}
-                  onChange={(e) => setSearchCategory(e.target.value)}
+                  value={filters.select}
+                  onChange={(e) => updateFilters("select", e.target.value)}
                 >
-                  {category.map((cat) => (
+                  {memberCategory.map((cat) => (
                     <option key={cat.value} value={cat.value}>
                       {cat.name}
                     </option>
@@ -210,7 +318,7 @@ export const AdminPage = () => {
                   onKeyDown={handleKeyDown} // 엔터 키 이벤트 처리
                 />
                 <button className="search-button" onClick={handleSearch}>
-                  <FaSearch/> {/* 검색 아이콘 */}
+                  <FaSearch /> {/* 검색 아이콘 */}
                 </button>
               </div>
             </SearchSt>
@@ -218,16 +326,14 @@ export const AdminPage = () => {
               <UserBox
                 key={member.id}
                 onClick={() => handleMemberClick(member.id)}
-                style={{cursor: "pointer"}}
+                style={{ cursor: "pointer" }}
               >
                 {member.nickname} ({member.id})
               </UserBox>
             ))}
           </div>
         )}
-        {activeTab === "planner" && (
-          <></>
-        )}
+        {activeTab === "planner" && <></>}
         {isModalOpen && selectedMember && (
           <Modal
             isOpen={isModalOpen}
@@ -236,12 +342,24 @@ export const AdminPage = () => {
             confirmText="계정 정지"
           >
             <h2>멤버 상세 정보</h2>
-            <p><strong>ID:</strong> {selectedMember.id}</p>
-            <p><strong>이름:</strong> {selectedMember.name}</p>
-            <p><strong>닉네임:</strong> {selectedMember.nickname}</p>
-            <p><strong>이메일:</strong> {selectedMember.email}</p>
-            <p><strong>프로필 이미지:</strong> {selectedMember.imgPath || "없음"}</p>
-            <p><strong>신고 횟수:</strong> {reportCount}</p>
+            <p>
+              <strong>ID:</strong> {selectedMember.id}
+            </p>
+            <p>
+              <strong>이름:</strong> {selectedMember.name}
+            </p>
+            <p>
+              <strong>닉네임:</strong> {selectedMember.nickname}
+            </p>
+            <p>
+              <strong>이메일:</strong> {selectedMember.email}
+            </p>
+            <p>
+              <strong>프로필 이미지:</strong> {selectedMember.imgPath || "없음"}
+            </p>
+            <p>
+              <strong>신고 횟수:</strong> {reportCount}
+            </p>
           </Modal>
         )}
         {isConfirmModalOpen && (
@@ -256,7 +374,7 @@ export const AdminPage = () => {
             <input onChange={(e) => setBanDays(e.target.value)}/>
             
             정지 사유 입력
-            <input onChange={(e) => setBanReason(e.target.value)}/>
+            <input onChange={(e) => setBanReason(e.target.value)} />
             <h3>{selectedMember.name}님의 계정을 정지시키겠습니까?</h3>
           </Modal>
         )}
@@ -264,34 +382,63 @@ export const AdminPage = () => {
           <Modal
             isOpen={isReportModalOpen}
             onClose={() => handleReportReject(selectedReport.id)}
-            onConfirm={() => handleReportAccept(selectedReport.id, selectedReport.reported.id, banDays, banReason)}
-            confirmText="승인"
-            cancelText="거절">
+            onConfirm={async () => {
+              setLoading(true);
+              await handleReportAccept(
+                selectedReport.id,
+                selectedReport.reported.id,
+                banDays,
+                banReason
+              );
+              setLoading(false);
+            }}
+            confirmText={loading ? "처리 중..." : "승인"}
+            cancelText="거절"
+          >
             정지일 입력
-            <input onChange={(e) => setBanDays(e.target.value)}/>
-            
+            <input
+              type="text"
+              value={banDays}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^[1-9][0-9]*$/.test(value) || value === "") {
+                  setBanDays(value);
+                }
+              }}
+              placeholder="숫자만 입력"
+            />
             정지 사유 입력
-            <input onChange={(e) => setBanReason(e.target.value)}/>
+            <input
+              type="text"
+              value={banReason}
+              onChange={(e) => setBanReason(e.target.value)}
+              placeholder="사유를 입력하세요"
+            />
             <Button onClick={() => setIsReportModalOpen(false)}>취소</Button>
           </Modal>
         )}
+        <Pagination
+          currentPage={filters.currentPage}
+          totalPages={totalPages}
+          handlePageChange={handlePageChange}
+        />
       </div>
     </div>
   );
 };
 
 const UserBox = styled.div`
-    margin: 10px auto;
-    border: 1px solid black;
-    border-radius: 10px;
-    width: 70vw;
-    height: 100px;
+  margin: 10px auto;
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 70vw;
+  height: 100px;
 `;
 
 const ReportBox = styled.div`
-    margin: 10px auto;
-    border: 1px solid black;
-    border-radius: 10px;
-    width: 70vw;
-    padding: 10px;
+  margin: 10px auto;
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 70vw;
+  padding: 10px;
 `;

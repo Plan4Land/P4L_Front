@@ -312,16 +312,14 @@ export const Main = () => {
         </RecommItem>
         <Festive className="GridItem">
           <Calendar
-            calendarType="hebrew"
+            calendarType="gregory"
             onChange={onChange}
             value={selectedDate} // 선택된 날짜
             onActiveStartDateChange={handleMonthChange}
-            tileClassName={({ date, view }) => {
+            tileClassName={({ date }) => {
               const isSameMonth = date.getMonth() === month;
               const isSameYear = date.getFullYear() === year;
-              if (!isSameMonth || !isSameYear) {
-                return "react-calendar__tile--inactive";
-              }
+              return isSameMonth && isSameYear ? "" : "other-month-tile";
             }}
             tileContent={({ date }) =>
               holidayDates.some(

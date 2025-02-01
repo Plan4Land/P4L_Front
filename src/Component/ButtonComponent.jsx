@@ -8,7 +8,7 @@ const StyledButton = styled.button`
   ${(props) => props.$height && `height: ${props.$height};`}
   padding: ${(props) => props.padding || "10px 20px"};
   font-size: ${(props) => props.fontSize || "16px"};
-  border: ${(props) => props.border || `1px solid ${colors.colorB}`};
+  border: ${(props) => props.border || `none`};
   border-radius: ${(props) => props.borderRadius || "8px"};
   background-color: ${(props) => props.bgColor || colors.colorB};
   color: ${(props) => props.color || "white"};
@@ -58,13 +58,7 @@ export const Button = ({
 );
 
 export const CancelButton = ({ onClick, children, ...props }) => (
-  <Button
-    onClick={onClick}
-    {...props}
-    bgColor="#c4c4c4"
-    color="black"
-    border="1px solid #6d6d6d"
-  >
+  <Button onClick={onClick} {...props} bgColor="#c4c4c4" color="black">
     {children}
   </Button>
 );

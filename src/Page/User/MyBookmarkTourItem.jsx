@@ -102,7 +102,9 @@ export const MyBookmarkTourItem = () => {
               next={loadMorePlanners} // 추가 데이터를 불러오는 함수
               hasMore={page + 1 < totalPages} // 추가 데이터 여부
               loader={<p>로딩 중...</p>}
-              endMessage={<p>더 이상 불러올 데이터가 없습니다.</p>}
+              endMessage={
+                <p className="endList">모든 관광지를 불러왔습니다.</p>
+              }
             >
               {bookmarkedSpots.length > 0 ? (
                 bookmarkedSpots.map((spot) => {

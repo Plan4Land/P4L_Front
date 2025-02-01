@@ -53,8 +53,7 @@ export const QuickSearch = styled(GridItem)`
       }
       &.active {
         background-color: ${colors.colorC};
-        /* color: white; */
-        color: black;
+        color: white;
       }
     }
   }
@@ -440,6 +439,10 @@ export const Festive = styled(GridItem)`
     border-radius: 10px;
     border: 1px solid #ddd;
   }
+  .other-month-tile {
+    color: #d3d3d3 !important;
+    background-color: transparent !important;
+  }
 
   .react-calendar__tile {
     position: relative;
@@ -467,20 +470,13 @@ export const Festive = styled(GridItem)`
     color: #333;
   }
 
-  .react-calendar__month-view__weekdays__weekday--sunday {
-    color: red;
-    font-weight: bold;
-  }
-
-  .react-calendar__month-view__weekdays__weekday--saturday {
-    color: blue;
-    font-weight: bold;
-  }
-
   .react-calendar__tile--inactive {
     color: #d3d3d3;
     pointer-events: none;
     background-color: transparent !important;
+  }
+  .react-calendar__navigation__label {
+    white-space: nowrap;
   }
 `;
 

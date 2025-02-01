@@ -142,6 +142,7 @@ const UserDelete = () => {
           hoverBgColor={"rgb(220, 0, 0)"}
           border={"1px solid rgb(220, 0, 0)"}
           onClick={handleDeleteClick}
+          className="nextButton"
         >
           회원탈퇴
         </Button>

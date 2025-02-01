@@ -1,114 +1,125 @@
-import styled, {css} from "styled-components";
-import {useState, useRef} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import styled, { css } from "styled-components";
+import { useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import emailjs from "emailjs-com";
-import {InputBox} from "../../Style/UserInfoEditStyle";
-import {Button} from "../ButtonComponent";
+import { InputBox } from "../../Style/UserInfoEditStyle";
+import { Button } from "../ButtonComponent";
 
 // icon
-import {GoMail, GoPencil} from "react-icons/go";
-import {IoClose} from "react-icons/io5";
-import {VscAccount} from "react-icons/vsc";
+import { GoMail, GoPencil } from "react-icons/go";
+import { IoClose } from "react-icons/io5";
+import { VscAccount } from "react-icons/vsc";
 import AxiosApi from "../../Api/AxiosApi";
 
-
 export const ModalStyle = styled.div`
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1001;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background-color: rgba(0, 0, 0, 0.4);
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .openModal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-container {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 1rem;
+    background-color: #fff;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    animation: slideDown 0.3s ease-out;
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-10px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  }
+
+  .readonly {
+    background-color: #ddd;
+  }
+
+  .closeBtn {
+    display: flex;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px;
+    cursor: pointer;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .margin-top50 {
+    margin-top: 50px;
+  }
+
+  .picture-container-new {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .picture-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .picture-box {
+    width: 126px;
+    height: 126px;
+
+    img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #ddd;
+      overflow: hidden;
+      cursor: pointer;
+
+      &:hover {
+        border: 3px solid #bbb;
+      }
     }
 
-    .openModal {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .plusPic {
+      width: 80px;
+      height: 80px;
+      padding: 20px;
     }
-
-    .modal-container {
-        display: flex;
-        flex-direction: column;
-        width: 500px;
-        margin: 0 auto;
-        padding: 30px;
-        border-radius: 1rem;
-        background-color: #fff;
-        overflow: hidden;
-        position: relative;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    }
-
-    .readonly {
-        background-color: #ddd;
-    }
-
-    .closeBtn {
-        display: flex;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        padding: 5px;
-        cursor: pointer;
-
-        svg {
-            width: 30px;
-            height: 30px;
-        }
-    }
-
-    .margin-top50 {
-        margin-top: 50px;
-    }
-
-    .picture-container-new {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .picture-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .picture-box {
-        width: 126px;
-        height: 126px;
-
-        img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 3px solid #ddd;
-            overflow: hidden;
-            cursor: pointer;
-
-            &:hover {
-                border: 3px solid #bbb;
-            }
-        }
-
-        .plusPic {
-            width: 80px;
-            height: 80px;
-            padding: 20px;
-        }
-    }
+  }
 `;
 
 // 아이디 찾기 모달
 export const FindUserIdModal = (props) => {
-  const {open, close, openResult} = props;
+  const { open, close, openResult } = props;
 
   const [inputName, setInputName] = useState("");
   const [inputEmail, setInputEmail] = useState("");
@@ -168,7 +179,7 @@ export const FindUserIdModal = (props) => {
               <div className="textMessage">{textMessage}</div>
               <InputBox>
                 <div className="iconBox-left">
-                  <GoPencil/>
+                  <GoPencil />
                 </div>
                 <div className="inputBox">
                   <input
@@ -182,7 +193,7 @@ export const FindUserIdModal = (props) => {
               </InputBox>
               <InputBox>
                 <div className="iconBox-left">
-                  <GoMail/>
+                  <GoMail />
                 </div>
                 <div className="inputBox">
                   <input
@@ -195,16 +206,11 @@ export const FindUserIdModal = (props) => {
                 </div>
               </InputBox>
             </div>
-            <div className="margin-top50"/>
-            <Button
-              onClick={onClickFindUserId}
-            >
-              아이디 찾기
-            </Button>
-
+            <div className="margin-top50" />
+            <Button onClick={onClickFindUserId}>아이디 찾기</Button>
 
             <div className="closeBtn" onClick={handleCloseModal}>
-              <IoClose/>
+              <IoClose />
             </div>
           </div>
         )}
@@ -215,7 +221,7 @@ export const FindUserIdModal = (props) => {
 
 // 아이디 찾기 결과 모달
 export const ResultUserIdModal = (props) => {
-  const {open, close, userId, openFindPw} = props;
+  const { open, close, userId, openFindPw } = props;
 
   const handleBackgroundClick = (e) => {
     e.stopPropagation(); // 내부 클릭 시 닫히지 않게 설정
@@ -250,15 +256,15 @@ export const ResultUserIdModal = (props) => {
               </div>
               <InputBox className="readonly">
                 <div className="inputBox">
-                  <input type="text" value={changeUserId(userId)} readOnly/>
+                  <input type="text" value={changeUserId(userId)} readOnly />
                 </div>
               </InputBox>
             </div>
-            <div className="margin-top50"/>
+            <div className="margin-top50" />
             <Button onClick={onClickFindPw}>비밀번호 찾기</Button>
 
             <div className="closeBtn" onClick={close}>
-              <IoClose/>
+              <IoClose />
             </div>
           </div>
         )}
@@ -269,7 +275,7 @@ export const ResultUserIdModal = (props) => {
 
 // 비밀번호 찾기 모달
 export const FindPwModal = (props) => {
-  const {open, close, openResult, openFindUserId} = props;
+  const { open, close, openResult, openFindUserId } = props;
   const [inputUserId, setInputUserId] = useState("");
   const [inputEmail, setInputEmail] = useState("");
   const [textMessage, setTextMessage] = useState("");
@@ -301,7 +307,10 @@ export const FindPwModal = (props) => {
   // 유저 비밀번호 변경 -> 이메일 보내기
   const passwordChange = async (newPassword) => {
     // 탈퇴 확인
-    const isActivate = await AxiosApi.isActivateByIdAndEmail(inputUserId, inputEmail);
+    const isActivate = await AxiosApi.isActivateByIdAndEmail(
+      inputUserId,
+      inputEmail
+    );
     if (isActivate.data === "탈퇴한 회원입니다.") {
       setTextMessage("탈퇴한 회원입니다.");
       return;
@@ -377,7 +386,7 @@ export const FindPwModal = (props) => {
               <div className="textMessage">{textMessage}</div>
               <InputBox>
                 <div className="iconBox-left">
-                  <VscAccount/>
+                  <VscAccount />
                 </div>
                 <div className="inputBox">
                   <input
@@ -391,7 +400,7 @@ export const FindPwModal = (props) => {
               </InputBox>
               <InputBox>
                 <div className="iconBox-left">
-                  <GoMail/>
+                  <GoMail />
                 </div>
                 <div className="inputBox">
                   <input
@@ -404,7 +413,7 @@ export const FindPwModal = (props) => {
                 </div>
               </InputBox>
             </div>
-            <div className="margin-top50"/>
+            <div className="margin-top50" />
             <Button onClick={onClickFindPw}>비밀번호 찾기</Button>
             <p
               style={{
@@ -417,7 +426,7 @@ export const FindPwModal = (props) => {
             </p>
             <Button onClick={onClickFindUserId}>아이디 찾기</Button>
             <div className="closeBtn" onClick={handleCloseModal}>
-              <IoClose/>
+              <IoClose />
             </div>
           </div>
         )}
@@ -428,7 +437,7 @@ export const FindPwModal = (props) => {
 
 // 비밀번호 찾기 결과 모달
 export const ResultPwModal = (props) => {
-  const {open, close, email} = props;
+  const { open, close, email } = props;
 
   const handleBackgroundClick = (e) => {
     e.stopPropagation(); // 내부 클릭 시 닫히지 않게 설정
@@ -450,15 +459,15 @@ export const ResultPwModal = (props) => {
               </div>
               <InputBox className="readonly">
                 <div className="inputBox">
-                  <input type="email" value={email} readOnly/>
+                  <input type="email" value={email} readOnly />
                 </div>
               </InputBox>
             </div>
-            <div className="margin-top50"/>
+            <div className="margin-top50" />
             <Button onClick={close}>로그인</Button>
 
             <div className="closeBtn" onClick={close}>
-              <IoClose/>
+              <IoClose />
             </div>
           </div>
         )}
@@ -467,8 +476,9 @@ export const ResultPwModal = (props) => {
   );
 };
 
+// 정지 계정 확인
 export const BanModal = (props) => {
-  const {open, close, id, banDays, banReason} = props;
+  const { open, close, id, banDays, banReason } = props;
 
   const handleBackgroundClick = (e) => {
     e.stopPropagation(); // 내부 클릭 시 닫히지 않게 설정
@@ -479,8 +489,8 @@ export const BanModal = (props) => {
     <ModalStyle>
       <div
         className={open ? "openModal modal" : "modal"}
-        onClick={handleBackgroundClick}>
-
+        onClick={handleBackgroundClick}
+      >
         {open && (
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
             <p> 정지된 계정입니다.</p>
@@ -489,9 +499,7 @@ export const BanModal = (props) => {
             <p> 정지 사유 : {banReason}</p>
           </div>
         )}
-
       </div>
     </ModalStyle>
-  )
-
-}
+  );
+};

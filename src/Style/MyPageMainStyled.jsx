@@ -151,6 +151,12 @@ export const UserPlanning = styled.div`
     display: flex;
     justify-content: center;
   }
+  .endList {
+    text-align: center;
+    margin: auto;
+    color: gray;
+    font-size: 13px;
+  }
 `;
 
 export const FollowList = styled.div`

@@ -101,7 +101,9 @@ export const MyBookmarkPlanItem = () => {
               next={loadMorePlanners} // 추가 데이터를 불러오는 함수
               hasMore={page + 1 < totalPages} // 추가 데이터가 있는지 여부
               loader={<p>로딩 중...</p>}
-              endMessage={<p>더 이상 불러올 데이터가 없습니다.</p>}
+              endMessage={
+                <p className="endList">모든 플래너를 불러왔습니다.</p>
+              }
             >
               {bookmarkedPlans.length > 0 ? (
                 bookmarkedPlans.map((plannerObj) => {
