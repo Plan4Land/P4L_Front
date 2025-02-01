@@ -53,8 +53,7 @@ export const QuickSearch = styled(GridItem)`
       }
       &.active {
         background-color: ${colors.colorC};
-        /* color: white; */
-        color: black;
+        color: white;
       }
     }
   }
