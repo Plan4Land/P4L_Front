@@ -285,8 +285,7 @@ const KtxInquiry = () => {
               )}
             </ToggleSection>
           </div>
-
-          {/* 출발 세부 역 선택 */}
+          
           {selectedDepCat1 && (
             <div className="subarea">
               <ToggleSection

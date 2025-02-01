@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
-import { Button, ToggleButton } from "../../Component/ButtonComponent";
+import { Button, ToggleSection } from "../../Component/ButtonComponent";
 import {
   Table,
   SelectTourItem,
@@ -195,141 +195,151 @@ const IntercityBus = () => {
           </SearchSt>
 
           <div className="mainarea">
-            <h3>
-              출발 지역 선택
-              <ToggleButton isOpen={isDepCat1Open} onToggle={toggleDepCat1} />
-            </h3>
-            {isDepCat1Open && (
-              <div className="buttons">
-                {InterCityService.map((cat1) => (
-                  <Button
-                    key={`dep-cat1-${cat1.cat1}`}
-                    onClick={() => {
-                      setSelectedDepCat1(cat1.cat1);
-                      setSelectedDepCat2("");
-                    }}
-                    className={selectedDepCat1 === cat1.cat1 ? "selected" : ""}
-                  >
-                    {cat1.cat1}
-                  </Button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {selectedDepCat1 && (
-            <div className="subarea">
-              <h3>
-                출발 세부 지역 선택
-                <ToggleButton isOpen={isDepCat2Open} onToggle={toggleDepCat2} />
-              </h3>
-              {isDepCat2Open && (
+            <ToggleSection
+              title="출발 지역 선택"
+              isOpen={{isDepCat1Open} }
+              onToggle={toggleDepCat1}
+            >
+              {isDepCat1Open && (
                 <div className="buttons">
-                  {getCat2List(selectedDepCat1).map((cat2) => (
+                  {InterCityService.map((cat1) => (
                     <Button
-                      key={`dep-cat2-${cat2.cat2Code}`}
+                      key={`dep-cat1-${cat1.cat1}`}
                       onClick={() => {
-                        setSelectedDepCat2(cat2.cat2);
+                        setSelectedDepCat1(cat1.cat1);
+                        setSelectedDepCat2("");
                       }}
-                      className={
-                        selectedDepCat2 === cat2.cat2 ? "selected" : ""
-                      }
+                      className={selectedDepCat1 === cat1.cat1 ? "selected" : ""}
                     >
-                      {cat2.cat2}
+                      {cat1.cat1}
                     </Button>
                   ))}
                 </div>
               )}
+            </ToggleSection>
+          </div>
+
+          {selectedDepCat1 && (
+            <div className="subarea">
+              <ToggleSection
+                title="출발 세부 지역 선택"
+                isOpen={isDepCat2Open}
+                onToggle={toggleDepCat2}
+              >
+                {isDepCat2Open && (
+                  <div className="buttons">
+                    {getCat2List(selectedDepCat1).map((cat2) => (
+                      <Button
+                        key={`dep-cat2-${cat2.cat2Code}`}
+                        onClick={() => {
+                          setSelectedDepCat2(cat2.cat2);
+                        }}
+                        className={
+                          selectedDepCat2 === cat2.cat2 ? "selected" : ""
+                        }
+                      >
+                        {cat2.cat2}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </ToggleSection>
             </div>
           )}
 
           {/* 도착지 설정 */}
           <div className="top">
-            <h3>
-              도착 지역 선택
-              <ToggleButton isOpen={isArrCat1Open} onToggle={toggleArrCat1} />
-            </h3>
-            {isArrCat1Open && (
-              <div className="buttons">
-                {InterCityService.map((cat1) => (
-                  <Button
-                    key={`dep-cat1-${cat1.cat1}`}
-                    onClick={() => {
-                      setSelectedArrCat1(cat1.cat1);
-                      setSelectedArrCat2("");
-                    }}
-                    className={selectedArrCat1 === cat1.cat1 ? "selected" : ""}
-                  >
-                    {cat1.cat1}
-                  </Button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {selectedArrCat1 && (
-            <div className="middle">
-              <h3>
-                도착 세부 지역 선택
-                <ToggleButton isOpen={isArrCat2Open} onToggle={toggleArrCat2} />
-              </h3>
-              {isArrCat2Open && (
+            <ToggleSection
+              title="도착 지역 선택"
+              isOpen={isArrCat1Open}
+              onToggle={toggleArrCat1}
+            >
+              {isArrCat1Open && (
                 <div className="buttons">
-                  {getCat2List(selectedArrCat1).map((cat2) => (
+                  {InterCityService.map((cat1) => (
                     <Button
-                      key={`dep-cat2-${cat2.cat2Code}`}
+                      key={`dep-cat1-${cat1.cat1}`}
                       onClick={() => {
-                        setSelectedArrCat2(cat2.cat2);
+                        setSelectedArrCat1(cat1.cat1);
+                        setSelectedArrCat2("");
                       }}
-                      className={
-                        selectedArrCat2 === cat2.cat2 ? "selected" : ""
-                      }
+                      className={selectedArrCat1 === cat1.cat1 ? "selected" : ""}
                     >
-                      {cat2.cat2}
+                      {cat1.cat1}
                     </Button>
                   ))}
                 </div>
               )}
+            </ToggleSection>
+          </div>
+
+          {selectedArrCat1 && (
+            <div className="middle">
+              <ToggleSection
+                title="도착 세부 지역 선택"
+                isOpen={isArrCat2Open}
+                onToggle={toggleArrCat2}
+              >
+                {isArrCat2Open && (
+                  <div className="buttons">
+                    {getCat2List(selectedArrCat1).map((cat2) => (
+                      <Button
+                        key={`dep-cat2-${cat2.cat2Code}`}
+                        onClick={() => {
+                          setSelectedArrCat2(cat2.cat2);
+                        }}
+                        className={
+                          selectedArrCat2 === cat2.cat2 ? "selected" : ""
+                        }
+                      >
+                        {cat2.cat2}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </ToggleSection>
             </div>
           )}
 
           {/* 버스 등급 선택 */}
           {selectedDepCat2 && selectedArrCat2 && (
             <div className="category">
-              <h3>
-                버스 등급 선택
-                <ToggleButton isOpen={isGradeOpen} onToggle={toggleGrade} />
-              </h3>
-              {isGradeOpen && (
-                <div className="buttons">
-                  {InterCityGradeService.map((grade) => (
-                    <Button
-                      key={grade.GradeId}
-                      onClick={() => {
-                        setSelectedBusGrade((prev) => {
-                          if (grade.GradeId === "") {
-                            return [""];
-                          }
-                          if (prev.includes("")) {
-                            return [grade.GradeId];
-                          }
-                          if (prev.includes(grade.GradeId)) {
-                            return prev.filter((id) => id !== grade.GradeId);
-                          }
-                          return [...prev, grade.GradeId];
-                        });
-                      }}
-                      className={
-                        selectedBusGrade.includes(grade.GradeId)
-                          ? "selected"
-                          : ""
-                      }
-                    >
-                      {grade.GradeNm}
-                    </Button>
-                  ))}
-                </div>
-              )}
+              <ToggleSection
+                title="버스 종류 선택"
+                isOpen={isGradeOpen} 
+                onToggle={toggleGrade}
+              >
+                {isGradeOpen && (
+                  <div className="buttons">
+                    {InterCityGradeService.map((grade) => (
+                      <Button
+                        key={grade.GradeId}
+                        onClick={() => {
+                          setSelectedBusGrade((prev) => {
+                            if (grade.GradeId === "") {
+                              return [""];
+                            }
+                            if (prev.includes("")) {
+                              return [grade.GradeId];
+                            }
+                            if (prev.includes(grade.GradeId)) {
+                              return prev.filter((id) => id !== grade.GradeId);
+                            }
+                            return [...prev, grade.GradeId];
+                          });
+                        }}
+                        className={
+                          selectedBusGrade.includes(grade.GradeId)
+                            ? "selected"
+                            : ""
+                        }
+                      >
+                        {grade.GradeNm}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+              </ToggleSection>
             </div>
           )}
 

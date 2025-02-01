@@ -14,6 +14,7 @@ import { ExpressServiceCode } from "../../Util/Service_Express_code";
 import { ExpressGradeService } from "../../Util/Service_ExpressGrade_code";
 import { FaBars } from "react-icons/fa";
 import { useMediaQuery } from "react-responsive";
+import { Loading } from "../../Component/LoadingComponent";
 
 const ExpressBus = () => {
   const [schedule, setSchedule] = useState([]);
@@ -30,7 +31,7 @@ const ExpressBus = () => {
   const [selectedBusGrade, setSelectedBusGrade] = useState("");
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const [totalItems, setTotalItems] = useState(0);
+  const [error, setError] = useState(null);
 
   // 토글 상태 관리
   const [isDepCat1Open, setIsDepCat1Open] = useState(true);
@@ -422,7 +423,7 @@ const ExpressBus = () => {
           {(selectedDepCat2 || selectedDepCat3) && selectedArrCat1 && selectedArrCat2 && (
             <div className="category">
               <ToggleSection
-                title="버스 등급 선택"
+                title="버스 종류 선택"
                 isOpen={isGradeOpen}
                 onToggle={toggleGrade}
               >
@@ -465,48 +466,70 @@ const ExpressBus = () => {
 
         <div className="tour-list">
           <h3>고속버스 조회</h3>
-          {displayedSchedule.length === 0 ? (
-            <p>조회된 시간표가 없습니다.</p>
-          ) : (
-            <Table>
-              <thead>
-                <tr>
-                  <th>출발지</th>
-                  <th>도착지</th>
-                  <th>출발시간</th>
-                  <th>도착시간</th>
-                  <th>버스등급</th>
-                  <th>요금</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayedSchedule.map((bus, index) => (
-                  <tr key={index}>
-                    <td>{bus.depStation}</td>
-                    <td>{bus.arrStation}</td>
-                    <td>{bus.depTime}</td>
-                    <td>{bus.arrTime}</td>
-                    <td>{bus.busGrade}</td>
-                    <td>{bus.charge}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+
+          {/* 총 개수 출력 */}
+          <div className="totalCount">총 {displayedSchedule.length.toLocaleString()}건</div>
+          
+          {/* 로딩 중 표시 */}
+          {loading && (
+            <Loading>
+              <p>목록을 불러오는 중 입니다.</p>
+            </Loading>
           )}
-          {schedule.length > 0 && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "20px",
-              }}
-            >
-              <Pagination
-                currentPage={currentPage}
-                totalPages={Math.ceil(schedule.length / itemsPerPage)}
-                handlePageChange={handlePageChange}
-              />
-            </div>
+          
+          {/* 에러 메시지 표시 */}
+          {error && <div>{error}</div>}
+
+          {/* 로딩 중이 아니고 에러가 없다면 고속버스 데이터 출력 */}
+          {!loading && !error && (
+            <>
+              {/* 고속버스 시간표 목록 */}
+              {displayedSchedule.length === 0 ? (
+                <p>조회된 시간표가 없습니다.</p>
+              ) : (
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>출발지</th>
+                      <th>도착지</th>
+                      <th>출발시간</th>
+                      <th>도착시간</th>
+                      <th>버스등급</th>
+                      <th>요금</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {displayedSchedule.map((bus, index) => (
+                      <tr key={index}>
+                        <td>{bus.depStation}</td>
+                        <td>{bus.arrStation}</td>
+                        <td>{bus.depTime}</td>
+                        <td>{bus.arrTime}</td>
+                        <td>{bus.busGrade}</td>
+                        <td>{bus.charge}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              )}
+
+              {/* 페이지네이션 */}
+              {schedule.length > 0 && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={Math.ceil(schedule.length / itemsPerPage)}
+                    handlePageChange={handlePageChange}
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
       </List>
