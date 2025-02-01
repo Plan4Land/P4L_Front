@@ -181,6 +181,31 @@ export const SignupContainer = styled.div`
   .signup-button {
     margin: 5px auto;
   }
+  .banModal {
+    width: 500px;
+    height: 300px;
+
+    .info {
+      font-size: 18px;
+      font-weight: bold;
+      color: red;
+    }
+    .banInfo {
+      overflow-y: scroll;
+      ${ScrollBar}
+      margin: 20px;
+      display: flex;
+      flex-direction: column;
+      .explain {
+        strong {
+          margin-right: 5px;
+        }
+        margin: 20px;
+        display: flex;
+        justify-content: flex-start;
+      }
+    }
+  }
   @media (max-width: 768px) {
     .title {
       margin: 0;

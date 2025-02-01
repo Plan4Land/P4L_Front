@@ -22,6 +22,7 @@ import {
   ResultPwModal,
   BanModal,
 } from "../../Component/SignupComponents/SignupModalComponent";
+import { CloseModal } from "../../Util/Modal";
 
 // icon
 import { GoLock, GoEye, GoEyeClosed } from "react-icons/go";
@@ -307,13 +308,27 @@ export const Login = () => {
             email={findPwResult}
           />
 
-          <BanModal
-            open={banModalOpen}
-            close={() => openModal(setBanModalOpen, false)}
-            id={banData?.userId}
-            banDays={banData?.endDate}
-            banReason={banData?.reason}
-          />
+          <CloseModal
+            isOpen={banModalOpen}
+            onClose={() => openModal(setBanModalOpen, false)}
+          >
+            <div className="banModal">
+              <p className="info">
+                해당 계정은 관리자로 인해 정지된 계정입니다.
+              </p>
+              <div className="banInfo">
+                <p className="explain">
+                  <strong>아이디:</strong> {banData?.userId}
+                </p>
+                <p className="explain">
+                  <strong>정지 해제 일자:</strong> {banData?.endDate}
+                </p>
+                <p className="explain">
+                  <strong>정지 사유:</strong> {banData?.reason}
+                </p>
+              </div>
+            </div>
+          </CloseModal>
         </SignupContainer>
       </Center>
       {/* <Footer /> */}

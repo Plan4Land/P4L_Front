@@ -224,7 +224,7 @@ export const Container = styled.div`
     width: 100%;
     .deleteBox {
       display: flex;
-      width: 100%;
+      width: 80%;
       justify-content: flex-end;
       padding-right: 20px;
     }
@@ -233,6 +233,9 @@ export const Container = styled.div`
       font-size: 12px;
       margin-top: 4px;
       cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
   @media (max-width: 768px) {
