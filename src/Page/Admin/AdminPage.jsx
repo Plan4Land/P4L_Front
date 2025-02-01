@@ -234,7 +234,7 @@ export const AdminPage = () => {
         <div className="tabNav">
           <Button onClick={handleReportTabClick}>신고 관리</Button>
           <Button onClick={handleUserTabClick}>유저 목록</Button>
-          <Button onClick={handlePlannerClick}>플래너 목록</Button>
+          {/*<Button onClick={handlePlannerClick}>플래너 목록</Button>*/}
         </div>
         {activeTab === "report" && (
           <div>
@@ -371,10 +371,24 @@ export const AdminPage = () => {
             cancelText="취소"
           >
             정지일 입력
-            <input onChange={(e) => setBanDays(e.target.value)}/>
-            
+            <input
+              type="text"
+              value={banDays}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^[1-9][0-9]*$/.test(value) || value === "") {
+                  setBanDays(value);
+                }
+              }}
+              placeholder="숫자만 입력"
+            />
             정지 사유 입력
-            <input onChange={(e) => setBanReason(e.target.value)} />
+            <input
+              type="text"
+              value={banReason}
+              onChange={(e) => setBanReason(e.target.value)}
+              placeholder="사유를 입력하세요"
+            />
             <h3>{selectedMember.name}님의 계정을 정지시키겠습니까?</h3>
           </Modal>
         )}
