@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Header, Footer } from "../../Component/GlobalComponent";
-import { Button, ToggleSection } from "../../Component/ButtonComponent";
+import { Button, ToggleSection} from "../../Component/ButtonComponent";
 import {
   Table,
   SelectTourItem,
@@ -32,6 +32,7 @@ const ExpressBus = () => {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [error, setError] = useState(null);
+  const [totalItems, setTotalItems] = useState(0);
 
   // 토글 상태 관리
   const [isDepCat1Open, setIsDepCat1Open] = useState(true);
@@ -466,24 +467,15 @@ const ExpressBus = () => {
 
         <div className="tour-list">
           <h3>고속버스 조회</h3>
-
-          {/* 총 개수 출력 */}
           <div className="totalCount">총 {displayedSchedule.length.toLocaleString()}건</div>
-          
-          {/* 로딩 중 표시 */}
           {loading && (
             <Loading>
               <p>목록을 불러오는 중 입니다.</p>
             </Loading>
           )}
-          
-          {/* 에러 메시지 표시 */}
           {error && <div>{error}</div>}
-
-          {/* 로딩 중이 아니고 에러가 없다면 고속버스 데이터 출력 */}
           {!loading && !error && (
             <>
-              {/* 고속버스 시간표 목록 */}
               {displayedSchedule.length === 0 ? (
                 <p>조회된 시간표가 없습니다.</p>
               ) : (
@@ -512,8 +504,6 @@ const ExpressBus = () => {
                   </tbody>
                 </Table>
               )}
-
-              {/* 페이지네이션 */}
               {schedule.length > 0 && (
                 <div
                   style={{

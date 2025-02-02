@@ -251,6 +251,13 @@ export const HeaderSt = styled.div`
     margin-top: -50px;
     line-height: 35px;
   }
+  /* 모바일 버전 스타일 */
+  @media (max-width: 768px) {
+    .dropdown-Trafficlist {
+      transform: translateX(-53px) translateY(calc(-100% - 17px));
+      margin-top: 0;
+    }
+  }
 `;
 
 export const NavSt = styled.div`

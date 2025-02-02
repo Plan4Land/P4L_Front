@@ -328,11 +328,7 @@ const IntercityBus = () => {
                             return [...prev, grade.GradeId];
                           });
                         }}
-                        className={
-                          selectedBusGrade.includes(grade.GradeId)
-                            ? "selected"
-                            : ""
-                        }
+                        className={selectedBusGrade.includes(grade.GradeId) ? "selected" : ""}
                       >
                         {grade.GradeNm}
                       </Button>
