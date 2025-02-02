@@ -36,10 +36,12 @@ export const KakaoMapSpot = ({ mapX, mapY }) => {
               top: "5px",
               left: "5px",
               zIndex: 10,
+              backgroundColor: colors.colorC,
+              border: "1px solid #333",
+              cursor: "pointer",
             }}
             type="button"
             onClick={() => setToggle("roadview")}
-            title="로드뷰 보기"
             value="로드뷰"
           />
         )}
@@ -78,19 +80,10 @@ export const MapInfo = styled.div`
 
 // 플래너 페이지에 사용되는 지도
 export const KakaoMap = React.memo(({ plans, date }) => {
-  console.log("카카오지도 호출", plans);
-  // Rest API
-  // https://developers.kakao.com/docs/latest/ko/local/dev-guide#address-coord
-  // https://react-kakao-maps-sdk.jaeseokim.dev/docs/sample/library/keywordBasic
-  // 참고 사이트 : https://m.blog.naver.com/kiddwannabe/221812712712
-  // https://bluepebble25.tistory.com/73#--%--%EA%B-%AC%ED%--%--%--%EC%--%B-%EA%B-%B--%---%--react-kakao-maps-sdk%--%ED%-C%A-%ED%--%A-%EC%A-%--%--%EC%-D%B-%EC%-A%A-
+  // plans, date가 이전 렌더링과 동일하면 재렌더링 안함(React.memo)
+  const [prevLatLng, setPrevLatLng] = useState(null);
 
-  // const [centerLatLng, setCenterLatLng] = useState({
-  //   lat: plans[Object.keys(plans)[0]]?.[0].latitude,
-  //   lng: plans[Object.keys(plans)[0]]?.[0].longitude,
-  // });
   const firstPlan = plans[date]?.[0];
-  console.log(firstPlan);
 
   const allPlans = Object.values(plans).flat();
   const sortedPlans = allPlans.sort((a, b) => {
@@ -102,14 +95,16 @@ export const KakaoMap = React.memo(({ plans, date }) => {
   });
 
   const centerLatLng = useMemo(() => {
+    // centerLatLng값이 plans나 date가 변경되었을때만 재계산
     if (firstPlan) {
-      return {
+      const newLatLng = {
         lat: parseFloat(firstPlan.latitude || firstPlan.position.lat),
         lng: parseFloat(firstPlan.longitude || firstPlan.position.lng),
       };
-    } else if (sortedPlans.length > 0) {
-      console.log(">>>> : ", sortedPlans);
-      return {
+      setPrevLatLng(newLatLng); // 새로운 lat, lng 값을 저장
+      return newLatLng;
+    } else if (prevLatLng === null && sortedPlans.length > 0) {
+      const newLatLng = {
         lat: parseFloat(
           sortedPlans[0]?.latitude || sortedPlans[0]?.position.lat
         ),
@@ -117,11 +112,16 @@ export const KakaoMap = React.memo(({ plans, date }) => {
           sortedPlans[0]?.longitude || sortedPlans[0]?.position.lng
         ),
       };
+      setPrevLatLng(newLatLng); // 이전 값으로 저장
+      return newLatLng;
+    } else if (prevLatLng) {
+      return prevLatLng;
     } else {
-      return {
+      const defaultLatLng = {
         lat: plans[Object.keys(plans)[0]]?.[0].latitude || 37.5563,
         lng: plans[Object.keys(plans)[0]]?.[0].longitude || 126.9723,
       };
+      return defaultLatLng;
     }
   }, [plans, date]);
 
@@ -270,7 +270,6 @@ export const SearchKakaoMap = ({
     );
     map.setCenter(position);
     setInfo(marker);
-    console.log(marker);
 
     setCurrentAddedPlace((prev) => ({
       ...prev,
