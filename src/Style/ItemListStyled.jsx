@@ -290,18 +290,24 @@ export const Table = styled.table`
   max-width: 700px;
   border-collapse: collapse;
   text-align: center;
+  table-layout: fixed; /* 고정된 레이아웃 설정 */
+  
   th,
-  td 
-  {
+  td {
     padding: 13px;
     border: 1px solid #ddd;
   }
-  th 
-  {
+  
+  th {
     background-color: #f4f4f4;
   }
-  @media (max-width: 1616px) {
+  
+  @media (max-width: 768px) {
+    width: 100%;
     min-width: auto;
+    th, td {
+      padding: 10px; 
+    }
   }
 `;
 
