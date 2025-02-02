@@ -7,6 +7,7 @@ import {
   SearchSt,
   List,
   FilterButton,
+  LoadBox,
 } from "../../Style/ItemListStyled";
 import { FaUndo, FaSearch } from "react-icons/fa";
 import { Pagination } from "../../Component/Pagination";
@@ -337,12 +338,12 @@ const IntercityBus = () => {
             </div>
           )}
 
-          <div>
-            <Button onClick={fetchSchedule} disabled={loading}>
+          <LoadBox>
+            <Button className="load" onClick={fetchSchedule} disabled={loading}>
               {loading ? "로딩 중..." : "조회"}
               <FaSearch style={{ marginLeft: "6px" }} />
             </Button>
-          </div>
+          </LoadBox>
         </SelectTourItem>
 
         <div className="tour-list">

@@ -9,6 +9,7 @@ import {
   FilterButton,
   CalenderSt,
   List,
+  LoadBox 
 } from "../../Style/ItemListStyled";
 import { FaUndo, FaSearch } from "react-icons/fa";
 import { Vehiclekind } from "../../Util/Service_VehicleKind_code";
@@ -422,12 +423,12 @@ const KtxInquiry = () => {
             </div>
           )}
 
-          <div>
-            <Button onClick={fetchSchedule} disabled={loading}>
+          <LoadBox>
+            <Button className="load" onClick={fetchSchedule} disabled={loading}>
               {loading ? "로딩 중..." : "조회"}
               <FaSearch style={{ marginLeft: "6px" }} />
             </Button>
-          </div>
+          </LoadBox>
         </SelectTourItem>
 
         <div className="tour-list">

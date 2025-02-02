@@ -46,6 +46,10 @@ export const SelectTourItem = styled.div`
     margin: 3px;
     border: 1px solid ${colors.colorC};
 
+    &.load {
+      width: 97%;
+    }
+
     &:hover {
       opacity: 0.7;
     }
@@ -58,6 +62,7 @@ export const SelectTourItem = styled.div`
       color: #b0b0b0;
     }
   }
+  
   .reset-button {
     width: 80px;
     height: 20px;
@@ -135,6 +140,12 @@ export const SelectTourItem = styled.div`
     }
   }
 `;
+
+export const LoadBox = styled.div`
+    display: flex;
+    justify-content: center;
+`;
+
 
 export const FilterButton = styled.div`
   display: none;
