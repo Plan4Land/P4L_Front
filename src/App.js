@@ -46,7 +46,6 @@ function App() {
                 <Route path="/planninglist" element={<PlanningList />} />
                 <Route path="/otheruser/:userId" element={<Otheruser />} />
                 <Route path="/test" element={<Test />} />
-                <Route path="/management" element={<AdminPage />} />
                 <Route path="/ExpressBus" element={<ExpressBus />} />
                 <Route path="/IntercityBus" element={<IntercityBus />} />
                 <Route path="/traffic" element={<TrafficMain />} />
@@ -117,6 +116,7 @@ function App() {
                 }
               />
               <Route path="/admin" element={<AdminLogin />} />
+              <Route path="/management" element={<AdminPage />} />
             </Routes>
           </Router>
         </DndProvider>
