@@ -141,7 +141,7 @@ const SectionTitle = styled.h3`
 const SectionContent = styled.div`
   overflow: hidden;
   transition: max-height 0.3s linear;
-  max-height: ${(props) => (props.isOpen ? "500px" : "0")};
+  max-height: ${(props) => (props.isOpen ? "760px" : "0")};
 `;
 
 export const ToggleSection = ({ title, isOpen, onToggle, children }) => {

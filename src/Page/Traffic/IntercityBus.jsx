@@ -31,7 +31,6 @@ const IntercityBus = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [error, setError] = useState(null);
 
-  // 토글 상태 관리
   const [isDepCat1Open, setIsDepCat1Open] = useState(true);
   const [isDepCat2Open, setIsDepCat2Open] = useState(true);
   const [isArrCat1Open, setIsArrCat1Open] = useState(true);
@@ -60,12 +59,10 @@ const IntercityBus = () => {
       return;
     }
 
-    // 출발지 터미널 찾기
     const selectedDepTerminal = InterCityService.flatMap(
       (cat1) => cat1.cat2List
     ).find((cat2) => cat2.cat2 === selectedDepCat2);
 
-    // 도착지 터미널 찾기
     const selectedArrTerminal = InterCityService.flatMap(
       (cat1) => cat1.cat2List
     ).find((cat2) => cat2.cat2 === selectedArrCat2);
@@ -86,7 +83,7 @@ const IntercityBus = () => {
       depTerminalId: depTerminalId,
       arrTerminalId: arrTerminalId,
       depPlandTime: formattedDate,
-      numOfRows: 100, // 최대 데이터 개수 요청
+      numOfRows: 100,
       pageNo: 1,
     };
 
@@ -176,7 +173,6 @@ const IntercityBus = () => {
 
   return (
     <>
-      {/* <Header /> */}
       <FilterButton onClick={handleToggleSelect}>
         <FaBars />
       </FilterButton>
@@ -187,7 +183,6 @@ const IntercityBus = () => {
             <FaUndo style={{ marginLeft: "6px" }} />
           </button>
 
-          {/* 날짜 입력 */}
           <SearchSt>
             <div className="search-wrapper">
               <input
@@ -252,7 +247,6 @@ const IntercityBus = () => {
             </div>
           )}
 
-          {/* 도착지 설정 */}
           <div className="top">
             <ToggleSection
               title="도착 지역 선택"
@@ -306,7 +300,6 @@ const IntercityBus = () => {
             </div>
           )}
 
-          {/* 버스 등급 선택 */}
           {selectedDepCat2 && selectedArrCat2 && (
             <div className="category">
               <ToggleSection

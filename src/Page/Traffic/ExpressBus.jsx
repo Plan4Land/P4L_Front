@@ -33,7 +33,6 @@ const ExpressBus = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [error, setError] = useState(null);
 
-  // 토글 상태 관리
   const [isDepCat1Open, setIsDepCat1Open] = useState(true);
   const [isDepCat2Open, setIsDepCat2Open] = useState(true);
   const [isDepCat3Open, setIsDepCat3Open] = useState(true);
@@ -394,7 +393,7 @@ const ExpressBus = () => {
           {selectedArrCat2 && !isMetropolitanCity(selectedArrCat1) && (
             <div className="subcategoryarea">
               <ToggleSection
-                title="도착 소분류 지역 선택"
+                title="도착 터미널 선택"
                 isOpen={isArrCat3Open}
                 onToggle={toggleArrCat3}
               >

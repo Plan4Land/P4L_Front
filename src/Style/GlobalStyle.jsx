@@ -248,8 +248,10 @@ export const HeaderSt = styled.div`
     border: 1px solid #ddd;
     width: 120px;
     height: 70px;
-    margin-top: -50px;
+    margin-top: -55px;
     line-height: 35px;
+    border-radius: 15px;
+    padding: auto;
   }
   /* 모바일 버전 스타일 */
   @media (max-width: 768px) {

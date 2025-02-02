@@ -135,6 +135,7 @@ export const SelectTourItem = styled.div`
     }
   }
 `;
+
 export const FilterButton = styled.div`
   display: none;
 
@@ -158,6 +159,68 @@ export const SearchSt = styled.div`
   flex-grow: 1;
   display: flex;
   align-items: center;
+
+  .search-wrapper {
+    position: relative;
+    flex-grow: 0.9;
+    display: flex;
+    align-items: center;
+  }
+
+  .search {
+    font-size: 14px;
+    height: 40px;
+    border-radius: 50px;
+    border: 2px solid ${colors.colorB};
+    padding-left: 20px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .search-button {
+    position: absolute;
+    right: 15px;
+    top: 10%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: ${colors.colorB};
+    width: 20px;
+
+    &:hover {
+      background: transparent;
+      color: ${colors.colorA};
+      border: none;
+      transform: none;
+    }
+  }
+  button.search-button:hover {
+    background: transparent;
+    color: ${colors.colorA};
+    border: none;
+    transform: none;
+  }
+  @media (max-width: 768px) {
+    margin-top: 20px;
+    .search {
+      height: 30px;
+      font-size: 10px;
+    }
+    .search-button {
+      top: 0%;
+      scale: 0.8;
+    }
+  }
+`;
+
+export const CalenderSt = styled.div`
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+
   .search-wrapper {
     position: relative;
     flex-grow: 0.9;

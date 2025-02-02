@@ -7,6 +7,7 @@ import {
   SelectTourItem,
   SearchSt,
   FilterButton,
+  CalenderSt,
   List,
 } from "../../Style/ItemListStyled";
 import { FaUndo, FaSearch } from "react-icons/fa";
@@ -31,7 +32,6 @@ const KtxInquiry = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [error, setError] = useState(null);
 
-  // 토글 상태 관리
   const [isDepCat1Open, setIsDepCat1Open] = useState(true);
   const [isDepCat2Open, setIsDepCat2Open] = useState(true);
   const [isArrCat1Open, setIsArrCat1Open] = useState(true);
@@ -84,7 +84,6 @@ const KtxInquiry = () => {
     });
   };
 
-  // 열차 종류가 '전체'인 경우 모든 열차를 조회하도록 처리
   const fetchSchedule = useCallback(async () => {
     if (
       !date ||
@@ -138,7 +137,7 @@ const KtxInquiry = () => {
   
     try {
       const expandedVehicleCodes = selectedVehicle.length === 0
-        ? Vehiclekind.map((kind) => kind.VehicleKindCode) // 선택한 열차 종류가 없으면 전체 열차 조회
+        ? Vehiclekind.map((kind) => kind.VehicleKindCode)
         : selectedVehicle.flatMap((vehicle) =>
             Vehiclekind.filter(
               (kind) =>
@@ -182,7 +181,6 @@ const KtxInquiry = () => {
             };
           });
   
-          // 중복 제거
           scheduleData.forEach((newSchedule) => {
             const isDuplicate = allSchedules.some(
               (existingSchedule) =>
@@ -192,7 +190,7 @@ const KtxInquiry = () => {
                 existingSchedule.arrTime === newSchedule.arrTime
             );
             if (!isDuplicate) {
-              allSchedules.push(newSchedule); // 중복이 아니면 추가
+              allSchedules.push(newSchedule);
             }
           });
   
@@ -266,7 +264,7 @@ const KtxInquiry = () => {
             <FaUndo style={{ marginLeft: "6px" }} />
           </button>
 
-          <SearchSt>
+          <CalenderSt>
             <div className="search-wrapper">
               <input
                 type="date"
@@ -275,7 +273,7 @@ const KtxInquiry = () => {
                 onChange={(e) => setDate(e.target.value)}
               />
             </div>
-          </SearchSt>
+          </CalenderSt>
           
           <div className="mainarea">
             <ToggleSection
@@ -381,7 +379,6 @@ const KtxInquiry = () => {
             </div>
           )}
 
-
           {selectedDepCat2 && selectedArrCat2 && (
             <div className="category">
               <ToggleSection
@@ -396,21 +393,17 @@ const KtxInquiry = () => {
                         key={vehicle.VehicleKindCode}
                         onClick={() => {
                           setSelectedVehicle((prev) => {
-                            // '전체' 선택 시 모든 선택 해제하고 '전체'만 선택
                             if (vehicle.VehicleKindCode === "") {
                               return [""];
                             }
-                            // '전체'가 선택된 상태에서 특정 열차 선택 시 '전체' 제거
                             if (prev.includes("")) {
                               return [vehicle.VehicleKindCode];
                             }
-                            // 이미 선택된 경우 해제
                             if (prev.includes(vehicle.VehicleKindCode)) {
                               return prev.filter(
                                 (code) => code !== vehicle.VehicleKindCode
                               );
                             }
-                            // 선택 추가
                             return [...prev, vehicle.VehicleKindCode];
                           });
                         }}
