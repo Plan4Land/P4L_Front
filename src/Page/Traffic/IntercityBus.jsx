@@ -13,6 +13,8 @@ import { Pagination } from "../../Component/Pagination";
 import { InterCityService } from "../../Util/Service_InterCityBus_code";
 import { InterCityGradeService } from "../../Util/Service_InterCityGrade_code";
 import { FaBars } from "react-icons/fa";
+import { useMediaQuery } from "react-responsive";
+import { Loading } from "../../Component/LoadingComponent";
 
 const IntercityBus = () => {
   const [schedule, setSchedule] = useState([]);
@@ -26,6 +28,8 @@ const IntercityBus = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedBusGrade, setSelectedBusGrade] = useState("");
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const [error, setError] = useState(null);
 
   // 토글 상태 관리
   const [isDepCat1Open, setIsDepCat1Open] = useState(true);
@@ -139,6 +143,7 @@ const IntercityBus = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+    window.scrollTo(0, 0);
   };
 
   const handleResetSelections = () => {
@@ -347,55 +352,66 @@ const IntercityBus = () => {
           </div>
         </SelectTourItem>
 
-        <div className="schedule-results">
+        <div className="tour-list">
           <h3>시외버스 조회</h3>
-          {displayedSchedule.length === 0 ? (
-            <p>조회된 시간표가 없습니다.</p>
-          ) : (
-            <Table>
-              <thead>
-                <tr>
-                  <th>출발지</th>
-                  <th>도착지</th>
-                  <th>출발시간</th>
-                  <th>도착시간</th>
-                  <th>버스등급</th>
-                  <th>요금</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayedSchedule.map((bus, index) => (
-                  <tr key={index}>
-                    <td>{bus.depStation}</td>
-                    <td>{bus.arrStation}</td>
-                    <td>{bus.depTime}</td>
-                    <td>{bus.arrTime}</td>
-                    <td>{bus.busGrade}</td>
-                    <td>{bus.charge}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+          <div className="totalCount">총 {schedule.length.toLocaleString()}건</div>
+          {loading && (
+            <Loading>
+              <p>목록을 불러오는 중 입니다.</p>
+            </Loading>
           )}
-          {schedule.length > 0 && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "20px",
-              }}
-            >
-              <Pagination
-                currentPage={currentPage}
-                totalPages={Math.ceil(schedule.length / itemsPerPage)}
-                handlePageChange={handlePageChange}
-              />
-            </div>
+          {error && <div>{error}</div>}
+          {!loading && !error && (
+            <>
+              {displayedSchedule.length === 0 ? (
+                <p>조회된 시간표가 없습니다.</p>
+              ) : (
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>출발지</th>
+                      <th>도착지</th>
+                      <th>출발시간</th>
+                      <th>도착시간</th>
+                      <th>버스등급</th>
+                      <th>요금</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {displayedSchedule.map((bus, index) => (
+                      <tr key={index}>
+                        <td>{bus.depStation}</td>
+                        <td>{bus.arrStation}</td>
+                        <td>{bus.depTime}</td>
+                        <td>{bus.arrTime}</td>
+                        <td>{bus.busGrade}</td>
+                        <td>{bus.charge}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              )}
+              {schedule.length > 0 && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={Math.ceil(schedule.length / itemsPerPage)}
+                    handlePageChange={handlePageChange}
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
       </List>
-      {/* <Footer /> */}
     </>
   );
 };
+
 export default IntercityBus;

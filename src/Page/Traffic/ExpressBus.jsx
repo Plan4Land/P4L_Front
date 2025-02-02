@@ -32,7 +32,6 @@ const ExpressBus = () => {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [error, setError] = useState(null);
-  const [totalItems, setTotalItems] = useState(0);
 
   // 토글 상태 관리
   const [isDepCat1Open, setIsDepCat1Open] = useState(true);
@@ -186,6 +185,7 @@ const ExpressBus = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+    window.scrollTo(0, 0);
   };
 
   const handleResetSelections = () => {

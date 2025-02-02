@@ -13,6 +13,8 @@ import { FaUndo, FaSearch } from "react-icons/fa";
 import { Vehiclekind } from "../../Util/Service_VehicleKind_code";
 import { Pagination } from "../../Component/Pagination";
 import { FaBars } from "react-icons/fa";
+import { useMediaQuery } from "react-responsive";
+import { Loading } from "../../Component/LoadingComponent";
 
 const KtxInquiry = () => {
   const [schedule, setSchedule] = useState([]);
@@ -26,6 +28,8 @@ const KtxInquiry = () => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const [error, setError] = useState(null);
 
   // 토글 상태 관리
   const [isDepCat1Open, setIsDepCat1Open] = useState(true);
@@ -220,6 +224,7 @@ const KtxInquiry = () => {
   
   const handlePageChange = (page) => {
     setCurrentPage(page);
+    window.scrollTo(0, 0);
   };
 
   const handleResetSelections = () => {
@@ -434,50 +439,61 @@ const KtxInquiry = () => {
 
         <div className="tour-list">
           <h3>KTX 조회</h3>
-          {displayedSchedule.length === 0 ? (
-            <p>조회된 시간표가 없습니다.</p>
-          ) : (
-            <Table>
-              <thead>
-                <tr>
-                  <th>출발역</th>
-                  <th>출발 시간</th>
-                  <th>도착역</th>
-                  <th>도착 시간</th>
-                  <th>열차 종류</th>
-                  <th>요금</th>
-                  <th>소요시간</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayedSchedule.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.depStation}</td>
-                    <td>{item.depTime}</td>
-                    <td>{item.arrStation}</td>
-                    <td>{item.arrTime}</td>
-                    <td>{item.trainGradeCode}</td>
-                    <td>{item.adultCharge}원</td>
-                    <td>{item.duration}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+          <div className="totalCount">총 {displayedSchedule.length.toLocaleString()}건</div>
+          {loading && (
+            <Loading>
+              <p>목록을 불러오는 중 입니다.</p>
+            </Loading>
           )}
-          {schedule.length > 0 && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "20px",
-              }}
-            >
-              <Pagination
-                currentPage={currentPage}
-                totalPages={Math.ceil(schedule.length / itemsPerPage)}
-                handlePageChange={handlePageChange}
-              />
-            </div>
+          {error && <div>{error}</div>}
+          {!loading && !error && (
+            <>
+              {displayedSchedule.length === 0 ? (
+                <p>조회된 시간표가 없습니다.</p>
+              ) : (
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>출발역</th>
+                      <th>출발 시간</th>
+                      <th>도착역</th>
+                      <th>도착 시간</th>
+                      <th>열차 종류</th>
+                      <th>요금</th>
+                      <th>소요시간</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {displayedSchedule.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.depStation}</td>
+                        <td>{item.depTime}</td>
+                        <td>{item.arrStation}</td>
+                        <td>{item.arrTime}</td>
+                        <td>{item.trainGradeCode}</td>
+                        <td>{item.adultCharge}원</td>
+                        <td>{item.duration}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              )}
+              {schedule.length > 0 && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={Math.ceil(schedule.length / itemsPerPage)}
+                    handlePageChange={handlePageChange}
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
       </List>
