@@ -4,7 +4,6 @@ import { LuUserRoundPlus } from "react-icons/lu";
 import { BiLock, BiLockOpen, BiTrash } from "react-icons/bi";
 import PlanningApi from "../../Api/PlanningApi";
 import { useAuth } from "../../Context/AuthContext";
-import { useNavigate } from "react-router-dom";
 import { CheckModal } from "../../Util/Modal";
 import { useState } from "react";
 
@@ -20,7 +19,6 @@ export const MenuIcons = ({
   setIsChatOpen,
 }) => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleBookmarked = async () => {
@@ -119,7 +117,7 @@ export const MenuIcons = ({
         </>
       )}
       <CheckModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        로그인이 필요한 서비스입니다.
+        <p>로그인이 필요한 서비스입니다.</p>
       </CheckModal>
     </div>
   );

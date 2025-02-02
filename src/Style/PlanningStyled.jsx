@@ -590,12 +590,11 @@ export const ContentContainer = styled.div`
 
 export const MainPlanning = styled.div`
   width: 50%;
-  min-width: 300px; // 이거도 고민
-  min-height: 100px; // 이거 고민
-  max-height: 60vh; // 이것도 고민
+  min-width: 300px;
+  min-height: 100px;
+  max-height: 60vh;
   padding-bottom: 20px;
   overflow-y: auto;
-  /* overflow-x: hidden; */
   border-radius: 10px;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
   ${ScrollBar};

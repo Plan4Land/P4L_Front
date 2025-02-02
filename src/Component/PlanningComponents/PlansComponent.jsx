@@ -3,9 +3,7 @@ import {
   DayToggleContainer,
   DatePickerContainer,
 } from "../../Style/PlanningStyled";
-import { colors } from "../../Style/GlobalStyle";
 import { themes, areas } from "../../Util/Common";
-import { ProfileImg } from "../PictureCommponent";
 import { PictureComponent } from "../PictureCommponent";
 import { Upload } from "../FirebaseUpload";
 import { useEffect, useState } from "react";
@@ -14,9 +12,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import { FaPenToSquare } from "react-icons/fa6";
-import { FaChevronCircleUp, FaChevronCircleDown } from "react-icons/fa";
 import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
-import { PlanToggleSection, ToggleButton } from "../ButtonComponent";
+import { PlanToggleSection } from "../ButtonComponent";
 
 // import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -29,7 +26,6 @@ export const PlannerInfoEditComponent = ({
   selectedThemes,
   setSelectedThemes,
   isEditting,
-  // plans,
   editPlans,
   plannerId,
   sender,
@@ -111,7 +107,6 @@ export const PlannerInfoEditComponent = ({
         theme: updatedThemes.join(", "),
       }));
     } else if (selectedThemes.length < 3) {
-      // Add theme to selection
       const updatedThemes = [...selectedThemes, theme];
       setSelectedThemes(updatedThemes);
       setEditPlannerInfo((prev) => ({
@@ -142,13 +137,11 @@ export const PlannerInfoEditComponent = ({
         sender: sender,
         data: {
           plannerInfo: [editPlannerInfo],
-          // plans: plans,
           plans: editPlans,
           isEditting: isEditting,
         },
       };
       ws.current.send(JSON.stringify(message));
-      console.log("여기서 보냄", message);
     }
   }, [editPlannerInfo]);
 
@@ -181,10 +174,6 @@ export const PlannerInfoEditComponent = ({
   return (
     <>
       <div className="planner-thumbnail">
-        {/* <ProfileImg
-          // file={`/img/${plannerInfo.thumbnail}`}
-          file={currentPic}
-        /> */}
         <PictureComponent
           currentPic={currentPic}
           setCurrentPic={setCurrentPic}
@@ -418,16 +407,6 @@ export const PlansComponent = ({
   useEffect(() => {
     const currentPlannerInfo = editPlannerInfo || plannerInfo;
     const currentPlans = editPlans || plans;
-    if (editPlans) {
-      console.log("editPlans가 선택됨");
-    } else if (plans) {
-      console.log("plans가 선택됨");
-    }
-    if (editPlannerInfo) {
-      console.log("editPlannerInfo 선택됨");
-    } else if (plannerInfo) {
-      console.log("plannerInfo 선택됨");
-    }
     const startDate = new Date(currentPlannerInfo.startDate);
     const endDate = new Date(currentPlannerInfo.endDate);
     const timeDiff = endDate.getTime() - startDate.getTime();
@@ -493,7 +472,6 @@ export const PlansComponent = ({
     };
 
     const groupedPlans = groupPlansByDate();
-    // console.log("groupedPlans : ", groupedPlans);
     setGroupPlans(groupedPlans); // 정렬된 일정
   }, [editPlannerInfo, editPlans, plannerInfo, plans]);
 
@@ -524,7 +502,6 @@ export const PlansComponent = ({
       // 뒤의 요소와 seq 교환
       const temp = plansForDate[planIndex].seq;
       plansForDate[planIndex].seq = plansForDate[planIndex + 1].seq;
-      console.log(plansForDate[planIndex].seq);
       plansForDate[planIndex + 1].seq = temp;
     }
 
@@ -553,7 +530,6 @@ export const PlansComponent = ({
         },
       };
       ws.current.send(JSON.stringify(message));
-      console.log("PlansComponent에서 보냄", message);
     }
   }, [editPlans]);
 
@@ -565,7 +541,6 @@ export const PlansComponent = ({
             className="planning-day"
             onClick={() => {
               toggleDay(index, date);
-              console.log(travelInfo);
             }}
           >
             <span>

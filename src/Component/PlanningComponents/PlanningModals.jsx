@@ -1,6 +1,5 @@
 import { useAuth } from "../../Context/AuthContext";
 import {
-  UserProfile,
   ParticipantsContainer,
   SearchedUserContainer,
   SearchedUserHr,
@@ -110,7 +109,7 @@ export const UserModal = ({
         confirmText="확인"
         cancelText="취소"
       >
-        이 참여자를 플래너에서 삭제시키겠습니까?
+        <p>이 참여자를 플래너에서 삭제시키겠습니까?</p>
       </Modal>
     </>
   );
@@ -123,7 +122,6 @@ export const AddPlaceModal = ({
   searchState,
   setSearchState,
   setCurrentAddedPlace,
-  // setPlans,
 }) => {
   const { user } = useAuth();
   const [selectedMenu, setSelectedMenu] = useState("장소 검색");
@@ -151,9 +149,8 @@ export const AddPlaceModal = ({
         );
         setBookmarkedPlaces((prevPlaces) => [
           ...prevPlaces,
-          ...response.content, // response가 배열일 경우
+          ...response.content,
         ]);
-        console.log(response.content);
       };
 
       getBookmaredTourList();
@@ -442,31 +439,3 @@ export const DeletePlanning = ({
     </Modal>
   );
 };
-
-// // 페이지 Unload 전 모달창
-// export const BeforeUnload = ({
-//   modals,
-//   setModals,
-//   acceptUnload,
-//   setAcceptUnload,
-// }) => {
-//   const handleOnConfirm = () => {
-//     if (acceptUnload) {
-//       setAcceptUnload(); // 저장된 작업 실행
-//     }
-//     setModals((prev) => ({ ...prev, beforeUnload: false }));
-//   };
-//   const handleOnClose = () => {
-//     setAcceptUnload(null);
-//     setModals((prev) => ({ ...prev, beforeUnload: false }));
-//   };
-//   return (
-//     <Modal
-//       isOpen={modals.beforeUnload}
-//       onClose={() => handleOnClose()}
-//       onConfirm={() => handleOnConfirm()}
-//     >
-//       <p>변경사항이 저장되지 않을 수 있습니다. 괜찮으신가요?</p>
-//     </Modal>
-//   );
-// };

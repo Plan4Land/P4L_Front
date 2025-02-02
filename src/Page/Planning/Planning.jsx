@@ -19,14 +19,13 @@ import {
   PlansComponent,
 } from "../../Component/PlanningComponents/PlansComponent";
 import { useEffect, useRef, useState } from "react";
-import { Header, Footer } from "../../Component/GlobalComponent";
 import { ProfileImg } from "../../Component/PictureCommponent";
 import { Loading } from "../../Component/LoadingComponent";
 import { Button } from "../../Component/ButtonComponent";
 import PlanningApi from "../../Api/PlanningApi";
 import AxiosApi from "../../Api/AxiosApi";
 import { useNavigate, useParams } from "react-router-dom";
-import { areas, themes } from "../../Util/Common";
+import { areas } from "../../Util/Common";
 import { useAuth } from "../../Context/AuthContext";
 import { MenuIcons } from "../../Component/PlanningComponents/PlanningMenuIcons";
 import {
@@ -51,7 +50,7 @@ export const Planning = () => {
     subArea: "",
   });
   const [plans, setPlans] = useState([]);
-  const [editPlans, setEditPlans] = useState(null); ///////////////////////////////////////////
+  const [editPlans, setEditPlans] = useState(null);
   const [modals, setModals] = useState({
     userModal: false, // 초대된 users 모달 open 여부
     addPlaceModal: false, // 장소 추가 모달 open 여부
@@ -60,7 +59,6 @@ export const Planning = () => {
     searchUser: false, // 멤버 초대 모달 open 여부
   });
   const [memoState, setMemoState] = useState({
-    ///////////////////////////////////////////////
     isClicked: [], // 메모마다 open 여부
     isOpened: false, // 현재 열린 메모가 있는지 여부
     updatedMemo: "", // 작성한 메모 내용
@@ -80,9 +78,9 @@ export const Planning = () => {
     dayToggle: [], // 토글 열림 여부
     clickedDate: "",
   });
-  const [groupPlans, setGroupPlans] = useState({}); // 계획 정렬    /////////////////////////////////////////////////////
+  const [groupPlans, setGroupPlans] = useState({}); // 계획 정렬
   const [selectedPlan, setSelectedPlan] = useState({}); // date, planIndex, plan
-  const [isEditting, setIsEditting] = useState(false); //////////////////////////////////////////////////////
+  const [isEditting, setIsEditting] = useState(false);
   const [editor, setEditor] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(null);
@@ -119,7 +117,6 @@ export const Planning = () => {
       })
     );
     setInputMsg("");
-    console.log("전송");
   };
 
   const closeChat = () => {
@@ -148,11 +145,6 @@ export const Planning = () => {
     setIsEditting(!isEditting);
     let message;
     if (isEditting) {
-      // 편집 완료하면
-      console.log("수정 완료 버튼 누름");
-      // setEditor("");
-      // setEditPlannerInfo(null);
-      // setPlannerInfo(editPlannerInfo);
       message = {
         type: "PLANNER",
         plannerId: plannerId,
@@ -165,8 +157,6 @@ export const Planning = () => {
         },
       };
     } else {
-      // 편집 시작하면
-      console.log("편집 시작", plannerInfo);
       setEditPlannerInfo(plannerInfo);
       setEditPlans(plans);
       message = {
@@ -192,17 +182,13 @@ export const Planning = () => {
       if (ws.current) {
         ws.current.onmessage = async (msg) => {
           const data = JSON.parse(msg.data);
-          console.log("data ::::: ", data);
-
           if (
             data.type === "PLANNER" &&
             data.data?.plannerInfo?.[0] &&
             !_.isEqual(data.data.plannerInfo[0], editPlannerInfo)
           ) {
-            console.log("plannerInfo 바뀐거 있음");
             setEditPlannerInfo(data.data.plannerInfo[0]);
             setReceivePlanner(data.data.plannerInfo[0]);
-            // setPlans(data.data.plans);
             setIsEditting(data.data.isEditting);
             setEditor(data.sender);
           } else if (
@@ -211,19 +197,17 @@ export const Planning = () => {
             data.data?.plans !== null &&
             !_.isEqual(data.data.plans, editPlans)
           ) {
-            console.log("plans 바뀐거 있음");
             setEditPlans(data.data.plans);
             setIsEditting(data.data.isEditting);
             setEditor(data.sender);
           } else if (data.type === "PLANNER") {
-            console.log("바뀐거 없음");
             setReceivePlanner(
               Array.isArray(data.data.plannerInfo) &&
                 data.data.plannerInfo.length > 0
                 ? data.data.plannerInfo[0]
                 : data.data.plannerInfo
             );
-            setPlans(data.data.plans);
+            // setPlans(data.data.plans);
             setIsEditting(data.data.isEditting);
 
             if (data.message === "편집완료") {
@@ -258,7 +242,6 @@ export const Planning = () => {
           }
 
           if (editor && data.type === "CLOSE" && editor === data.sender) {
-            console.log("editor : ", editor);
             // 수정하던 사람이 새로고침하면
             setPlannerInfo(plannerInfo);
             setEditPlannerInfo(null);
@@ -295,37 +278,14 @@ export const Planning = () => {
         ws.current = new WebSocket("ws://localhost:8111/ws/planner");
         ws.current.onopen = () => {
           setSocketConnected(true);
-          console.log("소켓 연결 완료");
         };
       }
     }
-    // const closeMessage = {
-    //   type: "CLOSE",
-    //   plannerId: plannerId,
-    //   sender: sender,
-    //   message: editor,
-    //   data: {
-    //     plannerInfo: null,
-    //     plans: null,
-    //     isEditting: false,
-    //   },
-    // };
-
-    // const handleBeforeUnload = () => {
-    //   console.log("editor /////// ", editor);
-    //   if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-    //     ws.current.send(JSON.stringify(closeMessage));
-    //   }
-    // };
-
-    // window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
-      // window.removeEventListener("beforeunload", handleBeforeUnload);
       if (ws.current) {
         ws.current.close();
         ws.current = null;
-        console.log("페이지 이동으로 인해 소켓 연결 종료");
       }
     };
   }, [plannerInfo?.id, user?.nickname]);
@@ -361,7 +321,6 @@ export const Planning = () => {
             ? response.theme.split(",").map((theme) => theme.trim())
             : []
         );
-        console.log("fetchPlanner : ", response);
       } catch (e) {
         console.log("플래너 불러오는 중 에러", e);
       }
@@ -370,7 +329,6 @@ export const Planning = () => {
       try {
         const response = await PlanningApi.getPlan(plannerId);
         setPlans(response);
-        console.log("fetchPlan : ", response);
       } catch (e) {
         console.log("플랜 불러오는 중 에러", e);
       }
@@ -466,7 +424,6 @@ export const Planning = () => {
   if (plannerInfo) {
     return (
       <div>
-        {/* <Header /> */}
         <MainContainer onClick={() => closeMemo()}>
           <MenuIcons
             plannerId={plannerId}
@@ -478,8 +435,6 @@ export const Planning = () => {
             setModals={setModals}
             isChatOpen={isChatOpen}
             setIsChatOpen={setIsChatOpen}
-            setPlans={setPlans}
-            setIsEditting={setIsEditting}
           />
           <Info>
             <div
@@ -528,9 +483,7 @@ export const Planning = () => {
                     <div>
                       <h1>{editPlannerInfo.title}</h1>
                       <h3>
-                        <h3>{editPlannerInfo.theme}</h3>
-                        {areaState.area} {areaState.subArea}
-                        &nbsp;/&nbsp;&nbsp;
+                        {areaState.area} {areaState.subArea} &nbsp;/&nbsp;&nbsp;
                         {editPlannerInfo.theme}
                       </h3>
                       <h3>
@@ -758,7 +711,6 @@ export const Planning = () => {
             searchState={searchState}
             setSearchState={setSearchState}
             setCurrentAddedPlace={setCurrentAddedPlace}
-            // setPlans={setPlans}
           />
         )}
         {modals.searchUser && (
@@ -793,20 +745,17 @@ export const Planning = () => {
             <p>이미지 업로드 중입니다. 잠시만 기다려주세요...</p>
           </Loading>
         )}
-        {/* <Footer /> */}
       </div>
     );
   } else {
     return (
       <>
-        {/* <Header /> */}
         <div style={{ width: "100%", height: "800px" }}>
           {" "}
           <Loading>
             <p>플래닝 정보를 불러오는 중입니다. 잠시만 기다려주세요...</p>
           </Loading>
         </div>
-        {/* <Footer /> */}
       </>
     );
   }
