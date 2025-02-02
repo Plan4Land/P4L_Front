@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import AdminApi from "../../Api/AdminApi";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import Common from "../../Util/Common";
 import {Button} from "../../Component/ButtonComponent";
 import {useAuth} from "../../Context/AuthContext";
@@ -10,11 +10,6 @@ const AdminLogin = () => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
-
-  useEffect(() => {
-    logout();
-  }, []);
 
   const handleLogin = async () => {
     try{
