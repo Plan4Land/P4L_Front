@@ -4,6 +4,7 @@ import axios from "axios";
 import AxiosApi from "../../../Api/AxiosApi";
 import { useAuth } from "../../../Context/AuthContext";
 import { Button } from "../../../Component/ButtonComponent";
+import Common from "../../../Util/Common";
 
 export function KakaoRedirect() {
   const navigate = useNavigate();
@@ -67,6 +68,9 @@ export function KakaoRedirect() {
                 
                 if (backendResponse.status === 200) {
                   // 4. 로그인 성공 -> 페이지 이동
+                  console.log(backendResponse.data);
+                  Common.setAccessToken(backendResponse.data.accessToken);
+                  Common.setRefreshToken(backendResponse.data.refreshToken);
                   loginFront("kakao", kakaoUser.id);
                   navigate("/");
                 }
@@ -94,6 +98,8 @@ export function KakaoRedirect() {
 
   const loginFront = async (sso, socialId) => {
     const userData = await AxiosApi.memberInfoBySocialId(sso, socialId);
+    console.log("12345")
+    console.log(userData);
     login(userData);
   }
 

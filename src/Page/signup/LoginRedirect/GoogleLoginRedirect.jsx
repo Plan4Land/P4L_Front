@@ -4,6 +4,7 @@ import axios from "axios";
 import AxiosApi from "../../../Api/AxiosApi";
 import { useAuth } from "../../../Context/AuthContext";
 import { Button } from "../../../Component/ButtonComponent";
+import Common from "../../../Util/Common";
 
 export function GoogleRedirect() {
   const navigate = useNavigate();
@@ -70,6 +71,8 @@ export function GoogleRedirect() {
                 console.log("백엔드 응답:", backendResponse);
                 if (backendResponse.status === 200) {
                   // 4. 로그인 성공 -> 페이지 이동
+                  Common.setAccessToken(backendResponse.data.accessToken);
+                  Common.setRefreshToken(backendResponse.data.refreshToken);
                   loginFront("google", googleUser.id);
                   navigate("/");
                 }

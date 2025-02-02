@@ -49,7 +49,8 @@ const AxiosApi = {
     return await AxiosInstance.get(`/member/${userId}`);
   },
   memberInfoBySocialId: async (sso, socialId) => {
-    return await AxiosInstance.get(`/member/social/${sso}/${socialId}`);
+    console.log("memberinfobysosid", sso, socialId);
+    return await axios.get(Common.PLAN_DOMAIN+`/member/social/${sso}/${socialId}`);
   },
   // 멤버 검색
   searchMember: async (userKeyword, plannerId) => {

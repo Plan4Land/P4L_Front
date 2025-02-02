@@ -4,6 +4,7 @@ import axios from "axios";
 import AxiosApi from "../../../Api/AxiosApi";
 import { useAuth } from "../../../Context/AuthContext";
 import { Button } from "../../../Component/ButtonComponent";
+import Common from "../../../Util/Common";
 
 export function NaverRedirect() {
   const navigate = useNavigate();
@@ -60,6 +61,8 @@ export function NaverRedirect() {
   
           if (backendResponse.status === 200) {
             // 로그인 성공 -> 페이지 이동
+            Common.setAccessToken(backendResponse.data.accessToken);
+            Common.setRefreshToken(backendResponse.data.refreshToken);
             await loginFront("naver", naverUser.id);
             navigate("/");
           }
