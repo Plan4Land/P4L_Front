@@ -96,7 +96,7 @@ export const ProfileImg = ({ file, width, height }) => {
 };
 
 export const PictureComponent = (props) => {
-  const { currentPic, setCurrentPic, role, type, width, height } = props;
+  const { currentPic, setCurrentPic, role, type, width, height, mediaHeight768 } = props;
   const [isPicsModalOpen, setIsPicsModalOpen] = useState("");
   // const imgRootPath = type === "profile" ? "/profile-pic" : "/Img/planning-pic";
 
@@ -127,6 +127,7 @@ export const PictureComponent = (props) => {
         state={role === "ROLE_MEMBERSHIP" ? "edit" : "new"}
         addPicture={handlePicAdd}
         type={type}
+        mediaHeight768={mediaHeight768}
       />
     </>
   );
@@ -134,7 +135,7 @@ export const PictureComponent = (props) => {
 
 // 프로필 사진 모달
 export const ProfilePicModal = (props) => {
-  const { open, close, onSelect, state, addPicture, type } = props;
+  const { open, close, onSelect, state, addPicture, type, mediaHeight768 } = props;
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -165,6 +166,7 @@ export const ProfilePicModal = (props) => {
       onClose={() => close(false)}
       contentWidth="450px"
       // contentHeight="400px"
+      mediaHeight768={mediaHeight768}
     >
       <ModalContainer>
         <div className="modal-subcontainer">
@@ -364,5 +366,21 @@ const PictureModalBox = styled.div`
     width: 80px;
     height: 80px;
     padding: 20px;
+  }
+
+  @media (max-width: 768px) {
+    width: 88px;
+    height: 88px;
+    margin: 6px !important;
+
+    img {
+      width: 82px;
+      height: 82px;
+    }
+    .plusPic {
+      width: 62px;
+      height: 62px;
+      padding: 10px;
+    }
   }
 `;
