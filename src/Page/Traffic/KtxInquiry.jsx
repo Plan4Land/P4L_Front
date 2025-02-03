@@ -32,6 +32,9 @@ const KtxInquiry = () => {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [error, setError] = useState(null);
+  const [selectedTime, setSelectedTime] = useState("");
+  const [isDepTimeOpen, setIsDepTimeOpen] = useState(true); 
+  const [selectedDepTime, setSelectedDepTime] = useState("");
 
   const [isDepCat1Open, setIsDepCat1Open] = useState(true);
   const [isDepCat2Open, setIsDepCat2Open] = useState(true);
@@ -210,7 +213,6 @@ const KtxInquiry = () => {
       }
   
       const sortedSchedules = sortByTime(allSchedules);
-      console.log(sortedSchedules);
       setSchedule(sortedSchedules);
       setCurrentPage(0);
     } catch (error) {
@@ -226,6 +228,10 @@ const KtxInquiry = () => {
     window.scrollTo(0, 0);
   };
 
+  const handleSearchClick = () => {
+    fetchSchedule();
+  };
+
   const handleResetSelections = () => {
     setSelectedDepCat1("");
     setSelectedDepCat2("");
@@ -235,6 +241,7 @@ const KtxInquiry = () => {
     setDate("");
     setSchedule([]);
     setCurrentPage(1);
+    setSelectedDepTime("");
   };
 
   const getCat2List = (selectedCat1) => {
@@ -247,6 +254,20 @@ const KtxInquiry = () => {
     setIsSelectOpen(!isSelectOpen);
   };
 
+  const generateTimes = () => {
+    const times = [];
+    for (let i = 0; i < 24; i++) {
+      const hour = String(i).padStart(2, "0");
+      times.push(`${hour}:00`);
+    }
+    return times;
+  };
+
+  const handleTimeSelect = (time) => {
+    setSelectedTime(time);
+  };
+
+  const toggleDepTime = () => setIsDepTimeOpen((prev) => !prev);
   const toggleDepCat1 = () => setIsDepCat1Open(!isDepCat1Open);
   const toggleDepCat2 = () => setIsDepCat2Open((prev) => !prev);
   const toggleArrCat1 = () => setIsArrCat1Open(!isArrCat1Open);
@@ -272,14 +293,37 @@ const KtxInquiry = () => {
                 className="search"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                placeholder="출발 날짜를 선택해주세요"
               />
             </div>
           </CalenderSt>
+
+          <div className="mainarea">
+            <ToggleSection
+              title="출발 시간 선택"
+              isOpen={isDepTimeOpen}
+              onToggle={toggleDepCat1}
+            >
+              {isDepTimeOpen && (
+                <div className="buttons">
+                  {generateTimes().map((time) => (
+                    <Button
+                      key={`dep-time-${time}`}
+                      onClick={() => setSelectedDepTime(time)}
+                      className={selectedDepTime === time ? "selected" : ""}
+                    >
+                      {time}
+                    </Button>
+                  ))}
+                </div>
+              )}
+            </ToggleSection>
+          </div>
           
           <div className="mainarea">
             <ToggleSection
               title="출발 역 선택"
-              isOpen={{isDepCat1Open} }
+              isOpen={{isDepCat1Open}}
               onToggle={toggleDepCat1}
             >
               {isDepCat1Open && ( 

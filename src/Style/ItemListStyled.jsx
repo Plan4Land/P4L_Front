@@ -137,6 +137,9 @@ export const SelectTourItem = styled.div`
     h3 {
       font-size: 15px;
       margin: 15px 0 5px 10px;
+      &.title {
+        margin-left: 0;
+      }
     }
   }
 `;
@@ -359,9 +362,9 @@ export const SortSelect = styled.select`
 `;
 
 export const Table = styled.table`
-  width: 65vw;
-  min-width: 680px; /* 최소 테이블 너비 */
-  max-width: 700px;
+  width: 80vw;
+  min-width: 800px; /* 최소 테이블 너비 */
+  max-width: 850px;
   border-collapse: collapse;
   text-align: center;
   table-layout: fixed; /* 고정된 레이아웃 설정 */
@@ -377,7 +380,7 @@ export const Table = styled.table`
   }
   
   @media (max-width: 768px) {
-    width: 100%;
+    width: 103%;
     min-width: auto;
     th, td {
       padding: 10px; 
