@@ -85,6 +85,7 @@ export const QuickSearch = styled(GridItem)`
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
         height: 100%;
         width: 100%;
+        min-width: 200px;
         border-radius: 10px;
         transition: all 0.3s ease;
         font-size: 18px;
@@ -94,9 +95,18 @@ export const QuickSearch = styled(GridItem)`
           transform: translateY(-2px);
         }
       }
-      @media (max-width: 1024px) {
+      @media (max-width: 1300px) {
         .buttons {
           grid-template-columns: repeat(4, 1fr);
+        }
+      }
+      @media (max-width: 1024px) {
+        /* .buttons {
+          grid-template-columns: repeat(4, 1fr);
+        } */
+        button {
+          min-width: 140px;
+          font-size: 16px;
         }
       }
       @media (max-width: 768px) {
@@ -107,7 +117,15 @@ export const QuickSearch = styled(GridItem)`
           margin: 5px;
         }
         button {
+          min-width: 110px;
           font-size: 14px;
+          padding: 0;
+        }
+      }
+      @media (max-width: 420px) {
+        button {
+          min-width: 90px;
+          font-size: 12px;
           padding: 0;
         }
       }
@@ -264,6 +282,9 @@ export const RecommItem = styled(GridItem)`
 
   .swiper-pagination-bullet-active {
     background-color: ${colors.colorB};
+  }
+  @media (max-width: 1300px) {
+    grid-column: span 4;
   }
   @media (max-width: 768px) {
     height: 350px;
@@ -432,7 +453,9 @@ export const Festive = styled(GridItem)`
   @media (max-width: 768px) {
     grid-column: span 2;
   }
-
+  @media (max-width: 1300px) {
+    display: none;
+  }
   .react-calendar {
     width: 100%;
     height: 360px;
