@@ -98,9 +98,10 @@ export const Info = styled.div`
   }
   h1 {
     margin: 7% 3px;
-    @media (max-width: 1250px) {
+    @media (max-width: 1350px) {
       font-size: 24px;
       margin: 6% 3px;
+      letter-spacing: -1px;
     }
     @media (max-width: 768px) {
       font-size: 20px;
@@ -136,6 +137,12 @@ export const Info = styled.div`
     height: 15vw;
     max-height: 370px;
     flex-shrink: 0;
+    @media (max-width: 768px) {
+      margin: 0 2% 0 2%;
+      .current-pic {
+        scale: 0.9;
+      }
+    }
   }
   .editTitle {
     display: flex;
@@ -169,7 +176,7 @@ export const Info = styled.div`
     @media (max-width: 768px) {
       font-size: 16px;
       padding: 5px;
-      width: 65%;
+      width: 72%;
     }
     @media (max-width: 400px) {
       font-size: 14px;
@@ -339,7 +346,7 @@ export const Info = styled.div`
     @media (max-width: 768px) {
       grid-template-columns: repeat(3, 1fr);
       margin-bottom: 5px;
-      max-width: 80%;
+      max-width: 90%;
     }
   }
 
@@ -390,7 +397,7 @@ export const Info = styled.div`
     @media (max-width: 768px) {
       display: flex;
       position: absolute;
-      left: -8vw;
+      left: -2vw;
       bottom: 0;
       font-size: 17px;
       span {
@@ -401,13 +408,17 @@ export const Info = styled.div`
       left: -15vw;
       scale: 0.9;
     }
-    @media (max-width: 470px) {
-      left: -18vw;
-      scale: 0.9;
+    /* @media (max-width: 470px) {
+      left: -25vw;
+      scale: 0.8;
+    } */
+    @media (max-width: 440px) {
+      left: -25vw;
+      scale: 0.8;
     }
-    @media (max-width: 400px) {
-      left: -23vw;
-      scale: 0.9;
+    @media (max-width: 390px) {
+      left: -27vw;
+      scale: 0.7;
     }
   }
 `;
@@ -615,14 +626,11 @@ export const MainPlanning = styled.div`
     position: absolute;
     z-index: 10;
     background-color: white;
-    top: 95px;
-    left: 5px;
+    top: 70px;
+    left: -10px;
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  @media (max-width: 400px) {
-    left: 8px;
   }
 
   .planning-day {
@@ -1053,6 +1061,9 @@ export const SearchBookmarkContainer = styled.div`
   border: 1px solid #ddd;
   padding: 10px;
   ${ScrollBar}
+  @media (max-width: 768px) {
+    height: 315px;
+  }
 `;
 
 export const DayToggleContainer = styled.div`
