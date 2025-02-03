@@ -96,7 +96,15 @@ export const ProfileImg = ({ file, width, height }) => {
 };
 
 export const PictureComponent = (props) => {
-  const { currentPic, setCurrentPic, role, type, width, height, mediaHeight768 } = props;
+  const {
+    currentPic,
+    setCurrentPic,
+    role,
+    type,
+    width,
+    height,
+    mediaHeight768,
+  } = props;
   const [isPicsModalOpen, setIsPicsModalOpen] = useState("");
   // const imgRootPath = type === "profile" ? "/profile-pic" : "/Img/planning-pic";
 
@@ -135,7 +143,8 @@ export const PictureComponent = (props) => {
 
 // 프로필 사진 모달
 export const ProfilePicModal = (props) => {
-  const { open, close, onSelect, state, addPicture, type, mediaHeight768 } = props;
+  const { open, close, onSelect, state, addPicture, type, mediaHeight768 } =
+    props;
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -273,8 +282,12 @@ const PictureBox = styled.div`
     cursor: pointer;
     width: ${(props) => props.width || "100px"};
     height: ${(props) => props.height || "100px"};
+    flex-shrink: 0;
     &:hover {
       border: 1px solid #bbb;
+    }
+    @media (max-width: 768px) {
+      scale: 0.6;
     }
   }
 
