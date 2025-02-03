@@ -31,6 +31,9 @@ const IntercityBus = () => {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [error, setError] = useState(null);
+  const [selectedTime, setSelectedTime] = useState("");
+  const [isDepTimeOpen, setIsDepTimeOpen] = useState(true); // 출발 시간 선택 섹션 상태
+  const [selectedDepTime, setSelectedDepTime] = useState(""); // 선택된 출발 시간 상태
 
   const [isDepCat1Open, setIsDepCat1Open] = useState(true);
   const [isDepCat2Open, setIsDepCat2Open] = useState(true);
@@ -94,10 +97,7 @@ const IntercityBus = () => {
     setLoading(true);
     try {
       const response = await fetch(`${url}?${new URLSearchParams(params)}`);
-      console.log("API 응답 상태:", response.status);
-      const textData = await response.text(); // XML 데이터로 받아옴
-      console.log("XML 응답 데이터:", textData);
-
+      const textData = await response.text();
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(textData, "application/xml");
       const items = xmlDoc.getElementsByTagName("item");
@@ -126,7 +126,12 @@ const IntercityBus = () => {
             charge: item.getElementsByTagName("charge")[0]?.textContent || "",
           };
         });
-        setSchedule(schedules);
+
+        const filteredSchedules = selectedDepTime
+        ? schedules.filter((schedule) => schedule.depTime >= selectedDepTime)
+        : schedules;
+
+        setSchedule(filteredSchedules);
         setCurrentPage(0);
       } else {
         alert("조회된 시외버스 시간이 없습니다.");
@@ -137,7 +142,7 @@ const IntercityBus = () => {
     } finally {
       setLoading(false);
     }
-  }, [date, selectedDepCat2, selectedArrCat2]);
+  }, [date, selectedDepCat2, selectedArrCat2, selectedDepTime]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -152,7 +157,7 @@ const IntercityBus = () => {
     setDate("");
     setSchedule([]);
     setCurrentPage(0);
-    console.log("초기화됨");
+    setSelectedDepTime("");
   };
 
   const getCat2List = (selectedCat1) => {
@@ -166,6 +171,20 @@ const IntercityBus = () => {
     setIsSelectOpen(!isSelectOpen);
   };
 
+  const generateTimes = () => {
+    const times = [];
+    for (let i = 0; i < 24; i++) {
+      const hour = String(i).padStart(2, "0");
+      times.push(`${hour}:00`);
+    }
+    return times;
+  };
+
+  const handleTimeSelect = (time) => {
+    setSelectedTime(time);
+  };
+
+  const toggleDepTime = () => setIsDepTimeOpen((prev) => !prev);
   const toggleDepCat1 = () => setIsDepCat1Open(!isDepCat1Open);
   const toggleDepCat2 = () => setIsDepCat2Open((prev) => !prev);
   const toggleArrCat1 = () => setIsArrCat1Open(!isArrCat1Open);
@@ -194,6 +213,28 @@ const IntercityBus = () => {
               />
             </div>
           </SearchSt>
+
+          <div className="mainarea">
+            <ToggleSection
+              title="출발 시간 선택"
+              isOpen={isDepTimeOpen}
+              onToggle={toggleDepTime}
+            >
+              {isDepTimeOpen && (
+                <div className="buttons">
+                  {generateTimes().map((time) => (
+                    <Button
+                      key={`dep-time-${time}`}
+                      onClick={() => setSelectedDepTime(time)}
+                      className={selectedDepTime === time ? "selected" : ""}
+                    >
+                      {time}
+                    </Button>
+                  ))}
+                </div>
+              )}
+            </ToggleSection>
+          </div>
 
           <div className="mainarea">
             <ToggleSection

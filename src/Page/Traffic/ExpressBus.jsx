@@ -33,6 +33,7 @@ const ExpressBus = () => {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [error, setError] = useState(null);
+  const [selectedTime, setSelectedTime] = useState("");
 
   const [isDepCat1Open, setIsDepCat1Open] = useState(true);
   const [isDepCat2Open, setIsDepCat2Open] = useState(true);
@@ -308,7 +309,7 @@ const ExpressBus = () => {
           {selectedDepCat2 && !isMetropolitanCity(selectedDepCat1) && (
             <div className="top">
               <ToggleSection
-                title="출발 소분류 지역 선택"
+                title="출발 터미널 선택"
                 isOpen={isArrCat1Open}
                 onToggle={toggleArrCat1}
               >
