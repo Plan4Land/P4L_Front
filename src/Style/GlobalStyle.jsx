@@ -247,11 +247,11 @@ export const HeaderSt = styled.div`
     background-color: white;
     border: 1px solid #ddd;
     width: 120px;
-    height: 70px;
-    margin-top: -55px;
-    line-height: 35px;
+    height: auto; /* 높이를 자동으로 조정 */
+    margin-top: -45px;
+    line-height: 40px; /* 항목 간 간격을 늘려 클릭 범위 확대 */
     border-radius: 15px;
-    padding: auto;
+    padding: 0; /* 불필요한 패딩을 제거 */
   }
   /* 모바일 버전 스타일 */
   @media (max-width: 768px) {

@@ -393,7 +393,7 @@ const IntercityBus = () => {
           {loading && (
             <Loading>
               <p>목록을 불러오는 중 입니다.</p>
-            </Loading>
+            </Loading>  
           )}
           {error && <div>{error}</div>}
           {!loading && !error && (
