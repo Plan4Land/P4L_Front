@@ -219,6 +219,7 @@ const UserInfoEdit = () => {
           setCurrentPic={setCurrentPic}
           role={userRole}
           type={"profile"}
+          mediaHeight768={"350px"}
         />
 
         <Button onClick={handleSave}>저장하기</Button>

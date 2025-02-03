@@ -235,7 +235,7 @@ export const HeaderSt = styled.div`
     .usermenu {
       .dropdown-list {
         top: -10px;
-        right: -150px;
+        right: -130px;
         scale: 0.7;
       }
     }
