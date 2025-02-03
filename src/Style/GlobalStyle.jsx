@@ -172,7 +172,7 @@ export const HeaderSt = styled.div`
       display: none;
       position: absolute;
       right: 0;
-      width: 500px;
+      width: 230px;
       background-color: white;
       border: 1px solid #ddd;
       box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -185,7 +185,7 @@ export const HeaderSt = styled.div`
       margin-bottom: 20px;
       .truncated-text {
         display: inline-block;
-        max-width: 150px; /* 원하는 너비 설정 */
+        max-width: 220px; /* 원하는 너비 설정 */
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -195,7 +195,7 @@ export const HeaderSt = styled.div`
         border-bottom: 1px solid #ddd;
       }
       h3 {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: bold;
         margin-bottom: 10px;
         color: black;
@@ -206,7 +206,7 @@ export const HeaderSt = styled.div`
       }
       p {
         color: ${colors.colorA};
-        font-size: 16px;
+        font-size: 15px;
         margin: 5px 0;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -234,7 +234,7 @@ export const HeaderSt = styled.div`
     }
     .usermenu {
       .dropdown-list {
-        top: -20px;
+        top: -10px;
         right: -150px;
         scale: 0.7;
       }
