@@ -190,15 +190,15 @@ export const Header = () => {
                     <h3>내 플래닝</h3>
                   </div>
                   {planners.map((plan, index) => {
-                    const areaName =
-                      areas.find((area) => area.code === plan.area)?.name ||
-                      "알 수 없는 지역";
-                    const subAreaName =
-                      areas
-                        .find((area) => area.code === plan.area)
-                        ?.subAreas.find(
-                          (subArea) => subArea.code === plan.subArea
-                        )?.name || "알 수 없는 하위 지역";
+                    // const areaName =
+                    //   areas.find((area) => area.code === plan.area)?.name ||
+                    //   "알 수 없는 지역";
+                    // const subAreaName =
+                    //   areas
+                    //     .find((area) => area.code === plan.area)
+                    //     ?.subAreas.find(
+                    //       (subArea) => subArea.code === plan.subArea
+                    //     )?.name || "알 수 없는 하위 지역";
 
                     return (
                       <p
@@ -206,7 +206,7 @@ export const Header = () => {
                         onClick={() => topPlanClick(plan.id)}
                       >
                         <strong className="truncated-text">{plan.title}</strong>{" "}
-                        -
+                        {/* -
                         <span className="truncated-text">
                           {areaName} {subAreaName}
                         </span>
@@ -216,7 +216,7 @@ export const Header = () => {
                             .split(",")
                             .map((theme) => `#${theme.trim()}`)
                             .join(" ")}
-                        </span>
+                        </span> */}
                       </p>
                     );
                   })}
@@ -232,8 +232,9 @@ export const Header = () => {
                       key={`bookmarked-spot-${index}`}
                       onClick={() => topTourClick(spot.id)}
                     >
-                      <strong className="truncated-text">{spot.title}</strong> -
-                      <span className="truncated-text">{spot.addr1}</span>
+                      <strong className="truncated-text">{spot.title}</strong>
+                      {/* -
+                      <span className="truncated-text">{spot.addr1}</span> */}
                     </p>
                   ))}
                 </div>

@@ -80,9 +80,13 @@ export function NaverRedirect() {
                 sso: "naver",
               },
             });
+          } else if (backendError.response.status === 410 && backendError.response.data.message === "탈퇴한 회원입니다.") {
+            console.log("탈퇴한 회원입니다.");
+            alert("탈퇴한 회원입니다.");
           } else {
             console.error("백엔드 통신 오류:", backendError);
           }
+          setIsSuccess(false);
         }
       } catch (error) {
         console.error("로그인 과정에서 오류 발생:", error);

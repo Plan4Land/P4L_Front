@@ -773,13 +773,15 @@ export const MakePlanningContainer = styled.div`
       margin-bottom: 0;
     }
     .location-select {
-      width: 70vw;
-      font-size: 10px;
+      width: 50vw;
+      min-width: 335px;
+      font-size: 13px;
       padding: 5px;
     }
     .planningTitle {
       input {
-        width: 70vw;
+        width: 60vw;
+        min-width: 335px;
       }
     }
     .profile-container {
@@ -810,7 +812,7 @@ export const DatePickerContainer = styled.div`
   position: relative;
   z-index: 2;
   @media (max-width: 768px) {
-    scale: 0.7;
+    scale: 0.8;
   }
   span {
     margin: 0 5px;
