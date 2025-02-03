@@ -83,13 +83,18 @@ export function GoogleRedirect() {
 
                   // 404 에러 시 회원가입 페이지로 이동
                   navigate("/signup", { state: { social_id: googleUser.id, sso: "google" } });
+                } else if (error.response.status === 410 && error.response.data.message === "탈퇴한 회원입니다.") {
+                  console.log("탈퇴한 회원입니다.");
+                  alert("탈퇴한 회원입니다.");
                 } else {
                   console.error("백엔드 통신 오류:", error);
                 }
+                setIsSuccess(false);
               });
           })
           .catch((error) => {
             console.error("구글 사용자 정보 조회 실패:", error);
+            setIsSuccess(false);
           });
       })
       .catch((error) => {
