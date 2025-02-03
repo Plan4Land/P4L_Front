@@ -224,7 +224,7 @@ export const Container = styled.div`
     width: 100%;
     .deleteBox {
       display: flex;
-      width: 80%;
+      width: 500px;
       justify-content: flex-end;
       padding-right: 20px;
     }
@@ -245,12 +245,16 @@ export const Container = styled.div`
     .message {
       font-size: 10px;
     }
-    .nextButton {
+    /* .nextButton {
       scale: 0.7;
+    } */
+    .center2 {
+      .deleteBox {
+        /* margin-top: -35px; */
+        width: 100%;
+      }
     }
-    .deleteBox {
-      margin-top: -35px;
-    }
+    
     label {
       font-size: 13px;
     }
@@ -337,7 +341,8 @@ export const InputBox = styled.div`
     }
   }
   @media (max-width: 768px) {
-    font-size: 0.8em;
+    width: calc(100% - 22px);
+    /* font-size: 0.8em; */
     padding: 5px 10px;
   }
 `;
@@ -405,6 +410,34 @@ export const EditBox = styled.div`
     }
   }
   @media (max-width: 768px) {
-    scale: 0.7;
+    /* scale: 0.7; */
+    width: 100%;
+    .icon {
+      svg {
+        width: 100%;
+      }
+    }
+    .iconBox1 {
+      padding: 5% 10%;
+    }
+    .iconBox2 {
+      padding: 7% 10%;
+    }
+  }
+  @media (max-width: 400px) {
+    flex-direction: column;
+    .icon {
+      svg {
+        height: 100%;
+      }
+    }
+    .iconBox1 {
+      border-right: none;
+      border-bottom: 1px solid #ddd;
+      padding: 20% 25%;
+    }
+    .iconBox2 {
+      padding: 20% 20%;
+    }
   }
 `;
