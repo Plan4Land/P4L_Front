@@ -10,7 +10,7 @@ export const UserMenu = ({ setSelectedMenu, selectedMenu }) => {
     "북마크 관광지",
     "북마크 플래닝",
     "내 정보 수정",
-    "멤버십",
+    // "멤버십",
   ];
 
   return (
