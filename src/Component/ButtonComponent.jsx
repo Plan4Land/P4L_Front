@@ -84,7 +84,7 @@ export const ScrollBar = css`
 
   /* 스크롤바 핸들에 마우스를 올렸을 때 */
   &::-webkit-scrollbar-thumb:hover {
-    background: #b68444;
+    background: rgb(80, 156, 189);
   }
 `;
 

@@ -33,11 +33,13 @@ export const KakaoMapSpot = ({ mapX, mapY }) => {
           <input
             style={{
               position: "absolute",
+              width: "55px",
               top: "5px",
               left: "5px",
               zIndex: 10,
               backgroundColor: colors.colorC,
-              border: "1px solid #333",
+              border: "none",
+              borderRadius: "5px",
               cursor: "pointer",
             }}
             type="button"
@@ -59,9 +61,13 @@ export const KakaoMapSpot = ({ mapX, mapY }) => {
           <input
             style={{
               position: "absolute",
+              width: "55px",
               top: "5px",
               left: "5px",
               zIndex: 10,
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
             }}
             type="button"
             onClick={() => setToggle("map")}

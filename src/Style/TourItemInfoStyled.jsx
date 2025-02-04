@@ -7,7 +7,7 @@ export const TourItemInfoBox = styled.div`
   margin: auto;
   padding: 20px;
   .tour-title {
-    width: 90%;
+    width: 100%;
     border-bottom: 2px solid #ddd;
     margin-bottom: 2px;
     display: table;
@@ -56,8 +56,8 @@ export const TourItemInfoBox = styled.div`
       color: ${colors.colorA};
       font-size: 2em;
       position: absolute;
-      top: 58px;
-      right: 10px;
+      top: 55px;
+      right: 50px;
       background-color: transparent;
       border: none;
       cursor: pointer;
@@ -83,13 +83,29 @@ export const TourItemInfoBox = styled.div`
     height: 500px;
     gap: 10px;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
       flex-direction: column;
       height: 800px;
     }
   }
-  @media (max-width: 768px) {
-    width: 80%;
+  @media (max-width: 1024px) {
+    width: 90%;
+    .tourThumb {
+      width: 100%;
+    }
+    .tour-title {
+      font-size: 20px;
+    }
+    .tour-details {
+      .bookmark {
+        font-size: 1.5em;
+        top: 40px;
+        right: 40px;
+      }
+      p {
+        font-size: 11px;
+      }
+    }
   }
 `;
 
@@ -132,7 +148,7 @@ export const NearTravelList = styled.div`
       margin-bottom: 10px;
     }
   }
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     height: 50%;
     width: 100%;
   }
@@ -155,6 +171,7 @@ export const SpotInformation = styled.div`
       font-weight: bold;
       cursor: pointer;
       border: none;
+      border-radius: 10px;
       background-color: transparent;
       height: 30px;
       margin: auto;
@@ -174,7 +191,8 @@ export const SpotInformation = styled.div`
   }
   .info-item {
     display: flex;
-    margin: 20px auto;
+    margin: auto;
+    padding: 10px 0;
     border-bottom: 1px solid #ddd;
     align-items: center;
     .info-name {
@@ -182,9 +200,11 @@ export const SpotInformation = styled.div`
       width: 100px;
       display: inline-block;
       color: ${colors.colorA};
+      white-space: nowrap;
     }
     .info-content {
-      display: table-cell;
+      white-space: normal;
+      word-break: break-word;
     }
   }
   .info-detail,
@@ -194,5 +214,23 @@ export const SpotInformation = styled.div`
     height: 75%;
     overflow-y: scroll;
     ${ScrollBar}
+  }
+  @media (max-width: 1024px) {
+    width: 100%;
+    .info-content {
+      font-size: 13px;
+    }
+    .tabs {
+      height: 30px;
+      button {
+        height: 20px;
+      }
+    }
+    .informationDetail {
+      margin: 5px auto;
+      .info-name {
+        font-size: 15px;
+      }
+    }
   }
 `;
