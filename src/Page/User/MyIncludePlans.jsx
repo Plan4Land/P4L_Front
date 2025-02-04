@@ -42,7 +42,7 @@ export const MyIncludePlans = () => {
         currentPage,
         size
       );
-      console.log(data.content);
+      // console.log(data.content);
 
       // 모바일에서 이전 데이터와 새 데이터의 중복을 피하도록 처리
       if (isMobile) {
@@ -117,9 +117,8 @@ export const MyIncludePlans = () => {
                       )?.name || "알 수 없는 하위 지역";
 
                   return (
-                    <div className="itemBox">
+                    <div className="itemBox" key={planner.id}>
                       <PlanItem
-                        key={planner.id}
                         id={planner.id}
                         thumbnail={
                           planner.thumbnail || "/default-thumbnail.png"
@@ -153,9 +152,8 @@ export const MyIncludePlans = () => {
                   ?.name || "알 수 없는 하위 지역";
 
               return (
-                <div className="itemBox">
+                <div className="itemBox" key={planner.id}>
                   <PlanItem
-                    key={planner.id}
                     id={planner.id}
                     thumbnail={planner.thumbnail || "/default-thumbnail.png"}
                     title={planner.title}

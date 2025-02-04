@@ -481,9 +481,8 @@ export const TourList = () => {
                 ) : (
                   travelSpots.map((spot) => {
                     return (
-                      <div className="itemBox">
+                      <div className="itemBox" key={spot.id}>
                         <TourItem
-                          key={spot.id}
                           data={spot}
                           // id={spot.id}
                           // thumbnail={spot.thumbnail}

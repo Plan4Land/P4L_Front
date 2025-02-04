@@ -117,7 +117,7 @@ export const MyPageMain = () => {
         const data = await AxiosApi.loadFollow(user.id);
         setFollowings(data?.followingInfo || []);
         setFollowers(data?.followerInfo || []);
-        console.log(data.followerInfo);
+        // console.log(data.followerInfo);
       } catch (error) {
         console.error("팔로워 정보를 불러오는데 오류가 발생했습니다.", error);
       }
@@ -139,7 +139,7 @@ export const MyPageMain = () => {
         currentPage,
         size
       );
-      console.log(data.content);
+      // console.log(data.content);
 
       // 모바일에서 이전 데이터와 새 데이터의 중복을 피하도록 처리
       if (isMobile) {

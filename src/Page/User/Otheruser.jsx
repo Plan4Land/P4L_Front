@@ -277,9 +277,8 @@ export const Otheruser = () => {
                         (subArea) => subArea.code === planner.subArea
                       )?.name || "알 수 없는 하위 지역";
                   return (
-                    <div className="itemBox">
+                    <div className="itemBox" key={planner.id}>
                       <PlanItem
-                        key={planner.id}
                         id={planner.id}
                         thumbnail={
                           planner.thumbnail || "/default-thumbnail.png"
@@ -310,9 +309,8 @@ export const Otheruser = () => {
                       (subArea) => subArea.code === planner.subArea
                     )?.name || "알 수 없는 하위 지역";
                 return (
-                  <div className="itemBox">
+                  <div className="itemBox" key={planner.id}>
                     <PlanItem
-                      key={planner.id}
                       id={planner.id}
                       thumbnail={planner.thumbnail || "/default-thumbnail.png"}
                       title={planner.title}

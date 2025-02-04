@@ -52,7 +52,7 @@ export const MyBookmarkTourItem = () => {
         currentPage,
         size
       );
-      console.log(data.content);
+      // console.log(data.content);
 
       // 모바일에서 이전 데이터와 새 데이터의 중복을 피하도록 처리
       if (isMobile) {
@@ -119,9 +119,8 @@ export const MyBookmarkTourItem = () => {
                   )?.name;
 
                   return (
-                    <div className="itemBox">
+                    <div className="itemBox" key={spot.id}>
                       <TourItem
-                        key={spot.id}
                         // id={spot.id}
                         // thumbnail={spot.thumbnail}
                         // title={spot.title}
@@ -150,9 +149,8 @@ export const MyBookmarkTourItem = () => {
               )?.name;
 
               return (
-                <div className="itemBox">
+                <div className="itemBox" key={spot.id}>
                   <TourItem
-                    key={spot.id}
                     // id={spot.id}
                     // thumbnail={spot.thumbnail}
                     // title={spot.title}
