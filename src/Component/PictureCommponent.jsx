@@ -120,7 +120,7 @@ export const PictureComponent = (props) => {
     <>
       <PictureBox width={width} height={height}>
         <div className="current-pic" onClick={() => setIsPicsModalOpen(true)}>
-          <img src={currentPic} alt="프로필 이미지" />
+          <img src={currentPic} alt="-" />
           <label htmlFor="profile-upload" className="upload-label">
             <FontAwesomeIcon icon={faCamera} />
           </label>
@@ -179,7 +179,9 @@ export const ProfilePicModal = (props) => {
     >
       <ModalContainer>
         <div className="modal-subcontainer">
-          <h1 className="title">프로필 선택</h1>
+          <h1 className="title">
+            {type === "profile" ? "프로필 선택" : "썸네일 선택"}
+          </h1>
           <div
             className={
               state === "new" ? "picture-container-new" : "picture-container"
@@ -320,6 +322,7 @@ const ModalContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: black;
 
   .picture-container-new {
     display: grid;
