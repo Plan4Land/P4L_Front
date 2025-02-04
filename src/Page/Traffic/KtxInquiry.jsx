@@ -89,13 +89,8 @@ const KtxInquiry = () => {
   };
 
   const fetchSchedule = useCallback(async () => {
-    if (
-      !date ||
-      !selectedDepCat2 ||
-      !selectedArrCat2 ||
-      selectedVehicle === null
-    ) {
-      alert("날짜, 출발 세부 역, 도착 세부 역, 열차 종류를 모두 선택해주세요.");
+    if (!date || !selectedDepCat2 || !selectedArrCat2 || selectedVehicle === null) {
+      alert("날짜, 출발역, 도착역, 열차 종류 모두 선택해주세요.");
       return;
     }
   
@@ -113,7 +108,6 @@ const KtxInquiry = () => {
   
     const depTerminalId = selectedDepTerminal.cat2Code;
     const arrTerminalId = selectedArrTerminal.cat2Code;
-  
     const formattedDate = date.replace(/-/g, "");
   
     const formatDateTime = (dateTime) => {
@@ -126,8 +120,7 @@ const KtxInquiry = () => {
       return `${hour}:${minute}`;
     };
   
-    const url =
-      "http://apis.data.go.kr/1613000/TrainInfoService/getStrtpntAlocFndTrainInfo";
+    const url = "http://apis.data.go.kr/1613000/TrainInfoService/getStrtpntAlocFndTrainInfo";
     const params = {
       serviceKey:
         "BaAcBeQKCSysvfPe3OYNj5RZR2Ndak1B6nK/pNi+AWPXoWb9ERyK++Iih8TqfSog2L4NtpXRGXOUouQhD+cigw==",
@@ -185,7 +178,11 @@ const KtxInquiry = () => {
             };
           });
   
-          scheduleData.forEach((newSchedule) => {
+          const filteredSchedules = selectedDepTime
+            ? scheduleData.filter((schedule) => schedule.depTime >= selectedDepTime)
+            : scheduleData;
+  
+          filteredSchedules.forEach((newSchedule) => {
             const isDuplicate = allSchedules.some(
               (existingSchedule) =>
                 existingSchedule.depStation === newSchedule.depStation &&
@@ -221,17 +218,17 @@ const KtxInquiry = () => {
     } finally {
       setLoading(false);
     }
-  }, [date, selectedDepCat2, selectedArrCat2, selectedVehicle]);
+  }, [date, selectedDepCat2, selectedArrCat2, selectedVehicle, selectedDepTime]);
   
   const handlePageChange = (page) => {
     setCurrentPage(page);
     window.scrollTo(0, 0);
   };
-
+  
   const handleSearchClick = () => {
     fetchSchedule();
   };
-
+  
   const handleResetSelections = () => {
     setSelectedDepCat1("");
     setSelectedDepCat2("");
@@ -243,17 +240,17 @@ const KtxInquiry = () => {
     setCurrentPage(1);
     setSelectedDepTime("");
   };
-
+  
   const getCat2List = (selectedCat1) => {
     return (
       KTXServiceCode.find((cat1) => cat1.cat1 === selectedCat1)?.cat2List || []
     );
   };
-
+  
   const handleToggleSelect = () => {
     setIsSelectOpen(!isSelectOpen);
   };
-
+  
   const generateTimes = () => {
     const times = [];
     for (let i = 0; i < 24; i++) {
@@ -262,11 +259,11 @@ const KtxInquiry = () => {
     }
     return times;
   };
-
+  
   const handleTimeSelect = (time) => {
     setSelectedTime(time);
   };
-
+  
   const toggleDepTime = () => setIsDepTimeOpen((prev) => !prev);
   const toggleDepCat1 = () => setIsDepCat1Open(!isDepCat1Open);
   const toggleDepCat2 = () => setIsDepCat2Open((prev) => !prev);
@@ -293,7 +290,6 @@ const KtxInquiry = () => {
                 className="search"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                placeholder="출발 날짜를 선택해주세요"
               />
             </div>
           </CalenderSt>
@@ -323,7 +319,7 @@ const KtxInquiry = () => {
           <div className="mainarea">
             <ToggleSection
               title="출발 역 선택"
-              isOpen={{isDepCat1Open}}
+              isOpen={isDepCat1Open}
               onToggle={toggleDepCat1}
             >
               {isDepCat1Open && ( 
