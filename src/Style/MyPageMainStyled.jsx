@@ -257,7 +257,7 @@ export const MenuBarButton = styled.div`
     display: block;
     text-align: center;
     width: 20px;
-    padding: 10px 0 0 20px;
+    padding: 20px 0 0 20px;
     background-color: transparent;
     color: gray;
     font-size: 20px;

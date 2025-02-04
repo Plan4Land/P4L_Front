@@ -62,7 +62,7 @@ export const SelectTourItem = styled.div`
       color: #b0b0b0;
     }
   }
-  
+
   .reset-button {
     width: 80px;
     height: 20px;
@@ -120,7 +120,7 @@ export const SelectTourItem = styled.div`
     position: absolute;
     z-index: 10;
     background-color: white;
-    top: 110px;
+    top: 90px;
     left: 40px;
     padding: 10px;
     border-radius: 10px;
@@ -145,10 +145,9 @@ export const SelectTourItem = styled.div`
 `;
 
 export const LoadBox = styled.div`
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 `;
-
 
 export const FilterButton = styled.div`
   display: none;
@@ -157,7 +156,7 @@ export const FilterButton = styled.div`
     display: block;
     text-align: center;
     width: 20px;
-    padding: 10px 0 0 20px;
+    padding: 20px 0 0 20px;
     background-color: transparent;
     color: gray;
     font-size: 20px;
@@ -368,22 +367,23 @@ export const Table = styled.table`
   border-collapse: collapse;
   text-align: center;
   table-layout: fixed; /* 고정된 레이아웃 설정 */
-  
+
   th,
   td {
     padding: 13px;
     border: 1px solid #ddd;
   }
-  
+
   th {
     background-color: #f4f4f4;
   }
-  
+
   @media (max-width: 768px) {
     width: 103%;
     min-width: auto;
-    th, td {
-      padding: 10px; 
+    th,
+    td {
+      padding: 10px;
     }
   }
 `;

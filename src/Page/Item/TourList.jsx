@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Footer, Header } from "../../Component/GlobalComponent";
 import {
@@ -63,6 +63,7 @@ export const TourList = () => {
   const [searchQuery, setSearchQuery] = useState(filters.searchQuery);
 
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const selectRef = useRef(null);
 
   useEffect(() => {
     const fetchFilteredTravelSpots = async () => {
@@ -248,6 +249,19 @@ export const TourList = () => {
   const handleToggleSelect = () => {
     setIsSelectOpen(!isSelectOpen);
   };
+  const handleClickOutside = (event) => {
+    if (selectRef.current && !selectRef.current.contains(event.target)) {
+      setIsSelectOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleLoadMore = async () => {
     if (filters.currentPage + 1 < totalPages) {
       setFilters((prevFilters) => ({
@@ -289,7 +303,7 @@ export const TourList = () => {
         <FaBars />
       </FilterButton>
       <List>
-        <SelectTourItem className={isSelectOpen ? "open" : ""}>
+        <SelectTourItem className={isSelectOpen ? "open" : ""} ref={selectRef}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
             <FaUndo style={{ marginLeft: "6px" }} />

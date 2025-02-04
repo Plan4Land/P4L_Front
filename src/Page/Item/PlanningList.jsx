@@ -1,5 +1,5 @@
 import { Header, Footer } from "../../Component/GlobalComponent";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { areas, themes } from "../../Util/Common";
 import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
 import { Button, ToggleSection } from "../../Component/ButtonComponent";
@@ -62,6 +62,7 @@ export const PlanningList = () => {
   const [searchQuery, setSearchQuery] = useState(filters.searchQuery);
 
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const selectRef = useRef(null);
 
   const sortBy = [
     {
@@ -195,6 +196,18 @@ export const PlanningList = () => {
   const handleToggleSelect = () => {
     setIsSelectOpen(!isSelectOpen);
   };
+  const handleClickOutside = (event) => {
+    if (selectRef.current && !selectRef.current.contains(event.target)) {
+      setIsSelectOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleTopFilterChange = (key, name) => {
     setFilters((prev) => {
@@ -220,7 +233,7 @@ export const PlanningList = () => {
         <FaBars />
       </FilterButton>
       <List>
-        <SelectTourItem className={isSelectOpen ? "open" : ""}>
+        <SelectTourItem className={isSelectOpen ? "open" : ""} ref={selectRef}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
             <FaUndo style={{ marginLeft: "6px" }} />
@@ -340,9 +353,6 @@ export const PlanningList = () => {
                 </option>
               ))}
             </SortSelect>
-            {/* <Link to={"/makeplanning"}>
-              <Button>플래닝 만들기</Button>
-            </Link> */}
           </div>
           <div className="plannerList">
             {planners.length === 0 ? (

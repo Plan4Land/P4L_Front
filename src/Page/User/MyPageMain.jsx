@@ -1,6 +1,6 @@
 import { Header, Footer } from "../../Component/GlobalComponent";
 import { UserMenu } from "../../Component/UserComponent";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, Link, Navigate } from "react-router-dom";
 import { Button, CancelButton } from "../../Component/ButtonComponent";
 import {
@@ -46,11 +46,25 @@ export const MyPageMain = () => {
   const { user } = useAuth();
   const [invitedPlannings, setInvitedPlannings] = useState([]);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const selectRef = useRef(null);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const handleToggleSelect = () => {
     setIsSelectOpen(!isSelectOpen);
   };
+
+  const handleClickOutside = (event) => {
+    if (selectRef.current && !selectRef.current.contains(event.target)) {
+      setIsSelectOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleFollow = async (follower, followed, isFollow) => {
     const data = await AxiosApi.follow(follower, followed, isFollow);
@@ -198,7 +212,7 @@ export const MyPageMain = () => {
         <FaBars />
       </MenuBarButton>
       <MyPageMainContainer>
-        <div className={`menu ${isSelectOpen ? "open" : ""}`}>
+        <div className={`menu ${isSelectOpen ? "open" : ""}`} ref={selectRef}>
           <UserMenu
             setSelectedMenu={setSelectedMenu}
             selectedMenu={selectedMenu}

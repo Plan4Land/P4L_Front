@@ -276,7 +276,28 @@ export const NavSt = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-grow: 0.6;
-  .tag,
+  .tag {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 15px;
+    color: ${colors.colorA};
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    &:hover {
+      text-decoration: underline;
+      opacity: 0.7;
+      cursor: pointer;
+    }
+  }
+  .tag.active {
+    text-decoration: underline;
+    opacity: 0.7;
+  }
   .title-font,
   p {
     color: ${colors.colorA};
@@ -293,10 +314,6 @@ export const NavSt = styled.div`
       cursor: pointer;
     }
   }
-  .tag.active {
-    text-decoration: underline;
-    opacity: 0.7;
-  }
   p {
     color: ${colors.colorA};
     margin: -10px;
@@ -310,14 +327,15 @@ export const NavSt = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    height: 35px;
+    height: 50px;
     background-color: white;
     font-size: 12px;
     z-index: 10;
     padding: 0 15%;
     box-shadow: 1px -1px 4px rgba(0, 0, 0, 0.1);
     p,
-    .title-font {
+    .title-font,
+    .tag {
       font-size: 15px;
     }
   }
