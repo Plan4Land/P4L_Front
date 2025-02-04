@@ -19,7 +19,7 @@ export function KakaoRedirect() {
       console.log("code가 존재하지 않습니다.");
       return;
     }
-    
+
     // 1. 카카오 토큰 발급
     axios
       .post(
@@ -53,19 +53,21 @@ export function KakaoRedirect() {
             console.log("카카오 사용자 정보:", kakaoUser);
             // 3. 백엔드로 사용자 정보 전송
             axios
-              .post("http://localhost:8111/auth/login", 
+              .post(
+                "http://localhost:8111/auth/login",
                 {
                   sso: "kakao",
-                  socialId: kakaoUser.id
+                  socialId: kakaoUser.id,
                 },
                 {
                   headers: {
-                    'Content-Type': 'application/json',
-                  }
-                })
+                    "Content-Type": "application/json",
+                  },
+                }
+              )
               .then((backendResponse) => {
                 console.log("백엔드 응답:", backendResponse);
-                
+
                 if (backendResponse.status === 200) {
                   // 4. 로그인 성공 -> 페이지 이동
                   console.log(backendResponse.data);
@@ -76,12 +78,14 @@ export function KakaoRedirect() {
                 }
               })
               .catch((error) => {
-                if (error.response.status === 404 && error.response.data.message === "회원가입이 필요합니다.") {
-                  console.log("회원가입이 필요합니다. 404 에러 발생");
-          
+                if (error.response.data === "회원가입이 필요합니다.") {
+                  console.log("회원가입이 필요합니다.");
+
                   // 404 에러 시 회원가입 페이지로 이동
-                  navigate("/signup", { state: { social_id: kakaoUser.id, sso: "kakao" } });
-                } else if (error.response.status === 410 && error.response.data.message === "탈퇴한 회원입니다.") {
+                  navigate("/signup", {
+                    state: { social_id: kakaoUser.id, sso: "kakao" },
+                  });
+                } else if (error.response.data === "탈퇴한 회원입니다.") {
                   console.log("탈퇴한 회원입니다.");
                   alert("탈퇴한 회원입니다.");
                 } else {
@@ -102,23 +106,24 @@ export function KakaoRedirect() {
 
   const loginFront = async (sso, socialId) => {
     const userData = await AxiosApi.memberInfoBySocialId(sso, socialId);
-    console.log("12345")
+    console.log("12345");
     console.log(userData);
     login(userData);
-  }
+  };
 
   return (
     <div>
-      {isSuccess === true
-        ? (<h1>로그인 중입니다...</h1>)
-        : (<>
+      {isSuccess === true ? (
+        <h1>로그인 중입니다...</h1>
+      ) : (
+        <>
           <h2>로그인에 실패했습니다.</h2>
           <h2>다시 시도하거나 관리자에게 문의해주세요.</h2>
           <Button onClick={() => navigate("/login")}>뒤로</Button>
-        </>)
-      }
+        </>
+      )}
     </div>
   );
-};
+}
 
 export default KakaoRedirect;

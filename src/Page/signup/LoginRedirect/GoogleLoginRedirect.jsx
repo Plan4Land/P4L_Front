@@ -19,7 +19,7 @@ export function GoogleRedirect() {
       console.log("code가 존재하지 않습니다.");
       return;
     }
-    
+
     // 1. 구글 토큰 발급
     axios
       .post(
@@ -78,12 +78,14 @@ export function GoogleRedirect() {
                 }
               })
               .catch((error) => {
-                if (error.response.status === 404 && error.response.data.message === "회원가입이 필요합니다.") {
-                  console.log("회원가입이 필요합니다. 404 에러 발생");
+                if (error.response.data === "회원가입이 필요합니다.") {
+                  console.log("회원가입이 필요합니다.");
 
                   // 404 에러 시 회원가입 페이지로 이동
-                  navigate("/signup", { state: { social_id: googleUser.id, sso: "google" } });
-                } else if (error.response.status === 410 && error.response.data.message === "탈퇴한 회원입니다.") {
+                  navigate("/signup", {
+                    state: { social_id: googleUser.id, sso: "google" },
+                  });
+                } else if (error.response.data === "탈퇴한 회원입니다.") {
                   console.log("탈퇴한 회원입니다.");
                   alert("탈퇴한 회원입니다.");
                 } else {
@@ -110,16 +112,17 @@ export function GoogleRedirect() {
 
   return (
     <div>
-      {isSuccess === true
-        ? (<h1>로그인 중입니다...</h1>)
-        : (<>
+      {isSuccess === true ? (
+        <h1>로그인 중입니다...</h1>
+      ) : (
+        <>
           <h2>로그인에 실패했습니다.</h2>
           <h2>다시 시도하거나 관리자에게 문의해주세요.</h2>
           <Button onClick={() => navigate("/login")}>뒤로</Button>
-        </>)
-      }
+        </>
+      )}
     </div>
   );
-};
+}
 
 export default GoogleRedirect;

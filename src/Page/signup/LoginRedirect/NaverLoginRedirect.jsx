@@ -39,15 +39,15 @@ export function NaverRedirect() {
           { headers: { "Content-Type": "application/json" } }
         );
         const { access_token } = tokenResponse.data;
-  
+
         // 2. 네이버 사용자 정보 조회
         const userResponse = await axios.post(
-          "http://localhost:8111/auth/naver/userinfo", 
+          "http://localhost:8111/auth/naver/userinfo",
           { access_token },
           { headers: { "Content-Type": "application/json" } }
         );
         const naverUser = userResponse.data.response;
-  
+
         // 3. 백엔드로 사용자 정보 전송
         try {
           const backendResponse = await axios.post(
@@ -58,7 +58,7 @@ export function NaverRedirect() {
             },
             { headers: { "Content-Type": "application/json" } }
           );
-  
+
           if (backendResponse.status === 200) {
             // 로그인 성공 -> 페이지 이동
             Common.setAccessToken(backendResponse.data.accessToken);
@@ -67,12 +67,9 @@ export function NaverRedirect() {
             navigate("/");
           }
         } catch (backendError) {
-          if (
-            backendError.response.status === 404 &&
-            backendError.response.data.message === "회원가입이 필요합니다."
-          ) {
-            console.log("회원가입이 필요합니다. 404 에러 발생");
-  
+          if (backendError.response.data === "회원가입이 필요합니다.") {
+            console.log("회원가입이 필요합니다.");
+
             // 회원가입 페이지로 이동
             navigate("/signup", {
               state: {
@@ -80,7 +77,7 @@ export function NaverRedirect() {
                 sso: "naver",
               },
             });
-          } else if (backendError.response.status === 410 && backendError.response.data.message === "탈퇴한 회원입니다.") {
+          } else if (backendError.response.data === "탈퇴한 회원입니다.") {
             console.log("탈퇴한 회원입니다.");
             alert("탈퇴한 회원입니다.");
           } else {
@@ -93,7 +90,7 @@ export function NaverRedirect() {
         setIsSuccess(false);
       }
     };
-  
+
     fatchData();
   }
 
@@ -104,16 +101,17 @@ export function NaverRedirect() {
 
   return (
     <div>
-      {isSuccess === true
-        ? (<h1>로그인 중입니다...</h1>)
-        : (<>
+      {isSuccess === true ? (
+        <h1>로그인 중입니다...</h1>
+      ) : (
+        <>
           <h2>로그인에 실패했습니다.</h2>
           <h2>다시 시도하거나 관리자에게 문의해주세요.</h2>
           <Button onClick={() => navigate("/login")}>뒤로</Button>
-        </>)
-      }
+        </>
+      )}
     </div>
   );
-};
+}
 
 export default NaverRedirect;
