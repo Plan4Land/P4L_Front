@@ -281,6 +281,7 @@ export const NavSt = styled.div`
     justify-content: center;
     align-items: center;
     padding: 10px 15px;
+    margin-bottom: 10px;
     color: ${colors.colorA};
     font-size: 20px;
     font-weight: bold;
