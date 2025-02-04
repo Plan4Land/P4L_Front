@@ -40,7 +40,7 @@ export const HeaderSt = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  padding: 0 5% 0 10%;
+  padding: 0 5% 0 5%;
 
   .logoBox {
     height: 90px;
@@ -218,8 +218,14 @@ export const HeaderSt = styled.div`
     }
   }
   @media (max-width: 768px) {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
     height: 60px;
     padding: 0 0 0 8%;
+    background-color: white;
+    z-index: 15;
     .profile-img {
       scale: 0.7;
     }
@@ -240,6 +246,8 @@ export const HeaderSt = styled.div`
       }
     }
   }
+
+  // ================================================================================================
   .dropdown-Trafficlist {
     position: fixed;
     transform: translateX(-53px) translateY(calc(100% + 5px));
@@ -336,5 +344,11 @@ export const FooterSt = styled.div`
     p {
       font-size: 10px;
     }
+  }
+`;
+
+export const Main = styled.div`
+  @media (max-width: 768px) {
+    margin-top: 60px;
   }
 `;

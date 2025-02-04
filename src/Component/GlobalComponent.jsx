@@ -1,4 +1,10 @@
-import { HeaderSt, NavSt, FooterSt, GlobalFont } from "../Style/GlobalStyle";
+import {
+  HeaderSt,
+  NavSt,
+  FooterSt,
+  GlobalFont,
+  Main,
+} from "../Style/GlobalStyle";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { Modal } from "../Util/Modal";
@@ -311,9 +317,9 @@ export const Layout = () => {
   return (
     <div>
       <Header />
-      <main>
+      <Main>
         <Outlet />
-      </main>
+      </Main>
       <Footer />
     </div>
   );
