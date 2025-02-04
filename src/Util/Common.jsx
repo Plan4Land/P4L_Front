@@ -2,7 +2,7 @@ import axios from "axios";
 
 const Common = {
   PLAN_DOMAIN: "",
-  PLAN_SOCKET_URL: "ws://plan4land.store:8111/ws/planner",
+  PLAN_SOCKET_URL: "ws://localhost:8111/ws/planner",
 
   getAccessToken: () => {
     return localStorage.getItem("accessToken");

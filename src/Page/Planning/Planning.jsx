@@ -275,7 +275,7 @@ export const Planning = () => {
       setIsParticipant(participant);
 
       if (participant && !ws.current) {
-        ws.current = new WebSocket("ws://plan4land.store/ws/planner");
+        ws.current = new WebSocket("ws://localhost:8111/ws/planner");
         ws.current.onopen = () => {
           setSocketConnected(true);
         };
