@@ -71,7 +71,7 @@ export function NaverRedirect() {
             console.log("회원가입이 필요합니다.");
 
             // 회원가입 페이지로 이동
-            navigate("/signup", {
+            navigate("/signup/terms", {
               state: {
                 social_id: naverUser.id,
                 sso: "naver",

@@ -174,7 +174,6 @@ export const Signup = () => {
   }, [inputEmail]);
   // 이메일 체크
   const handleEmailCheck = async () => {
-    setIsLoading(true);
     // 유효성 검사 먼저 수행
     if (!handleEmailInput({ target: { value: inputEmail } })) return;
 
@@ -184,7 +183,7 @@ export const Signup = () => {
       setEmailMsg("중복된 이메일입니다.");
       return;
     }
-
+    setIsLoading(true);
     // 중복 검사 통과하면 이메일 인증
     const newCode = generateRandomCode();
     setEmailResult(newCode);

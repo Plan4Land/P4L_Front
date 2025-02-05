@@ -82,7 +82,7 @@ export function KakaoRedirect() {
                   console.log("회원가입이 필요합니다.");
 
                   // 404 에러 시 회원가입 페이지로 이동
-                  navigate("/signup", {
+                  navigate("/signup/terms", {
                     state: { social_id: kakaoUser.id, sso: "kakao" },
                   });
                 } else if (error.response.data === "탈퇴한 회원입니다.") {
