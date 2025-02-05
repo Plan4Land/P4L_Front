@@ -37,6 +37,8 @@ export const MakePlanning = () => {
   const [isDateVisible, setIsDateVisible] = useState(false);
   const [isTitleVisible, setIsTitleVisible] = useState(false);
   const [isImageVisible, setIsImageVisible] = useState(false);
+  const [startCalOpen, setStartCalOpen] = useState(false);
+  const [endCalOpen, setEndCalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
   const memberId = user?.id;
@@ -85,11 +87,8 @@ export const MakePlanning = () => {
   };
 
   const handleStartDateChange = (date) => {
-    console.log(date);
-    console.log(new Date(date));
     setStartDate(date);
     if (endDate && date > endDate) {
-      console.log("여기 오는건 아니지..?");
       setEndDate(null);
     }
   };
@@ -217,12 +216,21 @@ export const MakePlanning = () => {
                   dateFormat="yyyy-MM-dd"
                   dateFormatCalendar="yyyy년 MM월"
                   selected={startDate}
-                  onChange={handleStartDateChange}
+                  onChange={(date) => {
+                    handleStartDateChange(date);
+                    setStartCalOpen(false);
+                  }}
                   selectsStart
                   startDate={startDate}
                   endDate={endDate}
                   // minDate={new Date()}
                   placeholderText="시작일 선택"
+                  onKeyDown={(e) => e.preventDefault()}
+                  open={startCalOpen}
+                  onInputClick={() => {
+                    setStartCalOpen(!startCalOpen);
+                    setEndCalOpen(false);
+                  }}
                 />
                 <span>~</span>
                 {startDate ? (
@@ -232,12 +240,21 @@ export const MakePlanning = () => {
                     dateFormat="yyyy-MM-dd"
                     dateFormatCalendar="yyyy년 MM월"
                     selected={endDate}
-                    onChange={(date) => setEndDate(date)}
+                    onChange={(date) => {
+                      setEndDate(date);
+                      setEndCalOpen(false);
+                    }}
                     selectsEnd
                     startDate={startDate}
                     endDate={endDate}
                     minDate={startDate}
                     placeholderText="종료일 선택"
+                    onKeyDown={(e) => e.preventDefault()}
+                    open={endCalOpen}
+                    onInputClick={() => {
+                      setEndCalOpen(!endCalOpen);
+                      setStartCalOpen(false);
+                    }}
                   />
                 ) : (
                   <input
@@ -311,7 +328,7 @@ export const MakePlanning = () => {
           onClose={() => setOpenModal(false)}
           buttonProps={{ $margin: "5% 0 0" }}
         >
-          <h3>시작일을 먼저 선택해주세요.</h3>
+          <p>시작일을 먼저 선택해주세요.</p>
         </CheckModal>
       )}
       {isLoading && (

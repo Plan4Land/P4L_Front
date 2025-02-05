@@ -28,6 +28,7 @@ const Train = () => {
   const [arrivalStationCode, setArrivalStationCode] = useState(null);
 
   const [date, setDate] = useState(null);
+  const [calOpen, setCalOpen] = useState(false);
   const [selectedVehicles, setSelectedVehicles] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -139,13 +140,19 @@ const Train = () => {
                   dateFormat="yyyy-MM-dd"
                   dateFormatCalendar="yyyy년 MM월"
                   selected={date}
-                  onChange={(date) => setDate(date)}
+                  onChange={(date) => {
+                    setDate(date);
+                    setCalOpen(false);
+                  }}
                   // selectsStart
                   startDate={date}
                   // endDate={endDate}
                   minDate={new Date()}
                   maxDate={new Date().setDate(new Date().getDate() + 6)}
                   placeholderText="시작일 선택"
+                  open={calOpen}
+                  onInputClick={() => setCalOpen(!calOpen)}
+                  onKeyDown={(e) => e.preventDefault()}
                 />
               </DatePickerContainer>
             </div>

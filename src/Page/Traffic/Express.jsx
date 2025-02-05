@@ -30,6 +30,7 @@ const Express = () => {
   const [arrivalStationCode, setArrivalStationCode] = useState(null);
 
   const [date, setDate] = useState(null);
+  const [calOpen, setCalOpen] = useState(false);
   const [selectedVehicles, setSelectedVehicles] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -127,11 +128,17 @@ const Express = () => {
                   dateFormat="yyyy-MM-dd"
                   dateFormatCalendar="yyyy년 MM월"
                   selected={date}
-                  onChange={(date) => setDate(date)}
+                  onChange={(date) => {
+                    setDate(date);
+                    setCalOpen(false);
+                  }}
                   startDate={date}
                   minDate={new Date()}
                   maxDate={new Date().setDate(new Date().getDate() + 6)}
                   placeholderText="시작일 선택"
+                  open={calOpen}
+                  onInputClick={() => setCalOpen(!calOpen)}
+                  onKeyDown={(e) => e.preventDefault()}
                 />
               </DatePickerContainer>
             </div>
@@ -268,29 +275,19 @@ const Express = () => {
             </tbody>
           )}
         </table>
-        {trainSchedule && trainSchedule.length > 0 && (
-          <>
-            <Pagination
-              currentPage={currentPage - 1}
-              totalPages={trainSchedule.length}
-              handlePageChange={(page) => handlePageChange(page + 1)}
-            />
-            <div className="inform">
-              <span>
-                ※본 정보는 한국철도공사의 사정에 따라 변경될 수 있습니다.
-                최신정보 확인은{" "}
-                <a
-                  href="https://www.letskorail.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  한국철도공사 홈페이지
-                </a>
-                에서 확인하시기 바랍니다.
-              </span>
-            </div>
-          </>
-        )}
+        <div className="inform">
+          <span>
+            ※본 정보는 코버스의 사정에 따라 변경될 수 있습니다. 최신정보 확인은
+            <a
+              href="https://www.kobus.co.kr/main.do"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              고속버스통합예매 홈페이지
+            </a>
+            에서 확인하시기 바랍니다.
+          </span>
+        </div>
       </ScheduleResult>
     </TrafficBox>
   );

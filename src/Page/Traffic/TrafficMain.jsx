@@ -66,6 +66,7 @@ export default TrafficMain;
 const TrafficContainer = styled.div`
   width: 80vw;
   margin: 0 auto;
+  padding-top: 10px;
 
   .menu {
     margin: 20px 0;
@@ -90,7 +91,7 @@ const TrafficContainer = styled.div`
     .menu {
       margin: 10px 0;
       span {
-        font-size: 10px;
+        font-size: 13px;
       }
     }
   }

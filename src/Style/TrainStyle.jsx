@@ -98,6 +98,16 @@ export const Container = styled.div`
     }
   }
   @media (max-width: 400px) {
+    .datepicker {
+      display: flex;
+      width: 90%;
+      .datepicker-component {
+        min-width: 200px;
+      }
+      .input-date-picker {
+        width: 100px !important;
+      }
+    }
   }
 `;
 
