@@ -206,30 +206,26 @@ export const ProfilePicModal = (props) => {
                     />
                   </PictureModalBox>
                 ))}
-            {state === "edit" && (
-              <>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  style={{ display: "none" }}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+            />
+            <PictureModalBox>
+              {selectedImage && (
+                <img
+                  src={URL.createObjectURL(selectedImage)}
+                  alt="Selected"
+                  onClick={() => addNewPic(selectedImage)}
                 />
-                <PictureModalBox>
-                  {selectedImage && (
-                    <img
-                      src={URL.createObjectURL(selectedImage)}
-                      alt="Selected"
-                      onClick={() => addNewPic(selectedImage)}
-                    />
-                  )}
-                </PictureModalBox>
-                <PictureModalBox />
-                <PictureModalBox onClick={openFilePicker}>
-                  <img src={Plus} alt="이미지 선택" className="plusPic" />
-                </PictureModalBox>
-              </>
-            )}
+              )}
+            </PictureModalBox>
+            <PictureModalBox />
+            <PictureModalBox onClick={openFilePicker}>
+              <img src={Plus} alt="이미지 선택" className="plusPic" />
+            </PictureModalBox>
           </div>
           {/* <div className="closeBtn" onClick={close}>
             <IoClose />
