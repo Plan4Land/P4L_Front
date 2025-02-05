@@ -14,6 +14,164 @@ export const List = styled.div`
     width: 90%;
   }
 `;
+export const SelectTrafficItem = styled.div`
+  /* width: 350px; */
+  padding-top: 40px;
+  position: relative;
+  margin-right: 30px;
+  width: 500px;
+  .title {
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+    h3 {
+      font-size: 15px;
+      margin-bottom: 5px;
+      margin-left: 10px;
+    }
+  }
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    place-items: center;
+  }
+  button {
+    font-size: 11px;
+    font-weight: bold;
+    background-color: white;
+    color: ${colors.colorA};
+    height: 30px;
+    width: 90%;
+    margin: 3px;
+    border: 1px solid ${colors.colorC};
+
+    &.load {
+      width: 97%;
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
+    &.selected {
+      background-color: ${colors.colorB};
+      color: white;
+    }
+    &:disabled {
+      background-color: #f0f0f0;
+      color: #b0b0b0;
+    }
+  }
+
+  .reset-button {
+    width: 80px;
+    height: 20px;
+    font-size: 10px;
+    padding: 0;
+    background-color: #f3f3f3;
+    border: none;
+    border-radius: 50px;
+    color: gray;
+    position: absolute;
+    top: 10px;
+    right: 30px;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #f3f3f3;
+      opacity: 0.7;
+      color: gray;
+    }
+    @media (max-width: 768px) {
+      top: 4px;
+      scale: 80%;
+    }
+  }
+  .toggle-button {
+    font-size: 16px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    color: ${colors.colorA};
+  }
+
+  .toggle-button:hover {
+    color: ${colors.colorB};
+  }
+  @media (max-width: 1024px) {
+    width: 310px;
+    .buttons {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  /* SelectTourItem 기본 상태 숨기기 (모바일 화면) */
+  @media (max-width: 768px) {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: all 0.3s ease;
+
+    &.open {
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* position: absolute;
+    z-index: 10;
+    background-color: white;
+    top: 90px;
+    left: 40px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    .buttons {
+      width: 80%;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    button {
+      font-size: 9px;
+      width: 90px;
+      height: 28px;
+    }
+    h3 {
+      font-size: 15px;
+      margin: 15px 0 5px 10px;
+      &.title {
+        margin-left: 0;
+      }
+    } */
+    position: fixed;  /* 화면에 고정된 위치 */
+    z-index: 10;
+    background-color: white;
+    top: 90px;
+    left: 40px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+    max-height: 72%; 
+    overflow-y: auto; 
+    
+    .buttons {
+      width: 80%;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    button {
+      font-size: 9px;
+      width: 90px;
+      height: 28px;
+    }
+
+    h3 {
+      font-size: 15px;
+      margin: 15px 0 5px 10px;
+      &.title {
+        margin-left: 0;
+      }
+    }
+  }
+`;
 
 export const SelectTourItem = styled.div`
   /* width: 350px; */

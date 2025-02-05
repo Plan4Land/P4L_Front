@@ -3,7 +3,7 @@ import { Header, Footer } from "../../Component/GlobalComponent";
 import { Button, ToggleSection} from "../../Component/ButtonComponent";
 import {
   Table,
-  SelectTourItem,
+  SelectTrafficItem,
   SearchSt,
   List,
   FilterButton,
@@ -235,7 +235,7 @@ const ExpressBus = () => {
         <FaBars />
       </FilterButton>
       <List>
-        <SelectTourItem className={isSelectOpen ? "open" : ""}>
+        <SelectTrafficItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
             <FaUndo style={{ marginLeft: "6px" }} />
@@ -466,7 +466,7 @@ const ExpressBus = () => {
               </Button>
             </LoadBox>
           )}
-        </SelectTourItem>
+        </SelectTrafficItem>
 
         <div className="tour-list">
           <h3>고속버스 조회</h3>

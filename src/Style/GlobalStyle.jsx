@@ -255,11 +255,11 @@ export const HeaderSt = styled.div`
     background-color: white;
     border: 1px solid #ddd;
     width: 120px;
-    height: auto; /* 높이를 자동으로 조정 */
+    height: auto;
     margin-top: -45px;
-    line-height: 40px; /* 항목 간 간격을 늘려 클릭 범위 확대 */
+    line-height: 40px; 
     border-radius: 15px;
-    padding: 0; /* 불필요한 패딩을 제거 */
+    padding: 0; 
   }
   /* 모바일 버전 스타일 */
   @media (max-width: 768px) {

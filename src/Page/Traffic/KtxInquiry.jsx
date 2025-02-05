@@ -4,7 +4,7 @@ import { Header, Footer } from "../../Component/GlobalComponent";
 import { Button, ToggleSection } from "../../Component/ButtonComponent";
 import {
   Table,
-  SelectTourItem,
+  SelectTrafficItem,
   SearchSt,
   FilterButton,
   CalenderSt,
@@ -277,7 +277,7 @@ const KtxInquiry = () => {
         <FaBars />
       </FilterButton>
       <List>
-        <SelectTourItem className={isSelectOpen ? "open" : ""}>
+        <SelectTrafficItem className={isSelectOpen ? "open" : ""}>
           <button className="reset-button" onClick={handleResetSelections}>
             초기화
             <FaUndo style={{ marginLeft: "6px" }} />
@@ -469,7 +469,7 @@ const KtxInquiry = () => {
               <FaSearch style={{ marginLeft: "6px" }} />
             </Button>
           </LoadBox>
-        </SelectTourItem>
+        </SelectTrafficItem>
 
         <div className="tour-list">
           <h3>KTX 조회</h3>
