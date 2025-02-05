@@ -688,6 +688,7 @@ export const MakePlanningContainer = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
+  overflow: hidden;
 
   h2.question-title {
     margin: 30px 0 20px 0;
@@ -769,6 +770,11 @@ export const MakePlanningContainer = styled.div`
     margin: auto;
   }
 
+  .public {
+    display: flex;
+    justify-content: center;
+  }
+
   @media (max-width: 768px) {
     h2 {
       font-size: 18px;
@@ -824,7 +830,15 @@ export const DatePickerContainer = styled.div`
   position: relative;
   /* z-index: 2; */
   @media (max-width: 768px) {
+    min-width: 360px;
     scale: 0.8;
+    margin: 0 auto;
+    .react-datepicker__navigation--previous {
+      left: -105px;
+    }
+    .react-datepicker__navigation--next {
+      right: -105px;
+    }
   }
   span {
     margin: 0 5px;
@@ -879,6 +893,9 @@ export const DatePickerContainer = styled.div`
     position: absolute;
     top: 6px;
     width: 9px;
+    @media (max-width: 768px) {
+      scale: 1;
+    }
   }
 
   // 선택 날짜

@@ -3,7 +3,7 @@ import { colors } from "../Style/GlobalStyle";
 
 const ToggleContainer = styled.div`
   position: relative;
-  width: 300px;
+  /* width: 300px; */
   cursor: pointer;
   > .toggle-container {
     width: 65px;
