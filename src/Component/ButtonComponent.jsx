@@ -144,6 +144,14 @@ const SectionContent = styled.div`
   max-height: ${(props) => (props.isOpen ? "500px" : "0")};
 `;
 
+const SectionPlanContent = styled.div`
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transform: ${(props) =>
+    props.isOpen ? "translateY(0)" : "translateY(-10px)"};
+  opacity: ${(props) => (props.isOpen ? "1" : "0")};
+  display: ${(props) => (props.isOpen ? "block" : "none")};
+`;
+
 export const ToggleSection = ({ title, isOpen, onToggle, children }) => {
   return (
     <SectionContainer>
@@ -159,7 +167,7 @@ export const ToggleSection = ({ title, isOpen, onToggle, children }) => {
 export const PlanToggleSection = ({ isOpen, children }) => {
   return (
     <SectionContainer>
-      <SectionContent isOpen={isOpen}>{children}</SectionContent>
+      <SectionPlanContent isOpen={isOpen}>{children}</SectionPlanContent>
     </SectionContainer>
   );
 };

@@ -454,7 +454,7 @@ export const Planning = () => {
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
                 filter: "brightness(50%)  blur(3px)", // 배경 이미지 밝기 조정
-                zIndex: 1,
+                zIndex: -1,
               }}
             />
             <div className="planner-info-content">
@@ -542,55 +542,7 @@ export const Planning = () => {
                 </>
               )}
 
-              {isChatOpen && (
-                <ChatContainer>
-                  <div className="chat-header">
-                    <FaTimes className="close-chat" onClick={closeChat} />
-                  </div>
-                  <ChatMsgContainer
-                    ref={ChatContainerRef}
-                    className="chat-msg-container"
-                  >
-                    {chatList.map((chat, index) => (
-                      <Message key={index} isSender={chat.sender === sender}>
-                        <p className="id">{`${chat.sender}`}</p>
-                        {/* <p
-                          className="talk"
-                          dangerouslySetInnerHTML={{ __html: chat.message }}
-                        /> */}
-                        <div className="talk">
-                          {chat.message.split("<br>").map((line, i) => (
-                            <p key={i} style={{ margin: "0" }}>
-                              {line}
-                            </p>
-                          ))}
-                        </div>
-                      </Message>
-                    ))}
-                  </ChatMsgContainer>
-
-                  <div className="sendChat">
-                    <textarea
-                      id="chatTyping"
-                      value={inputMsg ?? ""}
-                      onChange={(e) => setInputMsg(e.target.value)}
-                      onKeyDown={handleChatKeyDown}
-                      style={{
-                        height: `${Math.min(
-                          90,
-                          15 + inputMsg.split("\n").length * 15
-                        )}px`,
-                      }}
-                    />
-                    <button
-                      onClick={handleChatButtonClick}
-                      disabled={!inputMsg?.trim()}
-                    >
-                      <HiArrowCircleUp className="sendIcon" />
-                    </button>
-                  </div>
-                </ChatContainer>
-              )}
+              {/* 채팅 있던 자리 */}
             </div>
             {!isEditting && (
               <PlannerOwner
@@ -744,6 +696,51 @@ export const Planning = () => {
           <Loading>
             <p>이미지 업로드 중입니다. 잠시만 기다려주세요...</p>
           </Loading>
+        )}
+        {isChatOpen && (
+          <ChatContainer>
+            <div className="chat-header">
+              <FaTimes className="close-chat" onClick={closeChat} />
+            </div>
+            <ChatMsgContainer
+              ref={ChatContainerRef}
+              className="chat-msg-container"
+            >
+              {chatList.map((chat, index) => (
+                <Message key={index} isSender={chat.sender === sender}>
+                  <p className="id">{`${chat.sender}`}</p>
+                  <div className="talk">
+                    {chat.message.split("<br>").map((line, i) => (
+                      <p key={i} style={{ margin: "0" }}>
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                </Message>
+              ))}
+            </ChatMsgContainer>
+
+            <div className="sendChat">
+              <textarea
+                id="chatTyping"
+                value={inputMsg ?? ""}
+                onChange={(e) => setInputMsg(e.target.value)}
+                onKeyDown={handleChatKeyDown}
+                style={{
+                  height: `${Math.min(
+                    90,
+                    15 + inputMsg.split("\n").length * 15
+                  )}px`,
+                }}
+              />
+              <button
+                onClick={handleChatButtonClick}
+                disabled={!inputMsg?.trim()}
+              >
+                <HiArrowCircleUp className="sendIcon" />
+              </button>
+            </div>
+          </ChatContainer>
         )}
       </div>
     );

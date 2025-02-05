@@ -24,7 +24,8 @@ export const MainContainer = styled.div`
       top: 120px;
     }
     @media (max-width: 768px) {
-      top: 85px;
+      right: 4vw;
+      top: 80px;
     }
     .menu-icon {
       font-size: 2rem;
@@ -75,8 +76,8 @@ export const Info = styled.div`
     display: flex;
     position: relative;
     align-items: center;
-    width: 100%;
-    z-index: 3;
+    width: 80%;
+    /* z-index: 2; */
     color: #fff;
   }
 
@@ -230,7 +231,7 @@ export const Info = styled.div`
     height: 25px;
     font-size: 13px;
     white-space: nowrap;
-    z-index: 2;
+    /* z-index: 2; */
     @media (max-width: 990px) {
       width: 65px;
       top: 10px;
@@ -253,7 +254,7 @@ export const Info = styled.div`
     right: 20px;
     top: 20px;
     color: white;
-    z-index: 2;
+    /* z-index: 2; */
     span {
       font-weight: bold;
     }
@@ -281,7 +282,7 @@ export const Info = styled.div`
       padding: 10px;
       background-color: transparent;
       border-radius: 10px;
-      z-index: 10;
+      /* z-index: 10; */
       transition: all 0.3s ease;
 
       &:hover {
@@ -446,7 +447,7 @@ export const Users = styled.div`
 `;
 
 export const PlannerOwner = styled.div`
-  z-index: 3;
+  /* z-index: 2; */
   display: flex;
   position: absolute;
   right: 0;
@@ -594,6 +595,8 @@ export const UserName = styled.div`
 export const ContentContainer = styled.div`
   width: 100%;
   display: flex;
+  position: relative;
+  z-index: 1;
   justify-content: center;
   padding: 2%;
   box-sizing: border-box;
@@ -623,11 +626,11 @@ export const MainPlanning = styled.div`
       transform: translateX(0);
     }
 
-    position: absolute;
-    z-index: 10;
+    position: fixed;
+    z-index: 99;
     background-color: white;
     top: 70px;
-    left: -10px;
+    left: -20px;
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -636,6 +639,7 @@ export const MainPlanning = styled.div`
   .planning-day {
     display: flex;
     position: relative;
+    z-index: 100;
     align-items: center;
     width: 90%;
     height: 30px;
@@ -665,7 +669,7 @@ export const KakaoMapContainer = styled.div`
   width: 40%;
   height: 400px;
   margin-left: 1%;
-  z-index: 1;
+  /* z-index: 1; */
   @media (max-width: 990px) {
     min-width: 300px;
   }
@@ -818,7 +822,7 @@ export const DatePickerContainer = styled.div`
   border: 1px solid #aaa;
   border-radius: 20px;
   position: relative;
-  z-index: 2;
+  /* z-index: 2; */
   @media (max-width: 768px) {
     scale: 0.8;
   }
@@ -1188,13 +1192,13 @@ export const DayToggleContainer = styled.div`
       display: flex;
       position: absolute;
       right: 0;
-      bottom: 0;
+      bottom: 1vh;
       transform: translateX(-10%) translateY(95%);
       width: 230px;
-      height: 15vh;
+      height: 8vh;
       /* max-height: 100vh; */
       overflow-y: auto;
-      z-index: 2;
+      z-index: 999;
       background-color: transparent;
       ${ScrollBar}
       textarea {
@@ -1219,8 +1223,8 @@ export const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: fixed;
-  right: 10px;
-  top: 150px;
+  right: 12px;
+  top: 155px;
   width: 350px;
   height: 60vh;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
@@ -1261,6 +1265,7 @@ export const ChatContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: absolute;
     bottom: 0;
     margin-bottom: 8px;
     margin-left: 5px;
