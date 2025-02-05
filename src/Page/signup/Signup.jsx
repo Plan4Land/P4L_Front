@@ -80,7 +80,6 @@ export const Signup = () => {
   const [ssoState, setSsoState] = useState(sso || null);
 
   const [emailTimeLeft, setEmailTimeLeft] = useState(-2);
-  const [emailTimeOver, setEmailTimeOver] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -98,7 +97,6 @@ export const Signup = () => {
       }, 1000);
       return () => clearInterval(timer);
     } else if (emailTimeLeft === -1) {
-      setEmailTimeOver(true);
       setEmailMsg("인증 시간이 만료되었습니다.");
       setEmailCheck(false);
       setIsEmail2Show(false);
