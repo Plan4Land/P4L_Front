@@ -157,6 +157,7 @@ export const FindUserIdModal = (props) => {
     close();
     setInputName("");
     setInputEmail("");
+    setTextMessage("");
   };
 
   // 엔터로 버튼 클릭
@@ -364,6 +365,7 @@ export const FindPwModal = (props) => {
     close();
     setInputUserId("");
     setInputEmail("");
+    setTextMessage("");
   };
 
   // 엔터로 버튼 클릭
