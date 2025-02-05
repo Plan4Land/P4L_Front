@@ -34,7 +34,7 @@ export function NaverRedirect() {
       try {
         // 1. 토큰 요청
         const tokenResponse = await axios.post(
-          "http://localhost:8111/auth/naver/token",
+          "http://plan4land.store/auth/naver/token",
           { code, state },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -42,7 +42,7 @@ export function NaverRedirect() {
 
         // 2. 네이버 사용자 정보 조회
         const userResponse = await axios.post(
-          "http://localhost:8111/auth/naver/userinfo",
+          "http://plan4land.store/auth/naver/userinfo",
           { access_token },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -51,7 +51,7 @@ export function NaverRedirect() {
         // 3. 백엔드로 사용자 정보 전송
         try {
           const backendResponse = await axios.post(
-            "http://localhost:8111/auth/login",
+            "http://plan4land.store/auth/login",
             {
               sso: "naver",
               socialId: naverUser.id,
