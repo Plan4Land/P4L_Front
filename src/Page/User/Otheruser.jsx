@@ -200,7 +200,7 @@ export const Otheruser = () => {
                 style={{
                   backgroundImage:
                     userInfo && userInfo.imgPath
-                      ? `url(/${userInfo.imgPath})`
+                      ? `url(${userInfo.imgPath})`
                       : undefined,
                   backgroundSize: "cover",
                   backgroundPosition: "center",

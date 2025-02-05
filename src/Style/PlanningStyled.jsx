@@ -446,7 +446,7 @@ export const Users = styled.div`
 `;
 
 export const PlannerOwner = styled.div`
-  z-index: 2;
+  z-index: 3;
   display: flex;
   position: absolute;
   right: 0;

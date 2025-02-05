@@ -369,5 +369,6 @@ export const FooterSt = styled.div`
 export const Main = styled.div`
   @media (max-width: 768px) {
     margin-top: 60px;
+    min-height: 1000px;
   }
 `;

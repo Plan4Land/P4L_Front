@@ -232,6 +232,10 @@ export const InvitePlanning = styled.div`
 export const OtherUserInfo = styled.div`
   width: 60%;
   margin: auto;
+  @media (max-width: 768px) {
+    margin-top: 40px;
+    width: 90%;
+  }
 `;
 
 export const ReportContent = styled.div`
