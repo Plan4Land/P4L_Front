@@ -4,6 +4,9 @@ import { ScrollBar } from "../Component/ButtonComponent";
 import searchCate1 from "../Img/cateimg/cate_tour.png";
 import searchCate2 from "../Img/cateimg/cate_lodgin.png";
 import searchCate3 from "../Img/cateimg/cate_restaurant.png";
+import searchCate1Mobile from "../Img/cateimg/cate_tour_mobile.png";
+import searchCate2Mobile from "../Img/cateimg/cate_lodgin_mobile.png";
+import searchCate3Mobile from "../Img/cateimg/cate_restaurant_mobile.png";
 
 export const MainBox = styled.div`
   display: grid;
@@ -170,6 +173,20 @@ export const CateButton = styled.button`
         return "url(/img/cateimg/cate_tour.png)";
     }
   }};
+  @media (max-width: 550px) {
+    background-image: ${({ type }) => {
+      switch (type) {
+        case "100":
+          return `url(${searchCate1Mobile})`;
+        case "200":
+          return `url(${searchCate2Mobile})`;
+        case "300":
+          return `url(${searchCate3Mobile})`;
+        default:
+          return "url(/img/cateimg/cate_tour_mobile.png)";
+      }
+    }};
+  }
 
   /* hover 시 배경 어두워지기 */
   &::before {
