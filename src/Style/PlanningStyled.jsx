@@ -24,7 +24,7 @@ export const MainContainer = styled.div`
       top: 120px;
     }
     @media (max-width: 768px) {
-      top: 90px;
+      top: 85px;
     }
     .menu-icon {
       font-size: 2rem;
