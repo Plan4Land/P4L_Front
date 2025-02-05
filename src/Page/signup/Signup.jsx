@@ -80,7 +80,6 @@ export const Signup = () => {
   const [ssoState, setSsoState] = useState(sso || null);
 
   const [emailTimeLeft, setEmailTimeLeft] = useState(-2);
-  const [emailTimeOver, setEmailTimeOver] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -98,7 +97,6 @@ export const Signup = () => {
       }, 1000);
       return () => clearInterval(timer);
     } else if (emailTimeLeft === -1) {
-      setEmailTimeOver(true);
       setEmailMsg("인증 시간이 만료되었습니다.");
       setEmailCheck(false);
       setIsEmail2Show(false);
@@ -174,7 +172,6 @@ export const Signup = () => {
   }, [inputEmail]);
   // 이메일 체크
   const handleEmailCheck = async () => {
-    setIsLoading(true);
     // 유효성 검사 먼저 수행
     if (!handleEmailInput({ target: { value: inputEmail } })) return;
 
@@ -184,7 +181,7 @@ export const Signup = () => {
       setEmailMsg("중복된 이메일입니다.");
       return;
     }
-
+    setIsLoading(true);
     // 중복 검사 통과하면 이메일 인증
     const newCode = generateRandomCode();
     setEmailResult(newCode);
