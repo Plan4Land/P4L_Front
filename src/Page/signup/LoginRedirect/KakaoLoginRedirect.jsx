@@ -56,7 +56,7 @@ export function KakaoRedirect() {
             // 3. 백엔드로 사용자 정보 전송
             axios
               .post(
-                "http://plan4land.store/auth/login",
+                "https://plan4land.store/auth/login",
                 {
                   sso: "kakao",
                   socialId: kakaoUser.id,
