@@ -45,6 +45,9 @@ const ModalContent = styled.div`
       height: 30px;
     }
   }
+  @media (max-width: 768px) {
+    scale: 0.7;
+  }
 `;
 
 const CloseModalContent = styled.div`

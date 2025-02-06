@@ -257,9 +257,9 @@ export const HeaderSt = styled.div`
     width: 120px;
     height: auto;
     margin-top: -45px;
-    line-height: 40px; 
+    line-height: 40px;
     border-radius: 15px;
-    padding: 0; 
+    padding: 0;
   }
   /* 모바일 버전 스타일 */
   @media (max-width: 768px) {
@@ -281,7 +281,6 @@ export const NavSt = styled.div`
     justify-content: center;
     align-items: center;
     padding: 10px 15px;
-    margin-bottom: 10px;
     color: ${colors.colorA};
     font-size: 20px;
     font-weight: bold;

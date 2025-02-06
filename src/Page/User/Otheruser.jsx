@@ -187,6 +187,12 @@ export const Otheruser = () => {
       setPage((prevPage) => prevPage + 1);
     }
   };
+  // 내 계정이면 마이 페이지로
+  useEffect(() => {
+    if (user && user.id === userId) {
+      navigate("/mypage");
+    }
+  }, [user, userId, navigate]);
 
   return (
     <>
