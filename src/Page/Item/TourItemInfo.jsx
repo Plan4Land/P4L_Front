@@ -107,20 +107,12 @@ export const TourItemInfo = () => {
         const apiSpot = await TourItemApi.getSpotApiInfo(id);
         setSpotApiInfo(apiSpot);
         const apiPics = await TourItemApi.getSpotApiPics(id);
-        const updatedApiPics = apiPics.map((url) =>
-          url.replace("http://", "https://")
-        );
-        setSpotApiPics(updatedApiPics);
+        setSpotApiPics(apiPics);
         const apiSpotDetail = await TourItemApi.getSpotApiDetails(
           id,
           apiSpot.contenttypeid
         );
         setSpotApiDetails(apiSpotDetail);
-
-        // console.log("apiSpot : ", apiSpot);
-        console.log("apiPics : ", updatedApiPics);
-        // console.log(spotApiPics);
-        // console.log("apidetails : ", apiSpotDetail);
       } catch (error) {
         console.error(
           "여행지 상세 정보 조회 오류 또는 근처 관광지 조회 오류:",
@@ -207,7 +199,7 @@ export const TourItemInfo = () => {
                   {images.map((image, index) => (
                     <SwiperSlide key={index}>
                       <img
-                        src={image}
+                        src={image.replace("http:", "https:")}
                         alt={`여행지 이미지 ${index + 1}`}
                         className="tour-image"
                       />
