@@ -250,13 +250,13 @@ export const HeaderSt = styled.div`
   // ================================================================================================
   .dropdown-Trafficlist {
     position: fixed;
-    transform: translateX(-53px) translateY(calc(100% + 5px));
+    transform: translateX(-40px) translateY(calc(100% + 5px));
     z-index: 1000;
     background-color: white;
     border: 1px solid #ddd;
     width: 120px;
     height: auto;
-    margin-top: -45px;
+    margin-top: -55px;
     line-height: 40px;
     border-radius: 15px;
     padding: 0;
@@ -264,8 +264,8 @@ export const HeaderSt = styled.div`
   /* 모바일 버전 스타일 */
   @media (max-width: 768px) {
     .dropdown-Trafficlist {
-      transform: translateX(-53px) translateY(calc(-100% - 17px));
-      margin-top: 0;
+      transform: translateX(-47px) translateY(calc(-100% - 17px));
+      margin-top: -19px;
     }
   }
 `;
