@@ -107,7 +107,10 @@ export const TourItemInfo = () => {
         const apiSpot = await TourItemApi.getSpotApiInfo(id);
         setSpotApiInfo(apiSpot);
         const apiPics = await TourItemApi.getSpotApiPics(id);
-        setSpotApiPics(apiPics);
+        const updatedApiPics = apiPics.map((url) =>
+          url.replace("http://", "https://")
+        );
+        setSpotApiPics(updatedApiPics);
         const apiSpotDetail = await TourItemApi.getSpotApiDetails(
           id,
           apiSpot.contenttypeid
@@ -115,7 +118,7 @@ export const TourItemInfo = () => {
         setSpotApiDetails(apiSpotDetail);
 
         // console.log("apiSpot : ", apiSpot);
-        // console.log("apiPics : ", apiPics);
+        console.log("apiPics : ", updatedApiPics);
         // console.log(spotApiPics);
         // console.log("apidetails : ", apiSpotDetail);
       } catch (error) {
