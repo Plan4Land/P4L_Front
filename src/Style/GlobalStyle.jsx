@@ -223,7 +223,7 @@ export const HeaderSt = styled.div`
     right: 0;
     top: 0;
     height: 60px;
-    padding: 0 0 0 8%;
+    padding: 0 0 0 10%;
     background-color: white;
     z-index: 15;
     .profile-img {
@@ -240,8 +240,8 @@ export const HeaderSt = styled.div`
     }
     .usermenu {
       .dropdown-list {
-        top: -10px;
-        right: -130px;
+        top: 5px;
+        right: -30px;
         scale: 0.7;
       }
     }

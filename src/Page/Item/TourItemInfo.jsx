@@ -399,7 +399,7 @@ export const TourItemInfo = () => {
         )}
       </TourItemInfoBox>
       <CheckModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        로그인이 필요한 서비스입니다.
+        <p>로그인이 필요한 서비스입니다.</p>
       </CheckModal>
       {/* <Footer /> */}
     </>

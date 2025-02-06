@@ -121,6 +121,7 @@ export const UserInfo = styled.div`
     align-items: center;
     font-size: 13px;
     p {
+      font-size: 10px;
       margin: 8px 0 0 0;
     }
     .ProfileImg {
@@ -173,12 +174,15 @@ export const FollowList = styled.div`
       border: none;
       color: ${colors.colorA};
       cursor: pointer;
-      margin-bottom: 20px;
+      border-radius: 10px;
+      /* margin-bottom: 20px; */
       transition: all 0.3s ease;
+      padding: 5px 10px;
       &:hover {
         background-color: ${colors.colorC};
       }
       &.active {
+        color: white;
         background-color: ${colors.colorC};
       }
     }

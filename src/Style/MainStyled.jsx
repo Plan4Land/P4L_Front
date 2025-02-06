@@ -231,7 +231,6 @@ export const RecommItem = styled(GridItem)`
   grid-column: span 3;
   height: 500px;
   margin-right: 20px;
-
   .topTourItem {
     overflow: hidden;
     text-align: center;
@@ -304,7 +303,15 @@ export const RecommItem = styled(GridItem)`
     grid-column: span 4;
   }
   @media (max-width: 768px) {
+    margin-right: 0px;
     height: 350px;
+    .topTourItem h3 {
+      margin: 5px;
+      font-size: 20px;
+    }
+    .topTourItem p {
+      font-size: 12px;
+    }
   }
 `;
 

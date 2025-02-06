@@ -216,8 +216,12 @@ export const Otheruser = () => {
               <div className="UserExplain">
                 {userInfo ? (
                   <>
-                    <p>닉네임: {userInfo.nickname}</p>
-                    <p>아이디: {userInfo.id}</p>
+                    <p>
+                      닉네임: <strong>{userInfo.nickname}</strong>
+                    </p>
+                    <p>
+                      아이디: <strong>{userInfo.id}</strong>
+                    </p>
                   </>
                 ) : (
                   <p>유저 정보를 불러오지 못했습니다.</p>

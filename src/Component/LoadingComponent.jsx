@@ -22,7 +22,13 @@ const Overlay = styled.div`
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
-
+  .spinner,
+  .text {
+    @media (max-width: 768px) {
+      scale: 0.7;
+      white-space: nowrap;
+    }
+  }
   @keyframes spin {
     to {
       transform: rotate(360deg);
@@ -33,8 +39,8 @@ const Overlay = styled.div`
 export const Loading = ({ children }) => {
   return (
     <Overlay>
-      <div className="spinner"></div>
-      {children}
+      <div className="spinner" />
+      <div className="text">{children}</div>
     </Overlay>
   );
 };

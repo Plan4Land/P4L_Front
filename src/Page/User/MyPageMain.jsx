@@ -1,7 +1,6 @@
-import { Header, Footer } from "../../Component/GlobalComponent";
 import { UserMenu } from "../../Component/UserComponent";
 import { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate, Link, Navigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Button, CancelButton } from "../../Component/ButtonComponent";
 import {
   MyPageMainContainer,
@@ -16,7 +15,6 @@ import { MyBookmarkTourItem } from "./MyBookmarkTourItem";
 import { CheckModal, CloseModal } from "../../Util/Modal";
 import { useAuth } from "../../Context/AuthContext";
 import { MyBookmarkPlanItem } from "./MyBookmarkPlanItem";
-import RequestPayment from "../Payment/RequestPayment";
 import { MyPlannerApi } from "../../Api/ItemApi";
 import PlanningApi from "../../Api/PlanningApi";
 import { areas } from "../../Util/Common";
@@ -66,10 +64,6 @@ export const MyPageMain = () => {
     };
   }, []);
 
-  const handleFollow = async (follower, followed, isFollow) => {
-    const data = await AxiosApi.follow(follower, followed, isFollow);
-  };
-
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
@@ -86,9 +80,7 @@ export const MyPageMain = () => {
   const closeInviteModal = () => {
     setIsInviteModalOpen(false);
   };
-  const handleTabClick = (tab) => {
-    setSelectedTab(tab);
-  };
+
   const handleApproval = async (memberId, plannerId) => {
     console.log(`플래닝 "${plannerId}"을(를) 승인했습니다.`);
     await PlanningApi.acceptInvitation(memberId, plannerId);
@@ -207,7 +199,6 @@ export const MyPageMain = () => {
 
   return (
     <>
-      {/* <Header /> */}
       <MenuBarButton onClick={handleToggleSelect}>
         <FaBars />
       </MenuBarButton>
@@ -232,8 +223,12 @@ export const MyPageMain = () => {
                     }}
                   />
                   <div className="UserExplain">
-                    <p>닉네임: {user.nickname}</p>
-                    <p>아이디: {user.id}</p>
+                    <p>
+                      닉네임: <strong>{user.nickname}</strong>
+                    </p>
+                    <p>
+                      아이디: <strong>{user.id}</strong>
+                    </p>
                     <div className="follow" onClick={openFollowModal}>
                       <p>
                         팔로잉: {followings.length} 팔로워: {followers.length}
@@ -407,7 +402,6 @@ export const MyPageMain = () => {
           )}
         </InvitePlanning>
       </CloseModal>
-      {/* <Footer /> */}
     </>
   );
 };
