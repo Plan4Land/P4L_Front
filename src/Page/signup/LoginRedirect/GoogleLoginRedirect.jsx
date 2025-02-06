@@ -58,7 +58,7 @@ export function GoogleRedirect() {
             // 3. 백엔드로 사용자 정보 전송
             axios
               .post(
-                "http://plan4land.store/auth/login",
+                "https://plan4land.store/auth/login",
                 {
                   sso: "google",
                   socialId: googleUser.id,

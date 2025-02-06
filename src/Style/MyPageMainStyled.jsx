@@ -120,17 +120,19 @@ export const UserInfo = styled.div`
     justify-content: center;
     align-items: center;
     font-size: 13px;
-    p {
+    /* p {
       font-size: 10px;
       margin: 8px 0 0 0;
     }
     .ProfileImg {
-      scale: 0.7;
-    }
+    } */
     .Button {
-      margin: -10px 0 10px 0;
+      margin: -20px 0 10px 0;
       flex-direction: row;
       scale: 0.6;
+    }
+    .user {
+      scale: 0.7;
     }
   }
 `;
@@ -225,11 +227,62 @@ export const InvitePlanning = styled.div`
       font-weight: bold;
     }
   }
-
   .buttons {
     display: flex;
     align-items: center;
     gap: 10px;
+  }
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 18px;
+    }
+    p {
+      font-size: 13px;
+    }
+    .invited-planning-list {
+      width: 300px;
+    }
+    .invited-planning-item {
+      margin-bottom: 15px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .planning-details {
+      width: 19rem;
+      text-align: left;
+      margin: 10px;
+    }
+
+    .label {
+      margin: 0;
+      margin-bottom: 5px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .owner {
+      margin: 0;
+      font-size: 10px;
+      span {
+        font-size: 11px;
+        font-weight: bold;
+      }
+    }
+    .buttons {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      button {
+        width: 45px;
+        height: 25px;
+        font-size: 10px;
+      }
+    }
   }
 `;
 
@@ -250,10 +303,12 @@ export const ReportContent = styled.div`
   }
   textarea {
     width: 100%;
-    height: 150px;
+    height: 140px;
     resize: none;
     overflow-y: scroll;
     margin-bottom: 15px;
+    border: 1px solid ${colors.colorA};
+    border-radius: 5px;
     ${ScrollBar}
   }
 `;

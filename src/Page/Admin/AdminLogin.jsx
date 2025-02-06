@@ -32,8 +32,7 @@ const AdminLogin = () => {
   }
 
   const handleClearStorage = () =>{
-    console.log(localStorage.getItem("user"));
-    console.log(Common.getAccessToken());
+    localStorage.clear();
   }
 
   return (

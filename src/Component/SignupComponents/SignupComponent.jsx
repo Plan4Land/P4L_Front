@@ -230,6 +230,31 @@ export const SignupContainer = styled.div`
     .textMessage-true {
       font-size: 10px;
     }
+    .banModal {
+      margin-top: 20px;
+      width: 300px;
+      height: 300px;
+      .info {
+        white-space: nowrap;
+        font-size: 15px;
+        font-weight: bold;
+        color: red;
+      }
+      .banInfo {
+        margin: 20px;
+        display: flex;
+        flex-direction: column;
+        .explain {
+          font-size: 13px;
+          strong {
+            margin-right: 5px;
+          }
+          margin: 20px;
+          display: flex;
+          justify-content: flex-start;
+        }
+      }
+    }
   }
   .signup-button {
     width: 80%;
