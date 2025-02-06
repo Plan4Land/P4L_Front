@@ -99,7 +99,7 @@ export const TourItemInfoBox = styled.div`
     .tour-details {
       .bookmark {
         font-size: 1.5em;
-        top: 40px;
+        top: 15px;
         right: 40px;
       }
       p {
