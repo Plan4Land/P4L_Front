@@ -230,7 +230,7 @@ const UserInfoEdit = () => {
 
         {/* 완료 모달 */}
         <CheckModal isOpen={isCheckModalOpen} onClose={closeCheckModal}>
-          {checkModalMessage}
+          <p>{checkModalMessage}</p>
         </CheckModal>
 
         {isLoading && (
