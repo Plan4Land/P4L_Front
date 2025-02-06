@@ -307,6 +307,7 @@ export const Footer = () => {
   return (
     <FooterSt>
       <h4>Plan4Land</h4>
+      <p>우)06234 서울 강남구 테헤란로14길 6 남도빌딩 2층 TEL)1544-9970</p>
       <p>문의가 필요한 사항은 메일 부탁드립니다.</p>
       <p>mail: plan4land.mail@gmail.com</p>
     </FooterSt>
