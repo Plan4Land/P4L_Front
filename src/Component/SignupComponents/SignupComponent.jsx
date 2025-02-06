@@ -117,6 +117,7 @@ export const SignupContainer = styled.div`
     width: 60px;
     height: 30px;
     font-size: 12px;
+    color: black;
     padding: 3px 5px;
     margin-bottom: 10px;
     background-color: ${colors.colorC};

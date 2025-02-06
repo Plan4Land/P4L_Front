@@ -273,6 +273,7 @@ const PictureBox = styled.div`
   height: 100%;
 
   .current-pic {
+    object-fit: cover;
     display: flex;
     position: relative;
     border-radius: 50%;
