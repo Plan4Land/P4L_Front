@@ -41,7 +41,9 @@ export const ModalStyle = styled.div`
     position: relative;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     animation: slideDown 0.3s ease-out;
-
+    @media (max-width: 768px) {
+      scale: 0.7;
+    }
     @keyframes slideDown {
       from {
         transform: translateY(-10px);

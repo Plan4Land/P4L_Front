@@ -240,7 +240,7 @@ export const HeaderSt = styled.div`
     }
     .usermenu {
       .dropdown-list {
-        top: 5px;
+        top: -10px;
         right: -30px;
         scale: 0.7;
       }
@@ -331,12 +331,13 @@ export const NavSt = styled.div`
     background-color: white;
     font-size: 12px;
     z-index: 10;
-    padding: 0 15%;
+    padding: 0 10%;
     box-shadow: 1px -1px 4px rgba(0, 0, 0, 0.1);
     p,
     .title-font,
     .tag {
-      font-size: 15px;
+      font-size: 17px;
+      margin-bottom: 3px;
     }
   }
 `;

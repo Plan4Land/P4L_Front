@@ -140,7 +140,7 @@ export const SelectTrafficItem = styled.div`
         margin-left: 0;
       }
     } */
-    position: fixed;  /* 화면에 고정된 위치 */
+    position: fixed; /* 화면에 고정된 위치 */
     z-index: 10;
     background-color: white;
     top: 90px;
@@ -149,9 +149,9 @@ export const SelectTrafficItem = styled.div`
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 
-    max-height: 72%; 
-    overflow-y: auto; 
-    
+    max-height: 72%;
+    overflow-y: auto;
+
     .buttons {
       width: 80%;
       grid-template-columns: repeat(3, 1fr);
