@@ -1,7 +1,11 @@
 import { storage } from "../Api/Firebase";
 
-export const Upload = async ({ currentPic, type, userId }) => {
+export const Upload = async ({ currentPic, type, userId, plannerId }) => {
+  console.log(">>>>>>>>>", plannerId);
   const imgFolder = type === "profile" ? "UserProfilePic" : "PlannerPic";
+  const imgName = type === "profile" ? "profile.png" : `${plannerId}.png`;
+  console.log(imgFolder);
+  console.log(imgName);
 
   let updatedPic = currentPic;
 
@@ -13,7 +17,7 @@ export const Upload = async ({ currentPic, type, userId }) => {
 
     // Firebase Storage 참조
     const storageRef = storage.ref(`/${imgFolder}/${userId}/`);
-    const fileRef = storageRef.child("profile.png");
+    const fileRef = storageRef.child(imgName);
 
     // 파일 업로드
     await fileRef.put(blob);

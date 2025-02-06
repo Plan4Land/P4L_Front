@@ -28,7 +28,7 @@ export const MakePlanning = () => {
   const [endDate, setEndDate] = useState(null);
   const [title, setTitle] = useState("");
   const [currentPic, setCurrentPic] = useState(Planningth1);
-  // const [selectedImage, setSelectedImage] = useState("");
+  const [plannerId, setPlannerId] = useState(null);
   const [isPublic, setIsPublic] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [isAreaVisible, setIsAreaVisible] = useState(false);
@@ -108,6 +108,7 @@ export const MakePlanning = () => {
       currentPic,
       type: "planner",
       userId: user.id,
+      plannerId: plannerId,
     });
 
     try {
@@ -132,10 +133,14 @@ export const MakePlanning = () => {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
-    console.log("시작일 : ", startDate);
-    console.log("종료일 : ", endDate);
-  }, [startDate, endDate]);
+    const fetchData = async () => {
+      const data = await PlanningApi.getNewPlanningId();
+      setPlannerId(data.data);
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
