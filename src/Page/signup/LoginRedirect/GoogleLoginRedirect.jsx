@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import AxiosApi from "../../../Api/AxiosApi";
 import { useAuth } from "../../../Context/AuthContext";
-import { Button } from "../../../Component/ButtonComponent";
 import Common from "../../../Util/Common";
+
+import { Button } from "../../../Component/ButtonComponent";
+import { Loading } from "../../../Component/LoadingComponent";
 
 export function GoogleRedirect() {
   const navigate = useNavigate();
@@ -113,7 +115,12 @@ export function GoogleRedirect() {
   return (
     <div>
       {isSuccess === true ? (
-        <h1>로그인 중입니다...</h1>
+        <>
+          {/* 로딩 */}
+          <Loading>
+            <p>로그인 중입니다...</p>
+          </Loading>
+        </>
       ) : (
         <>
           <h2>로그인에 실패했습니다.</h2>
