@@ -583,7 +583,7 @@ export const Signup = () => {
             currentPic={currentPic}
             setCurrentPic={setCurrentPic}
             type={"profile"}
-            mediaHeight768={"250px"}
+            mediaHeight768={"340px"}
           />
 
           {social_id && (
