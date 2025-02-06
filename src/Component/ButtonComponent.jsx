@@ -1,6 +1,7 @@
 import { colors } from "../Style/GlobalStyle";
 import styled, { css, keyframes } from "styled-components";
 import React from "react";
+import { GlobalFont } from "../Style/GlobalStyle";
 
 const StyledButton = styled.button`
   ${(props) => props.$margin && `margin: ${props.$margin};`}
@@ -157,7 +158,7 @@ const SectionPlanContent = styled.div`
 export const ToggleSection = ({ title, isOpen, onToggle, children }) => {
   return (
     <SectionContainer>
-      <SectionTitle>
+      <SectionTitle className="title-font">
         {title}
         <ToggleButton isOpen={isOpen} onToggle={onToggle} />
       </SectionTitle>

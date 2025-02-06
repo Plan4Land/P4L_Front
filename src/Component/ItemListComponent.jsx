@@ -117,11 +117,13 @@ const TourItemStyled = styled.div`
     align-items: center;
     gap: 10px;
     img {
+      object-fit: cover;
       width: 40px;
       height: 40px;
       min-width: 40px;
       border-radius: 50%;
       background-color: white;
+      aspect-ratio: 1 / 1;
     }
     .ownernick {
       display: -webkit-box;

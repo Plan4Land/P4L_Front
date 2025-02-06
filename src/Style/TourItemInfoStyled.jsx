@@ -168,6 +168,7 @@ export const SpotInformation = styled.div`
     border-bottom: 1px solid #ddd;
     width: 100%;
     button {
+      color: black;
       font-weight: bold;
       cursor: pointer;
       border: none;
@@ -182,6 +183,7 @@ export const SpotInformation = styled.div`
       }
     }
     button.active {
+      color: white;
       background-color: ${colors.colorC};
     }
   }

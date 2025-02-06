@@ -1,4 +1,3 @@
-import { Header, Footer } from "../../Component/GlobalComponent";
 import { useState, useEffect, useRef } from "react";
 import { areas, themes } from "../../Util/Common";
 import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
