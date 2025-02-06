@@ -14,6 +14,7 @@ import { Button } from "../../Component/ButtonComponent";
 // import { ProfilePicModal } from "../../Component/PictureModalComponent";
 import { CheckModal } from "../../Util/Modal";
 import { PictureComponent } from "../../Component/PictureCommponent";
+import { Upload } from "../../Component/FirebaseUpload";
 import { Loading } from "../../Component/LoadingComponent";
 
 // icon
@@ -361,13 +362,19 @@ export const Signup = () => {
     }
 
     try {
+      const updatePic = await Upload({
+        currentPic,
+        type: "profile",
+        userId: inputUserId,
+      });
+
       const response = await AxiosApi.signup(
         inputUserId,
         inputPw,
         inputName,
         inputNickname,
         inputEmail,
-        currentPic,
+        updatePic,
         social_id || null,
         ssoState || null
       );
