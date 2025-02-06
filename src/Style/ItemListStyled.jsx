@@ -18,8 +18,8 @@ export const SelectTrafficItem = styled.div`
   /* width: 350px; */
   padding-top: 40px;
   position: relative;
-  margin-right: 30px;
-  width: 500px;
+  margin-right: 90px;
+  width: 470px;
   .title {
     width: 100%;
     border-bottom: 1px solid #ddd;
@@ -41,8 +41,8 @@ export const SelectTrafficItem = styled.div`
     background-color: white;
     color: ${colors.colorA};
     height: 30px;
-    width: 90%;
-    margin: 3px;
+    width: 85%;
+    margin: 1px;
     border: 1px solid ${colors.colorC};
 
     &.load {
@@ -116,30 +116,6 @@ export const SelectTrafficItem = styled.div`
       transform: translateX(0);
     }
 
-    /* position: absolute;
-    z-index: 10;
-    background-color: white;
-    top: 90px;
-    left: 40px;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    .buttons {
-      width: 80%;
-      grid-template-columns: repeat(3, 1fr);
-    }
-    button {
-      font-size: 9px;
-      width: 90px;
-      height: 28px;
-    }
-    h3 {
-      font-size: 15px;
-      margin: 15px 0 5px 10px;
-      &.title {
-        margin-left: 0;
-      }
-    } */
     position: fixed; /* 화면에 고정된 위치 */
     z-index: 10;
     background-color: white;
