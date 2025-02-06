@@ -309,6 +309,7 @@ export const Info = styled.div`
     width: 25%;
     background-color: #f9f9f9;
     cursor: pointer;
+    color: black;
     @media (max-width: 1250px) {
       font-size: 13px;
     }
@@ -361,6 +362,7 @@ export const Info = styled.div`
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
+    color: black;
     &:hover {
       opacity: 0.7;
       &:disabled {
@@ -713,6 +715,7 @@ export const MakePlanningContainer = styled.div`
     width: 400px;
     background-color: #f9f9f9;
     cursor: pointer;
+    color: black;
   }
   .location-select:first-of-type {
     margin-bottom: 10px;
@@ -738,6 +741,7 @@ export const MakePlanningContainer = styled.div`
     border: 1px solid ${colors.colorB};
     cursor: pointer;
     transition: all 0.2s ease;
+    color: black;
 
     &:hover {
       background-color: ${colors.colorB};
@@ -828,7 +832,7 @@ export const DatePickerContainer = styled.div`
   border: 1px solid #aaa;
   border-radius: 20px;
   position: relative;
-  /* z-index: 2; */
+  z-index: 2;
   @media (max-width: 768px) {
     min-width: 360px;
     scale: 0.8;
