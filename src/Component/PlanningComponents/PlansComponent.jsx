@@ -153,6 +153,7 @@ export const PlannerInfoEditComponent = ({
           currentPic,
           type: "planner",
           userId: user.id,
+          plannerId: plannerId,
         });
 
         setEditPlannerInfo((prev) => ({

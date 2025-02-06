@@ -1,6 +1,9 @@
 import AxiosInstance from "./AxiosInstance";
 
 const PlanningApi = {
+  getNewPlanningId: async () => {
+    return await AxiosInstance.get(`/planner/last-planner`);
+  },
   makePlanning: async (
     title,
     theme,
