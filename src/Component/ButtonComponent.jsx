@@ -106,11 +106,13 @@ const StyledToggleButton = styled.button`
   font-size: 18px;
   color: ${(props) => (props.isOpen ? colors.colorB : "#666")};
   transition: color 0.2s ease;
-
   .icon {
     display: inline-block;
     transform: ${(props) => (props.isOpen ? "rotate(180deg)" : "rotate(0deg)")};
     transition: transform 0.3s ease;
+    @media (max-width: 768px) {
+      font-size: 13px;
+    }
   }
 `;
 
