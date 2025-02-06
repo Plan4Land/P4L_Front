@@ -275,7 +275,7 @@ export const HeaderSt = styled.div`
   @media (max-width: 768px) {
     .dropdown-Trafficlist {
       transform: translateX(-53px) translateY(calc(-100% - 17px));
-      margin-top: -19px;
+      margin-top: -28px;
     }
   }
 `;
