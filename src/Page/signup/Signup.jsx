@@ -588,12 +588,14 @@ export const Signup = () => {
           </div>
 
           {/* 프로필 사진 */}
-          <PictureComponent
-            currentPic={currentPic}
-            setCurrentPic={setCurrentPic}
-            type={"profile"}
-            mediaHeight768={"340px"} // 이부분 반영 필요
-          />
+          <div style={{ width: "130px", margin: "0 auto" }}>
+            <PictureComponent
+              currentPic={currentPic}
+              setCurrentPic={setCurrentPic}
+              type={"profile"}
+              mediaHeight768={"340px"} // 이부분 반영 필요
+            />
+          </div>
 
           {social_id && (
             <input type="hidden" name="social_id" value={socialId} />
