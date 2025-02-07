@@ -54,18 +54,23 @@ export const Login = () => {
   const location = useLocation();
   const { userState } = location.state || {};
   useEffect(() => {
-    setBanUserId(userState || null);
-    if(banUserId) {
-      openBanModal(banUserId);
+    if (userState) {
+      setBanUserId(userState);
     };
-    }, [userState]);
+  }, [userState]);
 
-    const openBanModal = async (banUserId) => {
-      const data = await AxiosApi.banData(banUserId);
-      console.log(data);
-      setBanData(data);
-      setBanModalOpen(true);
-    };
+  useEffect(() => {
+    if (banUserId) {
+      openBanModal(banUserId);
+    }
+  }, [banUserId]);
+
+  const openBanModal = async (banUserId) => {
+    const data = await AxiosApi.banData(banUserId);
+    console.log(data);
+    setBanData(data);
+    setBanModalOpen(true);
+  };
 
   const handleInputChange = (e, setState) => {
     setState(e.target.value);
