@@ -232,6 +232,7 @@ export const Signup = () => {
     if (inputEmail2 === emailResult) {
       setEmail2Msg("인증번호가 일치합니다.");
       setEmail2Check(true);
+      setEmailTimeLeft(-2);
     } else {
       setEmail2Msg("인증번호가 일치하지 않습니다.");
     }
@@ -362,6 +363,7 @@ export const Signup = () => {
     }
 
     try {
+      // 사진 저장
       const updatePic = await Upload({
         currentPic,
         type: "profile",

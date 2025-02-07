@@ -115,6 +115,7 @@ const UserInfoEdit = () => {
     }
     setIsLoading(true);
     try {
+      // 사진 저장
       const updatedPic = await Upload({
         currentPic,
         type: "profile",
