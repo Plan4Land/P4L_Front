@@ -137,7 +137,7 @@ export const Info = styled.div`
     max-width: 370px;
     height: 15vw;
     max-height: 370px;
-    flex-shrink: 0;
+    aspect-ratio: 1 / 1;
     @media (max-width: 768px) {
       margin: 0 2% 0 2%;
       .current-pic {
