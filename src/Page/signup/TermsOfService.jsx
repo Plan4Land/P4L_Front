@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Header, Footer } from "../../Component/GlobalComponent";
 import {
   Center,
@@ -16,7 +16,17 @@ export const TermsOfService = () => {
   const [isCheckedFst, setIsCheckedFst] = useState(false);
   const [isCheckedScd, setIsCheckedScd] = useState(false);
 
+  const location = useLocation();
+  const { social_id, sso } = location.state || {};
+  const [socialId, setSocialId] = useState(social_id || null);
+  const [ssoState, setSsoState] = useState(sso || null);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setSocialId(social_id || null);
+    setSsoState(sso || null);
+  }, [social_id, sso]);
 
   // 전체 동의 버튼
   const handleClickTotal = () => {
@@ -48,6 +58,12 @@ export const TermsOfService = () => {
       setIsCheckedTotal(false);
     }
   }, [isCheckedFst, isCheckedScd]);
+
+  const toSignup = () => {
+    navigate("/signup", {
+      state: { social_id: socialId, sso: ssoState },
+    });
+  };
 
   const isButtonOn = isCheckedFst && isCheckedScd;
 
@@ -249,7 +265,7 @@ export const TermsOfService = () => {
             </div>
           </Terms>
           <Button
-            onClick={() => navigate("/signup")}
+            onClick={toSignup}
             disabled={!isButtonOn}
             className="nextButton"
           >

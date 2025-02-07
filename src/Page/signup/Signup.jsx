@@ -590,7 +590,7 @@ export const Signup = () => {
             currentPic={currentPic}
             setCurrentPic={setCurrentPic}
             type={"profile"}
-            mediaHeight768={"340px"}
+            mediaHeight768={"340px"} // 이부분 반영 필요
           />
 
           {social_id && (
@@ -607,7 +607,7 @@ export const Signup = () => {
 
           {/* 완료 모달 */}
           <CheckModal isOpen={isCheckModalOpen} onClose={closeCheckModal}>
-            {checkModalMessage}
+            <p>{checkModalMessage}</p>
           </CheckModal>
 
           {/* 로딩 */}
