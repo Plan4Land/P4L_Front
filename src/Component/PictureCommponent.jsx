@@ -271,6 +271,8 @@ const PictureBox = styled.div`
   gap: 30px;
   margin: 20px 0;
   height: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
 
   .current-pic {
     object-fit: cover;
