@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import AxiosApi from "../../Api/AxiosApi";
 
@@ -45,10 +45,27 @@ export const Login = () => {
   const [findIdResult, setFindIdResult] = useState("");
   const [findPwResult, setFindPwResult] = useState("");
   const [banData, setBanData] = useState({});
+  const [banUserId, setBanUserId] = useState();
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   const { login } = useAuth();
+
+  const location = useLocation();
+  const { userState } = location.state || {};
+  useEffect(() => {
+    setBanUserId(userState || null);
+    if(banUserId) {
+      openBanModal(banUserId);
+    };
+    }, [userState]);
+
+    const openBanModal = async (banUserId) => {
+      const data = await AxiosApi.banData(banUserId);
+      console.log(data);
+      setBanData(data);
+      setBanModalOpen(true);
+    };
 
   const handleInputChange = (e, setState) => {
     setState(e.target.value);

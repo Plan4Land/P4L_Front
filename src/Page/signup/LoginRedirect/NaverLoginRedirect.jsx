@@ -82,6 +82,13 @@ export function NaverRedirect() {
           } else if (backendError.response.data === "탈퇴한 회원입니다.") {
             console.log("탈퇴한 회원입니다.");
             alert("탈퇴한 회원입니다.");
+          } else if (backendError.response.data === "정지된 회원입니다.") {
+            console.log("정지된 회원입니다.");
+            const socialUri = `https://plan4land.store/member/social/naver/${naverUser.id}`;
+            const banUser = axios.get(socialUri);
+              navigate("/login", {
+                state: { userState: banUser.id },
+              });
           } else {
             console.error("백엔드 통신 오류:", backendError);
           }
