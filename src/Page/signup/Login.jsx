@@ -88,10 +88,10 @@ export const Login = () => {
     } catch (error) {
       console.error("Error during login: ", error);
       if (error.response) {
-        console.log("로그 : ", error.response.data.message);
-        if (error.response.data.message === "탈퇴한 회원입니다.") {
+        console.log("로그 : ", error.response.data);
+        if (error.response.data === "탈퇴한 회원입니다.") {
           setTextMessage("탈퇴한 회원입니다.");
-        } else if (error.response.data.message === "정지된 회원입니다.") {
+        } else if (error.response.data === "정지된 회원입니다.") {
           const data = await AxiosApi.banData(inputUserId);
           console.log(data);
           setBanData(data);
