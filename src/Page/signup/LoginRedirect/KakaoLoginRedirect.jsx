@@ -92,11 +92,7 @@ export function KakaoRedirect() {
                   alert("탈퇴한 회원입니다.");
                 } else if (error.response.data === "정지된 회원입니다.") {
                   console.log("정지된 회원입니다.");
-                  const socialUri = `https://plan4land.store/member/social/kakao/${kakaoUser.id}`;
-                  const banUser = axios.get(socialUri);
-                  navigate("/login", {
-                    state: { userState: banUser.id },
-                  });
+                  handleBan(kakaoUser.id);
                 } else {
                   console.error("백엔드 통신 오류:", error);
                 }
@@ -115,9 +111,16 @@ export function KakaoRedirect() {
 
   const loginFront = async (sso, socialId) => {
     const userData = await AxiosApi.memberInfoBySocialId(sso, socialId);
-    console.log("12345");
-    console.log(userData);
     login(userData);
+  };
+
+  const handleBan = async (id) => {
+    const socialUri = `https://plan4land.store/member/social/kakao/${id}`;
+    const banUser = await axios.get(socialUri);
+    const banUserId = JSON.stringify(banUser.data.id);
+    navigate("/login", {
+      state: { userState: banUserId },
+    });
   };
 
   return (

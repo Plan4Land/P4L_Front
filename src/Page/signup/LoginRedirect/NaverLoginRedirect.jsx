@@ -84,11 +84,7 @@ export function NaverRedirect() {
             alert("탈퇴한 회원입니다.");
           } else if (backendError.response.data === "정지된 회원입니다.") {
             console.log("정지된 회원입니다.");
-            const socialUri = `https://plan4land.store/member/social/naver/${naverUser.id}`;
-            const banUser = axios.get(socialUri);
-              navigate("/login", {
-                state: { userState: banUser.id },
-              });
+            handleBan(naverUser.id);
           } else {
             console.error("백엔드 통신 오류:", backendError);
           }
@@ -108,15 +104,24 @@ export function NaverRedirect() {
     login(userData);
   };
 
+  const handleBan = async (id) => {
+    const socialUri = `https://plan4land.store/member/social/google/${id}`;
+    const banUser = await axios.get(socialUri);
+    const banUserId = JSON.stringify(banUser.data.id);
+    navigate("/login", {
+      state: { userState: banUserId },
+    });
+  };
+
   return (
     <div>
       {isSuccess === true ? (
         <>
-        {/* 로딩 */}
-        <Loading>
-          <p>로그인 중입니다...</p>
-        </Loading>
-      </>
+          {/* 로딩 */}
+          <Loading>
+            <p>로그인 중입니다...</p>
+          </Loading>
+        </>
       ) : (
         <>
           <h2>로그인에 실패했습니다.</h2>

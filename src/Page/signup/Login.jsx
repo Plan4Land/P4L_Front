@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 import AxiosApi from "../../Api/AxiosApi";
 
 // context
@@ -47,7 +48,7 @@ export const Login = () => {
   const [banData, setBanData] = useState({});
   const [banUserId, setBanUserId] = useState();
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const { login } = useAuth();
 
@@ -56,7 +57,7 @@ export const Login = () => {
   useEffect(() => {
     if (userState) {
       setBanUserId(userState);
-    };
+    }
   }, [userState]);
 
   useEffect(() => {
@@ -65,6 +66,7 @@ export const Login = () => {
     }
   }, [banUserId]);
 
+  // 정지회원 처리
   const openBanModal = async (banUserId) => {
     const data = await AxiosApi.banData(banUserId);
     console.log(data);
