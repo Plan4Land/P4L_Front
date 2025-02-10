@@ -26,7 +26,10 @@ export const KTXApi = {
           );
 
           // items가 존재하지 않거나, 배열이 아닌 경우 빈 배열로 처리
-          const items = response.data.response.body.items?.item || [];
+          let items = response.data.response.body.items?.item || [];
+          if (!Array.isArray(items)) {
+            items = items ? [items] : []; // 객체이면 배열로 변환, 없으면 빈 배열
+          }
 
           allItems = [...allItems, ...items];
 
@@ -83,9 +86,12 @@ export const ExpressApi = {
               },
             }
           );
-
+          console.log(departure, arrival, vehicleCode);
           // items가 존재하지 않거나, 배열이 아닌 경우 빈 배열로 처리
-          const items = response.data.response.body.items?.item || [];
+          let items = response.data.response?.body?.items?.item || [];
+          if (!Array.isArray(items)) {
+            items = items ? [items] : []; // 객체이면 배열로 변환, 없으면 빈 배열
+          }
 
           allItems = [...allItems, ...items];
 
