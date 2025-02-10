@@ -45,6 +45,7 @@ export const Container = styled.div`
       } */
     }
     .select-content {
+      min-width: 100%;
       padding: 5px 0;
       flex-direction: row;
     }
@@ -117,7 +118,10 @@ export const VehicleKindContainer = styled.div`
   /* @media (max-width: 768px) {
     width: 100%;
   } */
+
   .checkbox-container {
+    padding-left: 10px;
+    width: 80%;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -184,8 +188,10 @@ export const SelectStation = styled.div`
   }
   @media (max-width: 768px) {
     .select-wrapper {
+      flex-direction: column;
       flex-wrap: nowrap;
       select {
+        height: 25px;
         min-width: 80px;
         margin: 0 10px !important;
         font-size: 12px;
@@ -267,7 +273,8 @@ export const ScheduleResult = styled.div`
   .inform {
     margin: 0 auto;
     padding: 10px 0;
-    width: 90vw;
+    /* width: 90vw; */
+    min-width: 100%;
     font-size: 14px;
     @media (max-width: 768px) {
       font-size: 9px;
