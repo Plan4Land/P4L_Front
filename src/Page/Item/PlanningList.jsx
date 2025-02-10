@@ -148,6 +148,7 @@ export const PlanningList = () => {
       searchQuery: "",
       sortBy: "",
     });
+    setSearchQuery("");
   };
 
   const handlePageChange = (newPage) => {

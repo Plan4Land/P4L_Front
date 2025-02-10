@@ -163,6 +163,7 @@ export const TourList = () => {
       currentPage: 0,
       pageSize: 10,
     });
+    setSearchQuery("");
   };
 
   // 페이지 변경
