@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { KTXServiceCode } from "../../Util/Service_KTX_code";
 import { Vehiclekind } from "../../Util/Service_VehicleKind_code";
 import {
@@ -35,11 +35,14 @@ const Train = () => {
   const [trainSchedule, setTrainSchedule] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const allVehicleCodes = Vehiclekind.flatMap((vehicle) =>
+  const allVehicleCodes = Vehiclekind.slice(1).flatMap((vehicle) =>
     vehicle.subKinds
       ? [...vehicle.subKinds.map((sub) => sub.VehicleKindCode)]
       : [vehicle.VehicleKindCode]
   );
+  useEffect(() => {
+    console.log(selectedVehicles);
+  }, [selectedVehicles]);
 
   const allSelected = selectedVehicles.length === allVehicleCodes.length;
 
@@ -172,7 +175,7 @@ const Train = () => {
                   <span className="checkbox-name">전체 선택</span>
                 </label>
 
-                {Vehiclekind.map((vehicle) => (
+                {Vehiclekind.slice(1).map((vehicle) => (
                   <label key={vehicle.VehicleKindCode}>
                     <input
                       type="checkbox"

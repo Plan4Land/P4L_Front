@@ -37,7 +37,9 @@ const Express = () => {
   const [trainSchedule, setTrainSchedule] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const allVehicleCodes = ExpressGradeService.map((vehicle) => vehicle.GradeId);
+  const allVehicleCodes = ExpressGradeService.slice(1).map(
+    (vehicle) => vehicle.GradeId
+  );
 
   const allSelected = selectedVehicles.length === allVehicleCodes.length;
 
@@ -114,6 +116,10 @@ const Express = () => {
     }
   };
 
+  useEffect(() => {
+    console.log(selectedVehicles);
+  }, [selectedVehicles]);
+
   return (
     <TrafficBox>
       <Container>
@@ -158,7 +164,7 @@ const Express = () => {
                   <span className="checkbox-name">전체 선택</span>
                 </label>
 
-                {ExpressGradeService.map((vehicle) => (
+                {ExpressGradeService.slice(1).map((vehicle) => (
                   <label key={vehicle.GradeId}>
                     <input
                       type="checkbox"
