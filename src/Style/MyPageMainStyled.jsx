@@ -191,7 +191,11 @@ export const FollowList = styled.div`
   }
 `;
 export const InvitePlanning = styled.div`
+  height: 100%;
   .invited-planning-list {
+    height: 85%;
+    overflow-y: scroll;
+    ${ScrollBar}
     margin-top: 20px;
     width: 500px;
   }

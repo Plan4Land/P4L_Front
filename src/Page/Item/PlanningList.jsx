@@ -397,7 +397,7 @@ export const PlanningList = () => {
       </List>
       {/* <Footer /> */}
       <CheckModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        로그인이 필요한 서비스입니다.
+        <p>로그인이 필요한 서비스입니다.</p>
       </CheckModal>
     </>
   );
