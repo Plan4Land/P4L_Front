@@ -19,6 +19,7 @@ import { BookmarkedSpotsApi } from "../../Api/ItemApi";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
+import { deleteFile } from "../FirebaseUpload";
 
 // 플래닝에 초대 수락한 회원들 모달창
 export const UserModal = ({
@@ -414,6 +415,11 @@ export const DeletePlanning = ({
 
   const handleDeleteConfirm = async () => {
     if (plannerInfo.ownerNickname === user.nickname) {
+      await deleteFile({
+        type: "planner",
+        userId: user.id,
+        plannerId: plannerId,
+      });
       await PlanningApi.deletePlanning(plannerId, user.id);
     } else {
       await PlanningApi.leavePlanning(plannerId, user.id);

@@ -28,3 +28,36 @@ export const Upload = async ({ currentPic, type, userId, plannerId }) => {
   }
   return updatedPic;
 };
+
+export const deleteFile = async ({ type, userId, plannerId }) => {
+  const imgFolder = type === "profile" ? "UserProfilePic" : "PlannerPic";
+  const imgName = type === "profile" ? "profile.png" : `${plannerId}.png`;
+
+  try {
+    const fileRef = storage.ref(`/${imgFolder}/${userId}/${imgName}`);
+    await fileRef.delete();
+    console.log("파일 삭제 성공:", imgName);
+    return true;
+  } catch (error) {
+    console.error("파일 삭제 실패:", error);
+    return false;
+  }
+};
+
+export const deleteFolder = async ({ type, userId }) => {
+  const imgFolder = type === "profile" ? "UserProfilePic" : "PlannerPic";
+  const folderRef = storage.ref(`/${imgFolder}/${userId}/`);
+
+  try {
+    const fileList = await folderRef.listAll(); // 폴더 내 모든 파일 목록 가져오기
+    // console.log(fileList);
+    const deletePromises = fileList.items.map((file) => file.delete()); // 모든 파일 삭제
+    await Promise.all(deletePromises);
+
+    console.log("폴더 내 모든 파일 삭제 완료:", imgFolder);
+    return true;
+  } catch (error) {
+    console.error("폴더 삭제 실패:", error);
+    return false;
+  }
+};
