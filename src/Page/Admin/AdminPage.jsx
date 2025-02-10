@@ -1,18 +1,17 @@
 import styled from "styled-components";
-import {useEffect, useState} from "react";
-import {Button} from "../../Component/ButtonComponent";
-import {Modal} from "../../Util/Modal";
+import { useEffect, useState } from "react";
+import { Button } from "../../Component/ButtonComponent";
+import { Modal } from "../../Util/Modal";
 import AdminApi from "../../Api/AdminApi";
-import {FaSearch} from "react-icons/fa";
-import {SearchSt} from "../../Style/ItemListStyled";
-import {Pagination} from "../../Component/Pagination";
-import {useLocation, useNavigate} from "react-router-dom";
+import { FaSearch } from "react-icons/fa";
+import { SearchSt } from "../../Style/ItemListStyled";
+import { Pagination } from "../../Component/Pagination";
+import { useLocation, useNavigate } from "react-router-dom";
 // 게시글 목록 불러와서 삭제하기
 // 정지 유저 풀어주기
 // 관리자 토큰으로 로그인하기
 // 유저 상세정보 모달 -> 바로 볼 수 있게
 // 신고도 검색 기능?
-
 
 export const AdminPage = () => {
   const location = useLocation();
@@ -37,23 +36,34 @@ export const AdminPage = () => {
       currentPage: searchParams.get("currentPage") || 0,
       pageSize: searchParams.get("pageSize") || 20,
       select: searchParams.get("select") || "",
-      keyword: searchParams.get("keyword") || ""
-    }
+      keyword: searchParams.get("keyword") || "",
+    };
   });
   const [totalPages, setTotalPages] = useState(0);
 
   const handleSearch = () => {
     updateFilters("keyword", searchKeyword);
   };
+  const handleCloseConfirmModal = () => {
+    setIsConfirmModalOpen(false);
+    setBanDays(""); // 정지일 초기화
+    setBanReason(""); // 정지 사유 초기화
+  };
+
+  const handleCloseReportModal = () => {
+    setIsReportModalOpen(false);
+    setBanDays(""); // 정지일 초기화
+    setBanReason(""); // 정지 사유 초기화
+  };
 
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        if(activeTab === "report") {
+        if (activeTab === "report") {
           const data = await AdminApi.loadReports(filters);
           setReports(data.content);
           setTotalPages(data.totalPages);
-        }else if(activeTab === "user") {
+        } else if (activeTab === "user") {
           const data = await AdminApi.userSearch(filters);
           setMembers(data.content); // 배열 형식으로 설정
           setTotalPages(data.totalPages);
@@ -67,29 +77,29 @@ export const AdminPage = () => {
   }, [filters]);
 
   const memberCategory = [
-    {name: '전체', value: ''},
-    {name: '아이디', value: 'id'},
-    {name: '닉네임', value: 'nickname'},
-    {name: '이름', value: 'name'},
-    {name: '이메일', value: 'email'},
+    { name: "전체", value: "" },
+    { name: "아이디", value: "id" },
+    { name: "닉네임", value: "nickname" },
+    { name: "이름", value: "name" },
+    { name: "이메일", value: "email" },
   ];
 
   const reportsCategory = [
-    {name: '전체', value: ''},
-    {name: '대기', value: 'WAIT'},
-    {name: '거절', value: 'REJECT'},
-    {name: '승인', value: 'ACCEPT'},
-  ]
+    { name: "전체", value: "" },
+    { name: "대기", value: "WAIT" },
+    { name: "거절", value: "REJECT" },
+    { name: "승인", value: "ACCEPT" },
+  ];
 
   const clearFilters = () => {
     setFilters({
       currentPage: 0,
       pageSize: 20,
       select: "",
-      keyword: ""
-    })
+      keyword: "",
+    });
     navigate("/management");
-  }
+  };
 
   const updateFilters = (key, value) => {
     setFilters((prev) => {
@@ -99,18 +109,19 @@ export const AdminPage = () => {
         currentPage: key === "currentPage" ? value : 0,
       };
       const searchParams = new URLSearchParams(newFilters);
-      navigate(`/management?${searchParams.toString()}`, {replace: true});
+      navigate(`/management?${searchParams.toString()}`, { replace: true });
       return newFilters;
     });
   };
 
   const handlePageChange = (newPage) => {
     updateFilters("currentPage", newPage);
-  }
+  };
 
   const handleReportTabClick = async () => {
     setActiveTab("report");
-    if (reports.length === 0) { // 중복 호출 방지
+    if (reports.length === 0) {
+      // 중복 호출 방지
       try {
         setSearchKeyword("");
         clearFilters();
@@ -125,7 +136,8 @@ export const AdminPage = () => {
 
   const handleUserTabClick = async () => {
     setActiveTab("user");
-    if (members.length === 0) { // 중복 호출 방지
+    if (members.length === 0) {
+      // 중복 호출 방지
       try {
         setSearchKeyword("");
         clearFilters();
@@ -142,22 +154,25 @@ export const AdminPage = () => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && activeTab === "user") {
       handleSearch();
-    }else if (e.key === "Enter" && activeTab === "reports") {
+    } else if (e.key === "Enter" && activeTab === "reports") {
       handleReportSearch();
     }
   };
 
   const handleReportSearch = () => {
     updateFilters("keyword", searchKeyword);
-  }
+  };
 
   const handleReportReject = async (reportId) => {
     try {
       console.log(reportId);
       const response = await AdminApi.reportReject(reportId);
-      setReports(reports.map(report =>
-        report.id === reportId ? {...report, state: "REJECT"} : report));
-      console.log(response.data)
+      setReports(
+        reports.map((report) =>
+          report.id === reportId ? { ...report, state: "REJECT" } : report
+        )
+      );
+      console.log(response.data);
       setIsReportModalOpen(false);
       setSelectedReport(null);
     } catch (error) {
@@ -167,10 +182,18 @@ export const AdminPage = () => {
 
   const handleReportAccept = async (reportId, userId, day, reason) => {
     try {
-      const response = await AdminApi.reportAccept(reportId, userId, day, reason);
-      setReports(reports.map(report =>
-        report.id === reportId ? {...report, state: "ACCEPT"} : report));
-      console.log(response.data)
+      const response = await AdminApi.reportAccept(
+        reportId,
+        userId,
+        day,
+        reason
+      );
+      setReports(
+        reports.map((report) =>
+          report.id === reportId ? { ...report, state: "ACCEPT" } : report
+        )
+      );
+      console.log(response.data);
       setIsReportModalOpen(false);
       setSelectedReport(null);
       setBanDays(0);
@@ -183,9 +206,6 @@ export const AdminPage = () => {
     setSelectedReport(e);
     setIsReportModalOpen(true);
   };
-
-
-
 
   // 멤버 클릭 시 저장된 상세정보 사용 및 신고 횟수 가져오기
   const handleMemberClick = async (userId) => {
@@ -214,10 +234,16 @@ export const AdminPage = () => {
       await AdminApi.userBan(selectedMember.id, banDays, banReason);
       alert(`${selectedMember.name}님의 계정을 정지합니다.`);
       setIsConfirmModalOpen(false);
-      setMembers(members.map(member => member.id === selectedMember.id ? {
-        ...member,
-        role: "ROLE_BANNED"
-      } : member));
+      setMembers(
+        members.map((member) =>
+          member.id === selectedMember.id
+            ? {
+                ...member,
+                role: "ROLE_BANNED",
+              }
+            : member
+        )
+      );
     } catch (error) {
       console.error("Error banning member:", error);
     }
@@ -225,7 +251,7 @@ export const AdminPage = () => {
 
   const handlePlannerClick = async () => {
     setActiveTab("planner");
-  }
+  };
 
   return (
     <div>
@@ -260,7 +286,7 @@ export const AdminPage = () => {
                   onKeyDown={handleKeyDown}
                 />
                 <button className="search-button" onClick={handleReportSearch}>
-                  <FaSearch/> {/* 검색 아이콘 */}
+                  <FaSearch /> {/* 검색 아이콘 */}
                 </button>
               </div>
             </SearchSt>
@@ -365,7 +391,7 @@ export const AdminPage = () => {
         {isConfirmModalOpen && (
           <Modal
             isOpen={isConfirmModalOpen}
-            onClose={() => setIsConfirmModalOpen(false)}
+            onClose={handleCloseConfirmModal}
             onConfirm={confirmAccountBan}
             confirmText="정지하기"
             cancelText="취소"
@@ -395,7 +421,7 @@ export const AdminPage = () => {
         {isReportModalOpen && (
           <Modal
             isOpen={isReportModalOpen}
-            onClose={() => handleReportReject(selectedReport.id)}
+            onClose={handleCloseReportModal}
             onConfirm={async () => {
               setLoading(true);
               await handleReportAccept(
@@ -428,7 +454,7 @@ export const AdminPage = () => {
               onChange={(e) => setBanReason(e.target.value)}
               placeholder="사유를 입력하세요"
             />
-            <Button onClick={() => setIsReportModalOpen(false)}>취소</Button>
+            <Button onClick={handleCloseReportModal}>취소</Button>
           </Modal>
         )}
         <Pagination

@@ -55,7 +55,10 @@ export const Otheruser = () => {
       setShowConfirmationModal(true); // 신고 완료 모달 열기
     }
   };
-
+  const handleCloseReportModal = () => {
+    setShowReportModal(false);
+    setReportContent(""); // 신고 내용 초기화
+  };
   // 신고 내용이 비었을 때 CheckModal 닫기
   const handleCheckModalClose = () => {
     setIsCheckModalOpen(false); // CheckModal 닫기
@@ -360,7 +363,7 @@ export const Otheruser = () => {
       {/* 신고하기 모달 */}
       <Modal
         isOpen={showReportModal}
-        onClose={() => setShowReportModal(false)}
+        onClose={handleCloseReportModal}
         onConfirm={handleReportConfirm}
         buttonProps={{ children: "확인" }}
       >
@@ -370,7 +373,7 @@ export const Otheruser = () => {
             value={reportContent}
             onChange={(e) => setReportContent(e.target.value)}
             placeholder="신고 내용을 입력 해 주세요.
-            허위 신고의 경우 신고자에게 불이익이 생길 수 있습니다."
+      허위 신고의 경우 신고자에게 불이익이 생길 수 있습니다."
           />
         </ReportContent>
       </Modal>
