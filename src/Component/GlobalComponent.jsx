@@ -124,17 +124,17 @@ export const Header = () => {
     fetchData();
   }, [user?.id]);
 
-  const transportClick = (route) => {
-    // 교통 드롭다운 항목 클릭 시 이동
-    if (route === "ktxinquiry") navigate("/ktxinquiry");
-    if (route === "expressbus") navigate("/expressbus");
-    if (route === "intercitybus") navigate("/intercitybus");
-  };
+  // const transportClick = (route) => {
+  //   // 교통 드롭다운 항목 클릭 시 이동
+  //   if (route === "ktxinquiry") navigate("/ktxinquiry");
+  //   if (route === "expressbus") navigate("/expressbus");
+  //   if (route === "intercitybus") navigate("/intercitybus");
+  // };
 
-  const handleItemClick = (transportType) => {
-    setDropdownVisible(false); // 클릭 시 드롭다운 숨기기
-    transportClick(transportType); // 클릭된 항목에 해당하는 페이지로 이동
-  };
+  // const handleItemClick = (transportType) => {
+  //   setDropdownVisible(false); // 클릭 시 드롭다운 숨기기
+  //   transportClick(transportType); // 클릭된 항목에 해당하는 페이지로 이동
+  // };
 
   return (
     <HeaderSt>
@@ -147,16 +147,19 @@ export const Header = () => {
       </Link>
       <NavSt>
         <div className="recomm" onClick={toggleDropdown} ref={dropdownRef}>
-          <div className={`tag ${isActive("/ktxinquiry") ? "active" : ""}`}>
+          <Link
+            to="/traffic"
+            className={`tag ${isActive("/traffic") ? "active" : ""}`}
+          >
             <p className="title-font">교통</p>
-          </div>
-          {dropdownVisible && (
+          </Link>
+          {/* {dropdownVisible && (
             <div className="dropdown-Trafficlist">
               <p onClick={() => handleItemClick("ktxinquiry")}>KTX</p>
               <p onClick={() => handleItemClick("expressbus")}>고속버스</p>
               <p onClick={() => handleItemClick("intercitybus")}>시외버스</p>
             </div>
-          )}
+          )} */}
         </div>
         <p>|</p>
         <div className="recomm">
