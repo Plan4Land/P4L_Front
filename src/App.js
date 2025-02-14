@@ -27,6 +27,7 @@ import IntercityBus from "./Page/Traffic/IntercityBus";
 import AdminLogin from "./Page/Admin/AdminLogin";
 import { Layout } from "./Component/GlobalComponent";
 import TrafficMain from "./Page/Traffic/TrafficMain";
+import UserDelete from "./Page/User/UserDelete";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
                 <Route path="/ExpressBus" element={<ExpressBus />} />
                 <Route path="/IntercityBus" element={<IntercityBus />} />
                 <Route path="/traffic" element={<TrafficMain />} />
+                <Route path="/mypage/signout" element={<UserDelete />} />
                 <Route
                   path="/makePlanning"
                   element={

@@ -10,6 +10,16 @@ export const Center = styled.div`
     width: 90vw;
   }
 `;
+export const CenterDelete = styled.div`
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  width: 60vw;
+  margin: 0 auto;
+  @media (max-width: 768px) {
+    width: 90vw;
+  }
+`;
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -254,7 +264,7 @@ export const Container = styled.div`
         width: 100%;
       }
     }
-    
+
     label {
       font-size: 13px;
     }
