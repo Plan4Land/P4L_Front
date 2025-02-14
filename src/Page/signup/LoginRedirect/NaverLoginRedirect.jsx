@@ -13,7 +13,7 @@ export function NaverRedirect() {
   const location = useLocation();
   const [code, setCode] = useState(null);
   const [state, setState] = useState(null);
-  const { login } = useAuth();
+  const { login, socialLogin } = useAuth();
   const [isSuccess, setIsSuccess] = useState(true);
 
   if (!code && !state) {
@@ -41,6 +41,7 @@ export function NaverRedirect() {
           { headers: { "Content-Type": "application/json" } }
         );
         const { access_token } = tokenResponse.data;
+        socialLogin(access_token, "");
 
         // 2. 네이버 사용자 정보 조회
         const userResponse = await axios.post(

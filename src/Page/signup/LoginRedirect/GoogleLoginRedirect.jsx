@@ -13,7 +13,7 @@ export function GoogleRedirect() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const code = queryParams.get("code");
-  const { login } = useAuth();
+  const { login, socialLogin } = useAuth();
   const [isSuccess, setIsSuccess] = useState(true);
 
   useEffect(() => {
@@ -44,6 +44,7 @@ export function GoogleRedirect() {
         console.log("Access Token:", access_token);
         // const accessToken = response.data.access_token;
         // const idToken = response.data.id_token;
+        socialLogin(access_token, "");
 
         // 2. 구글 사용자 정보 조회
         axios

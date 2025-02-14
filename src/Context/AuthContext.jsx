@@ -12,6 +12,10 @@ export const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  const [socialToken, setSocialToken] = useState(() => {
+    const storedSocialToken = localStorage.getItem("socialToken");
+    return storedSocialToken ? JSON.parse(storedSocialToken) : null;
+  })
 
   useEffect(() => {
     if (user) {
@@ -27,6 +31,10 @@ export const AuthProvider = ({ children }) => {
     setUser({ id, nickname, imgPath, role });
   };
   const logout = () => setUser(null);
+  const socialLogin = (token) => {
+    const { accessToken, refreshToken } = token.data;
+    setSocialToken({ accessToken, refreshToken });
+  };
 
   const updateUser = (updatedData) => {
     setUser((pervUser) => ({
@@ -101,6 +109,8 @@ export const AuthProvider = ({ children }) => {
         updateUser,
         isAuthenticated,
         isAccessTokenValid,
+        socialToken,
+        socialLogin,
       }}
     >
       {children}

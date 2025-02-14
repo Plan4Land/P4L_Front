@@ -13,7 +13,7 @@ export function KakaoRedirect() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const code = queryParams.get("code");
-  const { login } = useAuth();
+  const { login, socialLogin } = useAuth();
   const [isSuccess, setIsSuccess] = useState(true);
 
   useEffect(() => {
@@ -42,6 +42,7 @@ export function KakaoRedirect() {
         const { access_token, refresh_token } = response.data;
         console.log("Access Token:", access_token);
         console.log("Refresh Token:", refresh_token);
+        socialLogin(access_token, refresh_token);
 
         // 2. 카카오 사용자 정보 조회
         axios

@@ -7,9 +7,10 @@ import { Button } from "../../Component/ButtonComponent";
 import { CheckModal, Modal } from "../../Util/Modal"; // Modal 컴포넌트 사용
 import { IoIosArrowBack } from "react-icons/io";
 import { GoCheckCircle } from "react-icons/go";
+import axios from "axios";
 
 const UserDelete = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, socialToken } = useAuth();
   const [userId, setUserId] = useState("");
   const [email, setEmail] = useState("");
   const [isChecked, setIsChecked] = useState(false);
@@ -30,6 +31,7 @@ const UserDelete = () => {
       }
     };
     if (user?.id) getUserInfo();
+    
   }, [user?.id]);
 
   // 탈퇴 확인 모달 띄우기
@@ -43,6 +45,7 @@ const UserDelete = () => {
 
   // 실제 탈퇴 처리
   const handleSubmit = async () => {
+    // 탈퇴 처리
     const response = await AxiosApi.memberDelete(user.id);
     if (response.data) {
       const logoutResponse = await AxiosApi.logout(user.id);
@@ -51,6 +54,53 @@ const UserDelete = () => {
         setIsModalOpen(true); // 탈퇴 완료 모달 열기
       }
     }
+    
+    // 소셜 연결 끊기
+    const userInfo = await AxiosApi.memberInfo(user.id);
+    if (userInfo.data.sso === "kakao") {
+      axios
+        .get(`https://kapi.kakao.com/v1/user/unlink`, {
+          headers: {
+            Authorization: `Bearer ${socialToken.accessToken}`,
+          },
+          params: {
+            target_id_type: 'user_id',
+            target_id: userInfo.data.socialId,
+          },
+        })
+        .then(response => {
+          console.log('카카오 계정 연결 끊기 성공', response);
+        })
+        .catch(error => {
+          console.log('카카오 계정 연결 끊기 실패', error);
+        });
+    } else if (userInfo.data.sso === "google") {
+      const accessToken = socialToken.accessToken;
+      axios
+        .get(`https://oauth2.googleapis.com/revoke?token=${accessToken}`)
+        .then((response) => {
+          console.log('구글 계정 연결 끊기 성공', response);
+        })
+        .catch((error) => {
+          console.log('구글 계정 연결 끊기 실패', error);
+        });
+    } else if (userInfo.data.sso === "naver") {
+      const accessToken = socialToken.accessToken;
+      axios
+        .get("https://nid.naver.com/oauth2.0/token", {
+          params: {
+            access_token: accessToken,
+            grant_type: "delete",
+          },
+        })
+        .then((response) => {
+          console.log('네이버 계정 연결 끊기 성공', response);
+        })
+        .catch((error) => {
+          console.log('네이버 계정 연결 끊기 실패', error);
+        });
+    }
+    
   };
 
   // 모달 닫기
