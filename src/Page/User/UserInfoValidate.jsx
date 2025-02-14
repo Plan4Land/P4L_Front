@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import AxiosApi from "../../Api/AxiosApi";
 
@@ -20,6 +20,7 @@ import { BiSolidLock } from "react-icons/bi";
 
 const UserInfoValidate = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   // URL에서 menu 값을 가져옴
   const menuFromUrl = queryParams.get("menu");
@@ -116,7 +117,10 @@ const UserInfoValidate = () => {
               <div className="deleteBox">
                 <span
                   className="userDeleteBtn"
-                  onClick={() => setSelectedMenu("회원 탈퇴")}
+                  onClick={() => {
+                    setSelectedMenu("회원 탈퇴");
+                    navigate("/mypage/signout");
+                  }}
                 >
                   회원 탈퇴
                 </span>
@@ -127,7 +131,7 @@ const UserInfoValidate = () => {
       )}
       {selectedMenu === "회원정보 수정" && <UserInfoEdit />}
       {selectedMenu === "비밀번호 변경" && <UserUpdatePassword />}
-      {selectedMenu === "회원 탈퇴" && <UserDelete />}
+      {/* {selectedMenu === "회원 탈퇴" && <UserDelete />} */}
     </>
   );
 };
