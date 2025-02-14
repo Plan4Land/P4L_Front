@@ -85,7 +85,7 @@ const Express = () => {
       const combinedSchedules = response.flat();
       console.log("combinedSchedules : ", combinedSchedules);
       const sortedSchedules = combinedSchedules.sort(
-        (a, b) => a.arrplandtime - b.arrplandtime
+        (a, b) => a.arrPlandTime - b.arrPlandTime
       );
       // 20개씩 묶기
       const chunkedSchedules = [];
@@ -275,7 +275,16 @@ const Express = () => {
                     8,
                     10
                   )} : ${String(schedule.arrPlandTime).slice(10, 12)}`}</td>
-                  <td>{Number(schedule.charge).toLocaleString()} 원</td>
+                  <td>
+                    {schedule.charge === 0 ? (
+                      <span className="currency">매진</span>
+                    ) : (
+                      <>
+                        {Number(schedule.charge).toLocaleString()}
+                        <span className="currency">원</span>
+                      </>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -294,6 +303,13 @@ const Express = () => {
             에서 확인하시기 바랍니다.
           </span>
         </div>
+        {trainSchedule && trainSchedule.length > 0 && (
+          <Pagination
+            currentPage={currentPage - 1}
+            totalPages={trainSchedule.length}
+            handlePageChange={(page) => handlePageChange(page + 1)}
+          />
+        )}
       </ScheduleResult>
     </TrafficBox>
   );

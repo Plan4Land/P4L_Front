@@ -285,8 +285,14 @@ const Train = () => {
                     10
                   )} : ${String(schedule.arrplandtime).slice(10, 12)}`}</td>
                   <td>
-                    {Number(schedule.adultcharge).toLocaleString()}
-                    <span className="currency">원</span>
+                    {schedule.adultcharge === 0 ? (
+                      <span className="currency">매진</span>
+                    ) : (
+                      <>
+                        {Number(schedule.adultcharge).toLocaleString()}
+                        <span className="currency">원</span>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))}
