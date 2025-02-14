@@ -280,6 +280,7 @@ const PictureBox = styled.div`
     position: relative;
     border-radius: 50%;
     border: 1px solid #ddd;
+    background-color: white;
     cursor: pointer;
     width: ${(props) => props.width || "100px"};
     height: ${(props) => props.height || "100px"};
