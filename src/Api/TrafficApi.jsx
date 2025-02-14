@@ -10,7 +10,7 @@ export const KTXApi = {
       while (true) {
         try {
           const response = await axios.get(
-            "http://apis.data.go.kr/1613000/TrainInfoService/getStrtpntAlocFndTrainInfo",
+            "https://apis.data.go.kr/1613000/TrainInfoService/getStrtpntAlocFndTrainInfo",
             {
               params: {
                 depPlaceId: departure,
@@ -72,7 +72,7 @@ export const ExpressApi = {
       while (true) {
         try {
           const response = await axios.get(
-            "http://apis.data.go.kr/1613000/ExpBusInfoService/getStrtpntAlocFndExpbusInfo",
+            "https://apis.data.go.kr/1613000/ExpBusInfoService/getStrtpntAlocFndExpbusInfo",
             {
               params: {
                 depTerminalId: departure,
