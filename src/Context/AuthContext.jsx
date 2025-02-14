@@ -30,7 +30,10 @@ export const AuthProvider = ({ children }) => {
     const { id, nickname, imgPath, role } = userData.data;
     setUser({ id, nickname, imgPath, role });
   };
-  const logout = () => setUser(null);
+  const logout = () => {
+    setUser(null);
+    
+  };
   const socialLogin = (token) => {
     const { accessToken, refreshToken } = token.data;
     setSocialToken({ accessToken, refreshToken });

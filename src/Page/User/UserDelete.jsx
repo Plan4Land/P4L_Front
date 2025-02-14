@@ -103,7 +103,6 @@ const UserDelete = () => {
           console.log('네이버 계정 연결 끊기 실패', error);
         });
     }
-    
   };
 
   // 모달 닫기
