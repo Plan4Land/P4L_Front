@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AxiosApi from "../../Api/AxiosApi";
 import { useAuth } from "../../Context/AuthContext";
-import { CenterDelete, Container } from "../../Style/UserInfoEditStyle";
+import { Center, Container } from "../../Style/UserInfoEditStyle";
 import { Button } from "../../Component/ButtonComponent";
 import { CheckModal, Modal } from "../../Util/Modal"; // Modal 컴포넌트 사용
 import { IoIosArrowBack } from "react-icons/io";
@@ -31,7 +31,7 @@ const UserDelete = () => {
       }
     };
     if (user?.id) getUserInfo();
-    
+
   }, [user?.id]);
 
   // 탈퇴 확인 모달 띄우기
@@ -53,11 +53,8 @@ const UserDelete = () => {
         setShowConfirmDeleteModal(false); // 확인 모달 닫기
         setIsModalOpen(true); // 탈퇴 완료 모달 열기
       }
-    } else {
-      setShowConfirmDeleteModal(false);
-      navigate("/login");
     }
-    
+
     // 소셜 연결 끊기
     const userInfo = await AxiosApi.memberInfo(user.id);
     if (userInfo.data.sso === "kakao") {
@@ -103,6 +100,7 @@ const UserDelete = () => {
           console.log('네이버 계정 연결 끊기 실패', error);
         });
     }
+
   };
 
   // 모달 닫기
@@ -123,7 +121,7 @@ const UserDelete = () => {
   };
 
   return (
-    <CenterDelete>
+    <Center>
       <Container>
         <h2 className="title">회원탈퇴</h2>
 
@@ -216,18 +214,14 @@ const UserDelete = () => {
           confirmText="확인"
           cancelText="취소"
         >
-          {user?.id ? (
-            <p>정말로 탈퇴하시겠습니까?</p>
-          ) : (
-            <p>로그인이 필요한 서비스입니다.</p>
-          )}
+          <p>정말로 탈퇴하시겠습니까?</p>
         </Modal>
 
         <button className="back-button" onClick={handleBack}>
           <IoIosArrowBack />
         </button>
       </Container>
-    </CenterDelete>
+    </Center>
   );
 };
 

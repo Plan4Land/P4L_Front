@@ -337,81 +337,101 @@ export const Button = styled.button`
 `;
 
 export const Terms = styled.div`
-  margin-bottom: 30px;
-  .terms-label {
-    display: flex;
-    flex-direction: row;
-    gap: 5px;
-    cursor: pointer;
-  }
+    margin-bottom: 30px;
 
-  .iconBox-left {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2px;
-    svg {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
+    .terms-label {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        cursor: pointer;
     }
-  }
-  .checked {
-    svg {
-      background-color: green;
-      path:nth-child(1) {
-        color: white;
-      }
-      path:nth-child(2) {
-        color: green;
-      }
+
+    .iconBox-left {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2px;
+
+        svg {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+        }
     }
-  }
 
-  .inputBox-big {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-  }
+    .checked {
+        svg {
+            background-color: green;
 
-  .inputBox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-  }
+            path:nth-child(1) {
+                color: white;
+            }
 
-  .terms-content {
-    height: 200px;
-    overflow: auto;
-    padding: 15px;
-    margin: 9px 0 0 35px;
-    border: 1px solid #ddd;
-    ${ScrollBar}
-    p {
-      line-height: 1.5;
+            path:nth-child(2) {
+                color: green;
+            }
+        }
     }
-  }
-  @media (max-width: 768px) {
-    .inputBox-big,
+
+    .inputBox-big {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+    }
+
     .inputBox {
-      font-size: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
     }
-    .circle {
-      scale: 0.7;
-    }
+
     .terms-content {
-      h3 {
-        font-size: 15px;
-      }
-      h4 {
-        font-size: 13px;
-      }
-      p,
-      li {
-        font-size: 10px;
-      }
+        height: 200px;
+        overflow: auto;
+        padding: 15px;
+        margin: 9px 0 0 35px;
+        border: 1px solid #ddd;
+        
+        ${ScrollBar}        
+        p {
+            line-height: 1.5;
+        }
+        p,
+        li,
+        b,
+        table{
+            font-size: 13px;
+            color: #656565;
+        }
     }
-  }
+
+    @media (max-width: 768px) {
+        .inputBox-big,
+        .inputBox {
+            font-size: 15px;
+        }
+
+        .circle {
+            scale: 0.7;
+        }
+
+        .terms-content {
+            h3 {
+                font-size: 15px;                
+            }
+
+            h4 {
+                font-size: 13px;
+            }
+
+            p,
+            li,
+            b,
+            table{
+                font-size: 10px;                
+            }
+        }
+    }
 `;
