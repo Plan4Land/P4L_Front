@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+## 📁 폴더 구조 (`src/` 기준)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```
+src/
 
-## Available Scripts
+  ├── Api/        : Axios를 활용한 API 요청 함수들을 모아둔 폴더입니다.
+  
+  ├── Component/  : 페이지에서 분리한 공통 컴포넌트 및 재사용 가능한 UI 요소들이 위치해 있습니다.
+  
+  ├── Context/    : 인증 상태 관리 등 전역 상태 관리를 위한 컨텍스트가 있습니다.
+  
+  ├── Img/        : 프로젝트에서 사용하는 이미지 파일들을 보관합니다.
+  
+  ├── Page/       : 실제 화면에 렌더링되는 주요 페이지 컴포넌트들이 위치한 폴더입니다.
+  
+  ├── Style/      : styled-components로 작성한 스타일 정의 파일들이 있으며, 각 페이지와 연결됩니다.
+  
+  └── Util/       : 유틸 함수 및 공통 사용 데이터(서비스/지역 코드 등)들을 모아둔 폴더입니다.
+```
 
-In the project directory, you can run:
+<br/>
 
-### `npm start`
+## 📦 패키지 설치 및 실행 방법
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+yarn install
+yarn start
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+단, `.env` 파일이 있어야 정상적으로 작동합니다.
 
-### `npm test`
+해당 파일은 보안사항으로 공개되지 않습니다.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<br/>
 
-### `npm run build`
+## 🧱 개발 환경
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **React** `19.0.0`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Styled-components** `6.1.13`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Firebase** `11.1.0`
 
-### `npm run eject`
+- **Kakao Maps SDK** `1.1.27`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **EmailJS** `3.2.0`  
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Swiper** `11.2.0`  
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- **React Calendar** `5.1.0`  
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **React Date Picker** `7.5.0`
